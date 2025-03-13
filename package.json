@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "vue-component-meta": "^2.2.8",
+    "vue-tsc": "^2.2.8"
+  }
+}
