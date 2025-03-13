@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "fast-glob": "^3.3.3",
+    "typescript": "^5.8.2",
     "vue-component-meta": "^2.2.8",
     "vue-tsc": "^2.2.8"
   }
