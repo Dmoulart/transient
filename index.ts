@@ -10,6 +10,7 @@ export interface ComponentApiProps {
   required: ComponentMeta["props"][number]["required"];
   type: ComponentMeta["props"][number]["type"];
   default: ComponentMeta["props"][number]["default"];
+  schema: ComponentMeta["props"][number]["schema"];
 }
 
 export interface ComponentApi {
@@ -25,20 +26,27 @@ const tsconfigChecker = createChecker(
     printer: { newLine: 1 },
   }
 );
-
 const filterMeta = (meta: ComponentMeta): ComponentApi => {
   const props: ComponentApiProps[] = [];
+
   meta.props.forEach((prop) => {
     if (prop.global) return;
 
-    const { name, description, required, type, default: defaultValue } = prop;
-
+    const {
+      name,
+      description,
+      required,
+      type,
+      default: defaultValue,
+      schema,
+    } = prop;
     props.push({
       name,
       description,
       required,
       type,
       default: defaultValue || "unknown",
+      schema,
     });
   });
 
@@ -50,6 +58,7 @@ const filterMeta = (meta: ComponentMeta): ComponentApi => {
 };
 
 const COMPONENTS_DIR = "playground/components";
+debugger;
 
 // Collect components
 const components = fg.sync([`./**/*.vue`], {
@@ -60,7 +69,6 @@ const components = fg.sync([`./**/*.vue`], {
 // Generate component meta
 components.forEach((componentPath) => {
   const { name: componentName, dir: componentDir } = parse(componentPath);
-
   const meta = filterMeta(
     tsconfigChecker.getComponentMeta(
       resolve(__dirname, COMPONENTS_DIR, componentPath)

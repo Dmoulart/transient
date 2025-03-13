@@ -1,11 +1,8 @@
 <template>
-  <div>Hello</div>
+  <div><slot /></div>
 </template>
 <script setup lang="ts">
-type ComplexProp = { key: string; val: string };
-defineProps<{
-  points: number;
-  obj: { key: string; val: string };
-  complex: ComplexProp;
-}>();
+import { defineProps } from "vue";
+type Complex = { key: string; value: { someVal: boolean } };
+const props = defineProps<{ hello: string; complex: Complex }>();
 </script>
