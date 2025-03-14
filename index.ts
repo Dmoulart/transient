@@ -16,5 +16,3 @@ const translate = defineStrapiTranslator({
 });
 
 const translation = translate({ components: result });
-
-console.log(JSON.stringify(translation));

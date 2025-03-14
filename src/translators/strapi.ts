@@ -3,11 +3,8 @@ import { ComponentProp } from "../meta/component-api";
 import { defineTranslator, TranslatorConfig } from "../translator";
 import assert from "assert";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
+import { PropertyMetaSchema } from "vue-component-meta";
 
-type StrapiAttribute = {
-  type: "string" | "boolean";
-};
-type StrapiAttributes = { [key: string]: StrapiAttribute };
 type StrapiComponent = {
   collectionName: string;
   info: {
@@ -15,6 +12,26 @@ type StrapiComponent = {
     icon: string;
   };
   attributes: StrapiAttributes;
+};
+
+type StrapiAttributes = { [key: string]: StrapiAttribute };
+
+type StrapiAttribute = {
+  type: StrapiAttributeType;
+  required: boolean;
+  default?: any;
+  enum?: string[];
+};
+
+type StrapiAttributeType =
+  | "string"
+  | "boolean"
+  | "enumeration"
+  | "integer"
+  | "decimal";
+
+type PartialStrapiAttributeType = Partial<StrapiAttribute> & {
+  type: StrapiAttribute["type"];
 };
 
 export function defineStrapiTranslator(
@@ -28,9 +45,9 @@ export function defineStrapiTranslator(
         const { props } = component;
         const { name: displayName, dir } = parse(path);
 
-        const collectionName = `component_${
-          dir || "ui"
-        }_${displayName.toLowerCase()}`;
+        const category = dir || "ui";
+
+        const collectionName = `component_${category.toLowerCase()}_${displayName.toLowerCase()}`;
 
         strapiComponents.push({
           collectionName,
@@ -41,6 +58,7 @@ export function defineStrapiTranslator(
           attributes: toStrapiAttributes(props),
         });
       }
+
       return strapiComponents;
     },
     write(results, dest) {
@@ -49,7 +67,10 @@ export function defineStrapiTranslator(
       for (const component of results) {
         const [, category, name] = component.collectionName.split("_");
 
-        assert(category && name, "Invalid component name");
+        assert(
+          category && name,
+          `Invalid collectionName ${component.collectionName}`
+        );
 
         const destPath = resolve(dest, category);
 
@@ -72,26 +93,56 @@ function toStrapiAttributes(props: ComponentProp[]): StrapiAttributes {
 }
 
 function toStrapiAttribute(prop: ComponentProp): StrapiAttribute {
+  return {
+    required: Boolean(prop.required),
+    ...toStrapiAttributeType(prop),
+    default: prop.default,
+  };
+}
+
+function toStrapiAttributeType(
+  prop: ComponentProp
+): PartialStrapiAttributeType {
   if (typeof prop.schema === "string") {
     switch (prop.schema) {
       case "string":
-        return {
-          type: "string",
-        };
+        return { type: "string" };
       case "boolean":
-        return {
-          type: "boolean",
-        };
-
+        return { type: "boolean" };
+      case "number":
+        return { type: "decimal" }; // int ?
       default:
-        throw new Error(`${prop.name} : unsupported type ${prop.schema}`);
+        throw new Error(`unsupported type ${prop.schema}`);
     }
   }
   switch (prop.schema.kind) {
-    case "array":
     case "enum":
-    case "event":
+      return fromEnumToStrapiType(prop);
     case "object":
-      throw new Error(`${prop.name} : unsupported type ${prop.schema.kind}`);
+    case "array":
+    case "event":
+      throw new Error(`unsupported type ${prop.schema.kind}`);
   }
+}
+
+function fromEnumToStrapiType(prop: ComponentProp): PartialStrapiAttributeType {
+  assert(typeof prop.schema === "object" && prop.schema.kind === "enum");
+
+  if (prop.schema.type === "boolean") {
+    return { type: "boolean" };
+  }
+  const enumeration = prop.schema.schema;
+  assert(Array.isArray(enumeration));
+
+  assert(enumeration);
+  return {
+    type: "enumeration",
+    enum: enumeration as string[],
+  };
+}
+
+function fromObjectToStrapiType(
+  prop: ComponentProp
+): PartialStrapiAttributeType {
+  assert(false);
 }
