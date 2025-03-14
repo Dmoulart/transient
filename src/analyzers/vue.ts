@@ -15,6 +15,7 @@ import {
   assertIsArrayOf,
   someString,
 } from "../helpers/assert";
+import { unescapeString } from "../helpers/string";
 
 export function defineVueAnalyzer(
   options: Pick<AnalyzerConfig, "tsConfigPath" | "dest">
@@ -46,7 +47,7 @@ function describeComponent(meta: ComponentMeta): TransientComponent {
     props.push({
       name,
       description,
-      default: defaultValue,
+      default: defaultValue && unescapeString(defaultValue),
       required,
       ...propInfos,
       type,
@@ -95,7 +96,7 @@ function inspectPropertySchema(
       return {
         type: {
           kind: "enum",
-          enum: enumeration,
+          enum: enumeration.map(unescapeString),
         },
       };
     }
