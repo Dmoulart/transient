@@ -4,7 +4,7 @@ import { defineStrapiTranslator } from "./src/translators/strapi";
 
 const analyze = defineVueAnalyzer({
   tsConfigPath: resolve(__dirname, "playground/tsconfig.json"),
-  dest: resolve(__dirname, "playground/meta"),
+  dest: resolve(__dirname, "playground/app-schemas"),
 });
 
 const result = analyze({
@@ -12,7 +12,7 @@ const result = analyze({
 });
 
 const translate = defineStrapiTranslator({
-  dest: resolve(__dirname, "playground/translation"),
+  dest: resolve(__dirname, "playground/cms-schemas"),
 });
 
 const translation = translate({ components: result });

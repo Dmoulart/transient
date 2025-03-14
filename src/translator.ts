@@ -1,12 +1,14 @@
-import { AnalyzeResult } from "./analyzer";
+import { write } from "fs";
+import { ComponentsApiMap } from "./analyzer";
+
 export type TranslatorConfig<T> = {
   dest: string;
   write?: (result: T[], dest: string) => void;
-  translate(components: AnalyzeResult): T[];
+  translate(components: ComponentsApiMap): T[];
 };
 
 export type TranslationConfig = {
-  components: AnalyzeResult;
+  components: ComponentsApiMap;
 };
 
 export function defineTranslator<T>({

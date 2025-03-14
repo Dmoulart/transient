@@ -3,11 +3,11 @@ import { ComponentApi } from "./meta/component-api";
 import fg from "fast-glob";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 
-export type AnalyzeResult = { [path: string]: ComponentApi };
+export type ComponentsApiMap = { [path: string]: ComponentApi };
 export type AnalyzeOptions = {
   dir?: string;
 };
-export type Analyze = (options: AnalyzeOptions) => AnalyzeResult;
+export type Analyze = (options: AnalyzeOptions) => ComponentsApiMap;
 
 export type Analyzer = {
   defaultDir: string;
@@ -15,7 +15,7 @@ export type Analyzer = {
   dest: string;
   describe(path: string, dir: string): ComponentApi;
   scanDir(dir: string): string[];
-  write(result: AnalyzeResult, dest: string): void;
+  write(result: ComponentsApiMap, dest: string): void;
 };
 
 export type AnalyzerConfig = Partial<Analyzer> & {
@@ -61,7 +61,7 @@ export function defineAnalyzer(config: AnalyzerConfig): Analyze {
   return ({ dir }) => {
     const componentPaths = scanDir(dir ?? defaultDir);
 
-    const metas: AnalyzeResult = {};
+    const metas: ComponentsApiMap = {};
 
     for (const componentPath of componentPaths) {
       metas[componentPath] = describe(componentPath, dir ?? defaultDir);

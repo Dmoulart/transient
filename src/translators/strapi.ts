@@ -1,6 +1,9 @@
-import { parse } from "path";
+import { join, parse, resolve } from "path";
 import { ComponentProp } from "../meta/component-api";
 import { defineTranslator, TranslatorConfig } from "../translator";
+import assert from "assert";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
+
 type StrapiAttribute = {
   type: "string" | "boolean";
 };
@@ -39,6 +42,23 @@ export function defineStrapiTranslator(
         });
       }
       return strapiComponents;
+    },
+    write(results, dest) {
+      if (!existsSync(dest)) mkdirSync(dest);
+
+      for (const component of results) {
+        const [, category, name] = component.collectionName.split("_");
+
+        assert(category && name, "Invalid component name");
+
+        const destPath = resolve(dest, category);
+
+        if (!existsSync(destPath)) mkdirSync(destPath);
+
+        const componentFilePath = join(destPath, `${name}.json`);
+
+        writeFileSync(componentFilePath, JSON.stringify(component, null, 4));
+      }
     },
   });
 }
