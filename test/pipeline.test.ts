@@ -3,15 +3,15 @@ import { defineVueAnalyzer } from "../src/analyzers/vue";
 import { defineStrapiTranslator } from "../src/translators/strapi";
 import { expect, test } from "bun:test";
 
-const analyze = defineVueAnalyzer({
-  tsConfigPath: resolve(__dirname, "./tsconfig.json"),
-});
+test("vue-to-transient-to-strapi", () => {
+  const analyze = defineVueAnalyzer({
+    tsConfigPath: resolve(__dirname, "./tsconfig.json"),
+  });
 
-const result = analyze({
-  dir: resolve(__dirname, "./components"),
-});
+  const result = analyze({
+    dir: resolve(__dirname, "./components"),
+  });
 
-test("app-schema", () => {
   expect(result["Test.vue"]).toEqual({
     props: [
       {
@@ -54,14 +54,12 @@ test("app-schema", () => {
       },
     ],
   });
-});
 
-const translate = defineStrapiTranslator({});
+  const translate = defineStrapiTranslator({});
 
-const translation = translate({ components: result });
+  const [Test] = translate({ components: result });
 
-test("cms-schema", () => {
-  expect(translation[0]).toEqual({
+  expect(Test).toEqual({
     collectionName: "component_ui_test",
     info: {
       displayName: "Test",
