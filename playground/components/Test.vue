@@ -7,6 +7,7 @@ const props = withDefaults(
   defineProps<{
     text: string;
     display: boolean;
+    maybeDisplay?: boolean;
     env: "prod" | "dev";
     version: 0 | 1 | 2;
     level: number;

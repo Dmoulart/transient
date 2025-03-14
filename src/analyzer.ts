@@ -1,21 +1,21 @@
 import { join, parse, resolve } from "path";
-import { ComponentApi } from "./meta/component-api";
 import fg from "fast-glob";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
+import { TransientComponent } from "./transient/definition";
 
-export type ComponentsApiMap = { [path: string]: ComponentApi };
+export type TransientDictionnary = { [path: string]: TransientComponent };
 export type AnalyzeOptions = {
   dir?: string;
 };
-export type Analyze = (options: AnalyzeOptions) => ComponentsApiMap;
+export type Analyze = (options: AnalyzeOptions) => TransientDictionnary;
 
 export type Analyzer = {
   defaultDir: string;
   tsConfigPath: string;
   dest: string;
-  describe(path: string, dir: string): ComponentApi;
+  describe(path: string, dir: string): TransientComponent;
   scanDir(dir: string): string[];
-  write(result: ComponentsApiMap, dest: string): void;
+  write(result: TransientDictionnary, dest: string): void;
 };
 
 export type AnalyzerConfig = Partial<Analyzer> & {
@@ -61,7 +61,7 @@ export function defineAnalyzer(config: AnalyzerConfig): Analyze {
   return ({ dir }) => {
     const componentPaths = scanDir(dir ?? defaultDir);
 
-    const metas: ComponentsApiMap = {};
+    const metas: TransientDictionnary = {};
 
     for (const componentPath of componentPaths) {
       metas[componentPath] = describe(componentPath, dir ?? defaultDir);

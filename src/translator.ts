@@ -1,14 +1,14 @@
 import { write } from "fs";
-import { ComponentsApiMap } from "./analyzer";
+import { TransientDictionnary } from "./analyzer";
 
 export type TranslatorConfig<T> = {
   dest: string;
   write?: (result: T[], dest: string) => void;
-  translate(components: ComponentsApiMap): T[];
+  translate(components: TransientDictionnary): T[];
 };
 
 export type TranslationConfig = {
-  components: ComponentsApiMap;
+  components: TransientDictionnary;
 };
 
 export function defineTranslator<T>({

@@ -14,8 +14,8 @@ export type TransientType<T extends TransientTypeName = TransientTypeName> =
   T extends TransientPrimitiveTypeName
     ? T | { kind: T }
     : T extends "enum"
-    ? { kind: "enum"; values: string[] }
-    : { kind: T }; // All other kinds only have `kind`
+    ? { kind: "enum"; enum: string[] }
+    : { kind: T };
 
 export type TransientTypeName =
   | TransientPrimitiveTypeName
@@ -28,3 +28,19 @@ export type TransientPrimitiveTypeName =
   | "integer"
   | "decimal"
   | "string";
+
+const test: TransientComponent = {
+  props: [
+    {
+      name: "OK",
+      type: "boolean",
+    },
+    {
+      name: "",
+      type: {
+        kind: "enum",
+        enum: ["1", "2", "3"],
+      },
+    },
+  ],
+};

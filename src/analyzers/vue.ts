@@ -1,7 +1,20 @@
-import { ComponentMeta, createChecker } from "vue-component-meta";
-import { Analyzer, AnalyzerConfig, defineAnalyzer } from "../analyzer";
+import {
+  ComponentMeta,
+  createChecker,
+  PropertyMetaSchema,
+} from "vue-component-meta";
+import { AnalyzerConfig, defineAnalyzer } from "../analyzer";
 import { resolve } from "path";
-import { ComponentApi, ComponentProp } from "../meta/component-api";
+import {
+  TransientComponent,
+  TransientProp,
+  TransientType,
+} from "../transient/definition";
+import {
+  assertIsDefined,
+  assertIsArrayOf,
+  someString,
+} from "../helpers/assert";
 
 export function defineVueAnalyzer(
   options: Pick<AnalyzerConfig, "tsConfigPath" | "dest">
@@ -21,24 +34,118 @@ export function defineVueAnalyzer(
   });
 }
 
-function describeComponent(meta: ComponentMeta): ComponentApi {
-  const props: ComponentProp[] = [];
+function describeComponent(meta: ComponentMeta): TransientComponent {
+  const props: TransientProp[] = [];
 
-  meta.props.forEach((prop) => {
-    if (prop.global) return;
+  for (const prop of meta.props) {
+    if (prop.global) continue;
 
     const { name, description, required, default: defaultValue, schema } = prop;
+    const { type, propInfos } = inspectPropertySchema(schema);
 
     props.push({
       name,
       description,
-      required,
       default: defaultValue,
-      schema,
+      required,
+      ...propInfos,
+      type,
     });
-  });
+  }
 
   return {
     props,
   };
+}
+
+type PropertySchemaInspection = {
+  type: TransientType;
+  propInfos?: Partial<TransientProp>;
+};
+function inspectPropertySchema(
+  schema: PropertyMetaSchema
+): PropertySchemaInspection {
+  if (typeof schema === "string") {
+    switch (schema) {
+      case "string":
+        return { type: "string" };
+      case "boolean":
+        return { type: "boolean" };
+      case "number":
+        return { type: "decimal" };
+      default:
+        throw new Error(`unsupported type ${schema}`);
+    }
+  }
+
+  switch (schema.kind) {
+    case "enum": {
+      const enumeration = schema.schema;
+
+      assertIsDefined(enumeration);
+
+      const maybeBooleanType = getBooleanTypeIfAny(enumeration);
+
+      if (maybeBooleanType) {
+        return maybeBooleanType;
+      }
+
+      assertIsArrayOf(someString, enumeration);
+
+      return {
+        type: {
+          kind: "enum",
+          enum: enumeration,
+        },
+      };
+    }
+    case "object":
+    case "array":
+    case "event":
+      throw new Error(`unsupported type ${schema.kind}`);
+  }
+}
+
+function getBooleanTypeIfAny(
+  enumeration: PropertyMetaSchema[]
+): PropertySchemaInspection | false {
+  assertIsDefined(enumeration);
+  assertIsArrayOf(someString, enumeration);
+
+  if (enumeration.length == 2) {
+    const [maybeFalse, maybeTrue] = enumeration;
+    const isRequiredBoolean = maybeFalse === "false" && maybeTrue === "true";
+
+    if (isRequiredBoolean) {
+      return {
+        type: "boolean",
+        propInfos: {
+          required: true,
+        },
+      };
+    } else {
+      return false;
+    }
+  }
+
+  if (enumeration.length == 3) {
+    const [maybeUndefined, maybeFalse, maybeTrue] = enumeration;
+    const isOptionalBoolean =
+      maybeUndefined === "undefined" &&
+      maybeFalse === "false" &&
+      maybeTrue === "true";
+
+    if (isOptionalBoolean) {
+      return {
+        type: "boolean",
+        propInfos: {
+          required: false,
+        },
+      };
+    } else {
+      return false;
+    }
+  }
+
+  return false;
 }
