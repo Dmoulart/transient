@@ -46,7 +46,7 @@ function describeComponent(meta: ComponentMeta): TransientComponent {
 
     props.push({
       name,
-      description,
+      description: !!description ? description : undefined,
       default: defaultValue && unescapeString(defaultValue),
       required,
       ...propInfos,
