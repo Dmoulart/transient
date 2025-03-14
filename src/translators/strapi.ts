@@ -1,7 +1,7 @@
 import { join, parse, resolve } from "path";
-import { defineTranslator, TranslatorConfig } from "../translator";
+import { defineTranslator, type TranslatorConfig } from "../translator";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
-import { TransientProp } from "../transient/definition";
+import type { TransientProp } from "../transient/definition";
 import { assert, assertIs, someRecord } from "../helpers/assert";
 
 type StrapiComponent = {
@@ -85,9 +85,11 @@ export function defineStrapiTranslator(
 
 function toStrapiAttributes(props: TransientProp[]): StrapiAttributes {
   const attributes: StrapiAttributes = {};
+
   for (const prop of props) {
     attributes[prop.name] = toStrapiAttribute(prop);
   }
+
   return attributes;
 }
 

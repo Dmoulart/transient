@@ -1,7 +1,7 @@
 import { join, parse, resolve } from "path";
 import fg from "fast-glob";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
-import { TransientComponent } from "./transient/definition";
+import type { TransientComponent } from "./transient/definition";
 
 export type TransientDictionnary = { [path: string]: TransientComponent };
 export type AnalyzeOptions = {

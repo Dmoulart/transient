@@ -1,11 +1,11 @@
 import {
-  ComponentMeta,
   createChecker,
-  PropertyMetaSchema,
+  type ComponentMeta,
+  type PropertyMetaSchema,
 } from "vue-component-meta";
-import { AnalyzerConfig, defineAnalyzer } from "../analyzer";
+import { defineAnalyzer, type AnalyzerConfig } from "../analyzer";
 import { resolve } from "path";
-import {
+import type {
   TransientComponent,
   TransientProp,
   TransientType,

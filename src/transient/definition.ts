@@ -29,18 +29,18 @@ export type TransientPrimitiveTypeName =
   | "decimal"
   | "string";
 
-const test: TransientComponent = {
-  props: [
-    {
-      name: "OK",
-      type: "boolean",
-    },
-    {
-      name: "",
-      type: {
-        kind: "enum",
-        enum: ["1", "2", "3"],
-      },
-    },
-  ],
-};
+// const test: TransientComponent = {
+//   props: [
+//     {
+//       name: "OK",
+//       type: "boolean",
+//     },
+//     {
+//       name: "",
+//       type: {
+//         kind: "enum",
+//         enum: ["1", "2", "3"],
+//       },
+//     },
+//   ],
+// };

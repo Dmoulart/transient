@@ -1,8 +1,7 @@
-import { write } from "fs";
-import { TransientDictionnary } from "./analyzer";
+import type { TransientDictionnary } from "./analyzer";
 
 export type TranslatorConfig<T> = {
-  dest: string;
+  dest?: string;
   write?: (result: T[], dest: string) => void;
   translate(components: TransientDictionnary): T[];
 };
@@ -16,7 +15,7 @@ export function defineTranslator<T>({
   translate,
   write,
 }: TranslatorConfig<T>) {
-  return ({ components }) => {
+  return ({ components }: TranslationConfig) => {
     const translatedComponents = translate(components);
 
     if (dest && write) {
