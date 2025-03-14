@@ -1,9 +1,8 @@
 import { join, parse, resolve } from "path";
-import { ComponentProp } from "../meta/component-api";
 import { defineTranslator, TranslatorConfig } from "../translator";
-import assert from "assert";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
-import { PropertyMetaSchema } from "vue-component-meta";
+import { TransientProp } from "../transient/definition";
+import { assert, assertIs, someRecord } from "../helpers/assert";
 
 type StrapiComponent = {
   collectionName: string;
@@ -84,7 +83,7 @@ export function defineStrapiTranslator(
   });
 }
 
-function toStrapiAttributes(props: ComponentProp[]): StrapiAttributes {
+function toStrapiAttributes(props: TransientProp[]): StrapiAttributes {
   const attributes: StrapiAttributes = {};
   for (const prop of props) {
     attributes[prop.name] = toStrapiAttribute(prop);
@@ -92,7 +91,7 @@ function toStrapiAttributes(props: ComponentProp[]): StrapiAttributes {
   return attributes;
 }
 
-function toStrapiAttribute(prop: ComponentProp): StrapiAttribute {
+function toStrapiAttribute(prop: TransientProp): StrapiAttribute {
   return {
     required: Boolean(prop.required),
     ...toStrapiAttributeType(prop),
@@ -101,48 +100,39 @@ function toStrapiAttribute(prop: ComponentProp): StrapiAttribute {
 }
 
 function toStrapiAttributeType(
-  prop: ComponentProp
+  prop: TransientProp
 ): PartialStrapiAttributeType {
-  if (typeof prop.schema === "string") {
-    switch (prop.schema) {
+  if (typeof prop.type === "string") {
+    switch (prop.type) {
       case "string":
         return { type: "string" };
       case "boolean":
         return { type: "boolean" };
-      case "number":
-        return { type: "decimal" }; // int ?
+      case "decimal":
+        return { type: "decimal" };
+      case "integer":
+        return { type: "integer" };
       default:
-        throw new Error(`unsupported type ${prop.schema}`);
+        throw new Error(`unsupported type ${prop.type}`);
     }
   }
-  switch (prop.schema.kind) {
+  switch (prop.type.kind) {
     case "enum":
       return fromEnumToStrapiType(prop);
     case "object":
-    case "array":
-    case "event":
-      throw new Error(`unsupported type ${prop.schema.kind}`);
+    default:
+      throw new Error(`unsupported type ${prop.type.kind}`);
   }
 }
 
-function fromEnumToStrapiType(prop: ComponentProp): PartialStrapiAttributeType {
-  assert(typeof prop.schema === "object" && prop.schema.kind === "enum");
+function fromEnumToStrapiType(prop: TransientProp): PartialStrapiAttributeType {
+  assertIs(someRecord, prop.type);
+  assertIs((v) => v === "enum", prop.type.kind);
 
-  if (prop.schema.type === "boolean") {
-    return { type: "boolean" };
-  }
-  const enumeration = prop.schema.schema;
-  assert(Array.isArray(enumeration));
+  const enumeration = prop.type.enum;
 
-  assert(enumeration);
   return {
     type: "enumeration",
-    enum: enumeration as string[],
+    enum: enumeration,
   };
-}
-
-function fromObjectToStrapiType(
-  prop: ComponentProp
-): PartialStrapiAttributeType {
-  assert(false);
 }

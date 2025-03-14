@@ -1,5 +1,5 @@
-export function assert(value: boolean, message?: string): void {
-  if (!value) {
+export function assert(value: unknown, message?: string): void {
+  if (Boolean(value) === false) {
     throw new Error(message ?? "expected defined value");
   }
 }
@@ -18,7 +18,7 @@ export function assertIs<T>(
   value: unknown,
   message?: string
 ): asserts value is T {
-  if (isOfType(value)) {
+  if (!isOfType(value)) {
     throw new Error(message ?? `unuexpected type ${typeof value}`);
   }
 }
