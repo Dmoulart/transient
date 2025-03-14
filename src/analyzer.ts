@@ -12,10 +12,10 @@ export type Analyze = (options: AnalyzeOptions) => AnalyzeResult;
 export type Analyzer = {
   defaultDir: string;
   tsConfigPath: string;
-  describe: (path: string, dir: string) => ComponentApi;
-  scanDir: (dir: string) => string[];
   dest: string;
-  write(result: AnalyzeResult, dest: string);
+  describe(path: string, dir: string): ComponentApi;
+  scanDir(dir: string): string[];
+  write(result: AnalyzeResult, dest: string): void;
 };
 
 export type AnalyzerConfig = Partial<Analyzer> & {
@@ -50,7 +50,7 @@ const BASE_ANALYZER: Partial<Analyzer> = {
   },
 };
 
-export function createAnalyzer(config: AnalyzerConfig): Analyze {
+export function defineAnalyzer(config: AnalyzerConfig): Analyze {
   const analyzer = {
     ...BASE_ANALYZER,
     ...config,

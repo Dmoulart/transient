@@ -1,7 +1,25 @@
 import { ComponentMeta, createChecker } from "vue-component-meta";
-import { Analyzer, AnalyzerConfig, createAnalyzer } from "../analyzer";
+import { Analyzer, AnalyzerConfig, defineAnalyzer } from "../analyzer";
 import { resolve } from "path";
 import { ComponentApi, ComponentProp } from "../meta/component-api";
+
+export function defineVueAnalyzer(
+  options: Pick<AnalyzerConfig, "tsConfigPath" | "dest">
+) {
+  const checker = createChecker(options.tsConfigPath, {
+    forceUseTs: true,
+    printer: { newLine: 1 },
+  });
+
+  return defineAnalyzer({
+    dest: options.dest,
+    tsConfigPath: options.tsConfigPath,
+    describe(path, dir) {
+      const meta = checker.getComponentMeta(resolve(__dirname, dir, path));
+      return describeComponent(meta);
+    },
+  });
+}
 
 function describeComponent(meta: ComponentMeta): ComponentApi {
   const props: ComponentProp[] = [];
@@ -23,22 +41,4 @@ function describeComponent(meta: ComponentMeta): ComponentApi {
   return {
     props,
   };
-}
-
-export function createVueAnalyzer(
-  options: Pick<AnalyzerConfig, "tsConfigPath" | "dest">
-) {
-  const checker = createChecker(options.tsConfigPath, {
-    forceUseTs: true,
-    printer: { newLine: 1 },
-  });
-
-  return createAnalyzer({
-    dest: options.dest,
-    tsConfigPath: options.tsConfigPath,
-    describe(path, dir) {
-      const meta = checker.getComponentMeta(resolve(__dirname, dir, path));
-      return describeComponent(meta);
-    },
-  });
 }
