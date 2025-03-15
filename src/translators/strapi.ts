@@ -2,7 +2,14 @@ import { join, parse, resolve } from "path";
 import { defineTranslator, type TranslatorConfig } from "../translator";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import type { TransientProp, TransientProps } from "../transient/definition";
-import { assert, assertIs, someRecord } from "../helpers/assert";
+import {
+  assert,
+  assertIs,
+  assertIsArrayOf,
+  assertIsArrayOfLength,
+  assertIsDefined,
+  someRecord,
+} from "../helpers/assert";
 
 type StrapiComponent = {
   collectionName: string;
@@ -183,13 +190,6 @@ function toStrapiAttributeType(
     }
   }
 
-  //   "attributes": {
-  //   "test": {
-  //     "type": "component",
-  //     "repeatable": false,
-  //     "component": "ui.test"
-  //   }
-  // }
   switch (prop.type.kind) {
     case "enum":
       return { attribute: fromEnumToStrapiType(prop) };
@@ -220,6 +220,24 @@ function toStrapiAttributeType(
         ],
       };
     }
+    case "list": {
+      const { attribute, options } = toStrapiAttribute(prop.type.list, context);
+      // for now we only accept list of object types
+      assertIsDefined(options);
+      assertIsArrayOfLength(1, options);
+      const [listItemComponent] = options;
+      const { category, name } = extractCategoryAndNameFromCollectionName(
+        listItemComponent.collectionName
+      );
+      return {
+        attribute: {
+          type: "component",
+          repeatable: true,
+          component: `${category}.${name}`,
+        },
+        ...(options ? { options } : {}),
+      };
+    }
     default:
       throw new Error(`unsupported type ${prop.type.kind}`);
   }
@@ -235,4 +253,9 @@ function fromEnumToStrapiType(prop: TransientProp): PartialStrapiAttributeType {
     type: "enumeration",
     enum: enumeration,
   };
+}
+
+function extractCategoryAndNameFromCollectionName(collectionName: string) {
+  const [, category, name] = collectionName.split("_");
+  return { category, name };
 }

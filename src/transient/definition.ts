@@ -18,6 +18,8 @@ export type TransientType<T extends TransientTypeName = TransientTypeName> =
     ? { kind: "enum"; enum: string[] }
     : T extends "object"
     ? { kind: "object"; object: Record<string, TransientProp> }
+    : T extends "list"
+    ? { kind: "list"; list: TransientProp }
     : { kind: T };
 
 export type TransientTypeName =
@@ -53,6 +55,14 @@ const test: TransientComponent = {
           prop: {
             type: "string",
           },
+        },
+      },
+    },
+    arr: {
+      type: {
+        kind: "list",
+        list: {
+          type: "string",
         },
       },
     },

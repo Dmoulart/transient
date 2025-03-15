@@ -1,3 +1,5 @@
+import type { PropertyMetaSchema } from "vue-component-meta";
+import { type FixedArray } from "./types";
 export function assert(value: unknown, message?: string): void {
   if (Boolean(value) === false) {
     throw new Error(message ?? "expected defined value");
@@ -38,8 +40,31 @@ export function assertIsArrayOf<T>(
   }
 }
 
+export function assertIsArrayOfLength<L extends number, T>(
+  length: L,
+  value: Array<T>,
+  message?: string
+): asserts value is FixedArray<T, L> {
+  if (value.length !== length) {
+    throw new Error(
+      message ??
+        `unexpected array length. Expected ${length} found ${value.length}`
+    );
+  }
+}
+
 export const someString = (value: unknown): value is string =>
   typeof value === "string";
 
 export const someRecord = (value: unknown): value is Record<string, any> =>
   typeof value === "object";
+
+export const somePropertyMetaSchemaObject = (
+  value: unknown
+): value is Exclude<PropertyMetaSchema, "string"> =>
+  typeof value === "object" && value !== null && "kind" in value;
+
+export const somePropertyMetaSchema = (
+  value: unknown
+): value is PropertyMetaSchema =>
+  typeof value === "string" || somePropertyMetaSchemaObject(value);

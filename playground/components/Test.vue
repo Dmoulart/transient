@@ -8,12 +8,13 @@ type Data = {
   hello: boolean;
 };
 const props = defineProps<{
-  text: string;
-  display: boolean;
-  maybeDisplay?: boolean;
-  env: "prod" | "dev";
-  version: 0 | 1 | 2;
-  level: number;
-  data: Data;
+  // text: string;
+  // display: boolean;
+  // maybeDisplay?: boolean;
+  // env: "prod" | "dev";
+  // version: 0 | 1 | 2;
+  // level: number;
+  datas: Array<Data>;
+  // data: Data;
 }>();
 </script>

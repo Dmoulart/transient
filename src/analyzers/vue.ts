@@ -17,6 +17,8 @@ import {
   someString,
   assertIs,
   someRecord,
+  somePropertyMetaSchema,
+  assertIsArrayOfLength,
 } from "../helpers/assert";
 import { unescapeString } from "../helpers/string";
 
@@ -116,10 +118,33 @@ function inspectPropertySchema(
 
       return { type: { kind: "object", object } };
     }
-    // case "array": {
-    //   const arrayDef = schema.schema;
-    //   console.log({ arrayDef });
-    // }
+    case "array": {
+      const arrayDef = schema.schema;
+      assertIsArrayOf(somePropertyMetaSchema, arrayDef);
+      assertIsArrayOfLength(1, arrayDef);
+
+      const [arrayType] = arrayDef;
+
+      if (typeof arrayType === "string") {
+        throw new Error("Array of primitive types not supported.");
+      }
+
+      if (arrayType.kind === "array") {
+        throw new Error("Array of arrays not supported.");
+      }
+
+      const { type, propInfos } = inspectPropertySchema(arrayType);
+
+      return {
+        type: {
+          kind: "list",
+          list: {
+            ...propInfos,
+            type,
+          },
+        },
+      };
+    }
     default:
       throw new Error(`unsupported type ${schema.kind}`);
   }
