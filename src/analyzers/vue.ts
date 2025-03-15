@@ -116,8 +116,11 @@ function inspectPropertySchema(
 
       return { type: { kind: "object", object } };
     }
-    case "array":
-    case "event":
+    // case "array": {
+    //   const arrayDef = schema.schema;
+    //   console.log({ arrayDef });
+    // }
+    default:
       throw new Error(`unsupported type ${schema.kind}`);
   }
 }
