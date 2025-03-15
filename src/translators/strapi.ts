@@ -68,7 +68,7 @@ export function defineStrapiTranslator(
         const collectionName = `component_${context.name.category}_${context.name.id}`;
 
         const { attributes, options } = toStrapiAttributes(props, context);
-        console.log(options);
+
         if (options) {
           for (const optionComponent of options) {
             strapiComponents.push(optionComponent);
@@ -89,7 +89,7 @@ export function defineStrapiTranslator(
     },
     write(results, dest) {
       if (!existsSync(dest)) mkdirSync(dest);
-      console.log({ results });
+
       for (const component of results) {
         const [, category, name] = component.collectionName.split("_");
 
