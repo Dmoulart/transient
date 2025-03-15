@@ -11,6 +11,16 @@ const props = withDefaults(
     env: "prod" | "dev";
     version: 0 | 1 | 2;
     level: number;
+    complex: {
+      wololo: string;
+      waza: number;
+      text: string;
+      display: boolean;
+      maybeDisplay?: boolean;
+      env: "prod" | "dev";
+      version: 0 | 1 | 2;
+      level: number;
+    };
   }>(),
   {
     version: 0,

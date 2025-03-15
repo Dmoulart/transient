@@ -8,12 +8,15 @@ import { resolve } from "path";
 import type {
   TransientComponent,
   TransientProp,
+  TransientProps,
   TransientType,
 } from "../transient/definition";
 import {
   assertIsDefined,
   assertIsArrayOf,
   someString,
+  assertIs,
+  someRecord,
 } from "../helpers/assert";
 import { unescapeString } from "../helpers/string";
 
@@ -36,7 +39,7 @@ export function defineVueAnalyzer(
 }
 
 function describeComponent(meta: ComponentMeta): TransientComponent {
-  const props: TransientProp[] = [];
+  const props: TransientProps = {};
 
   for (const prop of meta.props) {
     if (prop.global) continue;
@@ -44,14 +47,13 @@ function describeComponent(meta: ComponentMeta): TransientComponent {
     const { name, description, required, default: defaultValue, schema } = prop;
     const { type, propInfos } = inspectPropertySchema(schema);
 
-    props.push({
-      name,
+    props[name] = {
       description: !!description ? description : undefined,
       default: defaultValue && unescapeString(defaultValue),
       required,
       ...propInfos,
       type,
-    });
+    };
   }
 
   return {
@@ -100,7 +102,20 @@ function inspectPropertySchema(
         },
       };
     }
-    case "object":
+    case "object": {
+      const objectDef = schema.schema;
+      assertIsDefined(objectDef);
+      assertIs(someRecord, objectDef);
+
+      const object: TransientType<"object">["object"] = {};
+      for (const [key, def] of Object.entries(objectDef)) {
+        const { type, propInfos } = inspectPropertySchema(def.schema);
+
+        object[key] = { type, ...propInfos };
+      }
+
+      return { type: { kind: "object", object } };
+    }
     case "array":
     case "event":
       throw new Error(`unsupported type ${schema.kind}`);

@@ -1,9 +1,10 @@
 export type TransientComponent = {
-  props: TransientProp[];
+  props: TransientProps;
 };
 
+export type TransientProps = Record<string, TransientProp>;
+
 export type TransientProp = {
-  name: string;
   type: TransientType;
   description?: string;
   required?: boolean;
@@ -15,6 +16,8 @@ export type TransientType<T extends TransientTypeName = TransientTypeName> =
     ? T | { kind: T }
     : T extends "enum"
     ? { kind: "enum"; enum: string[] }
+    : T extends "object"
+    ? { kind: "object"; object: Record<string, TransientProp> }
     : { kind: T };
 
 export type TransientTypeName =
@@ -29,18 +32,29 @@ export type TransientPrimitiveTypeName =
   | "decimal"
   | "string";
 
-// const test: TransientComponent = {
-//   props: [
-//     {
-//       name: "OK",
-//       type: "boolean",
-//     },
-//     {
-//       name: "",
-//       type: {
-//         kind: "enum",
-//         enum: ["1", "2", "3"],
-//       },
-//     },
-//   ],
-// };
+const test: TransientComponent = {
+  props: {
+    ok: {
+      type: "boolean",
+      default: "false",
+      description: "",
+      required: true,
+    },
+    err: {
+      type: {
+        kind: "enum",
+        enum: ["1", "2", "3"],
+      },
+    },
+    bigObject: {
+      type: {
+        kind: "object",
+        object: {
+          prop: {
+            type: "string",
+          },
+        },
+      },
+    },
+  },
+};
