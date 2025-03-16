@@ -19,6 +19,9 @@ export const logger = {
   info(message: string) {
     console.info(align(), message);
   },
+  output(message: string) {
+    console.info(align(), chalk.gray(message));
+  },
   processing(message: string) {
     console.info(align(), "- processing", chalk.blue(message), "...");
   },

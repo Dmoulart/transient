@@ -25,9 +25,8 @@ export function defineTranslator<T>({
 
     if (dest && write) {
       write(translatedComponents, dest);
-      logger.info(`Dumped in ${dest}`);
+      logger.output(`Output : ${dest}`);
     }
-
     logger.finish("component translation");
 
     return translatedComponents;
