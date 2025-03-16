@@ -10,6 +10,7 @@ import {
   assertIsDefined,
   someRecord,
 } from "../helpers/assert";
+import { logger } from "../log/logger";
 
 type StrapiComponent = {
   collectionName: string;
@@ -59,6 +60,8 @@ export function defineStrapiTranslator(
     translate(components) {
       const strapiComponents: StrapiComponent[] = [];
       for (const [path, component] of Object.entries(components)) {
+        logger.processing(path);
+
         const { props } = component;
         const { name: displayName, dir } = parse(path);
 
@@ -78,6 +81,7 @@ export function defineStrapiTranslator(
 
         if (options) {
           for (const optionComponent of options) {
+            logger.processing(optionComponent.collectionName);
             strapiComponents.push(optionComponent);
           }
         }
@@ -90,8 +94,9 @@ export function defineStrapiTranslator(
           },
           attributes,
         });
-      }
 
+        logger.result("OK");
+      }
       return strapiComponents;
     },
     write(results, dest) {

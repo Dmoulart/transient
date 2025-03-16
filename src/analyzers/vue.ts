@@ -71,16 +71,7 @@ function inspectPropertySchema(
   schema: PropertyMetaSchema
 ): PropertySchemaInspection {
   if (typeof schema === "string") {
-    switch (schema) {
-      case "string":
-        return { type: "string" };
-      case "boolean":
-        return { type: "boolean" };
-      case "number":
-        return { type: "decimal" };
-      default:
-        throw new Error(`unsupported type ${schema}`);
-    }
+    return toTransientPrimitiveType(schema);
   }
 
   switch (schema.kind) {
@@ -93,6 +84,12 @@ function inspectPropertySchema(
 
       if (maybeBooleanType) {
         return maybeBooleanType;
+      }
+
+      const maybeOptionalPrimitiveType = getOptionalTypeIfAny(enumeration);
+
+      if (maybeOptionalPrimitiveType) {
+        return maybeOptionalPrimitiveType;
       }
 
       assertIsArrayOf(someString, enumeration);
@@ -150,6 +147,31 @@ function inspectPropertySchema(
   }
 }
 
+function getOptionalTypeIfAny(
+  enumeration: PropertyMetaSchema[]
+): PropertySchemaInspection | false {
+  assertIsDefined(enumeration);
+  assertIsArrayOf(someString, enumeration);
+
+  if (enumeration.length == 2) {
+    const [maybeUndefined, maybePrimitive] = enumeration;
+    const isOptionalPrimitive =
+      maybeUndefined === "undefined" && isPrimitiveType(maybePrimitive);
+    if (isOptionalPrimitive) {
+      return {
+        ...toTransientPrimitiveType(maybePrimitive),
+        propInfos: {
+          required: false,
+        },
+      };
+    } else {
+      return false;
+    }
+  }
+
+  return false;
+}
+
 function getBooleanTypeIfAny(
   enumeration: PropertyMetaSchema[]
 ): PropertySchemaInspection | false {
@@ -192,4 +214,31 @@ function getBooleanTypeIfAny(
   }
 
   return false;
+}
+
+function isPrimitiveType(type: string): boolean {
+  switch (type) {
+    case "boolean":
+    case "string":
+    case "number":
+      return true;
+    default:
+      return false;
+  }
+}
+
+function toTransientPrimitiveType(
+  schema: PropertyMetaSchema
+): PropertySchemaInspection {
+  assertIs(someString, schema);
+  switch (schema) {
+    case "string":
+      return { type: "string" };
+    case "boolean":
+      return { type: "boolean" };
+    case "number":
+      return { type: "decimal" };
+    default:
+      throw new Error(`unsupported type ${schema}`);
+  }
 }

@@ -1,4 +1,5 @@
 import type { TransientDictionnary } from "./analyzer";
+import { logger } from "./log/logger";
 
 export type TranslatorConfig<T> = {
   dest?: string;
@@ -16,12 +17,13 @@ export function defineTranslator<T>({
   write,
 }: TranslatorConfig<T>) {
   return ({ components }: TranslationConfig) => {
+    logger.announce("component translation");
     const translatedComponents = translate(components);
-
+    logger.result(`${translatedComponents.length} components created`);
     if (dest && write) {
       write(translatedComponents, dest);
     }
-
+    logger.finish("component translation");
     return translatedComponents;
   };
 }

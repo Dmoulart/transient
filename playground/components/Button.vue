@@ -4,15 +4,7 @@
 <script setup lang="ts">
 import { defineProps } from "vue";
 
-type Data = {
-  live?: boolean;
-};
-
 const props = defineProps<{
   text: string;
-  display: boolean;
-  version: 0 | 1 | 2;
-  env: "prod" | "dev";
-  data: Array<Data>;
 }>();
 </script>
