@@ -20,13 +20,20 @@ export type TransientType<T extends TransientTypeName = TransientTypeName> =
     ? { kind: "object"; object: Record<string, TransientProp> }
     : T extends "list"
     ? { kind: "list"; list: TransientProp }
+    : T extends "record"
+    ? { kind: "record" }
     : { kind: T };
 
 export type TransientTypeName =
   | TransientPrimitiveTypeName
   | TransientComplexTypeName;
 
-export type TransientComplexTypeName = "list" | "object" | "union" | "enum";
+export type TransientComplexTypeName =
+  | "list"
+  | "object"
+  | "union"
+  | "enum"
+  | "record";
 
 export type TransientPrimitiveTypeName =
   | "boolean"
