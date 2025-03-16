@@ -18,12 +18,18 @@ export function defineTranslator<T>({
 }: TranslatorConfig<T>) {
   return ({ components }: TranslationConfig) => {
     logger.announce("component translation");
+
     const translatedComponents = translate(components);
+
     logger.result(`${translatedComponents.length} components created`);
+
     if (dest && write) {
       write(translatedComponents, dest);
+      logger.info(`Dumped in ${dest}`);
     }
+
     logger.finish("component translation");
+
     return translatedComponents;
   };
 }

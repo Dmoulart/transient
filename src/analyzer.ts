@@ -79,7 +79,9 @@ export function defineAnalyzer(config: AnalyzerConfig): Analyze {
 
     if (dest && write) {
       write(metas, dest);
+      logger.info(`Dumped in ${dest}`);
     }
+
     logger.finish("components analysis");
     return metas;
   };
