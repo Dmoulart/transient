@@ -116,7 +116,7 @@ export function defineStrapiTranslator(
 
         const componentFilePath = join(destPath, `${name}.json`);
 
-        writeFileSync(componentFilePath, JSON.stringify(component, null, 4));
+        writeFileSync(componentFilePath, JSON.stringify(component, null, 2));
       }
     },
   });

@@ -51,7 +51,7 @@ const BASE_ANALYZER: Partial<Analyzer> = {
         `${componentName}.json`
       );
 
-      writeFileSync(metaJsonFilePath, JSON.stringify(api, null, 4));
+      writeFileSync(metaJsonFilePath, JSON.stringify(api, null, 2));
     }
   },
 };
