@@ -1,5 +1,5 @@
 import { join, parse, resolve } from "path";
-import fg from "fast-glob";
+import fg, { type Pattern } from "fast-glob";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import type { TransientComponent } from "./transient/definition";
 import { logger } from "./log/logger";
@@ -14,8 +14,9 @@ export type Analyzer = {
   tsConfigPath: string;
   dest: string;
   log: boolean;
+  glob: Pattern;
   describe(path: string, dir: string): TransientComponent;
-  scanDir(dir: string): string[];
+  scanDir(dir: string, glob: Pattern): string[];
   write(result: TransientDictionnary, dest: string): void;
 };
 
@@ -28,13 +29,11 @@ const BASE_ANALYZER: Partial<Analyzer> = {
   defaultDir: ".",
   tsConfigPath: "./tsconfig.json",
   log: true,
-  scanDir(dir: string) {
-    const files = fg.sync([`./**/*`], {
+  scanDir(dir: string, glob: Pattern) {
+    const files = fg.sync(glob, {
       cwd: resolve(__dirname, dir),
       absolute: false,
     });
-
-    logger.info(`Found ${files.length} files`);
 
     return files;
   },
@@ -62,12 +61,14 @@ export function defineAnalyzer(config: AnalyzerConfig): Analyze {
     ...config,
   } as Analyzer;
 
-  const { defaultDir, describe, tsConfigPath, scanDir, write, dest } = analyzer;
+  const { defaultDir, describe, tsConfigPath, scanDir, write, dest, glob } =
+    analyzer;
 
   return ({ dir }) => {
     logger.announce("components analysis");
 
-    const componentPaths = scanDir(dir ?? defaultDir);
+    const componentPaths = scanDir(dir ?? defaultDir, glob);
+    logger.info(`Found ${componentPaths.length} files`);
 
     const metas: TransientDictionnary = {};
 

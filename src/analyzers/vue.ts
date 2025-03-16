@@ -33,6 +33,7 @@ export function defineVueAnalyzer(
   return defineAnalyzer({
     dest: options.dest,
     tsConfigPath: options.tsConfigPath,
+    glob: "./**/*.vue",
     describe(path, dir) {
       const meta = checker.getComponentMeta(resolve(__dirname, dir, path));
       return describeComponent(meta);
