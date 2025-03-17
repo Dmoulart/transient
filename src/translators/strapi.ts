@@ -38,7 +38,8 @@ type StrapiAttributeType =
   | "enumeration"
   | "integer"
   | "decimal"
-  | "component";
+  | "component"
+  | "json";
 
 type PartialStrapiAttributeType = Partial<StrapiAttribute> & {
   type: StrapiAttribute["type"];
@@ -241,6 +242,13 @@ function toStrapiAttributeType(
           component: `${category}.${name}`,
         },
         ...(options ? { options } : {}),
+      };
+    }
+    case "record": {
+      return {
+        attribute: {
+          type: "json",
+        },
       };
     }
     default:

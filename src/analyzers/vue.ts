@@ -3,24 +3,25 @@ import {
   type ComponentMeta,
   type PropertyMetaSchema,
 } from "vue-component-meta";
+import {
+  normalizeListOfTypes,
+  toPrimitiveType,
+  type TypeAnalysis,
+} from "./cast";
 import { defineAnalyzer, type AnalyzerConfig } from "../analyzer";
 import { resolve } from "path";
 import type {
   TransientComponent,
-  TransientProp,
   TransientProps,
   TransientType,
 } from "../transient/definition";
 import {
   assertIsDefined,
   assertIsArrayOf,
-  someString,
   assertIs,
   someRecord,
   somePropertyMetaSchema,
-  assertIsArrayOfLength,
 } from "../helpers/assert";
-import { unescapeString } from "../helpers/string";
 
 export function defineVueAnalyzer(
   options: Pick<AnalyzerConfig, "tsConfigPath" | "dest">
@@ -52,7 +53,7 @@ function describeComponent(meta: ComponentMeta): TransientComponent {
 
     props[name] = {
       description: !!description ? description : undefined,
-      default: defaultValue && unescapeString(defaultValue),
+      default: defaultValue, // && unescapeString(defaultValue),
       required,
       ...propInfos,
       type,
@@ -64,43 +65,20 @@ function describeComponent(meta: ComponentMeta): TransientComponent {
   };
 }
 
-type PropertySchemaInspection = {
-  type: TransientType;
-  propInfos?: Partial<TransientProp>;
-};
-function inspectPropertySchema(
-  schema: PropertyMetaSchema
-): PropertySchemaInspection {
+function inspectPropertySchema(schema: PropertyMetaSchema): TypeAnalysis {
   if (typeof schema === "string") {
-    return toTransientPrimitiveType(schema);
+    return {
+      type: toPrimitiveType(schema) ?? {
+        kind: "record",
+      },
+    };
   }
 
   switch (schema.kind) {
     case "enum": {
-      const enumeration = schema.schema;
+      assertIsDefined(schema.schema);
 
-      assertIsDefined(enumeration);
-
-      const maybeBooleanType = getBooleanTypeIfAny(enumeration);
-
-      if (maybeBooleanType) {
-        return maybeBooleanType;
-      }
-
-      const maybeOptionalPrimitiveType = getOptionalTypeIfAny(enumeration);
-
-      if (maybeOptionalPrimitiveType) {
-        return maybeOptionalPrimitiveType;
-      }
-
-      assertIsArrayOf(someString, enumeration);
-
-      return {
-        type: {
-          kind: "enum",
-          enum: enumeration.map(unescapeString),
-        },
-      };
+      return normalizeListOfTypes(schema.schema);
     }
     case "object": {
       const objectDef = schema.schema;
@@ -119,12 +97,28 @@ function inspectPropertySchema(
     case "array": {
       const arrayDef = schema.schema;
       assertIsArrayOf(somePropertyMetaSchema, arrayDef);
-      assertIsArrayOfLength(1, arrayDef);
+
+      // @todo tuples
+      let size: number = undefined;
+      const isTuple = arrayDef.length > 1;
+      if (arrayDef.length > 1) {
+      }
+      // assertIsArrayOfLength(1, arrayDef);
 
       const [arrayType] = arrayDef;
 
       if (typeof arrayType === "string") {
-        throw new Error("Array of primitive types not supported.");
+        const { type, propInfos } = inspectPropertySchema(arrayType);
+
+        return {
+          type: {
+            kind: "list",
+            list: {
+              type,
+              ...propInfos,
+            },
+          },
+        };
       }
 
       if (arrayType.kind === "array") {
@@ -143,103 +137,13 @@ function inspectPropertySchema(
         },
       };
     }
-    default:
-      throw new Error(`unsupported type ${schema.kind}`);
-  }
-}
-
-function getOptionalTypeIfAny(
-  enumeration: PropertyMetaSchema[]
-): PropertySchemaInspection | false {
-  assertIsDefined(enumeration);
-  assertIsArrayOf(someString, enumeration);
-
-  if (enumeration.length == 2) {
-    const [maybeUndefined, maybePrimitive] = enumeration;
-    const isOptionalPrimitive =
-      maybeUndefined === "undefined" && isPrimitiveType(maybePrimitive);
-    if (isOptionalPrimitive) {
+    // @temp
+    case "event": {
       return {
-        ...toTransientPrimitiveType(maybePrimitive),
-        propInfos: {
-          required: false,
+        type: {
+          kind: "record",
         },
       };
-    } else {
-      return false;
     }
-  }
-
-  return false;
-}
-
-function getBooleanTypeIfAny(
-  enumeration: PropertyMetaSchema[]
-): PropertySchemaInspection | false {
-  assertIsDefined(enumeration);
-  assertIsArrayOf(someString, enumeration);
-
-  if (enumeration.length == 2) {
-    const [maybeFalse, maybeTrue] = enumeration;
-    const isRequiredBoolean = maybeFalse === "false" && maybeTrue === "true";
-
-    if (isRequiredBoolean) {
-      return {
-        type: "boolean",
-        propInfos: {
-          required: true,
-        },
-      };
-    } else {
-      return false;
-    }
-  }
-
-  if (enumeration.length == 3) {
-    const [maybeUndefined, maybeFalse, maybeTrue] = enumeration;
-    const isOptionalBoolean =
-      maybeUndefined === "undefined" &&
-      maybeFalse === "false" &&
-      maybeTrue === "true";
-
-    if (isOptionalBoolean) {
-      return {
-        type: "boolean",
-        propInfos: {
-          required: false,
-        },
-      };
-    } else {
-      return false;
-    }
-  }
-
-  return false;
-}
-
-function isPrimitiveType(type: string): boolean {
-  switch (type) {
-    case "boolean":
-    case "string":
-    case "number":
-      return true;
-    default:
-      return false;
-  }
-}
-
-function toTransientPrimitiveType(
-  schema: PropertyMetaSchema
-): PropertySchemaInspection {
-  assertIs(someString, schema);
-  switch (schema) {
-    case "string":
-      return { type: "string" };
-    case "boolean":
-      return { type: "boolean" };
-    case "number":
-      return { type: "decimal" };
-    default:
-      throw new Error(`unsupported type ${schema}`);
   }
 }

@@ -22,6 +22,8 @@ export type TransientType<T extends TransientTypeName = TransientTypeName> =
     ? { kind: "list"; list: TransientProp }
     : T extends "record"
     ? { kind: "record" }
+    : T extends "union"
+    ? { kind: "union"; union: TransientType[] }
     : { kind: T };
 
 export type TransientTypeName =

@@ -3,3 +3,4 @@ playground/app-schemas/**/*
 playground/cms-schemas/**/*
 test/app-schemas/**/*
 test/cms-schemas/**/*
+.DS_Store

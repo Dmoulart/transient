@@ -43,7 +43,11 @@ const BASE_ANALYZER: Partial<Analyzer> = {
       const metaComponentDirPath = resolve(dest, componentDir);
 
       // if meta dir doesn't exist create
-      if (!existsSync(metaComponentDirPath)) mkdirSync(metaComponentDirPath);
+      if (!existsSync(metaComponentDirPath)) {
+        mkdirSync(metaComponentDirPath, {
+          recursive: true,
+        });
+      }
 
       const metaJsonFilePath = join(
         metaComponentDirPath,
