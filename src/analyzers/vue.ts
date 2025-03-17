@@ -49,7 +49,7 @@ function describeComponent(meta: ComponentMeta): TransientComponent {
     if (prop.global) continue;
 
     const { name, description, required, default: defaultValue, schema } = prop;
-    const { type, propInfos } = inspectPropertySchema(schema);
+    const { type, propInfos } = describePropType(schema);
 
     props[name] = {
       description: !!description ? description : undefined,
@@ -65,7 +65,7 @@ function describeComponent(meta: ComponentMeta): TransientComponent {
   };
 }
 
-function inspectPropertySchema(schema: PropertyMetaSchema): TypeAnalysis {
+function describePropType(schema: PropertyMetaSchema): TypeAnalysis {
   if (typeof schema === "string") {
     return {
       type: toPrimitiveType(schema) ?? {
@@ -87,7 +87,7 @@ function inspectPropertySchema(schema: PropertyMetaSchema): TypeAnalysis {
 
       const object: TransientType<"object">["object"] = {};
       for (const [key, def] of Object.entries(objectDef)) {
-        const { type, propInfos } = inspectPropertySchema(def.schema);
+        const { type, propInfos } = describePropType(def.schema);
 
         object[key] = { type, ...propInfos };
       }
@@ -99,16 +99,15 @@ function inspectPropertySchema(schema: PropertyMetaSchema): TypeAnalysis {
       assertIsArrayOf(somePropertyMetaSchema, arrayDef);
 
       // @todo tuples
-      let size: number = undefined;
-      const isTuple = arrayDef.length > 1;
-      if (arrayDef.length > 1) {
-      }
-      // assertIsArrayOfLength(1, arrayDef);
+      // let size: number = undefined;
+      // const isTuple = arrayDef.length > 1;
+      // if (arrayDef.length > 1) {
+      // }
 
       const [arrayType] = arrayDef;
 
       if (typeof arrayType === "string") {
-        const { type, propInfos } = inspectPropertySchema(arrayType);
+        const { type, propInfos } = describePropType(arrayType);
 
         return {
           type: {
@@ -125,7 +124,7 @@ function inspectPropertySchema(schema: PropertyMetaSchema): TypeAnalysis {
         throw new Error("Array of arrays not supported.");
       }
 
-      const { type, propInfos } = inspectPropertySchema(arrayType);
+      const { type, propInfos } = describePropType(arrayType);
 
       return {
         type: {
