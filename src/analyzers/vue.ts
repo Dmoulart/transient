@@ -4,7 +4,10 @@ import {
   type PropertyMetaSchema,
 } from "vue-component-meta";
 import {
-  normalizeListOfTypes,
+  castArray,
+  castEnumType,
+  castEvent,
+  castObject,
   toPrimitiveType,
   type TypeAnalysis,
 } from "./cast";
@@ -65,7 +68,7 @@ function describeComponent(meta: ComponentMeta): TransientComponent {
   };
 }
 
-function describePropType(schema: PropertyMetaSchema): TypeAnalysis {
+export function describePropType(schema: PropertyMetaSchema): TypeAnalysis {
   if (typeof schema === "string") {
     return {
       type: toPrimitiveType(schema) ?? {
@@ -78,71 +81,16 @@ function describePropType(schema: PropertyMetaSchema): TypeAnalysis {
     case "enum": {
       assertIsDefined(schema.schema);
 
-      return normalizeListOfTypes(schema.schema);
+      return castEnumType(schema.schema);
     }
     case "object": {
-      const objectDef = schema.schema;
-      assertIsDefined(objectDef);
-      assertIs(someRecord, objectDef);
-
-      const object: TransientType<"object">["object"] = {};
-      for (const [key, def] of Object.entries(objectDef)) {
-        const { type, propInfos } = describePropType(def.schema);
-
-        object[key] = { type, ...propInfos };
-      }
-
-      return { type: { kind: "object", object } };
+      return castObject(schema);
     }
     case "array": {
-      const arrayDef = schema.schema;
-      assertIsArrayOf(somePropertyMetaSchema, arrayDef);
-
-      // @todo tuples
-      // let size: number = undefined;
-      // const isTuple = arrayDef.length > 1;
-      // if (arrayDef.length > 1) {
-      // }
-
-      const [arrayType] = arrayDef;
-
-      if (typeof arrayType === "string") {
-        const { type, propInfos } = describePropType(arrayType);
-
-        return {
-          type: {
-            kind: "list",
-            list: {
-              type,
-              ...propInfos,
-            },
-          },
-        };
-      }
-
-      if (arrayType.kind === "array") {
-        throw new Error("Array of arrays not supported.");
-      }
-
-      const { type, propInfos } = describePropType(arrayType);
-
-      return {
-        type: {
-          kind: "list",
-          list: {
-            ...propInfos,
-            type,
-          },
-        },
-      };
+      return castArray(schema);
     }
-    // @temp
     case "event": {
-      return {
-        type: {
-          kind: "record",
-        },
-      };
+      return castEvent(schema);
     }
   }
 }

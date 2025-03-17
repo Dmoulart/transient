@@ -1,31 +1,27 @@
 import { describe, expect, test } from "bun:test";
-import { normalizeListOfTypes } from "../src/analyzers/cast";
+import { castEnumType } from "../src/analyzers/cast";
 
 describe("enum types normalization", () => {
   test("boolean", () => {
-    const { type } = normalizeListOfTypes(["true", "false"]);
+    const { type } = castEnumType(["true", "false"]);
 
     expect(type).toEqual("boolean");
   });
 
   test("optional with undefined", () => {
-    const { type, propInfos } = normalizeListOfTypes([
-      "undefined",
-      "true",
-      "false",
-    ]);
+    const { type, propInfos } = castEnumType(["undefined", "true", "false"]);
     expect(propInfos!.required).toEqual(false);
     expect(type).toEqual("boolean");
   });
 
   test("optional with null", () => {
-    const { type, propInfos } = normalizeListOfTypes(["null", "true", "false"]);
+    const { type, propInfos } = castEnumType(["null", "true", "false"]);
     expect(propInfos!.required).toEqual(false);
     expect(type).toEqual("boolean");
   });
 
   test("optional with both null and undefined", () => {
-    const { type, propInfos } = normalizeListOfTypes([
+    const { type, propInfos } = castEnumType([
       "null",
       "undefined",
       "true",
@@ -36,11 +32,7 @@ describe("enum types normalization", () => {
   });
 
   test("string literals", () => {
-    const { type, propInfos } = normalizeListOfTypes([
-      '"One"',
-      '"Two"',
-      '"Three"',
-    ]);
+    const { type, propInfos } = castEnumType(['"One"', '"Two"', '"Three"']);
     expect(propInfos!.required).toEqual(true);
     expect(type).toEqual({
       kind: "enum",
@@ -49,7 +41,7 @@ describe("enum types normalization", () => {
   });
 
   test("numbers", () => {
-    const { type, propInfos } = normalizeListOfTypes(["1", "2", "3"]);
+    const { type, propInfos } = castEnumType(["1", "2", "3"]);
     expect(propInfos!.required).toEqual(true);
     expect(type).toEqual({
       kind: "enum",
@@ -58,7 +50,7 @@ describe("enum types normalization", () => {
   });
 
   test("optionals, string literals, numbers", () => {
-    const { type, propInfos } = normalizeListOfTypes([
+    const { type, propInfos } = castEnumType([
       "undefined",
       "null",
       '"One"',
@@ -86,14 +78,14 @@ describe("enum types normalization", () => {
   });
 
   test("primitive", () => {
-    const { type, propInfos } = normalizeListOfTypes(["number"]);
+    const { type, propInfos } = castEnumType(["number"]);
 
     expect(propInfos!.required).toEqual(true);
     expect(type).toEqual("decimal");
   });
 
   test("primitives", () => {
-    const { type, propInfos } = normalizeListOfTypes(["number", "string"]);
+    const { type, propInfos } = castEnumType(["number", "string"]);
 
     expect(propInfos!.required).toEqual(true);
 
@@ -104,11 +96,7 @@ describe("enum types normalization", () => {
   });
 
   test("optional primitives", () => {
-    const { type, propInfos } = normalizeListOfTypes([
-      "undefined",
-      "number",
-      "string",
-    ]);
+    const { type, propInfos } = castEnumType(["undefined", "number", "string"]);
 
     expect(propInfos!.required).toEqual(false);
 

@@ -1,7 +1,16 @@
 import { type PropertyMetaSchema } from "vue-component-meta";
-import { assert, assertIs, someString } from "../helpers/assert";
+import {
+  assert,
+  assertIs,
+  assertIsArrayOf,
+  assertIsDefined,
+  somePropertyMetaSchema,
+  someRecord,
+  someString,
+} from "../helpers/assert";
 import type { TransientProp, TransientType } from "../transient/definition";
 import { isEscapedString, isNumeric, unescapeString } from "../core/string";
+import { describePropType } from "./vue";
 
 export type TypeAnalysis = {
   type: TransientType;
@@ -14,9 +23,7 @@ export type TypeNormalizationAnalysis = [
 ];
 const isStringLiteral = isEscapedString;
 
-export function normalizeListOfTypes(
-  enumeration: PropertyMetaSchema[]
-): TypeAnalysis {
+export function castEnumType(enumeration: PropertyMetaSchema[]): TypeAnalysis {
   let normalizedEnum = [...enumeration];
 
   const types: TransientType[] = [];
@@ -27,6 +34,9 @@ export function normalizeListOfTypes(
     collectStringLiteralsFromEnum,
     collectBooleanFromEnum,
     collectNumbersFromEnum,
+    collectObjectTypesFromEnum,
+    collectArrayTypesFromEnum,
+    collectEventTypesFromEnum,
     collectPrimitiveTypesFromEnum,
   ]) {
     const [filteredEnum, result] = collect(normalizedEnum);
@@ -173,10 +183,122 @@ export function collectNumbersFromEnum(
   ];
 }
 
+export function collectArrayTypesFromEnum(
+  enumeration: PropertyMetaSchema[]
+): TypeNormalizationAnalysis {
+  const complexTypes: TransientType[] = [];
+
+  for (let i = enumeration.length - 1; i >= 0; i--) {
+    const type = enumeration[i];
+
+    if (someRecord(type) && type.kind === "array") {
+      complexTypes.push(castArray(enumeration.splice(i, 1)[0]).type);
+    }
+  }
+
+  if (complexTypes.length === 0) {
+    return [enumeration, undefined];
+  }
+
+  if (complexTypes.length === 1) {
+    return [
+      enumeration,
+      {
+        type: complexTypes[0],
+      },
+    ];
+  }
+
+  return [
+    enumeration,
+    {
+      type: {
+        kind: "union",
+        union: complexTypes.reverse(),
+      },
+    },
+  ];
+}
+
+export function collectObjectTypesFromEnum(
+  enumeration: PropertyMetaSchema[]
+): TypeNormalizationAnalysis {
+  const complexTypes: TransientType[] = [];
+
+  for (let i = enumeration.length - 1; i >= 0; i--) {
+    const type = enumeration[i];
+
+    if (someRecord(type) && type.kind === "object") {
+      complexTypes.push(castObject(enumeration.splice(i, 1)[0]).type);
+    }
+  }
+
+  if (complexTypes.length === 0) {
+    return [enumeration, undefined];
+  }
+
+  if (complexTypes.length === 1) {
+    return [
+      enumeration,
+      {
+        type: complexTypes[0],
+      },
+    ];
+  }
+
+  return [
+    enumeration,
+    {
+      type: {
+        kind: "union",
+        union: complexTypes.reverse(),
+      },
+    },
+  ];
+}
+
+export function collectEventTypesFromEnum(
+  enumeration: PropertyMetaSchema[]
+): TypeNormalizationAnalysis {
+  const eventTypes: TransientType[] = [];
+
+  for (let i = enumeration.length - 1; i >= 0; i--) {
+    const type = enumeration[i];
+
+    if (someRecord(type) && type.kind === "event") {
+      eventTypes.push(castEvent(enumeration.splice(i, 1)[0]).type);
+    }
+  }
+
+  if (eventTypes.length === 0) {
+    return [enumeration, undefined];
+  }
+
+  if (eventTypes.length === 1) {
+    return [
+      enumeration,
+      {
+        type: eventTypes[0],
+      },
+    ];
+  }
+
+  return [
+    enumeration,
+    {
+      type: {
+        kind: "union",
+        union: eventTypes.reverse(),
+      },
+    },
+  ];
+}
+
 export function collectPrimitiveTypesFromEnum(
   enumeration: PropertyMetaSchema[]
 ): TypeNormalizationAnalysis {
   const primitiveTypes: TransientType[] = [];
+
   for (let i = enumeration.length - 1; i >= 0; i--) {
     const type = enumeration[i];
 
@@ -213,6 +335,7 @@ export function collectPrimitiveTypesFromEnum(
     },
   ];
 }
+
 export function mergeTypes(types: TransientType[]): TransientType {
   const flattenedTypes: TransientType[] = [];
 
@@ -263,4 +386,84 @@ export function toPrimitiveType(
       //   return undefined;
     }
   }
+}
+
+export function castObject(schema: PropertyMetaSchema): TypeAnalysis {
+  assertIs(someRecord, schema);
+  assert(schema.kind === "object");
+
+  const objectDef = schema.schema;
+
+  assertIsDefined(objectDef);
+
+  const object: TransientType<"object">["object"] = {};
+  for (const [key, def] of Object.entries(objectDef)) {
+    const { type, propInfos } = describePropType(def.schema);
+
+    object[key] = { type, ...propInfos };
+  }
+
+  return { type: { kind: "object", object } };
+}
+
+export function castArray(schema: PropertyMetaSchema): TypeAnalysis {
+  assertIs(someRecord, schema);
+  assert(schema.kind === "array");
+
+  const arrayDef = schema.schema;
+  assertIsArrayOf(somePropertyMetaSchema, arrayDef);
+
+  // @todo tuples
+  // let size: number = undefined;
+  // const isTuple = arrayDef.length > 1;
+  // if (arrayDef.length > 1) {
+  // }
+  if (arrayDef.length === 0) {
+    return {
+      type: {
+        kind: "record",
+      },
+    };
+  }
+
+  const [arrayType] = arrayDef;
+
+  if (typeof arrayType === "string") {
+    const { type, propInfos } = describePropType(arrayType);
+
+    return {
+      type: {
+        kind: "list",
+        list: {
+          type,
+          ...propInfos,
+        },
+      },
+    };
+  }
+
+  if (!arrayType || arrayType.kind === "array") {
+    console.error("damned");
+    throw new Error("Array of arrays not supported.");
+  }
+
+  const { type, propInfos } = describePropType(arrayType);
+
+  return {
+    type: {
+      kind: "list",
+      list: {
+        ...propInfos,
+        type,
+      },
+    },
+  };
+}
+
+export function castEvent(schema: PropertyMetaSchema): TypeAnalysis {
+  return {
+    type: {
+      kind: "record",
+    },
+  };
 }

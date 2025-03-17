@@ -251,6 +251,18 @@ function toStrapiAttributeType(
         },
       };
     }
+    case "union": {
+      assertIsDefined(prop.type.union[0]);
+      return toStrapiAttributeType(
+        { ...prop, type: prop.type.union[0] },
+        context
+      );
+      // return {
+      //   attribute: {
+      //     type: "json",
+      //   },
+      // };
+    }
     default:
       throw new Error(`unsupported type ${prop.type.kind}`);
   }
