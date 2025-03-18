@@ -5,12 +5,14 @@ import {
   assertIsArrayOf,
   assertIsDefined,
   somePropertyMetaSchema,
+  somePropertyMetaSchemaObject,
   someRecord,
   someString,
 } from "../helpers/assert";
 import type { TransientProp, TransientType } from "../transient/definition";
 import { isEscapedString, isNumeric, unescapeString } from "../core/string";
 import { describePropType } from "./vue";
+import { logger } from "../log/logger";
 
 export type TypeAnalysis = {
   type: TransientType;
@@ -373,15 +375,14 @@ export function toPrimitiveType(
       return "decimal";
     default: {
       // @tmp
-      return {
-        kind: "record",
-      };
-      //   if (schema.startsWith("Record")) {
-      //     // @tmp
-      //     return {
-      //       kind: "record",
-      //     };
-      //   }
+      if (schema.startsWith("Record")) {
+        // @tmp
+        return {
+          kind: "record",
+        };
+      }
+
+      return "unknown";
 
       //   return undefined;
     }
@@ -391,16 +392,30 @@ export function toPrimitiveType(
 export function castObject(schema: PropertyMetaSchema): TypeAnalysis {
   assertIs(someRecord, schema);
   assert(schema.kind === "object");
-
   const objectDef = schema.schema;
-
   assertIsDefined(objectDef);
 
   const object: TransientType<"object">["object"] = {};
+
+  const hasTooManyProps = Object.keys(objectDef).length > 20;
+
+  if (hasTooManyProps) {
+    logger.info("skipping object type, too many props...");
+    return { type: "unknown" };
+  }
+
   for (const [key, def] of Object.entries(objectDef)) {
     const { type, propInfos } = describePropType(def.schema);
-
     object[key] = { type, ...propInfos };
+  }
+
+  const hasUnknownProps = Object.values(object).every(
+    (prop) => prop.type === "unknown"
+  );
+
+  if (hasUnknownProps) {
+    logger.info("skipping object type, unknown props...");
+    return { type: "unknown" };
   }
 
   return { type: { kind: "object", object } };
@@ -420,9 +435,7 @@ export function castArray(schema: PropertyMetaSchema): TypeAnalysis {
   // }
   if (arrayDef.length === 0) {
     return {
-      type: {
-        kind: "record",
-      },
+      type: "unknown",
     };
   }
 
@@ -462,8 +475,6 @@ export function castArray(schema: PropertyMetaSchema): TypeAnalysis {
 
 export function castEvent(schema: PropertyMetaSchema): TypeAnalysis {
   return {
-    type: {
-      kind: "record",
-    },
+    type: "unknown",
   };
 }

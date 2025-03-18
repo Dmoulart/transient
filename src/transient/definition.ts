@@ -41,6 +41,7 @@ export type TransientPrimitiveTypeName =
   | "boolean"
   | "integer"
   | "decimal"
+  | "unknown"
   | "string";
 
 const test: TransientComponent = {

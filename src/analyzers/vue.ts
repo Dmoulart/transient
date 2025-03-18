@@ -16,15 +16,9 @@ import { resolve } from "path";
 import type {
   TransientComponent,
   TransientProps,
-  TransientType,
 } from "../transient/definition";
-import {
-  assertIsDefined,
-  assertIsArrayOf,
-  assertIs,
-  someRecord,
-  somePropertyMetaSchema,
-} from "../helpers/assert";
+import { assertIsDefined } from "../helpers/assert";
+import { logger } from "../log/logger";
 
 export function defineVueAnalyzer(
   options: Pick<AnalyzerConfig, "tsConfigPath" | "dest">
@@ -50,6 +44,7 @@ function describeComponent(meta: ComponentMeta): TransientComponent {
 
   for (const prop of meta.props) {
     if (prop.global) continue;
+    logger.details(`processing ${prop.name}`);
 
     const { name, description, required, default: defaultValue, schema } = prop;
     const { type, propInfos } = describePropType(schema);
@@ -71,9 +66,7 @@ function describeComponent(meta: ComponentMeta): TransientComponent {
 export function describePropType(schema: PropertyMetaSchema): TypeAnalysis {
   if (typeof schema === "string") {
     return {
-      type: toPrimitiveType(schema) ?? {
-        kind: "record",
-      },
+      type: toPrimitiveType(schema) ?? "unknown",
     };
   }
 

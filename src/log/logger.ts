@@ -13,14 +13,17 @@ export const logger = {
     console.log();
     console.log();
   },
-  result(result: string) {
-    console.info(align(), chalk.green(result));
-  },
   info(message: string) {
     console.info(align(), message);
   },
+  details(message: string) {
+    logger.info(chalk.gray(chalk.italic(message)));
+  },
+  result(result: string) {
+    logger.info(chalk.green(result));
+  },
   output(message: string) {
-    console.info(align(), chalk.gray(message));
+    logger.info(chalk.gray(message));
   },
   processing(message: string) {
     console.info(align(), "- processing", chalk.blue(message), "...");
