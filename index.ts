@@ -25,8 +25,8 @@ const result = analyze({
   // dir: resolve(__dirname, "playground/components"),
 });
 
-// const translate = defineStrapiTranslator({
-//   dest: resolve(__dirname, "playground/cms-schemas"),
-// });
+const translate = defineStrapiTranslator({
+  dest: resolve(__dirname, "playground/cms-schemas"),
+});
 
-// const translation = translate({ components: result });
+const translation = translate({ components: result });

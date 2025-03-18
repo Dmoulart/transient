@@ -5,7 +5,6 @@ import type { TransientProp, TransientProps } from "../transient/definition";
 import {
   assert,
   assertIs,
-  assertIsArrayOf,
   assertIsArrayOfLength,
   assertIsDefined,
   someRecord,
@@ -113,7 +112,9 @@ export function defineStrapiTranslator(
 
         const destPath = resolve(dest, category);
 
-        if (!existsSync(destPath)) mkdirSync(destPath);
+        if (!existsSync(destPath)) {
+          mkdirSync(destPath, { recursive: true });
+        }
 
         const componentFilePath = join(destPath, `${name}.json`);
 
@@ -131,10 +132,11 @@ function toStrapiAttributes(
   const options: StrapiComponent[] = [];
 
   for (const [name, prop] of Object.entries(props)) {
-    const { attribute, options: attributeOptions } = toStrapiAttribute(
-      prop,
-      context
-    );
+    const result = toStrapiAttribute(prop, context);
+    if (!result) {
+      continue;
+    }
+    const { attribute, options: attributeOptions } = result;
 
     if (attributeOptions) {
       options.push(...attributeOptions);
@@ -164,9 +166,14 @@ type StrapiAttributeTypeConversionResult = {
 function toStrapiAttribute(
   prop: TransientProp,
   context: StrapiComponentContext
-): StrapiAttributeConversionResult {
-  const { attribute, options } = toStrapiAttributeType(prop, context);
+): StrapiAttributeConversionResult | undefined {
+  const result = toStrapiAttributeType(prop, context);
 
+  if (result === undefined) {
+    return undefined;
+  }
+
+  const { attribute, options } = result;
   return {
     attribute: {
       required: Boolean(prop.required),
@@ -180,7 +187,7 @@ function toStrapiAttribute(
 function toStrapiAttributeType(
   prop: TransientProp,
   context: StrapiComponentContext
-): StrapiAttributeTypeConversionResult {
+): StrapiAttributeTypeConversionResult | undefined {
   if (typeof prop.type === "string") {
     switch (prop.type) {
       case "string":
@@ -191,6 +198,8 @@ function toStrapiAttributeType(
         return { attribute: { type: "decimal" } };
       case "integer":
         return { attribute: { type: "integer" } };
+      case "unknown":
+        return undefined;
       default:
         throw new Error(`unsupported type ${prop.type}`);
     }
@@ -227,10 +236,25 @@ function toStrapiAttributeType(
       };
     }
     case "list": {
-      const { attribute, options } = toStrapiAttribute(prop.type.list, context);
-      // for now we only accept list of object types
-      assertIsDefined(options);
-      assertIsArrayOfLength(1, options);
+      const result = toStrapiAttribute(prop.type.list, context);
+      if (!result) {
+        return undefined;
+      }
+
+      const { attribute, options } = result;
+      console.log({ attribute, options });
+
+      if (!options) {
+        // convert primitive types to JSON
+        return {
+          attribute: {
+            type: "json",
+          },
+          ...(options ? { options } : {}),
+        };
+      }
+      // there is some option duplication
+      // assertIsArrayOfLength(1, options);
       const [listItemComponent] = options;
       const { category, name } = extractCategoryAndNameFromCollectionName(
         listItemComponent.collectionName
@@ -253,6 +277,7 @@ function toStrapiAttributeType(
     }
     case "union": {
       assertIsDefined(prop.type.union[0]);
+
       return toStrapiAttributeType(
         { ...prop, type: prop.type.union[0] },
         context

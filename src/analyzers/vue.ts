@@ -19,6 +19,7 @@ import type {
 } from "../transient/definition";
 import { assertIsDefined } from "../helpers/assert";
 import { logger } from "../log/logger";
+import { unescapeString } from "../core/string";
 
 export function defineVueAnalyzer(
   options: Pick<AnalyzerConfig, "tsConfigPath" | "dest">
@@ -51,7 +52,7 @@ function describeComponent(meta: ComponentMeta): TransientComponent {
 
     props[name] = {
       description: !!description ? description : undefined,
-      default: defaultValue, // && unescapeString(defaultValue),
+      default: defaultValue && unescapeString(defaultValue),
       required,
       ...propInfos,
       type,
