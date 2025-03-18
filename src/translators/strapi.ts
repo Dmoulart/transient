@@ -2,6 +2,7 @@ import { join, parse, resolve } from "path";
 import { defineTranslator, type TranslatorConfig } from "../translator";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import type { TransientProp, TransientProps } from "../transient/definition";
+import { getTypeKind } from "../transient/ast";
 import {
   assert,
   assertIs,
@@ -242,7 +243,6 @@ function toStrapiAttributeType(
       }
 
       const { attribute, options } = result;
-      console.log({ attribute, options });
 
       if (!options) {
         // convert primitive types to JSON
@@ -277,16 +277,18 @@ function toStrapiAttributeType(
     }
     case "union": {
       assertIsDefined(prop.type.union[0]);
-
-      return toStrapiAttributeType(
-        { ...prop, type: prop.type.union[0] },
-        context
+      const type = prop.type.union.find(
+        (type) => getTypeKind(type) !== "unknown"
       );
-      // return {
-      //   attribute: {
-      //     type: "json",
-      //   },
-      // };
+      return type
+        ? toStrapiAttributeType(
+            {
+              ...prop,
+              type,
+            },
+            context
+          )
+        : undefined;
     }
     default:
       throw new Error(`unsupported type ${prop.type.kind}`);
