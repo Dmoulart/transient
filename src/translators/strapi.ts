@@ -66,7 +66,7 @@ export function defineStrapiTranslator(
         const { props } = component;
         const { name: displayName, dir } = parse(path);
 
-        const category = dir || "ui";
+        const category = dir.split("/")[0] || "ui";
 
         const context: StrapiComponentContext = {
           name: {
@@ -110,7 +110,7 @@ export function defineStrapiTranslator(
           category && name,
           `Invalid collectionName ${component.collectionName}`
         );
-
+        console.log({ dest, category });
         const destPath = resolve(dest, category);
 
         if (!existsSync(destPath)) {
@@ -134,6 +134,7 @@ function toStrapiAttributes(
 
   for (const [name, prop] of Object.entries(props)) {
     const result = toStrapiAttribute(prop, context);
+
     if (!result) {
       continue;
     }
@@ -143,7 +144,10 @@ function toStrapiAttributes(
       options.push(...attributeOptions);
     }
 
-    attributes[name] = attribute;
+    let attributeName = name === "id" ? "duck" : name;
+    attributeName = attributeName.startsWith("_") ? `${name}_b` : attributeName;
+
+    attributes[attributeName] = attribute;
   }
 
   return { attributes, options };
@@ -280,6 +284,9 @@ function toStrapiAttributeType(
       const type = prop.type.union.find(
         (type) => getTypeKind(type) !== "unknown"
       );
+      if (!type) {
+        logger.details("skipping prop ...");
+      }
       return type
         ? toStrapiAttributeType(
             {
