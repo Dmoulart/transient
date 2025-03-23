@@ -1,4 +1,5 @@
 import chalk from "chalk";
+
 let space = 0;
 export const logger = {
   announce(process: string) {

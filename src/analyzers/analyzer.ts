@@ -3,6 +3,7 @@ import fg, { type Pattern } from "fast-glob";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import type { TransientComponent } from "../transient/definition";
 import { logger } from "../log/logger";
+
 export type TransientDictionnary = { [path: string]: TransientComponent };
 export type AnalyzeOptions = {
   dir?: string;
