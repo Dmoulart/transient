@@ -8,7 +8,7 @@ import {
   somePropertyMetaSchemaObject,
   someRecord,
   someString,
-} from "../helpers/assert";
+} from "../core/assert";
 import type { TransientProp, TransientType } from "../transient/definition";
 import { isEscapedString, isNumeric, unescapeString } from "../core/string";
 import { describePropType } from "./vue";

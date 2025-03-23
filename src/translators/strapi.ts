@@ -9,7 +9,7 @@ import {
   assertIsArrayOfLength,
   assertIsDefined,
   someRecord,
-} from "../helpers/assert";
+} from "../core/assert";
 import { logger } from "../log/logger";
 
 type StrapiComponent = {

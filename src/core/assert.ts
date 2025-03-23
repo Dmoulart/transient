@@ -1,5 +1,5 @@
 import type { PropertyMetaSchema } from "vue-component-meta";
-import { type FixedArray } from "./types";
+import { type FixedArray } from "../helpers/types";
 export function assert(value: unknown, message?: string): void {
   if (Boolean(value) === false) {
     throw new Error(message ?? "expected defined value");

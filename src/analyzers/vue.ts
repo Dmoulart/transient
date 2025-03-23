@@ -17,7 +17,7 @@ import type {
   TransientComponent,
   TransientProps,
 } from "../transient/definition";
-import { assertIsDefined } from "../helpers/assert";
+import { assertIsDefined } from "../core/assert";
 import { logger } from "../log/logger";
 import { unescapeString } from "../core/string";
 
