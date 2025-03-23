@@ -1,5 +1,5 @@
 import { resolve } from "path";
-import { defineVueAnalyzer } from "./src/analyzers/vue";
+import { defineVueAnalyzer } from "./src/analyzers/vue/vue";
 import { defineStrapiTranslator } from "./src/translators/strapi";
 
 const LIB_SAMPLES_CONFIG = {

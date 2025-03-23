@@ -8,11 +8,11 @@ import {
   somePropertyMetaSchemaObject,
   someRecord,
   someString,
-} from "../core/assert";
-import type { TransientProp, TransientType } from "../transient/definition";
-import { isEscapedString, isNumeric, unescapeString } from "../core/string";
+} from "../../core/assert";
+import type { TransientProp, TransientType } from "../../transient/definition";
+import { isEscapedString, isNumeric, unescapeString } from "../../core/string";
 import { describePropType } from "./vue";
-import { logger } from "../log/logger";
+import { logger } from "../../log/logger";
 
 export type TypeAnalysis = {
   type: TransientType;

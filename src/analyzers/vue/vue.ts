@@ -16,10 +16,10 @@ import { resolve } from "path";
 import type {
   TransientComponent,
   TransientProps,
-} from "../transient/definition";
-import { assertIsDefined } from "../core/assert";
-import { logger } from "../log/logger";
-import { unescapeString } from "../core/string";
+} from "../../transient/definition";
+import { assertIsDefined } from "../../core/assert";
+import { logger } from "../../log/logger";
+import { unescapeString } from "../../core/string";
 
 export function defineVueAnalyzer(
   options: Pick<AnalyzerConfig, "tsConfigPath" | "dest" | "glob">

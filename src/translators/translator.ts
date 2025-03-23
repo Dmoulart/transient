@@ -1,4 +1,4 @@
-import type { TransientDictionnary } from "./analyzer";
+import type { TransientDictionnary } from "./analyzers/analyzer";
 import { logger } from "./log/logger";
 
 export type TranslatorConfig<T> = {
