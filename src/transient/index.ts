@@ -1,7 +1,7 @@
 export { getTypeKind } from "./ast.js";
 export {
   TransientComplexTypeName,
-  TransientComponent,
+  TransientComponentSchema,
   TransientPrimitiveTypeName,
   TransientProp,
   TransientProps,

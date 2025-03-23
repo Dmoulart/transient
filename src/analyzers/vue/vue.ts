@@ -3,7 +3,7 @@ import { castPropType } from "./cast";
 import { defineAnalyzer, type AnalyzerConfig } from "../analyzer";
 import { resolve } from "path";
 import type {
-  TransientComponent,
+  TransientComponentSchema,
   TransientProps,
 } from "../../transient/definition";
 import { logger } from "../../log/logger";
@@ -28,7 +28,7 @@ export function defineVueAnalyzer(
   });
 }
 
-function describeComponent(meta: ComponentMeta): TransientComponent {
+function describeComponent(meta: ComponentMeta): TransientComponentSchema {
   const props: TransientProps = {};
 
   for (const prop of meta.props) {

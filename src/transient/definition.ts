@@ -1,4 +1,4 @@
-export type TransientComponent = {
+export type TransientComponentSchema = {
   props: TransientProps;
 };
 
@@ -44,7 +44,7 @@ export type TransientPrimitiveTypeName =
   | "unknown"
   | "string";
 
-const test: TransientComponent = {
+const test: TransientComponentSchema = {
   props: {
     ok: {
       type: "boolean",

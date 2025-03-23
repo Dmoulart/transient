@@ -1,14 +1,14 @@
-import { TransientDictionnary } from "../analyzers/analyzer";
+import { TransientComponentDictionnary } from "../analyzers/analyzer";
 import { logger } from "../log/logger";
 
 export type TranslatorConfig<T> = {
   dest?: string;
   write?: (result: T[], dest: string) => void;
-  translate(components: TransientDictionnary): T[];
+  translate(components: TransientComponentDictionnary): T[];
 };
 
 export type TranslationConfig = {
-  components: TransientDictionnary;
+  components: TransientComponentDictionnary;
 };
 
 export function defineTranslator<T>({

@@ -1,14 +1,18 @@
 import { join, parse, resolve } from "path";
 import fg, { type Pattern } from "fast-glob";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
-import type { TransientComponent } from "../transient/definition";
+import type { TransientComponentSchema } from "../transient/definition";
 import { logger } from "../log/logger";
 
-export type TransientDictionnary = { [path: string]: TransientComponent };
+export type TransientComponentDictionnary = {
+  [path: string]: TransientComponentSchema;
+};
 export type AnalyzeOptions = {
   dir?: string;
 };
-export type Analyze = (options: AnalyzeOptions) => TransientDictionnary;
+export type Analyze = (
+  options: AnalyzeOptions
+) => TransientComponentDictionnary;
 
 export type Analyzer = {
   defaultDir: string;
@@ -16,9 +20,9 @@ export type Analyzer = {
   dest: string;
   log: boolean;
   glob: Pattern;
-  describe(path: string, dir: string): TransientComponent;
+  describe(path: string, dir: string): TransientComponentSchema;
   scanDir(dir: string, glob: Pattern): string[];
-  write(result: TransientDictionnary, dest: string): void;
+  write(result: TransientComponentDictionnary, dest: string): void;
 };
 
 export type AnalyzerConfig = Partial<Analyzer> & {
@@ -81,7 +85,7 @@ export function defineAnalyzer(config: AnalyzerConfig): Analyze {
     const componentPaths = scanDir(dir ?? defaultDir, glob);
     logger.info(`Found ${componentPaths.length} files`);
 
-    const metas: TransientDictionnary = {};
+    const metas: TransientComponentDictionnary = {};
 
     for (const componentPath of componentPaths) {
       logger.processing(componentPath);
