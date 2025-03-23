@@ -56,6 +56,12 @@ const BASE_ANALYZER: Partial<Analyzer> = {
 
       writeFileSync(metaJsonFilePath, JSON.stringify(api, null, 2));
     }
+
+    // write all
+    writeFileSync(
+      resolve(dest, "__schemas__.json"),
+      JSON.stringify(results, null, 2)
+    );
   },
 };
 

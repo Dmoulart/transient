@@ -22,7 +22,7 @@ import { logger } from "../log/logger";
 import { unescapeString } from "../core/string";
 
 export function defineVueAnalyzer(
-  options: Pick<AnalyzerConfig, "tsConfigPath" | "dest">
+  options: Pick<AnalyzerConfig, "tsConfigPath" | "dest" | "glob">
 ) {
   const checker = createChecker(options.tsConfigPath, {
     forceUseTs: true,
@@ -32,7 +32,7 @@ export function defineVueAnalyzer(
   return defineAnalyzer({
     dest: options.dest,
     tsConfigPath: options.tsConfigPath,
-    glob: "./**/*.vue",
+    glob: options.glob ?? "./**/*.vue",
     describe(path, dir) {
       const meta = checker.getComponentMeta(resolve(__dirname, dir, path));
       return describeComponent(meta);

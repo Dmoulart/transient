@@ -15,18 +15,25 @@ const TEST_CONFIG = {
   dest: resolve(__dirname, "playground/app-schemas"),
 };
 
+const APP_CONFIG = {
+  tsConfigPath: resolve(__dirname, "../app/tsconfig.app.json"),
+  dest: resolve(__dirname, "playground/app-schemas"),
+};
+
 const analyze = defineVueAnalyzer({
   // ...TEST_CONFIG,
-  ...LIB_SAMPLES_CONFIG,
+  // ...LIB_SAMPLES_CONFIG,
+  ...APP_CONFIG,
 });
 
 const result = analyze({
-  dir: resolve(__dirname, "../libs-samples/element-plus/packages/components"),
+  // dir: resolve(__dirname, "../libs-samples/element-plus/packages/components"),
   // dir: resolve(__dirname, "playground/components"),
+  dir: resolve(__dirname, "../app/src/components"),
 });
 
-const translate = defineStrapiTranslator({
-  dest: resolve(__dirname, "playground/cms-schemas"),
-});
+// const translate = defineStrapiTranslator({
+//   dest: resolve(__dirname, "playground/cms-schemas"),
+// });
 
-const translation = translate({ components: result });
+// const translation = translate({ components: result });

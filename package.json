@@ -1,4 +1,5 @@
 {
+  "name": "bridge",
   "dependencies": {
     "chalk": "^5.4.1",
     "fast-glob": "^3.3.3",
