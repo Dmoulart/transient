@@ -1,23 +1,11 @@
-import {
-  createChecker,
-  type ComponentMeta,
-  type PropertyMetaSchema,
-} from "vue-component-meta";
-import {
-  castArray,
-  castEnumType,
-  castEvent,
-  castObject,
-  toPrimitiveType,
-  type TypeAnalysis,
-} from "./cast";
+import { createChecker, type ComponentMeta } from "vue-component-meta";
+import { castPropType } from "./cast";
 import { defineAnalyzer, type AnalyzerConfig } from "../analyzer";
 import { resolve } from "path";
 import type {
   TransientComponent,
   TransientProps,
 } from "../../transient/definition";
-import { assertIsDefined } from "../../core/assert";
 import { logger } from "../../log/logger";
 import { unescapeString } from "../../core/string";
 
@@ -48,7 +36,7 @@ function describeComponent(meta: ComponentMeta): TransientComponent {
     logger.details(`processing ${prop.name}`);
 
     const { name, description, required, default: defaultValue, schema } = prop;
-    const { type, propInfos } = describePropType(schema);
+    const { type, propInfos } = castPropType(schema);
 
     props[name] = {
       description: !!description ? description : undefined,
@@ -62,29 +50,4 @@ function describeComponent(meta: ComponentMeta): TransientComponent {
   return {
     props,
   };
-}
-
-export function describePropType(schema: PropertyMetaSchema): TypeAnalysis {
-  if (typeof schema === "string") {
-    return {
-      type: toPrimitiveType(schema) ?? "unknown",
-    };
-  }
-
-  switch (schema.kind) {
-    case "enum": {
-      assertIsDefined(schema.schema);
-
-      return castEnumType(schema.schema);
-    }
-    case "object": {
-      return castObject(schema);
-    }
-    case "array": {
-      return castArray(schema);
-    }
-    case "event": {
-      return castEvent(schema);
-    }
-  }
 }

@@ -1,5 +1,5 @@
-import type { TransientDictionnary } from "./analyzers/analyzer";
-import { logger } from "./log/logger";
+import { TransientDictionnary } from "../analyzers/analyzer";
+import { logger } from "../log/logger";
 
 export type TranslatorConfig<T> = {
   dest?: string;

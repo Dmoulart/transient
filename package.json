@@ -1,5 +1,8 @@
 {
   "name": "bridge",
+  "scripts": {
+    "test": "bun test"
+  },
   "dependencies": {
     "chalk": "^5.4.1",
     "fast-glob": "^3.3.3",

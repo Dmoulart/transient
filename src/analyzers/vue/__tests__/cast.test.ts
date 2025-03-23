@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { castEnumType } from "../src/analyzers/cast";
+import { castEnumType } from "../cast";
 
 describe("enum types normalization", () => {
   test("boolean", () => {

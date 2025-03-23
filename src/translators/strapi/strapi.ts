@@ -1,16 +1,15 @@
 import { join, parse, resolve } from "path";
-import { defineTranslator, type TranslatorConfig } from "../translator";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
-import type { TransientProp, TransientProps } from "../transient/definition";
-import { getTypeKind } from "../transient/ast";
+import type { TransientProp, TransientProps } from "../../transient/definition";
+import { getTypeKind } from "../../transient/ast";
 import {
   assert,
   assertIs,
-  assertIsArrayOfLength,
   assertIsDefined,
   someRecord,
-} from "../core/assert";
-import { logger } from "../log/logger";
+} from "../../core/assert";
+import { logger } from "../../log/logger";
+import { defineTranslator, TranslatorConfig } from "../translator";
 
 type StrapiComponent = {
   collectionName: string;

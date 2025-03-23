@@ -5,19 +5,42 @@ import {
   assertIsArrayOf,
   assertIsDefined,
   somePropertyMetaSchema,
-  somePropertyMetaSchemaObject,
   someRecord,
   someString,
 } from "../../core/assert";
 import type { TransientProp, TransientType } from "../../transient/definition";
 import { isEscapedString, isNumeric, unescapeString } from "../../core/string";
-import { describePropType } from "./vue";
 import { logger } from "../../log/logger";
 
 export type TypeAnalysis = {
   type: TransientType;
   propInfos?: Partial<TransientProp>;
 };
+
+export function castPropType(schema: PropertyMetaSchema): TypeAnalysis {
+  if (typeof schema === "string") {
+    return {
+      type: toPrimitiveType(schema) ?? "unknown",
+    };
+  }
+
+  switch (schema.kind) {
+    case "enum": {
+      assertIsDefined(schema.schema);
+
+      return castEnumType(schema.schema);
+    }
+    case "object": {
+      return castObject(schema);
+    }
+    case "array": {
+      return castArray(schema);
+    }
+    case "event": {
+      return castEvent(schema);
+    }
+  }
+}
 
 export type TypeNormalizationAnalysis = [
   PropertyMetaSchema[],
@@ -405,7 +428,7 @@ export function castObject(schema: PropertyMetaSchema): TypeAnalysis {
   }
 
   for (const [key, def] of Object.entries(objectDef)) {
-    const { type, propInfos } = describePropType(def.schema);
+    const { type, propInfos } = castPropType(def.schema);
     object[key] = { type, ...propInfos };
   }
 
@@ -442,7 +465,7 @@ export function castArray(schema: PropertyMetaSchema): TypeAnalysis {
   const [arrayType] = arrayDef;
 
   if (typeof arrayType === "string") {
-    const { type, propInfos } = describePropType(arrayType);
+    const { type, propInfos } = castPropType(arrayType);
 
     return {
       type: {
@@ -460,7 +483,7 @@ export function castArray(schema: PropertyMetaSchema): TypeAnalysis {
     throw new Error("Array of arrays not supported.");
   }
 
-  const { type, propInfos } = describePropType(arrayType);
+  const { type, propInfos } = castPropType(arrayType);
 
   return {
     type: {
