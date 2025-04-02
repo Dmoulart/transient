@@ -16,7 +16,7 @@
     "@types/bun": "latest"
   },
   "scripts": {
-    "build": "tsc index.ts --outDir dist",
+    "build": "tsc index.ts --outDir dist --declaration",
     "bundle:watch": "bun build ./index.ts --outdir ./dist --watch --format esm"
   }
 }
