@@ -9,7 +9,7 @@ import {
   someRecord,
 } from "../../core/assert";
 import { logger } from "../../log/logger";
-import { defineTranslator, TranslatorConfig } from "../translator";
+import { defineTranslator, type TranslatorConfig } from "../translator";
 
 type StrapiComponent = {
   collectionName: string;
@@ -105,11 +105,16 @@ export function defineStrapiTranslator(
       for (const component of results) {
         const [, category, name] = component.collectionName.split("_");
 
-        assert(
-          category && name,
+        assertIsDefined(
+          category,
           `Invalid collectionName ${component.collectionName}`
         );
-        console.log({ dest, category });
+
+        assertIsDefined(
+          name,
+          `Invalid collectionName ${component.collectionName}`
+        );
+
         const destPath = resolve(dest, category);
 
         if (!existsSync(destPath)) {
@@ -259,6 +264,9 @@ function toStrapiAttributeType(
       // there is some option duplication
       // assertIsArrayOfLength(1, options);
       const [listItemComponent] = options;
+
+      assertIsDefined(listItemComponent);
+
       const { category, name } = extractCategoryAndNameFromCollectionName(
         listItemComponent.collectionName
       );

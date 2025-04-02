@@ -1,0 +1,14 @@
+{
+  "name": "playground",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "transient": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

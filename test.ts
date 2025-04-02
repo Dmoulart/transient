@@ -1,6 +1,6 @@
 import { resolve } from "path";
-import { defineVueAnalyzer } from "./src/analyzers/vue/vue";
-import { defineStrapiTranslator } from "./src/translators/strapi/strapi";
+import { defineVueAnalyzer } from "./packages/transient/src/analyzers/vue/vue";
+import { defineStrapiTranslator } from "./packages/transient/src/translators/strapi/strapi";
 
 const LIB_SAMPLES_CONFIG = {
   tsConfigPath: resolve(

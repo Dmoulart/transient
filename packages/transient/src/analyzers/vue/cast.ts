@@ -78,6 +78,7 @@ export function castEnumType(enumeration: PropertyMetaSchema[]): TypeAnalysis {
   }
 
   if (types.length === 1) {
+    assertIsDefined(types[0]);
     return {
       type: types[0],
       propInfos: {
@@ -217,7 +218,9 @@ export function collectArrayTypesFromEnum(
     const type = enumeration[i];
 
     if (someRecord(type) && type.kind === "array") {
-      complexTypes.push(castArray(enumeration.splice(i, 1)[0]).type);
+      const [array] = enumeration.splice(i, 1);
+      assertIsDefined(array);
+      complexTypes.push(castArray(array).type);
     }
   }
 
@@ -254,7 +257,9 @@ export function collectObjectTypesFromEnum(
     const type = enumeration[i];
 
     if (someRecord(type) && type.kind === "object") {
-      complexTypes.push(castObject(enumeration.splice(i, 1)[0]).type);
+      const [object] = enumeration.splice(i, 1);
+      assertIsDefined(object);
+      complexTypes.push(castObject(object).type);
     }
   }
 
@@ -291,7 +296,9 @@ export function collectEventTypesFromEnum(
     const type = enumeration[i];
 
     if (someRecord(type) && type.kind === "event") {
-      eventTypes.push(castEvent(enumeration.splice(i, 1)[0]).type);
+      const [event] = enumeration.splice(i, 1);
+      assertIsDefined(event);
+      eventTypes.push(castEvent(event).type);
     }
   }
 
@@ -374,6 +381,7 @@ export function mergeTypes(types: TransientType[]): TransientType {
   }
 
   if (flattenedTypes.length === 1) {
+    assertIsDefined(flattenedTypes[0]);
     return flattenedTypes[0];
   }
 
