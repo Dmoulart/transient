@@ -21,15 +21,15 @@ const APP_CONFIG = {
 };
 
 const analyze = defineVueAnalyzer({
-  // ...TEST_CONFIG,
+  ...TEST_CONFIG,
   // ...LIB_SAMPLES_CONFIG,
-  ...APP_CONFIG,
+  // ...APP_CONFIG,
 });
 
 const result = analyze({
   // dir: resolve(__dirname, "../libs-samples/element-plus/packages/components"),
-  // dir: resolve(__dirname, "playground/components"),
-  dir: resolve(__dirname, "../app/src/components"),
+  dir: resolve(__dirname, "playground/components"),
+  // dir: resolve(__dirname, "../app/src/components"),
 });
 
 // const translate = defineStrapiTranslator({

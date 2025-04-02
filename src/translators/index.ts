@@ -1,6 +1,6 @@
 export {
-  TranslationConfig,
-  TranslatorConfig,
+  type TranslationConfig,
+  type TranslatorConfig,
   defineTranslator,
 } from "./translator.js";
 

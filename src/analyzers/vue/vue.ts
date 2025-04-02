@@ -5,6 +5,7 @@ import { resolve } from "path";
 import type {
   TransientComponentSchema,
   TransientProps,
+  TransientSlots,
 } from "../../transient/definition";
 import { logger } from "../../log/logger";
 import { unescapeString } from "../../core/string";
@@ -30,6 +31,7 @@ export function defineVueAnalyzer(
 
 function describeComponent(meta: ComponentMeta): TransientComponentSchema {
   const props: TransientProps = {};
+  const slots: TransientSlots = {};
 
   for (const prop of meta.props) {
     if (prop.global) continue;
@@ -47,7 +49,12 @@ function describeComponent(meta: ComponentMeta): TransientComponentSchema {
     };
   }
 
+  for (const slot of meta.slots) {
+    slots[slot.name] = {};
+  }
+
   return {
     props,
+    slots,
   };
 }

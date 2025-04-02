@@ -1,6 +1,9 @@
 export type TransientComponentSchema = {
   props: TransientProps;
+  slots: TransientSlots;
 };
+
+export type TransientSlots = Record<string, TransientSlot>;
 
 export type TransientProps = Record<string, TransientProp>;
 
@@ -10,6 +13,8 @@ export type TransientProp = {
   required?: boolean;
   default?: string | undefined;
 };
+
+export type TransientSlot = any;
 
 export type TransientType<T extends TransientTypeName = TransientTypeName> =
   T extends TransientPrimitiveTypeName
@@ -44,37 +49,37 @@ export type TransientPrimitiveTypeName =
   | "unknown"
   | "string";
 
-const test: TransientComponentSchema = {
-  props: {
-    ok: {
-      type: "boolean",
-      default: "false",
-      description: "",
-      required: true,
-    },
-    err: {
-      type: {
-        kind: "enum",
-        enum: ["1", "2", "3"],
-      },
-    },
-    bigObject: {
-      type: {
-        kind: "object",
-        object: {
-          prop: {
-            type: "string",
-          },
-        },
-      },
-    },
-    arr: {
-      type: {
-        kind: "list",
-        list: {
-          type: "string",
-        },
-      },
-    },
-  },
-};
+// const test: TransientComponentSchema = {
+//   props: {
+//     ok: {
+//       type: "boolean",
+//       default: "false",
+//       description: "",
+//       required: true,
+//     },
+//     err: {
+//       type: {
+//         kind: "enum",
+//         enum: ["1", "2", "3"],
+//       },
+//     },
+//     bigObject: {
+//       type: {
+//         kind: "object",
+//         object: {
+//           prop: {
+//             type: "string",
+//           },
+//         },
+//       },
+//     },
+//     arr: {
+//       type: {
+//         kind: "list",
+//         list: {
+//           type: "string",
+//         },
+//       },
+//     },
+//   },
+// };
