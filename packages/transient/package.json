@@ -1,5 +1,22 @@
 {
   "name": "transient",
+  "type": "module",
   "module": "index.ts",
-  "type": "module"
+  "main": "dist/index.js",
+  "files": [
+    "/dist"
+  ],
+  "devDependencies": {
+    "chalk": "^5.4.1",
+    "fast-glob": "^3.3.3",
+    "typescript": "^5.8.2",
+    "vue": "^3.5.13",
+    "vue-component-meta": "^2.2.8",
+    "vue-tsc": "^2.2.8",
+    "@types/bun": "latest"
+  },
+  "scripts": {
+    "build": "tsc index.ts --outDir dist",
+    "bundle:watch": "bun build ./index.ts --outdir ./dist --watch --format esm"
+  }
 }

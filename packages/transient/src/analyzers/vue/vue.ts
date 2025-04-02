@@ -9,10 +9,11 @@ import type {
 } from "../../transient/definition";
 import { logger } from "../../log/logger";
 import { unescapeString } from "../../core/string";
-
-export function defineVueAnalyzer(
-  options: Pick<AnalyzerConfig, "tsConfigPath" | "dest" | "glob">
-) {
+export type VueAnalyzerOptions = Pick<
+  AnalyzerConfig,
+  "tsConfigPath" | "dest" | "glob"
+>;
+export function defineVueAnalyzer(options: VueAnalyzerOptions) {
   const checker = createChecker(options.tsConfigPath, {
     forceUseTs: true,
     printer: { newLine: 1 },

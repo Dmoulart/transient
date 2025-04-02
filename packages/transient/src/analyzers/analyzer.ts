@@ -1,5 +1,5 @@
 import { join, parse, resolve } from "path";
-import fg, { type Pattern } from "fast-glob";
+import { sync, type Pattern } from "fast-glob";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import type { TransientComponentSchema } from "../transient/definition";
 import { logger } from "../log/logger";
@@ -35,7 +35,7 @@ const BASE_ANALYZER: Partial<Analyzer> = {
   tsConfigPath: "./tsconfig.json",
   log: true,
   scanDir(dir: string, glob: Pattern) {
-    const files = fg.sync(glob, {
+    const files = sync(glob, {
       cwd: resolve(__dirname, dir),
       absolute: false,
     });

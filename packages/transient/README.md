@@ -13,3 +13,5 @@ bun run index.ts
 ```
 
 This project was created using `bun init` in bun v1.2.5. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+
+    "build:watch": "bun build ./index.ts --outdir ./dist --watch --format cjs"
