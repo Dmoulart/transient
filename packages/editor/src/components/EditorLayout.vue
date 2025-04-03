@@ -61,8 +61,26 @@
 
           <!-- Empty content area -->
           <div class="flex-1 overflow-auto p-6">
-            <div class="flex h-full items-center justify-center rounded-lg border-2 border-dashed">
-              <div class="text-center">
+            <!-- <h3 v-if="prototype.path" class="text-lg font-medium">
+              {{ prototype.path.split('/').at(-1) }}
+            </h3> -->
+            <div
+              class="flex h-full items-center justify-center rounded-lg border-2 border-dashed bg-black"
+            >
+              <PrototypeView
+                v-if="prototype.path"
+                :path="prototype.path"
+                :data="prototype.data"
+                :slots="prototype.slots"
+                :schema="dictionnary[prototype.path]"
+                @append="
+                  (event: any) => {
+                    prototype.slots[event.slot] ??= []
+                    prototype.slots[event.slot].push(event.path)
+                  }
+                "
+              />
+              <div v-else class="text-center">
                 <h3 class="text-lg font-medium">Empty Content Area</h3>
                 <p class="text-sm text-muted-foreground">
                   This is the main content area of your editor.
@@ -74,13 +92,24 @@
 
         <!-- File Explorer -->
         <div class="h-64 overflow-hidden">
-          <ComponentExplorer :dictionnary="dicitonnary" />
+          <ComponentExplorer
+            :dictionnary="dictionnary"
+            @select="
+              (path) => {
+                prototype.path = path
+              }
+            "
+          />
         </div>
       </div>
 
       <!-- Right sidebar -->
       <aside v-if="rightOpen" class="w-72 border-l bg-background">
-        <RightSidebar />
+        <RightSidebar
+          v-if="prototype.path"
+          :component-props="dictionnary[prototype.path].props"
+          v-model="prototype.data"
+        />
       </aside>
     </div>
 
@@ -101,19 +130,56 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { FileText, Plus, Search, ChevronDown } from 'lucide-vue-next'
 import LeftSidebar from './LeftSidebar.vue'
 import RightSidebar from './RightSidebar.vue'
 import ComponentExplorer from './ComponentExplorer.vue'
-import { TransientComponentDictionnary } from 'transient'
+import type { TransientComponentDictionnary, TransientComponentSchema } from 'transient'
+import { useTransient } from '@/stores/use-transient'
 
-const dicitonnary = ref()
+const dictionnary = ref<TransientComponentDictionnary>({})
+
 fetch('http://127.0.0.1:3001/schemas')
   .then((schemas) => schemas.json())
   .then((s) => {
-    dicitonnary.value = s
+    dictionnary.value = s
+    useTransient().dictionnary = s
   })
+
+const prototype = ref<{
+  path?: string
+  schema: TransientComponentSchema
+  slots: Record<string, string[]>
+  data: Record<string, any>
+}>({
+  path: undefined,
+  schema: {
+    props: {},
+    slots: {},
+  },
+  data: {},
+  slots: {},
+})
+
+watch(
+  () => prototype.value.path,
+  () => {
+    if (prototype.value.path) {
+      console.log(Object.entries(dictionnary.value[prototype.value.path].props))
+      prototype.value.data = Object.entries(dictionnary.value[prototype.value.path].props).reduce(
+        (data, [key, type]) => {
+          data[key] = type.default
+          return data
+        },
+        {} as Record<string, any>,
+      )
+    } else {
+      prototype.value.data = {}
+    }
+    prototype.value.slots = {}
+  },
+)
 
 const leftOpen = ref(true)
 const rightOpen = ref(true)

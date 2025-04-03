@@ -17,29 +17,15 @@
         </button>
       </div>
     </div>
-    <div class="overflow-y-scroll p-2">
-      <div class="w-full">
-        <div class="space-y-1 flex flex-row overflow-hidden flex-wrap gap-5">
-          <ComponentView
-            v-for="(schema, path, index) in dictionnary"
-            :schema="schema"
-            :path="path"
-            :key="index"
-          />
-        </div>
-      </div>
-    </div>
+    <ComponentList :dictionnary="dictionnary" @select="$emit('select', $event)" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { FolderPlus, FilePlus, RefreshCw } from 'lucide-vue-next'
-import FileExplorerItem from './FileExplorerItem.vue'
-import ComponentView from './ComponentView.vue'
-import { TransientComponentDictionnary } from 'transient'
-
-const props = defineProps<{ dictionnary: TransientComponentDictionnary }>()
+import ComponentList from './ComponentList.vue'
+import { type TransientComponentDictionnary } from 'transient'
+defineProps<{ dictionnary: TransientComponentDictionnary }>()
 </script>
 
 <style>

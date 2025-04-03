@@ -61,24 +61,11 @@
       </div>
 
       <div v-if="activeTab === 'props'" class="p-4">
-        <div class="grid gap-4">
-          <div>
-            <label class="text-sm font-medium">ID</label>
-            <input
-              type="text"
-              placeholder="element-id"
-              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            />
-          </div>
-          <div>
-            <label class="text-sm font-medium">Class</label>
-            <input
-              type="text"
-              placeholder="element-class"
-              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            />
-          </div>
-        </div>
+        <ComponentProps
+          v-if="componentProps"
+          :component-props="componentProps"
+          v-model="componentData"
+        />
       </div>
 
       <div v-if="activeTab === 'data'" class="p-4">
@@ -104,14 +91,12 @@
     </div>
   </div>
 </template>
-
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-
+import ComponentProps from './ComponentProps.vue'
+import type { TransientProps } from 'transient'
+defineProps<{ componentProps?: TransientProps }>()
+const componentData = defineModel<Record<string, any>>({ default: {} })
 const tabs = ['style', 'props', 'data']
-const activeTab = ref('style')
+const activeTab = ref('props')
 </script>
-
-<style>
-/* You can add any additional custom styles here */
-</style>

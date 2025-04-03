@@ -18,7 +18,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Layers, FileText, Users, BarChart, Settings } from 'lucide-vue-next'
 
 const navItems = [
