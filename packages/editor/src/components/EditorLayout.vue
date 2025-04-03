@@ -74,7 +74,7 @@
 
         <!-- File Explorer -->
         <div class="h-64 overflow-hidden">
-          <FileExplorer />
+          <ComponentExplorer :dictionnary="dicitonnary" />
         </div>
       </div>
 
@@ -100,18 +100,21 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { FileText, Plus, Search, ChevronDown } from 'lucide-vue-next'
 import LeftSidebar from './LeftSidebar.vue'
 import RightSidebar from './RightSidebar.vue'
-import FileExplorer from './FileExplorer.vue'
+import ComponentExplorer from './ComponentExplorer.vue'
+import { TransientComponentDictionnary } from 'transient'
 
-// State
+const dicitonnary = ref()
+fetch('http://127.0.0.1:3001/schemas')
+  .then((schemas) => schemas.json())
+  .then((s) => {
+    dicitonnary.value = s
+  })
+
 const leftOpen = ref(true)
 const rightOpen = ref(true)
 </script>
-
-<style>
-/* You can add any additional custom styles here */
-</style>

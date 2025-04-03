@@ -8,6 +8,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ComponentExplorer: typeof import('./src/components/ComponentExplorer.vue')['default']
+    ComponentView: typeof import('./src/components/ComponentView.vue')['default']
     EditorLayout: typeof import('./src/components/EditorLayout.vue')['default']
     FileExplorer: typeof import('./src/components/FileExplorer.vue')['default']
     FileExplorerItem: typeof import('./src/components/FileExplorerItem.vue')['default']

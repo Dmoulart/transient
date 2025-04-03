@@ -17,7 +17,6 @@
   },
   "scripts": {
     "build": "tsc index.ts --outDir dist --declaration",
-    "build:watch": "tsc --watch index.ts --outDir dist --declaration",
-    "bundle:watch": "bun build ./index.ts --outdir ./dist --watch --format esm"
+    "build:watch": "tsc --watch index.ts --outDir dist --declaration"
   }
 }
