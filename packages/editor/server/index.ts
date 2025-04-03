@@ -8,7 +8,7 @@ serve({
     '/schemas': () => {
       const analyzer = defineVueAnalyzer({
         tsConfigPath: resolve(__dirname, './tsconfig.app.json'),
-        glob: resolve(__dirname, './**/*.vue'),
+        glob: resolve(__dirname, './src/samples/**/*.vue'),
       })
 
       const schemas = analyzer({

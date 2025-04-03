@@ -35,6 +35,7 @@ const BASE_ANALYZER: Partial<Analyzer> = {
   tsConfigPath: "./tsconfig.json",
   log: true,
   scanDir(dir: string, glob: Pattern) {
+    logger.info(`Scanning directories : ${resolve(__dirname, dir)} ${glob}`);
     const files = sync(glob, {
       cwd: resolve(__dirname, dir),
       absolute: false,
