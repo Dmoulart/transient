@@ -76,7 +76,18 @@
                 @append="
                   (event: any) => {
                     prototype.slots[event.slot] ??= []
-                    prototype.slots[event.slot].push(event.path)
+                    prototype.slots[event.slot].push({
+                      type: 'unique',
+                      prototype: {
+                        path: event.path,
+                        schema: {
+                          props: {},
+                          slots: {},
+                        },
+                        data: {},
+                        slots: {},
+                      },
+                    })
                   }
                 "
               />
@@ -137,6 +148,7 @@ import RightSidebar from './RightSidebar.vue'
 import ComponentExplorer from './ComponentExplorer.vue'
 import type { TransientComponentDictionnary, TransientComponentSchema } from 'transient'
 import { useTransient } from '@/stores/use-transient'
+import { usePrototypes } from '@/stores/use-prototype'
 
 const dictionnary = ref<TransientComponentDictionnary>({})
 
@@ -147,27 +159,14 @@ fetch('http://127.0.0.1:3001/schemas')
     useTransient().dictionnary = s
   })
 
-const prototype = ref<{
-  path?: string
-  schema: TransientComponentSchema
-  slots: Record<string, string[]>
-  data: Record<string, any>
-}>({
-  path: undefined,
-  schema: {
-    props: {},
-    slots: {},
-  },
-  data: {},
-  slots: {},
-})
+const prototype = usePrototypes().root
 
 watch(
-  () => prototype.value.path,
+  () => prototype.path,
   () => {
-    if (prototype.value.path) {
-      console.log(Object.entries(dictionnary.value[prototype.value.path].props))
-      prototype.value.data = Object.entries(dictionnary.value[prototype.value.path].props).reduce(
+    if (prototype.path) {
+      console.log(Object.entries(dictionnary.value[prototype.path].props))
+      prototype.data = Object.entries(dictionnary.value[prototype.path].props).reduce(
         (data, [key, type]) => {
           data[key] = type.default
           return data
@@ -175,9 +174,9 @@ watch(
         {} as Record<string, any>,
       )
     } else {
-      prototype.value.data = {}
+      prototype.data = {}
     }
-    prototype.value.slots = {}
+    prototype.slots = {}
   },
 )
 

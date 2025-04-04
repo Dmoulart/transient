@@ -5,6 +5,7 @@
       :path="path"
       :schema="schema"
       :slots="{}"
+      :data="{}"
     />
     <footer class="truncate">{{ name }}</footer>
   </article>

@@ -7,7 +7,7 @@
           :schema="schema"
           :path="path as string"
           :key="index"
-          @click="$emit('select', path)"
+          @click="$emit('select', path as string)"
         />
       </div>
     </div>
@@ -16,4 +16,6 @@
 <script setup lang="ts">
 import { type TransientComponentDictionnary } from 'transient'
 defineProps<{ dictionnary: TransientComponentDictionnary }>()
+
+defineEmits<{ (e: 'select', data: string): void }>()
 </script>

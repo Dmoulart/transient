@@ -2,26 +2,28 @@
   <div class="flex justify-center items-center overflow-hidden flex-1">
     <Suspense>
       <component v-if="component" :is="component" v-bind="data">
-        <template v-for="(_, slot) of schema.slots" v-slot:[slot]>
+        <template v-for="(_, slotName) of schema.slots" v-slot:[slotName]>
           <ComponentSlot
-            v-if="!slots[slot] || slots[slot].length === 0"
-            :name="slot"
+            v-if="!slots[slotName] || slots[slotName].length === 0"
+            :name="slotName"
             @append="editedSlot = $event"
           />
           <ComponentView
             v-else
-            v-for="path of slots[slot]"
-            :path="path"
+            v-for="slot of slots[slotName]"
+            :path="slot.prototype.path"
             :schema="{
               props: {},
               slots: {},
             }"
+            :data="{}"
             :slots="{}"
           />
         </template>
       </component>
     </Suspense>
     <UDrawer
+      v-if="editedSlot"
       class="max-w-125"
       direction="right"
       :open="editedSlot"
@@ -31,7 +33,7 @@
       <template #content>
         <ComponentList
           :dictionnary="dictionnary"
-          @select="$emit('append', { slot: editedSlot, path: $event })"
+          @select="emit('append', { slot: editedSlot, path: $event })"
         />
       </template>
     </UDrawer>
@@ -44,14 +46,10 @@ import ComponentSlot from './ComponentSlot.vue'
 import ComponentList from './ComponentList.vue'
 import { computed, defineAsyncComponent, ref } from 'vue'
 import { useTransient } from '@/stores/use-transient'
+import type { Prototype } from '@/stores/use-prototype'
+import { watch } from 'vue'
 
-const props = defineProps<{
-  path: string
-  schema: TransientComponentSchema
-  slots: Record<string, string[]>
-  data?: Record<string, any>
-}>()
-
+const props = defineProps<Prototype & { path: string }>()
 const dictionnary = useTransient().dictionnary
 
 const component = computed(() => {
@@ -59,7 +57,10 @@ const component = computed(() => {
   return defineAsyncComponent(() => import(/* @vite-ignore */ props.path))
 })
 
-const editedSlot = ref()
+const emit = defineEmits<{ (e: 'append', data: { slot: string; path: string }): void }>()
+watch(props.slots, () => console.log(props.slots))
+console.log(props.slots)
+const editedSlot = ref<string>()
 </script>
 
 <style></style>
