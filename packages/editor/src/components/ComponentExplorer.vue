@@ -27,7 +27,3 @@ import ComponentList from './ComponentList.vue'
 import { type TransientComponentDictionnary } from 'transient'
 defineProps<{ dictionnary: TransientComponentDictionnary }>()
 </script>
-
-<style>
-/* You can add any additional custom styles here */
-</style>

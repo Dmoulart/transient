@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { TransientComponentSchema } from 'transient'
-import { inject, provide, ref } from 'vue'
+import { inject, provide, ref, type Ref } from 'vue'
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
@@ -11,25 +11,16 @@ export type PrototypeSlots = Record<string, PrototypeSlot<any>[]>
 
 export type Prototype = {
   path: string
-  schema: TransientComponentSchema
   slots: PrototypeSlots
   data: Record<string, any>
 }
 
-export const usePrototypes = defineStore('prototype', () => {
-  const root = ref<PartialBy<Prototype, 'path'>>({
-    path: undefined,
-    schema: {
-      props: {},
-      slots: {},
-    },
-    data: {},
-    slots: {},
-  })
+export const rootPrototype = ref<Prototype | undefined>()
 
-  return { root }
-})
+export function providePrototype(prototype: Ref<Prototype | undefined>) {
+  return provide('edited-prototype', prototype)
+}
 
-export function usePrototype() {
-  return inject<Prototype>('prototype')
+export function usePrototype(): Ref<Prototype> {
+  return inject<Ref<Prototype>>('edited-prototype') as Ref<Prototype>
 }

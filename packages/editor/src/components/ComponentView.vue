@@ -49,8 +49,9 @@ import { useTransient } from '@/stores/use-transient'
 import type { Prototype } from '@/stores/use-prototype'
 import { watch } from 'vue'
 
-const props = defineProps<Prototype & { path: string }>()
+const props = defineProps<Prototype>()
 const dictionnary = useTransient().dictionnary
+const schema = computed(() => dictionnary[props.path])
 
 const component = computed(() => {
   props.path // don't remove this haaha

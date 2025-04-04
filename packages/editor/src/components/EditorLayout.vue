@@ -67,30 +67,31 @@
             <div
               class="flex h-full items-center justify-center rounded-lg border-2 border-dashed bg-black"
             >
-              <PrototypeView
-                v-if="prototype.path"
-                :path="prototype.path"
-                :data="prototype.data"
-                :slots="prototype.slots"
-                :schema="dictionnary[prototype.path]"
-                @append="
-                  (event: any) => {
-                    prototype.slots[event.slot] ??= []
-                    prototype.slots[event.slot].push({
-                      type: 'unique',
-                      prototype: {
-                        path: event.path,
-                        schema: {
-                          props: {},
+              <template v-if="prototype">
+                <PrototypeView
+                  :path="prototype.path"
+                  :data="prototype.data"
+                  :slots="prototype.slots"
+                  :schema="dictionnary[prototype.path]"
+                  @append="
+                    (event: any) => {
+                      if (!prototype) {
+                        console.error('Unexpected empty prototype')
+                        return
+                      }
+                      prototype.slots[event.slot] ??= []
+                      prototype.slots[event.slot].push({
+                        type: 'unique',
+                        prototype: {
+                          path: event.path,
+                          data: {},
                           slots: {},
                         },
-                        data: {},
-                        slots: {},
-                      },
-                    })
-                  }
-                "
-              />
+                      })
+                    }
+                  "
+                />
+              </template>
               <div v-else class="text-center">
                 <h3 class="text-lg font-medium">Empty Content Area</h3>
                 <p class="text-sm text-muted-foreground">
@@ -107,7 +108,11 @@
             :dictionnary="dictionnary"
             @select="
               (path) => {
-                prototype.path = path
+                prototype = {
+                  path,
+                  slots: {},
+                  data: {},
+                }
               }
             "
           />
@@ -117,7 +122,7 @@
       <!-- Right sidebar -->
       <aside v-if="rightOpen" class="w-72 border-l bg-background">
         <RightSidebar
-          v-if="prototype.path"
+          v-if="prototype"
           :component-props="dictionnary[prototype.path].props"
           v-model="prototype.data"
         />
@@ -148,7 +153,9 @@ import RightSidebar from './RightSidebar.vue'
 import ComponentExplorer from './ComponentExplorer.vue'
 import type { TransientComponentDictionnary, TransientComponentSchema } from 'transient'
 import { useTransient } from '@/stores/use-transient'
-import { usePrototypes } from '@/stores/use-prototype'
+import { rootPrototype, providePrototype } from '@/stores/use-prototype'
+import { whenever } from '@vueuse/core'
+import assert from 'assert'
 
 const dictionnary = ref<TransientComponentDictionnary>({})
 
@@ -158,27 +165,20 @@ fetch('http://127.0.0.1:3001/schemas')
     dictionnary.value = s
     useTransient().dictionnary = s
   })
+const prototype = rootPrototype
+providePrototype(rootPrototype)
 
-const prototype = usePrototypes().root
-
-watch(
-  () => prototype.path,
-  () => {
-    if (prototype.path) {
-      console.log(Object.entries(dictionnary.value[prototype.path].props))
-      prototype.data = Object.entries(dictionnary.value[prototype.path].props).reduce(
-        (data, [key, type]) => {
-          data[key] = type.default
-          return data
-        },
-        {} as Record<string, any>,
-      )
-    } else {
-      prototype.data = {}
-    }
-    prototype.slots = {}
-  },
-)
+watch(prototype, () => {
+  if (prototype.value?.path) {
+    prototype.value.data = Object.entries(dictionnary.value[prototype.value.path].props).reduce(
+      (data, [key, type]) => {
+        data[key] = type.default
+        return data
+      },
+      {} as Record<string, any>,
+    )
+  }
+})
 
 const leftOpen = ref(true)
 const rightOpen = ref(true)
