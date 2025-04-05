@@ -1,4 +1,4 @@
-import { type PropertyMetaSchema } from "vue-component-meta";
+import { type PropertyMeta, type PropertyMetaSchema } from "vue-component-meta";
 import {
   assert,
   assertIs,
@@ -11,12 +11,25 @@ import {
 import type { TransientProp, TransientType } from "../../transient/definition";
 import { isEscapedString, isNumeric, unescapeString } from "../../core/string";
 import { logger } from "../../log/logger";
+import { getTypeKind } from "../../transient";
 
 export type TypeAnalysis = {
   type: TransientType;
   propInfos?: Partial<TransientProp>;
 };
-
+export function castDefaultValue(
+  value: Exclude<PropertyMeta["default"], undefined>,
+  type: TransientType
+) {
+  switch (getTypeKind(type)) {
+    case "boolean": {
+      return value === "true";
+    }
+    //@todo
+    default:
+      return unescapeString(value);
+  }
+}
 export function castPropType(schema: PropertyMetaSchema): TypeAnalysis {
   if (typeof schema === "string") {
     return {
@@ -44,7 +57,7 @@ export function castPropType(schema: PropertyMetaSchema): TypeAnalysis {
 
 export type TypeNormalizationAnalysis = [
   PropertyMetaSchema[],
-  Partial<TypeAnalysis> | undefined
+  Partial<TypeAnalysis> | undefined,
 ];
 const isStringLiteral = isEscapedString;
 

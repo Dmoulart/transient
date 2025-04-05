@@ -22,7 +22,7 @@
     <div class="flex flex-1 overflow-hidden">
       <!-- Left sidebar -->
       <aside v-if="leftOpen" class="w-64 border-r bg-background">
-        <LeftSidebar />
+        <LeftSidebar v-model="editedPrototype" />
       </aside>
 
       <div class="flex flex-1 flex-col overflow-hidden">
@@ -101,11 +101,7 @@
             :dictionnary="dictionnary"
             @select="
               (path) => {
-                rootPrototype = {
-                  path,
-                  slots: {},
-                  data: {},
-                }
+                rootPrototype = createPrototype(path)
               }
             "
           />
@@ -149,12 +145,15 @@ import { getComponentDefaultPropsValues } from 'transient/src/transient'
 import { useTransient } from '@/stores/use-transient'
 import {
   rootPrototype,
-  editedPrototype,
-  dictionnary,
+  usePrototype,
   createPrototype,
+  useDictionnary,
 } from '@/stores/use-prototype'
 import PrototypeView from './PrototypeView.vue'
 
+const dictionnary = useDictionnary()
+
+const editedPrototype = usePrototype()
 fetch('http://127.0.0.1:3001/schemas')
   .then((schemas) => schemas.json())
   .then((s) => {

@@ -15,7 +15,7 @@ export type TransientProp = {
   type: TransientType;
   description?: string;
   required?: boolean;
-  default?: string | undefined;
+  default?: string | boolean | undefined;
 };
 
 export type TransientSlot = any;

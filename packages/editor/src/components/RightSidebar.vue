@@ -3,7 +3,7 @@
     <div class="flex h-14 items-center border-b px-4">
       <h2 class="text-lg font-semibold">Properties</h2>
     </div>
-    <div class="flex-1 overflow-auto">
+    <div class="flex-1 overflow-y-scroll overflow-x-hidden">
       <div class="border-b">
         <div class="flex">
           <button
@@ -68,35 +68,27 @@
         />
       </div>
 
-      <div v-if="activeTab === 'data'" class="p-4">
-        <div class="grid gap-4">
-          <div>
-            <label class="text-sm font-medium">Data Source</label>
-            <input
-              type="text"
-              placeholder="None"
-              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            />
-          </div>
-          <div>
-            <label class="text-sm font-medium">Variable</label>
-            <input
-              type="text"
-              placeholder="data"
-              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            />
-          </div>
-        </div>
+      <div v-if="activeTab === 'schema'" class="p-4">
+        <JsonViewer :value="schema" copyable boxed sort expanded :expanded-depth="4" theme="dark" />
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import ComponentProps from './ComponentProps.vue'
 import type { TransientProps } from 'transient'
+import { usePrototype, useSchema } from '@/stores/use-prototype'
+
+// @ts-expect-error : oups no types
+import { JsonViewer } from 'vue3-json-viewer'
+import 'vue3-json-viewer/dist/index.css'
+
 defineProps<{ componentProps?: TransientProps }>()
+
 const componentData = defineModel<Record<string, any>>({ default: {} })
-const tabs = ['style', 'props', 'data']
+const tabs = ['style', 'props', 'schema']
 const activeTab = ref('props')
+
+const schema = useSchema()
 </script>

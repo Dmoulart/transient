@@ -1,5 +1,5 @@
 import { createChecker, type ComponentMeta } from "vue-component-meta";
-import { castPropType } from "./cast";
+import { castDefaultValue, castPropType } from "./cast";
 import { defineAnalyzer, type AnalyzerConfig } from "../analyzer";
 import { resolve } from "path";
 import type {
@@ -39,11 +39,12 @@ function describeComponent(meta: ComponentMeta): TransientComponentSchema {
     logger.details(`processing ${prop.name}`);
 
     const { name, description, required, default: defaultValue, schema } = prop;
+
     const { type, propInfos } = castPropType(schema);
 
     props[name] = {
       description: !!description ? description : undefined,
-      default: defaultValue && unescapeString(defaultValue),
+      default: defaultValue && castDefaultValue(defaultValue, type),
       required,
       ...propInfos,
       type,

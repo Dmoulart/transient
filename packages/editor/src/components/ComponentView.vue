@@ -54,6 +54,7 @@
 
     <UDrawer
       v-if="editedSlot"
+      ref="drawer"
       class="max-w-125"
       direction="right"
       :open="Boolean(editedSlot)"
@@ -66,6 +67,7 @@
           @select="
             (path) => {
               emit('append', { slot: editedSlot as string, path, to: prototype })
+              editedSlot = undefined
             }
           "
         />
@@ -78,11 +80,12 @@
 import { type TransientComponentSchema } from 'transient'
 import ComponentSlot from './ComponentSlot.vue'
 import ComponentList from './ComponentList.vue'
-import { computed, defineAsyncComponent, hydrateOnInteraction, ref } from 'vue'
+import { computed, defineAsyncComponent, hydrateOnInteraction, ref, useTemplateRef } from 'vue'
 import { useTransient } from '@/stores/use-transient'
 import type { Prototype } from '@/stores/use-prototype'
 import { watch } from 'vue'
 import { defineShortcuts } from '@nuxt/ui/runtime/composables/defineShortcuts.js'
+import { onClickOutside } from '@vueuse/core'
 
 const props = defineProps<{ prototype: Prototype; selectable?: boolean }>()
 const dictionnary = useTransient().dictionnary
@@ -100,6 +103,8 @@ const emit = defineEmits<{
   (e: 'append', data: { slot: string; path: string; to: Prototype }): void
 }>()
 const editedSlot = ref<string>()
+
+const drawer = useTemplateRef<HTMLElement>('drawer')
 </script>
 
 <style>

@@ -3,19 +3,9 @@
     <div class="flex h-14 items-center border-b px-4"></div>
     <div class="flex-1 overflow-auto py-2">
       <nav class="grid gap-1 px-2">
-        <UTree :items="items">
+        <UTree v-if="rootPrototype" :items="items" :multiple="false">
           <template #app="{ item }">
-            <p
-              class="italic font-bold"
-              @click="
-                () => {
-                  if (item.prototype) {
-                    debugger
-                    editedPrototype = item.prototype
-                  }
-                }
-              "
-            >
+            <p class="italic font-bold">
               {{ item.label }}
             </p>
           </template>
@@ -53,12 +43,12 @@ const items = computed(() => {
   return [
     {
       label: getPrototypeName(rootPrototype.value.path),
+      value: String(rootPrototype.value.id),
       slot: 'root' as const,
       defaultExpanded: true,
       children: produceTree(rootPrototype.value.slots),
       // icon: 'i-lucide-star',
       icon: 'i-lucide-component',
-      selected: editedPrototype.value === rootPrototype.value,
       onSelect: (e: Event) => {
         editedPrototype.value = rootPrototype.value
       },
@@ -73,7 +63,6 @@ function produceTree(slots: PrototypeSlots) {
       return {
         label: slotName,
         children,
-        defaultExpanded: true,
         icon: 'i-lucide-square-dashed',
       }
     }
@@ -87,10 +76,10 @@ function produceItem(prototypeSlot: PrototypeSlot<any>, slotName: string): Array
     {
       label: getPrototypeName(prototypeSlot.prototype.path),
       children: produceTree(prototypeSlot.prototype.slots),
-      selected: editedPrototype.value === prototypeSlot.prototype,
       onSelect: (e: Event) => {
         editedPrototype.value = prototypeSlot.prototype
       },
+      value: String(prototypeSlot.prototype.id),
       // icon: 'i-lucide-puzzle',
       icon: 'i-lucide-dot',
     },
