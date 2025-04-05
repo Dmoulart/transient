@@ -1,5 +1,5 @@
 <template>
-  <component :is="as" :class="className">
+  <component class="text-component" :is="as" :class="className">
     {{ text }}
   </component>
 </template>

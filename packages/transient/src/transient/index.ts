@@ -1,5 +1,6 @@
-export { getTypeKind } from "./ast.js";
+export { getTypeKind, getComponentDefaultPropsValues } from "./ast.js";
 export {
+  type TransientComponentDictionnary,
   type TransientComplexTypeName,
   type TransientComponentSchema,
   type TransientPrimitiveTypeName,

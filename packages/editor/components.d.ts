@@ -38,5 +38,6 @@ declare module 'vue' {
     ULinkBase: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/LinkBase.vue')['default']
     USelectMenu: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/SelectMenu.vue')['default']
     USwitch: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/Switch.vue')['default']
+    UTree: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/Tree.vue')['default']
   }
 }

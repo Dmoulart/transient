@@ -4,7 +4,6 @@
     :disabled="disabled"
     @click="$emit('click')"
   >
-    {{ text }}
     <slot />
   </button>
 </template>
@@ -17,7 +16,6 @@ const emit = defineEmits(['click'])
 interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'outline' | 'danger'
   size?: 'sm' | 'md' | 'lg'
-  text?: string
   disabled?: boolean
 }
 

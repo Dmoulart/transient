@@ -10,9 +10,10 @@
 </template>
 <script setup lang="ts">
 import { type TransientProp, type TransientType } from 'transient'
+import { computed } from 'vue'
 const props = defineProps<{ prop: TransientProp }>()
 
-const kind = getTypeKind(props.prop.type)
+const kind = computed(() => getTypeKind(props.prop.type))
 
 const model = defineModel()
 

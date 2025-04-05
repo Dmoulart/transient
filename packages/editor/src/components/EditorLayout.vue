@@ -67,27 +67,29 @@
             <div
               class="flex h-full items-center justify-center rounded-lg border-2 border-dashed bg-black"
             >
-              <template v-if="prototype">
+              <template v-if="rootPrototype">
                 <PrototypeView
-                  :path="prototype.path"
-                  :data="prototype.data"
-                  :slots="prototype.slots"
-                  :schema="dictionnary[prototype.path]"
+                  :path="rootPrototype.path"
+                  :data="rootPrototype.data"
+                  :slots="rootPrototype.slots"
+                  :schema="dictionnary[rootPrototype.path]"
                   @append="
                     (event: any) => {
-                      if (!prototype) {
+                      console.log('hello')
+                      if (!rootPrototype) {
                         console.error('Unexpected empty prototype')
                         return
                       }
-                      prototype.slots[event.slot] ??= []
-                      prototype.slots[event.slot].push({
+
+                      const prototype = createPrototype(event.path)
+
+                      rootPrototype.slots[event.slot] ??= []
+                      rootPrototype.slots[event.slot].push({
                         type: 'unique',
-                        prototype: {
-                          path: event.path,
-                          data: {},
-                          slots: {},
-                        },
+                        prototype,
                       })
+
+                      editedPrototype = prototype
                     }
                   "
                 />
@@ -108,7 +110,7 @@
             :dictionnary="dictionnary"
             @select="
               (path) => {
-                prototype = {
+                rootPrototype = {
                   path,
                   slots: {},
                   data: {},
@@ -122,9 +124,9 @@
       <!-- Right sidebar -->
       <aside v-if="rightOpen" class="w-72 border-l bg-background">
         <RightSidebar
-          v-if="prototype"
-          :component-props="dictionnary[prototype.path].props"
-          v-model="prototype.data"
+          v-if="editedPrototype"
+          :component-props="dictionnary[editedPrototype.path].props"
+          v-model="editedPrototype.data"
         />
       </aside>
     </div>
@@ -151,13 +153,15 @@ import { FileText, Plus, Search, ChevronDown } from 'lucide-vue-next'
 import LeftSidebar from './LeftSidebar.vue'
 import RightSidebar from './RightSidebar.vue'
 import ComponentExplorer from './ComponentExplorer.vue'
-import type { TransientComponentDictionnary, TransientComponentSchema } from 'transient'
+import { type TransientComponentDictionnary, type TransientComponentSchema } from 'transient'
+import { getComponentDefaultPropsValues } from 'transient/src/transient'
 import { useTransient } from '@/stores/use-transient'
-import { rootPrototype, providePrototype } from '@/stores/use-prototype'
-import { whenever } from '@vueuse/core'
-import assert from 'assert'
-
-const dictionnary = ref<TransientComponentDictionnary>({})
+import {
+  rootPrototype,
+  editedPrototype,
+  dictionnary,
+  createPrototype,
+} from '@/stores/use-prototype'
 
 fetch('http://127.0.0.1:3001/schemas')
   .then((schemas) => schemas.json())
@@ -165,21 +169,18 @@ fetch('http://127.0.0.1:3001/schemas')
     dictionnary.value = s
     useTransient().dictionnary = s
   })
-const prototype = rootPrototype
-providePrototype(rootPrototype)
 
-watch(prototype, () => {
-  if (prototype.value?.path) {
-    prototype.value.data = Object.entries(dictionnary.value[prototype.value.path].props).reduce(
-      (data, [key, type]) => {
-        data[key] = type.default
-        return data
-      },
-      {} as Record<string, any>,
-    )
+watch(rootPrototype, (prototype) => {
+  editedPrototype.value = prototype
+
+  if (prototype?.path) {
+    prototype.data = getComponentDefaultPropsValues(dictionnary.value[prototype.path].props)
   }
 })
 
+watch(editedPrototype, () => {
+  console.log('edit !!')
+})
 const leftOpen = ref(true)
 const rightOpen = ref(true)
 </script>

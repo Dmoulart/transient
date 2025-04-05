@@ -1,3 +1,7 @@
+export type TransientComponentDictionnary = {
+  [path: string]: TransientComponentSchema;
+};
+
 export type TransientComponentSchema = {
   props: TransientProps;
   slots: TransientSlots;
@@ -20,16 +24,16 @@ export type TransientType<T extends TransientTypeName = TransientTypeName> =
   T extends TransientPrimitiveTypeName
     ? T | { kind: T }
     : T extends "enum"
-    ? { kind: "enum"; enum: string[] }
-    : T extends "object"
-    ? { kind: "object"; object: Record<string, TransientProp> }
-    : T extends "list"
-    ? { kind: "list"; list: TransientProp }
-    : T extends "record"
-    ? { kind: "record" }
-    : T extends "union"
-    ? { kind: "union"; union: TransientType[] }
-    : { kind: T };
+      ? { kind: "enum"; enum: string[] }
+      : T extends "object"
+        ? { kind: "object"; object: Record<string, TransientProp> }
+        : T extends "list"
+          ? { kind: "list"; list: TransientProp }
+          : T extends "record"
+            ? { kind: "record" }
+            : T extends "union"
+              ? { kind: "union"; union: TransientType[] }
+              : { kind: T };
 
 export type TransientTypeName =
   | TransientPrimitiveTypeName

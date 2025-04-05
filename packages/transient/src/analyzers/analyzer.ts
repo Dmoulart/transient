@@ -1,12 +1,12 @@
 import { join, parse, resolve } from "path";
 import { sync, type Pattern } from "fast-glob";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
-import type { TransientComponentSchema } from "../transient/definition";
+import type {
+  TransientComponentDictionnary,
+  TransientComponentSchema,
+} from "../transient/definition";
 import { logger } from "../log/logger";
 
-export type TransientComponentDictionnary = {
-  [path: string]: TransientComponentSchema;
-};
 export type AnalyzeOptions = {
   dir?: string;
 };

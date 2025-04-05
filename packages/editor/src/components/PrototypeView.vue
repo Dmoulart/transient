@@ -1,5 +1,11 @@
 <template>
-  <ComponentView :path="path" :data="data" :slots="slots" @append="emit('append', $event)" />
+  <ComponentView
+    selectable
+    :path="path"
+    :data="data"
+    :slots="slots"
+    @append="emit('append', $event)"
+  />
 </template>
 <script setup lang="ts">
 const emit = defineEmits<{ (e: 'append', data: { slot: string; path: string }): void }>()
