@@ -69,22 +69,13 @@
             >
               <template v-if="rootPrototype">
                 <PrototypeView
-                  :path="rootPrototype.path"
-                  :data="rootPrototype.data"
-                  :slots="rootPrototype.slots"
-                  :schema="dictionnary[rootPrototype.path]"
+                  :prototype="rootPrototype"
                   @append="
-                    (event: any) => {
-                      console.log('hello')
-                      if (!rootPrototype) {
-                        console.error('Unexpected empty prototype')
-                        return
-                      }
+                    ({ path, slot, to }) => {
+                      const prototype = createPrototype(path)
 
-                      const prototype = createPrototype(event.path)
-
-                      rootPrototype.slots[event.slot] ??= []
-                      rootPrototype.slots[event.slot].push({
+                      to.slots[slot] ??= []
+                      to.slots[slot].push({
                         type: 'unique',
                         prototype,
                       })
@@ -162,6 +153,7 @@ import {
   dictionnary,
   createPrototype,
 } from '@/stores/use-prototype'
+import PrototypeView from './PrototypeView.vue'
 
 fetch('http://127.0.0.1:3001/schemas')
   .then((schemas) => schemas.json())

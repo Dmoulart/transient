@@ -2,19 +2,17 @@
   <div class="component-view flex justify-center items-center overflow-hidden flex-1">
     <div class="relative">
       <Suspense>
-        <component v-if="component" :is="component" v-bind="data">
+        <component v-if="component" :is="component" v-bind="prototype.data">
           <template v-for="(_, slotName) of schema.slots" v-slot:[slotName]>
             <ComponentSlot
-              v-if="!slots[slotName] || slots[slotName].length === 0"
+              v-if="!prototype.slots[slotName] || prototype.slots[slotName].length === 0"
               :name="slotName"
               @click="editedSlot = slotName"
             />
             <ComponentView
               v-else
-              v-for="slot of slots[slotName]"
-              :path="slot.prototype.path"
-              :data="slot.prototype.data"
-              :slots="slot.prototype.slots"
+              v-for="slot of prototype.slots[slotName]"
+              :prototype="slot.prototype"
               @append="emit('append', $event)"
             />
           </template>
@@ -67,7 +65,7 @@
           :dictionnary="dictionnary"
           @select="
             (path) => {
-              emit('append', { slot: editedSlot as string, path })
+              emit('append', { slot: editedSlot as string, path, to: prototype })
             }
           "
         />
@@ -86,14 +84,14 @@ import type { Prototype } from '@/stores/use-prototype'
 import { watch } from 'vue'
 import { defineShortcuts } from '@nuxt/ui/runtime/composables/defineShortcuts.js'
 
-const props = defineProps<Prototype & { selectable?: boolean }>()
+const props = defineProps<{ prototype: Prototype; selectable?: boolean }>()
 const dictionnary = useTransient().dictionnary
-const schema = computed(() => dictionnary[props.path])
+const schema = computed(() => dictionnary[props.prototype.path])
 
 const component = computed(() => {
-  props.path // don't remove this haaha
+  props.prototype.path // don't remove this haaha
   return defineAsyncComponent({
-    loader: () => import(/* @vite-ignore */ props.path),
+    loader: () => import(/* @vite-ignore */ props.prototype.path),
     hydrate: hydrateOnInteraction('click'),
   })
 })

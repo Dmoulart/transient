@@ -1,18 +1,12 @@
 <template>
-  <ComponentView
-    selectable
-    :path="path"
-    :data="data"
-    :slots="slots"
-    @append="emit('append', $event)"
-  />
+  <ComponentView selectable :prototype="prototype" @append="emit('append', $event)" />
 </template>
 <script setup lang="ts">
-const emit = defineEmits<{ (e: 'append', data: { slot: string; path: string }): void }>()
+import type { Prototype } from '@/stores/use-prototype'
+
+const emit = defineEmits<{ (e: 'append', data: { slot: string; path: string; to: Prototype }): void }>()
 
 defineProps<{
-  data: Record<string, any>
-  slots: Record<string, string[]>
-  path: string
+  prototype: Prototype
 }>()
 </script>
