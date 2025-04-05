@@ -1,5 +1,5 @@
 <template>
-  <div class="component-view flex justify-center items-center overflow-hidden flex-1">
+  <div ref="root" class="component-view flex justify-center items-center overflow-hidden flex-1">
     <div class="relative">
       <Suspense>
         <component v-if="component" :is="component" v-bind="prototype.data">
@@ -80,12 +80,16 @@
 import { type TransientComponentSchema } from 'transient'
 import ComponentSlot from './ComponentSlot.vue'
 import ComponentList from './ComponentList.vue'
-import { computed, defineAsyncComponent, hydrateOnInteraction, ref, useTemplateRef } from 'vue'
+import {
+  computed,
+  defineAsyncComponent,
+  hydrateOnInteraction,
+  ref,
+  useTemplateRef,
+  type WatchHandle,
+} from 'vue'
 import { useTransient } from '@/stores/use-transient'
 import type { Prototype } from '@/stores/use-prototype'
-import { watch } from 'vue'
-import { defineShortcuts } from '@nuxt/ui/runtime/composables/defineShortcuts.js'
-import { onClickOutside } from '@vueuse/core'
 
 const props = defineProps<{ prototype: Prototype; selectable?: boolean }>()
 const dictionnary = useTransient().dictionnary

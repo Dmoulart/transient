@@ -60,7 +60,7 @@
           </div>
 
           <!-- Empty content area -->
-          <div class="flex-1 overflow-auto p-6">
+          <div id="prototype-view" class="flex-1 overflow-auto p-6">
             <!-- <h3 v-if="prototype.path" class="text-lg font-medium">
               {{ prototype.path.split('/').at(-1) }}
             </h3> -->
@@ -150,9 +150,10 @@ import {
   useDictionnary,
 } from '@/stores/use-prototype'
 import PrototypeView from './PrototypeView.vue'
+import { useMouseIsAbove } from '@/stores/use-mouse-is-above'
+import { vMouseInElement } from '@vueuse/components'
 
 const dictionnary = useDictionnary()
-
 const editedPrototype = usePrototype()
 fetch('http://127.0.0.1:3001/schemas')
   .then((schemas) => schemas.json())
