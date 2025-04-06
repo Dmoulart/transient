@@ -17,7 +17,7 @@
         </button>
       </div>
     </div>
-    <ComponentList :dictionnary="dictionnary" @select="$emit('select', $event)" />
+    <ComponentList draggable :dictionnary="dictionnary" @select="$emit('select', $event)" />
   </div>
 </template>
 

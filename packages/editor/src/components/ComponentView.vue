@@ -1,56 +1,54 @@
 <template>
-  <div ref="root" class="component-view flex justify-center items-center overflow-hidden flex-1">
-    <div class="relative">
-      <Suspense>
-        <component v-if="component" :is="component" v-bind="prototype.data">
-          <template v-for="(_, slotName) of schema.slots" v-slot:[slotName]>
-            <ComponentSlot
-              v-if="!prototype.slots[slotName] || prototype.slots[slotName].length === 0"
-              :name="slotName"
-              @click="editedSlot = slotName"
-            />
-            <ComponentView
-              v-else
-              v-for="slot of prototype.slots[slotName]"
-              :prototype="slot.prototype"
-              @append="emit('append', $event)"
-            />
-          </template>
-        </component>
-      </Suspense>
-      <div
-        v-if="selectable"
-        class="bounding-box absolute shadow-md pointer-events-none z-50 size-full inset-0 p-5"
-        style="
-          --box-width: calc(100%);
-          --box-height: calc(100%);
-          --border-color: yellow;
-          --dash-size: 10px;
-          --dash-thickness: 1px;
+  <div class="component-view flex justify-center items-center overflow-hidden flex-1">
+    <Suspense>
+      <component v-if="component" :is="component" v-bind="prototype.data">
+        <template v-for="(_, slotName) of schema.slots" v-slot:[slotName]>
+          <ComponentSlot
+            v-if="!prototype.slots[slotName] || prototype.slots[slotName].length === 0"
+            :name="slotName"
+            @click="editedSlot = slotName"
+          />
+          <ComponentView
+            v-else
+            v-for="slot of prototype.slots[slotName]"
+            :prototype="slot.prototype"
+            @append="emit('append', $event)"
+          />
+        </template>
+      </component>
+    </Suspense>
+    <!-- <div
+      v-if="selectable"
+      class="bounding-box absolute shadow-md pointer-events-none z-50 size-full inset-0 p-5"
+      style="
+        --box-width: calc(100%);
+        --box-height: calc(100%);
+        --border-color: yellow;
+        --dash-size: 10px;
+        --dash-thickness: 1px;
 
-          width: var(--box-width);
-          height: var(--box-height);
-          border-radius: 12px;
-          background:
-            linear-gradient(90deg, var(--border-color) 50%, transparent 50%),
-            linear-gradient(90deg, var(--border-color) 50%, transparent 50%),
-            linear-gradient(0deg, var(--border-color) 50%, transparent 50%),
-            linear-gradient(0deg, var(--border-color) 50%, transparent 50%);
-          background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-          background-size:
-            var(--dash-size) var(--dash-thickness),
-            var(--dash-size) var(--dash-thickness),
-            var(--dash-thickness) var(--dash-size),
-            var(--dash-thickness) var(--dash-size);
-          background-position:
-            0px 0px,
-            var(--box-width) var(--box-height),
-            0px var(--box-height),
-            var(--box-width) 0px;
-          animation: border-dance 2s infinite linear;
-        "
-      />
-    </div>
+        width: var(--box-width);
+        height: var(--box-height);
+        border-radius: 12px;
+        background:
+          linear-gradient(90deg, var(--border-color) 50%, transparent 50%),
+          linear-gradient(90deg, var(--border-color) 50%, transparent 50%),
+          linear-gradient(0deg, var(--border-color) 50%, transparent 50%),
+          linear-gradient(0deg, var(--border-color) 50%, transparent 50%);
+        background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+        background-size:
+          var(--dash-size) var(--dash-thickness),
+          var(--dash-size) var(--dash-thickness),
+          var(--dash-thickness) var(--dash-size),
+          var(--dash-thickness) var(--dash-size);
+        background-position:
+          0px 0px,
+          var(--box-width) var(--box-height),
+          0px var(--box-height),
+          var(--box-width) 0px;
+        animation: border-dance 2s infinite linear;
+      "
+    /> -->
 
     <UDrawer
       v-if="editedSlot"
@@ -99,7 +97,6 @@ const component = computed(() => {
   props.prototype.path // don't remove this haaha
   return defineAsyncComponent({
     loader: () => import(/* @vite-ignore */ props.prototype.path),
-    hydrate: hydrateOnInteraction('click'),
   })
 })
 

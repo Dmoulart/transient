@@ -10,7 +10,7 @@ import { computed } from 'vue'
 interface TextProps {
   as?: string
   className?: string
-  text: string
+  text?: string
 }
 
 const props = withDefaults(defineProps<TextProps>(), {

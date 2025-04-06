@@ -5,7 +5,8 @@
         <ComponentItem
           v-for="(schema, path, index) in dictionnary"
           :prototype="createPrototype(path as string)"
-          @click="$emit('select', path as string)"
+          @select="$emit('select', path as string)"
+          :draggable="draggable"
         />
       </div>
     </div>
@@ -15,7 +16,7 @@
 import { type TransientComponentDictionnary } from 'transient'
 import ComponentItem from './ComponentItem.vue'
 import { createPrototype } from '@/stores/use-prototype'
-defineProps<{ dictionnary: TransientComponentDictionnary }>()
+defineProps<{ dictionnary: TransientComponentDictionnary; draggable?: boolean }>()
 
 defineEmits<{ (e: 'select', data: string): void }>()
 </script>

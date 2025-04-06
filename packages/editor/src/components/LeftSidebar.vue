@@ -3,12 +3,21 @@
     <div class="flex h-14 items-center border-b px-4"></div>
     <div class="flex-1 overflow-auto py-2">
       <nav class="grid gap-1 px-2">
-        <UTree v-if="rootPrototype" :items="items" :multiple="false">
-          <template #app="{ item }">
-            <p class="italic font-bold">
-              {{ item.label }}
-            </p>
-          </template>
+        <UTree
+          v-if="rootPrototype"
+          @update:modelValue="
+            (item: any) => {
+              if (item && item.prototype) {
+                prototype = item.prototype
+              }
+            }
+          "
+          :modelValue="selected"
+          :items="items"
+          :multiple="false"
+          size="lg"
+        >
+          <template #item-label="{ item }">{{ item.label }} + </template>
         </UTree>
 
         <!-- <button
@@ -26,14 +35,50 @@
 
 <script setup lang="ts">
 import {
-  editedPrototype,
   getPrototypeName,
-  rootPrototype,
   type Prototype,
+  rootPrototype,
+  usePrototype,
   type PrototypeSlot,
   type PrototypeSlots,
 } from '@/stores/use-prototype'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+const value = ref()
+
+const prototype = usePrototype()
+
+function findItem(
+  items: Record<string, any>[],
+  selectedPrototype: Prototype,
+): Record<string, any> | undefined {
+  for (const item of items) {
+    const isSelected = item.prototype && item.prototype.id === selectedPrototype.id
+
+    if (isSelected) {
+      return item
+    }
+
+    if (!isSelected && item.children?.length > 0) {
+      console.log('find children !')
+      const selected = findItem(item.children, selectedPrototype)
+
+      if (selected) {
+        return selected
+      }
+    }
+  }
+
+  return undefined
+}
+
+const selected = computed(() => {
+  if (!prototype.value) {
+    return undefined
+  }
+  const item = findItem(items.value, prototype.value)
+  console.log({ item })
+  return item
+})
 
 const items = computed(() => {
   if (!rootPrototype.value) {
@@ -43,15 +88,12 @@ const items = computed(() => {
   return [
     {
       label: getPrototypeName(rootPrototype.value.path),
-      value: String(rootPrototype.value.id),
       slot: 'root' as const,
       defaultExpanded: true,
       children: produceTree(rootPrototype.value.slots),
-      // icon: 'i-lucide-star',
       icon: 'i-lucide-component',
-      onSelect: (e: Event) => {
-        editedPrototype.value = rootPrototype.value
-      },
+      prototype: rootPrototype.value,
+      value: String(rootPrototype.value.id),
     },
   ]
 })
@@ -76,17 +118,11 @@ function produceItem(prototypeSlot: PrototypeSlot<any>, slotName: string): Array
     {
       label: getPrototypeName(prototypeSlot.prototype.path),
       children: produceTree(prototypeSlot.prototype.slots),
-      onSelect: (e: Event) => {
-        editedPrototype.value = prototypeSlot.prototype
-      },
-      value: String(prototypeSlot.prototype.id),
-      // icon: 'i-lucide-puzzle',
+      prototype: prototypeSlot.prototype,
       icon: 'i-lucide-dot',
+      appendable: true,
+      value: String(prototypeSlot.prototype.id),
     },
   ]
 }
 </script>
-
-<style>
-/* You can add any additional custom styles here */
-</style>
