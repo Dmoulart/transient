@@ -1,22 +1,15 @@
 <template>
   <div class="component-view flex justify-center items-center overflow-hidden flex-1">
-    <Suspense>
-      <component v-if="component" :is="component" v-bind="prototype.data">
-        <template v-for="(_, slotName) of schema.slots" v-slot:[slotName]>
-          <ComponentSlot
-            v-if="!prototype.slots[slotName] || prototype.slots[slotName].length === 0"
-            :name="slotName"
-            @click="editedSlot = slotName"
-          />
-          <ComponentView
-            v-else
-            v-for="slot of prototype.slots[slotName]"
-            :prototype="slot.prototype"
-            @append="emit('append', $event)"
-          />
-        </template>
-      </component>
-    </Suspense>
+    <Component
+      :prototype="prototype"
+      :selectable="selectable"
+      @click-on-slot="
+        ({ slotName, prototype }) => {
+          editedSlot = slotName
+          prototypeWhichSlotIsEdited = prototype
+        }
+      "
+    />
     <!-- <div
       v-if="selectable"
       class="bounding-box absolute shadow-md pointer-events-none z-50 size-full inset-0 p-5"
@@ -51,21 +44,31 @@
     /> -->
 
     <UDrawer
-      v-if="editedSlot"
+      v-if="editedSlot && prototypeWhichSlotIsEdited"
       ref="drawer"
       class="max-w-125"
       direction="right"
       :open="Boolean(editedSlot)"
       :overlay="false"
-      @close="editedSlot = undefined"
+      @close="
+        () => {
+          editedSlot = undefined
+          prototypeWhichSlotIsEdited = undefined
+        }
+      "
     >
       <template #content>
         <ComponentList
           :dictionnary="dictionnary"
           @select="
             (path) => {
-              emit('append', { slot: editedSlot as string, path, to: prototype })
+              emit('append', {
+                slot: editedSlot as string,
+                path,
+                to: prototypeWhichSlotIsEdited as Prototype,
+              })
               editedSlot = undefined
+              prototypeWhichSlotIsEdited = undefined
             }
           "
         />
@@ -75,31 +78,15 @@
 </template>
 
 <script setup lang="ts">
-import { type TransientComponentSchema } from 'transient'
-import ComponentSlot from './ComponentSlot.vue'
+import Component from './Component.vue'
 import ComponentList from './ComponentList.vue'
-import {
-  computed,
-  defineAsyncComponent,
-  hydrateOnInteraction,
-  ref,
-  useTemplateRef,
-  type WatchHandle,
-} from 'vue'
+import { ref, useTemplateRef } from 'vue'
 import { useTransient } from '@/stores/use-transient'
 import type { Prototype } from '@/stores/use-prototype'
 
 const props = defineProps<{ prototype: Prototype; selectable?: boolean }>()
 const dictionnary = useTransient().dictionnary
-const schema = computed(() => dictionnary[props.prototype.path])
-
-const component = computed(() => {
-  props.prototype.path // don't remove this haaha
-  return defineAsyncComponent({
-    loader: () => import(/* @vite-ignore */ props.prototype.path),
-  })
-})
-
+const prototypeWhichSlotIsEdited = ref<Prototype>()
 const emit = defineEmits<{
   (e: 'append', data: { slot: string; path: string; to: Prototype }): void
 }>()

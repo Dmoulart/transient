@@ -5,13 +5,13 @@
         <ComponentSlot
           v-if="!prototype.slots[slotName] || prototype.slots[slotName].length === 0"
           :name="slotName"
-          @click="editedSlot = slotName"
+          @click="emit('click-on-slot', { slotName, prototype })"
         />
         <Component
           v-else
           v-for="slot of prototype.slots[slotName]"
           :prototype="slot.prototype"
-          @append="$emit('append', $event)"
+          @click-on-slot="emit('click-on-slot', $event)"
         />
       </template>
     </component>
@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import type { Prototype } from '@/stores/use-prototype'
 import { useTransient } from '@/stores/use-transient'
-import { computed, defineAsyncComponent } from 'vue'
+import { computed, defineAsyncComponent, type PropType } from 'vue'
 
 const props = defineProps<{ prototype: Prototype; selectable?: boolean }>()
 const dictionnary = useTransient().dictionnary
@@ -32,4 +32,8 @@ const component = computed(() => {
     loader: () => import(/* @vite-ignore */ props.prototype.path),
   })
 })
+
+const emit = defineEmits<{
+  (e: 'click-on-slot', data: { slotName: string; prototype: Prototype }): void
+}>()
 </script>
