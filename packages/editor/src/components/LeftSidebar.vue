@@ -17,7 +17,7 @@
           :multiple="false"
           size="lg"
         >
-          <template #item-label="{ item }">{{ item.label }} + </template>
+          <template #item-label="{ item }">{{ item.label }} </template>
         </UTree>
 
         <!-- <button
@@ -98,14 +98,16 @@ const items = computed(() => {
   ]
 })
 
-function produceTree(slots: PrototypeSlots) {
+function produceTree(slots: PrototypeSlots, depth = 0) {
   return Object.entries(slots).flatMap(([slotName, prototypes]) => {
-    const children = prototypes.flatMap((prototypeSlot) => produceItem(prototypeSlot, slotName))
+    const children = prototypes.flatMap((prototypeSlot) => produceItem(prototypeSlot, depth + 1))
+
     if (slotName !== 'default') {
       return {
         label: slotName,
         children,
         icon: 'i-lucide-square-dashed',
+        value: `${slotName}-${depth}`,
       }
     }
 
@@ -113,11 +115,11 @@ function produceTree(slots: PrototypeSlots) {
   })
 }
 
-function produceItem(prototypeSlot: PrototypeSlot<any>, slotName: string): Array<any> {
+function produceItem(prototypeSlot: PrototypeSlot<any>, depth: number): Array<any> {
   return [
     {
       label: getPrototypeName(prototypeSlot.prototype.path),
-      children: produceTree(prototypeSlot.prototype.slots),
+      children: produceTree(prototypeSlot.prototype.slots, depth + 1),
       prototype: prototypeSlot.prototype,
       icon: 'i-lucide-dot',
       appendable: true,
