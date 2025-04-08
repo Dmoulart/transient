@@ -84,7 +84,7 @@ import { ref, useTemplateRef } from 'vue'
 import { useTransient } from '@/stores/use-transient'
 import type { Prototype } from '@/stores/use-prototype'
 
-const props = defineProps<{ prototype: Prototype; selectable?: boolean }>()
+defineProps<{ prototype: Prototype; selectable?: boolean }>()
 const dictionnary = useTransient().dictionnary
 const prototypeWhichSlotIsEdited = ref<Prototype>()
 const emit = defineEmits<{

@@ -118,6 +118,8 @@
       </aside>
     </div>
 
+    <AddComponentPanel />
+
     <!-- Toggle buttons for sidebars -->
     <button
       @click="leftOpen = !leftOpen"
@@ -140,7 +142,6 @@ import { FileText, Plus, Search, ChevronDown } from 'lucide-vue-next'
 import LeftSidebar from './LeftSidebar.vue'
 import RightSidebar from './RightSidebar.vue'
 import ComponentExplorer from './ComponentExplorer.vue'
-import { type TransientComponentDictionnary, type TransientComponentSchema } from 'transient'
 import { getComponentDefaultPropsValues } from 'transient/src/transient'
 import { useTransient } from '@/stores/use-transient'
 import {
@@ -148,11 +149,11 @@ import {
   usePrototype,
   createPrototype,
   useDictionnary,
+  usePrototypeSlotEdition,
 } from '@/stores/use-prototype'
 import PrototypeView from './PrototypeView.vue'
-import { useMouseIsAbove } from '@/stores/use-mouse-is-above'
-import { vMouseInElement } from '@vueuse/components'
-
+import ComponentPanel from './AddComponentPanel.vue'
+import AddComponentPanel from './AddComponentPanel.vue'
 const dictionnary = useDictionnary()
 const editedPrototype = usePrototype()
 fetch('http://127.0.0.1:3001/schemas')

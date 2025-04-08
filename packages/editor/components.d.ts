@@ -8,11 +8,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AddComponentPanel: typeof import('./src/components/AddComponentPanel.vue')['default']
     Component: typeof import('./src/components/Component.vue')['default']
     ComponentExplorer: typeof import('./src/components/ComponentExplorer.vue')['default']
     ComponentField: typeof import('./src/components/ComponentField.vue')['default']
     ComponentItem: typeof import('./src/components/ComponentItem.vue')['default']
     ComponentList: typeof import('./src/components/ComponentList.vue')['default']
+    ComponentPanel: typeof import('./src/components/ComponentPanel.vue')['default']
     ComponentProp: typeof import('./src/components/ComponentProp.vue')['default']
     ComponentProps: typeof import('./src/components/ComponentProps.vue')['default']
     ComponentSlot: typeof import('./src/components/ComponentSlot.vue')['default']
@@ -31,6 +33,7 @@ declare module 'vue' {
     UAvatar: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/Avatar.vue')['default']
     UButton: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/Button.vue')['default']
     UCheckbox: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/Checkbox.vue')['default']
+    UContextMenu: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/ContextMenu.vue')['default']
     UDrawer: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/Drawer.vue')['default']
     UForm: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/Form.vue')['default']
     UFormField: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/FormField.vue')['default']

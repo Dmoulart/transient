@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center justify-centerfont-bold hover:scale-300 transition-transform duration-300 ease-in-out"
+    class="flex items-center justify-center font-bold hover:scale-300 transition-transform duration-300 ease-in-out"
   >
     {{ name }}
   </div>

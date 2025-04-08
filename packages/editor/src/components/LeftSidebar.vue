@@ -17,7 +17,15 @@
           :multiple="false"
           size="lg"
         >
-          <template #item-label="{ item }">{{ item.label }} </template>
+          <template #item-label="{ item }">
+            <UContextMenu
+              :items="getContextMenuItems(item)"
+              :ui="{
+                content: 'w-48',
+              }"
+              ><div>{{ item.label }}</div>
+            </UContextMenu>
+          </template>
         </UTree>
 
         <!-- <button
@@ -41,16 +49,57 @@ import {
   usePrototype,
   type PrototypeSlot,
   type PrototypeSlots,
+  useSchema,
+  getSchema,
+  usePrototypeSlotEdition,
 } from '@/stores/use-prototype'
-import { computed, ref } from 'vue'
-const value = ref()
+import { capitalize, computed } from 'vue'
+import { type TreeItem } from '@nuxt/ui/components/Tree.vue'
+import UTree from '@nuxt/ui/components/Tree.vue'
+
+type ComponentTreeItem = TreeItem & ({ type: 'prototype'; prototype: Prototype } | { type: 'slot' })
+
+function getContextMenuItems(item: ComponentTreeItem) {
+  if (item.type === 'prototype') {
+    const schema = getSchema(item.prototype)
+    const appendToSlotsItem = Object.keys(schema.slots).map((slot) => {
+      return {
+        label: capitalize(slot),
+        icon: 'i-lucide-between-horizontal-start',
+        onSelect() {
+          const slotEdition = usePrototypeSlotEdition()
+          slotEdition.edit(item.prototype, slot)
+        },
+      }
+    })
+
+    return [
+      { label: 'Append', icon: 'i-lucide-plus', children: appendToSlotsItem },
+      {
+        label: 'Remove',
+        color: 'error' as const,
+        icon: 'i-lucide-trash',
+        onSelect() {},
+      },
+    ]
+  }
+
+  if (item.type === 'slot') {
+    return [
+      { label: 'Append', icon: 'i-lucide-plus' },
+      { label: 'Clear', color: 'error' as const, icon: 'i-lucide-trash' },
+    ]
+  }
+
+  return []
+}
 
 const prototype = usePrototype()
 
 function findItem(
   items: Record<string, any>[],
   selectedPrototype: Prototype,
-): Record<string, any> | undefined {
+): TreeItem | undefined {
   for (const item of items) {
     const isSelected = item.prototype && item.prototype.id === selectedPrototype.id
 
@@ -75,20 +124,19 @@ const selected = computed(() => {
   if (!prototype.value) {
     return undefined
   }
-  const item = findItem(items.value, prototype.value)
-  console.log({ item })
-  return item
+
+  return findItem(items.value, prototype.value)
 })
 
-const items = computed(() => {
+const items = computed<ComponentTreeItem[]>(() => {
   if (!rootPrototype.value) {
     return []
   }
 
   return [
     {
+      type: 'prototype',
       label: getPrototypeName(rootPrototype.value.path),
-      slot: 'root' as const,
       defaultExpanded: true,
       children: produceTree(rootPrototype.value.slots),
       icon: 'i-lucide-component',
@@ -98,12 +146,13 @@ const items = computed(() => {
   ]
 })
 
-function produceTree(slots: PrototypeSlots, depth = 0) {
+function produceTree(slots: PrototypeSlots, depth = 0): ComponentTreeItem[] {
   return Object.entries(slots).flatMap(([slotName, prototypes]) => {
     const children = prototypes.flatMap((prototypeSlot) => produceItem(prototypeSlot, depth + 1))
 
     if (slotName !== 'default') {
       return {
+        type: 'slot',
         label: slotName,
         children,
         icon: 'i-lucide-square-dashed',
@@ -115,14 +164,14 @@ function produceTree(slots: PrototypeSlots, depth = 0) {
   })
 }
 
-function produceItem(prototypeSlot: PrototypeSlot<any>, depth: number): Array<any> {
+function produceItem(prototypeSlot: PrototypeSlot<any>, depth: number): ComponentTreeItem[] {
   return [
     {
+      type: 'prototype',
       label: getPrototypeName(prototypeSlot.prototype.path),
       children: produceTree(prototypeSlot.prototype.slots, depth + 1),
       prototype: prototypeSlot.prototype,
       icon: 'i-lucide-dot',
-      appendable: true,
       value: String(prototypeSlot.prototype.id),
     },
   ]
