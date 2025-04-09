@@ -61,6 +61,17 @@ export function getSchema(prototype: Prototype) {
   return dictionnary.value[prototype.path]
 }
 
+export function getSchemaSlots(prototype: Prototype) {
+  return dictionnary.value[prototype.path]?.slots
+}
+
+export function hasSchemaSlots(prototype: Prototype) {
+  return (
+    dictionnary.value[prototype.path]?.slots &&
+    Object.keys(dictionnary.value[prototype.path].slots).length > 0
+  )
+}
+
 export function getPrototypeName(path: string) {
   return path.split('/').at(-1)
 }

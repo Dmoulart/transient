@@ -19,7 +19,7 @@
         >
           <template #item-label="{ item }">
             <UContextMenu
-              :items="getContextMenuItems(item)"
+              :items="generateContextMenu(item)"
               :ui="{
                 content: 'w-48',
               }"
@@ -43,6 +43,8 @@ import {
   type PrototypeSlots,
   getSchema,
   usePrototypeSlotEdition,
+  getSchemaSlots,
+  hasSchemaSlots,
 } from '@/stores/use-prototype'
 import { capitalize, computed, triggerRef } from 'vue'
 import { type TreeItem } from '@nuxt/ui/components/Tree.vue'
@@ -51,12 +53,51 @@ import UTree from '@nuxt/ui/components/Tree.vue'
 const selectedPrototype = useSelectedPrototype()
 
 type ComponentTreeItem = TreeItem &
-  (({ type: 'prototype'; prototype: Prototype } | { type: 'slot'; slotName: string }) & {
-    parentPrototype: Prototype
-    parentSlot?: string
+  ((
+    | { type: 'prototype'; prototype: Prototype; slotName?: string }
+    | { type: 'slot'; slotName: string }
+  ) & {
+    parentPrototype?: Prototype
   })
 
-function generateMenuItems(item: ComponentTreeItem) {}
+const MENU_TEMPLATE = [
+  {
+    condition: (item: ComponentTreeItem) => item.prototype && hasSchemaSlots(item.prototype),
+    action: append,
+  },
+  {
+    condition: (item: ComponentTreeItem) => item.slotName && item.parentPrototype,
+    action: insert,
+  },
+  {
+    condition: (item: ComponentTreeItem) =>
+      item.prototype &&
+      item.slotName &&
+      item.parentPrototype &&
+      item.parentPrototype.slots[item.slotName]?.length > 0,
+    action: remove,
+  },
+  {
+    condition: (item: ComponentTreeItem) =>
+      item.type === 'slot' &&
+      item.slotName &&
+      item.parentPrototype &&
+      item.parentPrototype.slots[item.slotName]?.length > 0,
+    action: clear,
+  },
+]
+
+function generateContextMenu(item: ComponentTreeItem) {
+  const menu = []
+
+  for (const { condition, action } of MENU_TEMPLATE) {
+    if (condition(item)) {
+      menu.push(action(item))
+    }
+  }
+
+  return menu
+}
 
 function append(item: ComponentTreeItem) {
   const schema = getSchema(item.prototype)
@@ -80,12 +121,12 @@ function insert(item: ComponentTreeItem) {
     label: 'Insert',
     icon: 'i-lucide-plus',
     onSelect() {
-      if (item.parentSlot && item.parentPrototype) {
-        if (!item.parentPrototype.slots[item.parentSlot]) {
+      if (item.slotName && item.parentPrototype) {
+        if (!item.parentPrototype.slots[item.slotName]) {
           throw new Error('Insert to unknown slot')
         }
         const slotEdition = usePrototypeSlotEdition()
-        slotEdition.start(item.parentPrototype, item.parentSlot)
+        slotEdition.start(item.parentPrototype, item.slotName)
       }
     },
   }
@@ -97,8 +138,8 @@ function remove(item: ComponentTreeItem) {
     color: 'error' as const,
     icon: 'i-lucide-trash',
     onSelect() {
-      if (item.parentSlot && item.parentPrototype) {
-        const slot = item.parentPrototype.slots[item.parentSlot]
+      if (item.slotName && item.parentPrototype) {
+        const slot = item.parentPrototype.slots[item.slotName]
 
         if (!slot) {
           throw new Error('Insert to unknown slot')
@@ -110,98 +151,26 @@ function remove(item: ComponentTreeItem) {
           throw new Error('Cannot find component to remove in slot')
         }
 
-        item.parentPrototype.slots[item.parentSlot].splice(index, 1)
+        item.parentPrototype.slots[item.slotName].splice(index, 1)
       }
     },
   }
 }
-function getContextMenuItems(item: ComponentTreeItem) {
-  if (item.type === 'prototype') {
-    const schema = getSchema(item.prototype)
 
-    const appendToSlotsItem = Object.keys(schema.slots).map((slot) => {
-      return {
-        label: capitalize(slot),
-        icon: 'i-lucide-plus',
-        onSelect() {
-          const slotEdition = usePrototypeSlotEdition()
-          slotEdition.start(item.prototype, slot)
-        },
+function clear(item: ComponentTreeItem) {
+  return {
+    label: 'Clear',
+    color: 'error' as const,
+    icon: 'i-lucide-trash',
+    onSelect() {
+      if (item.slotName && item.parentPrototype) {
+        if (!item.parentPrototype.slots[item.slotName]) {
+          throw new Error('Insert to unknown slot')
+        }
+        item.parentPrototype.slots[item.slotName] = []
       }
-    })
-
-    return [
-      { label: 'Append', icon: 'i-lucide-arrow-down-to-dot', children: appendToSlotsItem },
-      {
-        label: 'Insert',
-        icon: 'i-lucide-plus',
-        onSelect() {
-          if (item.parentSlot && item.parentPrototype) {
-            if (!item.parentPrototype.slots[item.parentSlot]) {
-              throw new Error('Insert to unknown slot')
-            }
-            const slotEdition = usePrototypeSlotEdition()
-            slotEdition.start(item.parentPrototype, item.parentSlot)
-          }
-        },
-      },
-      {
-        label: 'Remove',
-        color: 'error' as const,
-        icon: 'i-lucide-trash',
-        onSelect() {
-          if (item.parentSlot && item.parentPrototype) {
-            const slot = item.parentPrototype.slots[item.parentSlot]
-
-            if (!slot) {
-              throw new Error('Insert to unknown slot')
-            }
-
-            const index = slot.findIndex((slot) => slot.prototype === item.prototype)
-
-            if (index === -1) {
-              throw new Error('Cannot find component to remove in slot')
-            }
-
-            item.parentPrototype.slots[item.parentSlot].splice(index, 1)
-          }
-        },
-      },
-    ]
+    },
   }
-
-  if (item.type === 'slot') {
-    return [
-      {
-        label: 'Append',
-        icon: 'i-lucide-arrow-down-to-dot',
-        onSelect() {
-          if (item.slotName && item.parentPrototype) {
-            if (!item.parentPrototype.slots[item.slotName]) {
-              throw new Error('Insert to unknown slot')
-            }
-            const slotEdition = usePrototypeSlotEdition()
-            slotEdition.start(item.parentPrototype, item.slotName)
-          }
-        },
-      },
-      {
-        label: 'Clear',
-        color: 'error' as const,
-        icon: 'i-lucide-trash',
-        onSelect() {
-          if (item.slotName && item.parentPrototype) {
-            if (!item.parentPrototype.slots[item.slotName]) {
-              throw new Error('Insert to unknown slot')
-            }
-            item.parentPrototype.slots[item.slotName] = []
-          }
-        },
-      },
-    ]
-  }
-
-  return []
 }
 
 function findItem(
@@ -248,8 +217,6 @@ const items = computed<ComponentTreeItem[]>(() => {
       children: produceTree(rootPrototype.value.slots, rootPrototype.value),
       icon: 'i-lucide-component',
       prototype: rootPrototype.value,
-      parentPrototype: rootPrototype.value,
-      parentSlot: 'default',
       value: String(rootPrototype.value.id),
     },
   ]
@@ -296,7 +263,7 @@ function produceItem(
       icon: 'i-lucide-dot',
       value: String(prototypeSlot.prototype.id),
       parentPrototype: parentPrototype,
-      parentSlot: parentSlot,
+      slotName: parentSlot,
     },
   ]
 }
