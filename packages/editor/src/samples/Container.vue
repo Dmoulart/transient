@@ -8,6 +8,7 @@
       paddingMap[padding],
       borderMap[border],
       backgroundMap[background],
+      borderRadiusMap[borderRadius],
       fullWidth ? 'w-full' : '',
     ]"
   >
@@ -24,6 +25,7 @@ const props = withDefaults(
     align?: 'start' | 'center' | 'end' | 'stretch'
     padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
     border?: 'none' | 'sm' | 'md' | 'lg'
+    borderRadius?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full'
     fullWidth?: boolean
     background?: 'none' | 'muted' | 'surface' | 'accent' | 'danger' | 'info' | 'success'
   }>(),
@@ -34,6 +36,7 @@ const props = withDefaults(
     align: 'center',
     padding: 'none',
     border: 'none',
+    borderRadius: 'none',
     fullWidth: false,
     background: 'none',
   },
@@ -90,5 +93,14 @@ const backgroundMap = {
   danger: 'bg-red-100',
   info: 'bg-blue-100',
   success: 'bg-green-100',
+}
+
+const borderRadiusMap = {
+  none: 'rounded-none',
+  sm: 'rounded-sm',
+  md: 'rounded-md',
+  lg: 'rounded-lg',
+  xl: 'rounded-xl',
+  full: 'rounded-full',
 }
 </script>
