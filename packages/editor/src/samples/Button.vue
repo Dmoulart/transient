@@ -1,108 +1,65 @@
 <template>
   <button
-    :class="['button', variant, size, { disabled }]"
+    :class="[
+      baseStyle,
+      variantClasses[variant],
+      sizeClasses[size],
+      'transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 inline-flex items-center justify-center gap-2',
+    ]"
     :disabled="disabled"
-    @click="$emit('click')"
   >
-    <slot />
+    <!-- Left Slot -->
+    <span v-if="$slots.left" class="flex items-center">
+      <slot name="left" />
+    </span>
+
+    <!-- Default Slot -->
+    <span>
+      <slot />
+    </span>
+
+    <!-- Right Slot -->
+    <span v-if="$slots.right" class="flex items-center">
+      <slot name="right" />
+    </span>
   </button>
 </template>
 
-<script setup lang="ts">
-import { computed } from 'vue'
+<script lang="ts" setup>
+const props = withDefaults(
+  defineProps<{
+    variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'info' | 'neutral'
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+    disabled?: boolean
+  }>(),
+  {
+    variant: 'primary',
+    size: 'md',
+    disabled: false,
+  },
+)
 
-const emit = defineEmits(['click'])
+const baseStyle =
+  'font-bold rounded-2xl shadow-md text-white focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed'
 
-interface ButtonProps {
-  variant?: 'primary' | 'secondary' | 'outline' | 'danger'
-  size?: 'sm' | 'md' | 'lg'
-  disabled?: boolean
+const variantClasses = {
+  primary:
+    'bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 hover:from-pink-600 hover:to-yellow-600',
+  secondary:
+    'bg-gradient-to-r from-blue-400 via-purple-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-700',
+  danger: 'bg-gradient-to-r from-red-600 to-red-400 hover:from-red-700 hover:to-red-500',
+  success: 'bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700',
+  warning:
+    'bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black',
+  info: 'bg-gradient-to-r from-sky-400 to-cyan-600 hover:from-sky-500 hover:to-cyan-700',
+  neutral: 'bg-gradient-to-r from-gray-400 to-gray-600 hover:from-gray-500 hover:to-gray-700',
 }
 
-const props = withDefaults(defineProps<ButtonProps>(), {
-  variant: 'primary',
-  size: 'md',
-  disabled: false,
-})
+const sizeClasses = {
+  xs: 'text-xs px-3 py-1.5',
+  sm: 'text-sm px-4 py-2',
+  md: 'text-base px-6 py-3',
+  lg: 'text-lg px-8 py-4',
+  xl: 'text-xl px-10 py-5',
+}
 </script>
-
-<style scoped>
-.button {
-  all: unset;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  padding: 12px 20px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 1.5;
-  cursor: pointer;
-  transition:
-    background-color 0.3s,
-    transform 0.2s;
-  user-select: none;
-}
-
-.button:active:not(.disabled) {
-  transform: scale(0.98);
-}
-
-.button.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.button.primary {
-  background-color: #007bff;
-  color: white;
-  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
-}
-
-.button.primary:hover:not(.disabled) {
-  background-color: #0056b3;
-}
-
-.button.secondary {
-  background-color: #f3f4f6;
-  color: #111827;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.button.secondary:hover:not(.disabled) {
-  background-color: #e5e7eb;
-}
-
-.button.outline {
-  border: 2px solid #007bff;
-  color: #007bff;
-}
-
-.button.outline:hover:not(.disabled) {
-  background-color: rgba(0, 123, 255, 0.1);
-}
-
-.button.danger {
-  background-color: #dc3545;
-  color: white;
-  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.2);
-}
-
-.button.danger:hover:not(.disabled) {
-  background-color: #c82333;
-}
-
-.button.sm {
-  font-size: 12px;
-  padding: 8px 16px;
-}
-
-.button.md {
-  font-size: 14px;
-}
-
-.button.lg {
-  font-size: 16px;
-  padding: 14px 24px;
-}
-</style>
