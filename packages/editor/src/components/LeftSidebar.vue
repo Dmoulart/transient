@@ -96,6 +96,10 @@ function generateContextMenu(item: ComponentTreeItem) {
     }
   }
 
+  if (menu.length === 0) {
+    return undefined
+  }
+
   return menu
 }
 
