@@ -146,7 +146,7 @@ import { getComponentDefaultPropsValues } from 'transient/src/transient'
 import { useTransient } from '@/stores/use-transient'
 import {
   rootPrototype,
-  usePrototype,
+  useSelectedPrototype,
   createPrototype,
   useDictionnary,
   usePrototypeSlotEdition,
@@ -155,7 +155,7 @@ import PrototypeView from './PrototypeView.vue'
 import ComponentPanel from './AddComponentPanel.vue'
 import AddComponentPanel from './AddComponentPanel.vue'
 const dictionnary = useDictionnary()
-const editedPrototype = usePrototype()
+const editedPrototype = useSelectedPrototype()
 fetch('http://127.0.0.1:3001/schemas')
   .then((schemas) => schemas.json())
   .then((s) => {

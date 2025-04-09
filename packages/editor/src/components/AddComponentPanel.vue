@@ -6,7 +6,7 @@
     :overlay="false"
     @close="
       () => {
-        edit.quit()
+        edit.stop()
       }
     "
   >
@@ -24,7 +24,7 @@
               })
 
               editedPrototype = edit.prototype.value
-              edit.quit()
+              edit.stop()
             }
           }
         "
@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import {
   createPrototype,
-  usePrototype,
+  useSelectedPrototype,
   usePrototypeSlotEdition,
   type Prototype,
 } from '@/stores/use-prototype'
@@ -44,7 +44,7 @@ import ComponentList from './ComponentList.vue'
 
 const transient = useTransient()
 const edit = usePrototypeSlotEdition()
-const editedPrototype = usePrototype()
+const editedPrototype = useSelectedPrototype()
 const emit = defineEmits<{
   (e: 'close'): void
   (e: 'append', data: { slot: string; path: string; to: Prototype }): void

@@ -1,12 +1,10 @@
-import type { TransientComponentSchema } from 'transient'
 import {
   getComponentDefaultPropsValues,
   type TransientComponentDictionnary,
 } from 'transient/src/transient'
-import { computed, inject, provide, ref, unref, type Ref } from 'vue'
+import { computed, ref } from 'vue'
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
 export type PrototypeSlot<T extends 'unique' | 'list'> = { type: T; prototype: Prototype }
 
@@ -21,23 +19,27 @@ export type Prototype = {
 
 export const dictionnary = ref<TransientComponentDictionnary>({})
 export const rootPrototype = ref<Prototype | undefined>()
-export const editedPrototype = ref<Prototype | undefined>()
+export const selectedPrototype = ref<Prototype | undefined>()
 export const prototypeSlotEdition = ref<{ prototype: Prototype; slot: string } | undefined>()
 
 export function useDictionnary() {
   return dictionnary
 }
 
-export function usePrototype() {
-  return editedPrototype
+export function useRootPrototype() {
+  return rootPrototype
+}
+
+export function useSelectedPrototype() {
+  return selectedPrototype
 }
 
 export function usePrototypeSlotEdition() {
   return {
-    edit(prototype: Prototype, slot: string) {
+    start(prototype: Prototype, slot: string) {
       prototypeSlotEdition.value = { prototype, slot }
     },
-    quit() {
+    stop() {
       prototypeSlotEdition.value = undefined
     },
     slot: computed(() => prototypeSlotEdition.value?.slot),
@@ -45,7 +47,7 @@ export function usePrototypeSlotEdition() {
   }
 }
 
-export function useSchema(prototype = usePrototype()) {
+export function useSchema(prototype = useSelectedPrototype()) {
   return computed(() => {
     if (!prototype.value) {
       return undefined

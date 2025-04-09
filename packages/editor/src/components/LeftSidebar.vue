@@ -8,7 +8,7 @@
           @update:modelValue="
             (item: any) => {
               if (item && item.prototype) {
-                prototype = item.prototype
+                selectedPrototype = item.prototype
               }
             }
           "
@@ -23,19 +23,11 @@
               :ui="{
                 content: 'w-48',
               }"
-              ><div>{{ item.label }}</div>
+              ><div style="position: absolute; top: 0; left: 0; height: 100%; width: 100%" />
+              {{ item.label }}
             </UContextMenu>
           </template>
         </UTree>
-
-        <!-- <button
-          v-for="(item, index) in navItems"
-          :key="index"
-          class="inline-flex items-center justify-start rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
-        >
-          <component :is="item.icon" class="mr-2 h-4 w-4" />
-          {{ item.label }}
-        </button> -->
       </nav>
     </div>
   </div>
@@ -46,55 +38,171 @@ import {
   getPrototypeName,
   type Prototype,
   rootPrototype,
-  usePrototype,
+  useSelectedPrototype,
   type PrototypeSlot,
   type PrototypeSlots,
-  useSchema,
   getSchema,
   usePrototypeSlotEdition,
 } from '@/stores/use-prototype'
-import { capitalize, computed } from 'vue'
+import { capitalize, computed, triggerRef } from 'vue'
 import { type TreeItem } from '@nuxt/ui/components/Tree.vue'
 import UTree from '@nuxt/ui/components/Tree.vue'
 
-type ComponentTreeItem = TreeItem & ({ type: 'prototype'; prototype: Prototype } | { type: 'slot' })
+const selectedPrototype = useSelectedPrototype()
 
+type ComponentTreeItem = TreeItem &
+  (({ type: 'prototype'; prototype: Prototype } | { type: 'slot'; slotName: string }) & {
+    parentPrototype: Prototype
+    parentSlot?: string
+  })
+
+function generateMenuItems(item: ComponentTreeItem) {}
+
+function append(item: ComponentTreeItem) {
+  const schema = getSchema(item.prototype)
+
+  const appendToSlotsItem = Object.keys(schema.slots).map((slot) => {
+    return {
+      label: capitalize(slot),
+      icon: 'i-lucide-plus',
+      onSelect() {
+        const slotEdition = usePrototypeSlotEdition()
+        slotEdition.start(item.prototype, slot)
+      },
+    }
+  })
+
+  return { label: 'Append', icon: 'i-lucide-arrow-down-to-dot', children: appendToSlotsItem }
+}
+
+function insert(item: ComponentTreeItem) {
+  return {
+    label: 'Insert',
+    icon: 'i-lucide-plus',
+    onSelect() {
+      if (item.parentSlot && item.parentPrototype) {
+        if (!item.parentPrototype.slots[item.parentSlot]) {
+          throw new Error('Insert to unknown slot')
+        }
+        const slotEdition = usePrototypeSlotEdition()
+        slotEdition.start(item.parentPrototype, item.parentSlot)
+      }
+    },
+  }
+}
+
+function remove(item: ComponentTreeItem) {
+  return {
+    label: 'Remove',
+    color: 'error' as const,
+    icon: 'i-lucide-trash',
+    onSelect() {
+      if (item.parentSlot && item.parentPrototype) {
+        const slot = item.parentPrototype.slots[item.parentSlot]
+
+        if (!slot) {
+          throw new Error('Insert to unknown slot')
+        }
+
+        const index = slot.findIndex((slot) => slot.prototype === item.prototype)
+
+        if (index === -1) {
+          throw new Error('Cannot find component to remove in slot')
+        }
+
+        item.parentPrototype.slots[item.parentSlot].splice(index, 1)
+      }
+    },
+  }
+}
 function getContextMenuItems(item: ComponentTreeItem) {
   if (item.type === 'prototype') {
     const schema = getSchema(item.prototype)
+
     const appendToSlotsItem = Object.keys(schema.slots).map((slot) => {
       return {
         label: capitalize(slot),
-        icon: 'i-lucide-between-horizontal-start',
+        icon: 'i-lucide-plus',
         onSelect() {
           const slotEdition = usePrototypeSlotEdition()
-          slotEdition.edit(item.prototype, slot)
+          slotEdition.start(item.prototype, slot)
         },
       }
     })
 
     return [
-      { label: 'Append', icon: 'i-lucide-plus', children: appendToSlotsItem },
+      { label: 'Append', icon: 'i-lucide-arrow-down-to-dot', children: appendToSlotsItem },
+      {
+        label: 'Insert',
+        icon: 'i-lucide-plus',
+        onSelect() {
+          if (item.parentSlot && item.parentPrototype) {
+            if (!item.parentPrototype.slots[item.parentSlot]) {
+              throw new Error('Insert to unknown slot')
+            }
+            const slotEdition = usePrototypeSlotEdition()
+            slotEdition.start(item.parentPrototype, item.parentSlot)
+          }
+        },
+      },
       {
         label: 'Remove',
         color: 'error' as const,
         icon: 'i-lucide-trash',
-        onSelect() {},
+        onSelect() {
+          if (item.parentSlot && item.parentPrototype) {
+            const slot = item.parentPrototype.slots[item.parentSlot]
+
+            if (!slot) {
+              throw new Error('Insert to unknown slot')
+            }
+
+            const index = slot.findIndex((slot) => slot.prototype === item.prototype)
+
+            if (index === -1) {
+              throw new Error('Cannot find component to remove in slot')
+            }
+
+            item.parentPrototype.slots[item.parentSlot].splice(index, 1)
+          }
+        },
       },
     ]
   }
 
   if (item.type === 'slot') {
     return [
-      { label: 'Append', icon: 'i-lucide-plus' },
-      { label: 'Clear', color: 'error' as const, icon: 'i-lucide-trash' },
+      {
+        label: 'Append',
+        icon: 'i-lucide-arrow-down-to-dot',
+        onSelect() {
+          if (item.slotName && item.parentPrototype) {
+            if (!item.parentPrototype.slots[item.slotName]) {
+              throw new Error('Insert to unknown slot')
+            }
+            const slotEdition = usePrototypeSlotEdition()
+            slotEdition.start(item.parentPrototype, item.slotName)
+          }
+        },
+      },
+      {
+        label: 'Clear',
+        color: 'error' as const,
+        icon: 'i-lucide-trash',
+        onSelect() {
+          if (item.slotName && item.parentPrototype) {
+            if (!item.parentPrototype.slots[item.slotName]) {
+              throw new Error('Insert to unknown slot')
+            }
+            item.parentPrototype.slots[item.slotName] = []
+          }
+        },
+      },
     ]
   }
 
   return []
 }
-
-const prototype = usePrototype()
 
 function findItem(
   items: Record<string, any>[],
@@ -108,7 +216,6 @@ function findItem(
     }
 
     if (!isSelected && item.children?.length > 0) {
-      console.log('find children !')
       const selected = findItem(item.children, selectedPrototype)
 
       if (selected) {
@@ -121,11 +228,11 @@ function findItem(
 }
 
 const selected = computed(() => {
-  if (!prototype.value) {
+  if (!selectedPrototype.value) {
     return undefined
   }
 
-  return findItem(items.value, prototype.value)
+  return findItem(items.value, selectedPrototype.value)
 })
 
 const items = computed<ComponentTreeItem[]>(() => {
@@ -138,25 +245,35 @@ const items = computed<ComponentTreeItem[]>(() => {
       type: 'prototype',
       label: getPrototypeName(rootPrototype.value.path),
       defaultExpanded: true,
-      children: produceTree(rootPrototype.value.slots),
+      children: produceTree(rootPrototype.value.slots, rootPrototype.value),
       icon: 'i-lucide-component',
       prototype: rootPrototype.value,
+      parentPrototype: rootPrototype.value,
+      parentSlot: 'default',
       value: String(rootPrototype.value.id),
     },
   ]
 })
 
-function produceTree(slots: PrototypeSlots, depth = 0): ComponentTreeItem[] {
+function produceTree(
+  slots: PrototypeSlots,
+  parentPrototype: Prototype,
+  depth = 0,
+): ComponentTreeItem[] {
   return Object.entries(slots).flatMap(([slotName, prototypes]) => {
-    const children = prototypes.flatMap((prototypeSlot) => produceItem(prototypeSlot, depth + 1))
+    const children = prototypes.flatMap((prototypeSlot) =>
+      produceItem(prototypeSlot, parentPrototype, slotName, depth + 1),
+    )
 
-    if (slotName !== 'default') {
+    if (slotName !== 'default' && children.length > 0) {
       return {
         type: 'slot',
         label: slotName,
         children,
         icon: 'i-lucide-square-dashed',
         value: `${slotName}-${depth}`,
+        parentPrototype,
+        slotName,
       }
     }
 
@@ -164,15 +281,22 @@ function produceTree(slots: PrototypeSlots, depth = 0): ComponentTreeItem[] {
   })
 }
 
-function produceItem(prototypeSlot: PrototypeSlot<any>, depth: number): ComponentTreeItem[] {
+function produceItem(
+  prototypeSlot: PrototypeSlot<any>,
+  parentPrototype: Prototype,
+  parentSlot: string,
+  depth: number,
+): ComponentTreeItem[] {
   return [
     {
       type: 'prototype',
       label: getPrototypeName(prototypeSlot.prototype.path),
-      children: produceTree(prototypeSlot.prototype.slots, depth + 1),
+      children: produceTree(prototypeSlot.prototype.slots, prototypeSlot.prototype, depth + 1),
       prototype: prototypeSlot.prototype,
       icon: 'i-lucide-dot',
       value: String(prototypeSlot.prototype.id),
+      parentPrototype: parentPrototype,
+      parentSlot: parentSlot,
     },
   ]
 }
