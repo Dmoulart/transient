@@ -45,6 +45,7 @@ import {
   usePrototypeSlotEdition,
   getSchemaSlots,
   hasSchemaSlots,
+  findParent,
 } from '@/stores/use-prototype'
 import { capitalize, computed, triggerRef } from 'vue'
 import { type TreeItem } from '@nuxt/ui/components/Tree.vue'
@@ -62,6 +63,22 @@ type ComponentTreeItem = TreeItem &
 
 const MENU_TEMPLATE = [
   {
+    condition: (item: ComponentTreeItem) =>
+      item.slotName &&
+      item.parentPrototype &&
+      item.parentPrototype.slots[item.slotName].length > 1 &&
+      item.parentPrototype.slots[item.slotName][0].prototype !== item.prototype,
+    action: up,
+  },
+  {
+    condition: (item: ComponentTreeItem) =>
+      item.slotName &&
+      item.parentPrototype &&
+      item.parentPrototype.slots[item.slotName].length > 1 &&
+      item.parentPrototype.slots[item.slotName].at(-1)!.prototype !== item.prototype,
+    action: down,
+  },
+  {
     condition: (item: ComponentTreeItem) => item.prototype && hasSchemaSlots(item.prototype),
     action: append,
   },
@@ -73,8 +90,8 @@ const MENU_TEMPLATE = [
     condition: (item: ComponentTreeItem) =>
       item.prototype &&
       item.slotName &&
-      item.parentPrototype &&
-      item.parentPrototype.slots[item.slotName]?.length > 0,
+      findParent(item.prototype) &&
+      item.parentPrototype!.slots[item.slotName]?.length > 0,
     action: remove,
   },
   {
@@ -103,6 +120,66 @@ function generateContextMenu(item: ComponentTreeItem) {
   return menu
 }
 
+function up(item: ComponentTreeItem) {
+  return {
+    label: 'Up',
+    icon: 'i-lucide-move-up',
+    onSelect() {
+      if (!item.parentPrototype || !item.slotName) {
+        throw new Error('Cannot move this prototype')
+      }
+
+      const index = item.parentPrototype.slots[item.slotName].findIndex(
+        (child) => child.prototype == item.prototype,
+      )
+
+      if (index === -1) {
+        throw new Error('Cannot find this prototype')
+      }
+
+      if (index === 0) {
+        throw new Error('Expected prototype to be more than index 0')
+      }
+
+      const tmp = item.parentPrototype.slots[item.slotName][index - 1]
+      item.parentPrototype.slots[item.slotName][index - 1] =
+        item.parentPrototype.slots[item.slotName][index]
+      item.parentPrototype.slots[item.slotName][index] = tmp
+    },
+  }
+}
+
+function down(item: ComponentTreeItem) {
+  return {
+    label: 'Down',
+    icon: 'i-lucide-move-down',
+    onSelect() {
+      if (!item.parentPrototype || !item.slotName) {
+        throw new Error('Cannot move this prototype')
+      }
+
+      const index = item.parentPrototype.slots[item.slotName].findIndex(
+        (child) => child.prototype == item.prototype,
+      )
+
+      if (index === -1) {
+        throw new Error('Cannot find this prototype')
+      }
+
+      if (index === item.parentPrototype.slots[item.slotName].length) {
+        throw new Error('Expected prototype not to be the last one')
+      }
+
+      const tmp = item.parentPrototype.slots[item.slotName][index + 1]
+
+      item.parentPrototype.slots[item.slotName][index + 1] =
+        item.parentPrototype.slots[item.slotName][index]
+
+      item.parentPrototype.slots[item.slotName][index] = tmp
+    },
+  }
+}
+
 function append(item: ComponentTreeItem) {
   const schema = getSchema(item.prototype)
 
@@ -117,7 +194,7 @@ function append(item: ComponentTreeItem) {
     }
   })
 
-  return { label: 'Append', icon: 'i-lucide-arrow-down-to-dot', children: appendToSlotsItem }
+  return { label: 'Append', icon: 'i-lucide-between-horizontal-start', children: appendToSlotsItem }
 }
 
 function insert(item: ComponentTreeItem) {

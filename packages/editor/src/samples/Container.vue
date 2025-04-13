@@ -10,6 +10,7 @@
       backgroundMap[background],
       borderRadiusMap[borderRadius],
       fullWidth ? 'w-full' : '',
+      fullHeight ? 'h-full' : '',
     ]"
   >
     <slot />
@@ -27,6 +28,7 @@ const props = withDefaults(
     border?: 'none' | 'sm' | 'md' | 'lg'
     borderRadius?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full'
     fullWidth?: boolean
+    fullHeight?: boolean
     background?: 'none' | 'muted' | 'surface' | 'accent' | 'danger' | 'info' | 'success'
   }>(),
   {
@@ -38,6 +40,7 @@ const props = withDefaults(
     border: 'none',
     borderRadius: 'none',
     fullWidth: false,
+    fullHeight: false,
     background: 'none',
   },
 )

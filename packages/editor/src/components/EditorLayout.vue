@@ -145,17 +145,19 @@ import ComponentExplorer from './ComponentExplorer.vue'
 import { getComponentDefaultPropsValues } from 'transient/src/transient'
 import { useTransient } from '@/stores/use-transient'
 import {
-  rootPrototype,
   useSelectedPrototype,
   createPrototype,
   useDictionnary,
   usePrototypeSlotEdition,
+  useRootPrototype,
 } from '@/stores/use-prototype'
 import PrototypeView from './PrototypeView.vue'
 import ComponentPanel from './AddComponentPanel.vue'
 import AddComponentPanel from './AddComponentPanel.vue'
 const dictionnary = useDictionnary()
 const editedPrototype = useSelectedPrototype()
+const rootPrototype = useRootPrototype()
+
 fetch('http://127.0.0.1:3001/schemas')
   .then((schemas) => schemas.json())
   .then((s) => {
@@ -171,9 +173,6 @@ watch(rootPrototype, (prototype) => {
   }
 })
 
-watch(editedPrototype, () => {
-  console.log('edit !!')
-})
 const leftOpen = ref(true)
 const rightOpen = ref(true)
 </script>

@@ -23,6 +23,7 @@ declare module 'vue' {
     EditorLayout: typeof import('./src/components/EditorLayout.vue')['default']
     FileExplorer: typeof import('./src/components/FileExplorer.vue')['default']
     FileExplorerItem: typeof import('./src/components/FileExplorerItem.vue')['default']
+    Image: typeof import('./src/components/Image.vue')['default']
     LeftSidebar: typeof import('./src/components/LeftSidebar.vue')['default']
     PrototypeView: typeof import('./src/components/PrototypeView.vue')['default']
     RightSidebar: typeof import('./src/components/RightSidebar.vue')['default']

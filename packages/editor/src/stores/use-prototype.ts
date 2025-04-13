@@ -91,3 +91,51 @@ export function createPrototype(path: string): Prototype {
     slots: {},
   }
 }
+
+type ParentSearchResult = {
+  parent: Prototype | null
+  slotKey: string | null
+  pathToParent: Prototype[]
+}
+
+/**
+ * Recursively finds the parent of the node with `childId`
+ */
+export function findParentByChildId(
+  current: Prototype,
+  childId: number,
+  path: Prototype[] = [],
+): ParentSearchResult | null {
+  for (const [slotKey, slotItems] of Object.entries(current.slots)) {
+    for (const slot of slotItems) {
+      const child = slot.prototype
+
+      if (child.id === childId) {
+        return {
+          parent: current,
+          slotKey,
+          pathToParent: path,
+        }
+      }
+
+      const result = findParentByChildId(child, childId, [...path, current])
+      if (result) return result
+    }
+  }
+
+  return null
+}
+
+export function findParent(prototype: Prototype) {
+  const rootPrototype = useRootPrototype().value
+
+  if (!rootPrototype) {
+    return false
+  }
+
+  return findParentByChildId(rootPrototype, prototype.id)
+}
+
+export function hasParent(prototype: Prototype) {
+  return Boolean(findParent(prototype))
+}
