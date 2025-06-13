@@ -8,7 +8,7 @@ import type {
   TransientSlots,
 } from "../../transient/definition";
 import { logger } from "../../log/logger";
-import { unescapeString } from "../../core/string";
+import { analyzeTemplateElements } from "./template";
 export type VueAnalyzerOptions = Pick<
   AnalyzerConfig,
   "tsConfigPath" | "dest" | "glob"
@@ -24,13 +24,18 @@ export function defineVueAnalyzer(options: VueAnalyzerOptions) {
     tsConfigPath: options.tsConfigPath,
     glob: options.glob ?? "./**/*.vue",
     describe(path, dir) {
-      const meta = checker.getComponentMeta(resolve(__dirname, dir, path));
-      return describeComponent(meta);
+      const src = resolve(__dirname, dir, path);
+      const meta = checker.getComponentMeta(src);
+      return describeComponent(meta, src, path);
     },
   });
 }
 
-function describeComponent(meta: ComponentMeta): TransientComponentSchema {
+function describeComponent(
+  meta: ComponentMeta,
+  src: string,
+  path: string
+): TransientComponentSchema {
   const props: TransientProps = {};
   const slots: TransientSlots = {};
 
@@ -54,9 +59,12 @@ function describeComponent(meta: ComponentMeta): TransientComponentSchema {
   for (const slot of meta.slots) {
     slots[slot.name] = {};
   }
+  const template = analyzeTemplateElements(src, props);
 
   return {
+    path,
     props,
     slots,
+    ...(template ? { template } : {}),
   };
 }

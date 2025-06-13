@@ -2,7 +2,8 @@ import {
   getComponentDefaultPropsValues,
   type TransientComponentDictionnary,
 } from 'transient/src/transient'
-import { computed, ref } from 'vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
+import { useTransient } from './use-transient'
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
@@ -21,6 +22,29 @@ export const dictionnary = ref<TransientComponentDictionnary>({})
 export const rootPrototype = ref<Prototype | undefined>()
 export const selectedPrototype = ref<Prototype | undefined>()
 export const prototypeSlotEdition = ref<{ prototype: Prototype; slot: string } | undefined>()
+
+export async function loadDictionnary() {
+  useDictionnary().value = await fetch('http://127.0.0.1:3001/schemas').then((schemas) =>
+    schemas.json(),
+  )
+}
+
+// Crée un résolveur global de composants
+const componentModules = import.meta.glob('@/samples/**/*.vue')
+
+export async function loadAllComponents(): Promise<Record<string, any>> {
+  const result: Record<string, any> = {}
+
+  for (const path in componentModules) {
+    const name = path.split('/').pop()?.replace('.vue', '')
+    if (name) {
+      const mod = await componentModules[path]()
+      result[name] = mod.default
+    }
+  }
+
+  return result
+}
 
 export function useDictionnary() {
   return dictionnary

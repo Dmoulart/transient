@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "outDir": "dist",
+    "declaration": true,
+    "emitDeclarationOnly": false, // optional
     // Environment setup & latest features
     "lib": ["esnext"],
     "target": "ESNext",
@@ -24,5 +27,6 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
-  }
+  },
+  "include": ["index.ts", "src/**/*.ts"]
 }

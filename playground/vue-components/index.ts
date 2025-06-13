@@ -1,5 +1,8 @@
 import { resolve } from "path";
-import { defineStrapiTranslator, defineVueAnalyzer } from "transient";
+import {
+  defineStrapiTranslator,
+  defineVueAnalyzer,
+} from "../../packages/transient/index";
 
 const TEST_CONFIG = {
   tsConfigPath: resolve(__dirname, "./tsconfig.json"),

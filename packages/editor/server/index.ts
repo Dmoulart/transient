@@ -1,7 +1,7 @@
 import { serve } from 'bun'
 import { resolve } from 'url'
-import { defineVueAnalyzer } from 'transient'
-
+import { defineVueAnalyzer } from '../../transient/src/index'
+import { writeFileSync } from 'fs'
 serve({
   port: 3001,
   routes: {
@@ -14,7 +14,7 @@ serve({
       const schemas = analyzer({
         dir: resolve(__dirname, '.'),
       })
-
+      writeFileSync('schemas.json', JSON.stringify(schemas))
       return new Response(JSON.stringify(schemas), {
         headers: {
           'Access-Control-Allow-Origin': 'http://localhost:5173',

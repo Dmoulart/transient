@@ -148,7 +148,6 @@ import {
   useSelectedPrototype,
   createPrototype,
   useDictionnary,
-  usePrototypeSlotEdition,
   useRootPrototype,
 } from '@/stores/use-prototype'
 import PrototypeView from './PrototypeView.vue'
@@ -161,6 +160,7 @@ const rootPrototype = useRootPrototype()
 fetch('http://127.0.0.1:3001/schemas')
   .then((schemas) => schemas.json())
   .then((s) => {
+    console.log({ s })
     dictionnary.value = s
     useTransient().dictionnary = s
   })

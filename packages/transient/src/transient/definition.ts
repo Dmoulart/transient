@@ -2,9 +2,22 @@ export type TransientComponentDictionnary = {
   [path: string]: TransientComponentSchema;
 };
 
+export type TransientElement = {
+  tag: string; // peut être div, my-button, par ex
+  isComponent: boolean; // indique si c'est un composant custom
+  attributes: Record<string, BindingInfo>;
+  slots?: Record<string, TransientElement[]>;
+};
+
+export type TransientTemplate = {
+  elements: TransientElement[];
+};
+
 export type TransientComponentSchema = {
+  path: string;
   props: TransientProps;
   slots: TransientSlots;
+  template?: TransientTemplate;
 };
 
 export type TransientSlots = Record<string, TransientSlot>;
@@ -52,6 +65,11 @@ export type TransientPrimitiveTypeName =
   | "decimal"
   | "unknown"
   | "string";
+
+export type BindingInfo = {
+  type: "prop" | "literal";
+  expression: string | number | boolean;
+};
 
 // const test: TransientComponentSchema = {
 //   props: {
