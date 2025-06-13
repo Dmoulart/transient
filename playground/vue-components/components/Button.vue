@@ -1,11 +1,5 @@
 <template>
-  <button
-    data-test="btn"
-    :size-attr="size"
-    size-lit="size"
-    :wolo="wololo"
-    :stuff="true"
-  >
+  <button data-test="btn" :size-attr="size" size-lit="size" :stuff="true">
     {{ text }}
   </button>
 </template>

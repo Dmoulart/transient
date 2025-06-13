@@ -24,9 +24,12 @@ export const selectedPrototype = ref<Prototype | undefined>()
 export const prototypeSlotEdition = ref<{ prototype: Prototype; slot: string } | undefined>()
 
 export async function loadDictionnary() {
-  useDictionnary().value = await fetch('http://127.0.0.1:3001/schemas').then((schemas) =>
-    schemas.json(),
-  )
+  try {
+    const response = await fetch('http://127.0.0.1:3001/schemas')
+    await response.json()
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 // Crée un résolveur global de composants

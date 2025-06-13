@@ -2,7 +2,11 @@ import { parse as parseSFC } from "@vue/compiler-sfc";
 import {
   baseParse,
   NodeTypes,
-  type SimpleExpressionNode,
+  type AttributeNode,
+  type DirectiveNode,
+  type ElementNode,
+  type TemplateChildNode,
+  type TextNode,
 } from "@vue/compiler-dom";
 import { readFileSync } from "fs";
 import type {
@@ -19,7 +23,9 @@ export function analyzeTemplateElements(
 ): TransientTemplate | undefined {
   const source = readFileSync(componentPath, "utf-8");
   const sfc = parseSFC(source);
+
   const template = sfc.descriptor.template?.content;
+
   if (!template) return;
 
   const ast = baseParse(template);
@@ -31,71 +37,138 @@ export function analyzeTemplateElements(
   return { elements };
 }
 
-function walk(node: any, props: TransientProps): TransientElement | null {
+function walk(
+  node: TemplateChildNode,
+  props: TransientProps
+): TransientElement | null {
   if (node.type === NodeTypes.TEXT) {
-    const content = node.content;
-    if (!content) return null;
-    return {
-      tag: "#text",
-      isComponent: false,
-      attributes: {
-        value: { type: "literal", expression: content },
-      },
-    };
+    return parseText(node);
   }
 
-  if (node.type === NodeTypes.INTERPOLATION) {
-    return {
-      tag: "#text",
-      isComponent: false,
-      attributes: {
-        value: { type: "prop", expression: node.content.content.trim() },
-      },
-    };
-  }
+  // if (node.type === NodeTypes.INTERPOLATION) {
+  //   if ("content" in node.content) {
+  //     return {
+  //       tag: "#text",
+  //       isComponent: false,
+  //       attributes: {
+  //         value: { type: "prop", expression: node.content.content.trim() },
+  //       },
+  //     };
+  //   }
+  //   // not implemented
+  //   return null;
+  // }
 
   // Handle named slots defined via <template #slotName> or <template v-slot:slotName>
-  if (node.type === NodeTypes.ELEMENT && node.tag === "template") {
-    let slotName = "default";
+  // if (node.type === NodeTypes.ELEMENT && node.tag === "template") {
+  //   let slotName = "default";
 
-    for (const prop of node.props) {
-      if (prop.type === NodeTypes.DIRECTIVE && prop.name === "slot") {
-        if (prop.arg?.type === NodeTypes.SIMPLE_EXPRESSION) {
-          slotName = prop.arg.content;
-        }
-      }
-    }
+  //   for (const prop of node.props) {
+  //     if (prop.type === NodeTypes.DIRECTIVE && prop.name === "slot") {
+  //       if (prop.arg?.type === NodeTypes.SIMPLE_EXPRESSION) {
+  //         slotName = prop.arg.content;
+  //       }
+  //     }
+  //   }
 
-    const children = node.children
-      .map((child: any) => walk(child, props))
-      .filter(Boolean) as TransientElement[];
+  //   const children = node.children
+  //     .map((child: any) => walk(child, props))
+  //     .filter(Boolean) as TransientElement[];
 
-    // Instead of returning a template node, return children keyed by slot name
-    return {
-      tag: "template",
-      isComponent: false,
-      attributes: {
-        name: { type: "literal", expression: slotName },
-      },
-      slots: {
-        [slotName]: children,
-      },
-    };
+  //   // Instead of returning a template node, return children keyed by slot name
+  //   return {
+  //     tag: "template",
+  //     isComponent: false,
+  //     attributes: {
+  //       name: { type: "literal", expression: slotName },
+  //     },
+  //     slots: {
+  //       [slotName]: children,
+  //     },
+  //   };
+  // }
+
+  if (node.type === NodeTypes.ELEMENT) {
+    return parseElement(node, props);
   }
 
-  if (node.type !== NodeTypes.ELEMENT) return null;
+  return null;
+}
 
+function parseText(node: TextNode): TransientElement | null {
+  const content = node.content;
+
+  if (!content) return null;
+
+  return {
+    tag: "#text",
+    isComponent: false,
+    attributes: {
+      value: { type: "literal", expression: content },
+    },
+  };
+}
+
+function parseElement(
+  node: ElementNode,
+  props: TransientProps
+): TransientElement | null {
   const tag = node.tag;
-  const isComponent = /^[A-Z]/.test(tag);
 
+  const isComponent = /^[A-Z]/.test(tag);
+  const attributes = parseElementAttributes(node.props, props);
+
+  if (tag === "template") {
+    debugger;
+  }
+
+  const slots: Record<string, TransientElement[]> = {};
+
+  const children = node.children
+    .map((child) => walk(child, props))
+    .filter(Boolean) as TransientElement[];
+
+  for (const child of children) {
+    if (
+      child.tag === "template" &&
+      child.slots &&
+      child.attributes["v-slot"]?.expression
+    ) {
+      const slotName = child.attributes["v-slot"].expression;
+      assertIs(someString, slotName);
+      slots[slotName] = child.slots.default || [];
+    } else {
+      if (!slots.default) slots.default = [];
+      slots.default.push(child);
+    }
+  }
+
+  return {
+    tag,
+    isComponent,
+    attributes,
+    slots: Object.keys(slots).length ? slots : undefined,
+  };
+}
+
+function parseElementAttributes(
+  props: (AttributeNode | DirectiveNode)[],
+  componentProps: TransientProps
+): Record<string, BindingInfo> {
   const attributes: Record<string, BindingInfo> = {};
 
-  for (const prop of node.props) {
+  for (const prop of props) {
     if (prop.type === NodeTypes.DIRECTIVE) {
-      const key = `${prop.name}${prop.arg ? `:${prop.arg.content}` : ""}`;
-      const value = extractBindingValue(prop.exp, props);
-      if (value) {
-        attributes[key] = value;
+      if (prop.arg && "content" in prop.arg) {
+        const key = `${prop.name}${prop.arg ? `:${prop.arg.content}` : ""}`;
+
+        if (prop.name === "slot") {
+          const slotName = prop.arg.content;
+          attributes["v-slot"] = { type: "literal", expression: slotName };
+        } else if (prop.exp && "content" in prop.exp) {
+          const value = extractBindingValue(prop.exp.content, componentProps);
+          attributes[key] = value;
+        }
       }
     } else if (prop.type === NodeTypes.ATTRIBUTE) {
       const key = prop.name;
@@ -113,44 +186,13 @@ function walk(node: any, props: TransientProps): TransientElement | null {
     }
   }
 
-  // Walk children and flatten any <template #slotName> blocks into slots[slotName]
-  const rawChildren = node.children
-    .map((child: any) => walk(child, props))
-    .filter(Boolean) as TransientElement[];
-
-  const slots: Record<string, TransientElement[]> = {};
-
-  for (const child of rawChildren) {
-    if (
-      child.tag === "template" &&
-      child.slots &&
-      child.attributes?.name?.expression
-    ) {
-      const slotName = child.attributes.name.expression;
-      assertIs(someString, slotName);
-      slots[slotName] = child.slots.default || [];
-    } else {
-      if (!slots.default) slots.default = [];
-      slots.default.push(child);
-    }
-  }
-
-  return {
-    tag,
-    isComponent,
-    attributes,
-    slots: Object.keys(slots).length ? slots : undefined,
-  };
+  return attributes;
 }
 
 function extractBindingValue(
-  exp: SimpleExpressionNode | undefined,
+  content: string,
   props: TransientProps
-): BindingInfo | undefined {
-  if (!exp || !exp.content) return;
-
-  const content = exp.content.trim();
-
+): BindingInfo {
   // Literal: string
   if (/^(['"]).*\1$/.test(content)) {
     return { type: "literal", expression: content.slice(1, -1) };
@@ -174,6 +216,7 @@ function extractBindingValue(
     return { type: "prop", expression: content };
   }
 
+  return { type: "prop", expression: "not supported" };
   // Not supported
-  return undefined;
+  // throw new Error(`binding value not implemented for ${content}`);
 }

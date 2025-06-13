@@ -14,11 +14,11 @@
 </template>
 
 <script setup lang="ts">
-import { watch } from 'vue'
+import { onMounted, watch } from 'vue'
 import TransientBuilder from './TransientBuilder.vue'
 import { useDictionnary, loadDictionnary } from '@/stores/use-prototype'
 import HomePage from '@/samples/HomePage.vue'
-loadDictionnary()
-
+import schemas from '@/assets/schemas.json'
 const dictionnary = useDictionnary()
+dictionnary.value = schemas as any
 </script>
