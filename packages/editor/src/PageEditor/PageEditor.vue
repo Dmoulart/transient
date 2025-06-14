@@ -8,13 +8,13 @@
 </template>
 
 <script setup lang="ts">
-import TransientBuilder from './TransientBuilder.vue'
 import { useDictionnary } from '@/stores/use-dictionnary'
 import { usePage } from '@/stores/use-page'
 
 // @ts-expect-error : oups no types
 import { JsonViewer } from 'vue3-json-viewer'
 import 'vue3-json-viewer/dist/index.css'
+import TransientBuilder from './TransientBuilder.vue'
 
 const dictionnary = useDictionnary()
 

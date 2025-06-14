@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Editor from '../views/Editor.vue'
-import PageEditor from '@/components/PageEditor.vue'
+import PageEditor from '@/PageEditor/PageEditor.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
