@@ -28,6 +28,10 @@ function render(element: TransientElement): any {
   const tag = element.tag
   const Component = isComponent ? loadedComponents.value[tag] || tag : tag
 
+  const attrs = Object.fromEntries(
+    Object.entries(element.attributes || {}).map(([k, v]) => [k, v.expression]),
+  )
+
   const slots: Record<string, () => any> = {}
 
   for (const [slotName, slotElements] of Object.entries(element.slots || {})) {
@@ -43,6 +47,7 @@ function render(element: TransientElement): any {
   return h(
     Component,
     {
+      ...attrs,
       ...bindings,
       'data-element-id': element.id, // <- attribut que tu peux récupérer ensuite
     },
