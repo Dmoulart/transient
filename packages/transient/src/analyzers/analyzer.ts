@@ -47,24 +47,24 @@ const BASE_ANALYZER: Partial<Analyzer> = {
     return files;
   },
   write(results, dest) {
-    for (const [path, api] of Object.entries(results)) {
-      const { name: componentName, dir: componentDir } = parse(path);
-      const metaComponentDirPath = resolve(dest, componentDir);
+    // for (const [path, api] of Object.entries(results)) {
+    //   const { name: componentName, dir: componentDir } = parse(path);
+    //   const metaComponentDirPath = resolve(dest, componentDir);
 
-      // if meta dir doesn't exist create
-      if (!existsSync(metaComponentDirPath)) {
-        mkdirSync(metaComponentDirPath, {
-          recursive: true,
-        });
-      }
+    //   // if meta dir doesn't exist create
+    //   if (!existsSync(metaComponentDirPath)) {
+    //     mkdirSync(metaComponentDirPath, {
+    //       recursive: true,
+    //     });
+    //   }
 
-      const metaJsonFilePath = join(
-        metaComponentDirPath,
-        `${componentName}.json`
-      );
+    //   const metaJsonFilePath = join(
+    //     metaComponentDirPath,
+    //     `${componentName}.json`
+    //   );
 
-      writeFileSync(metaJsonFilePath, JSON.stringify(api, null, 2));
-    }
+    //   writeFileSync(metaJsonFilePath, JSON.stringify(api, null, 2));
+    // }
 
     // write all
     writeFileSync(
@@ -97,10 +97,11 @@ export function defineAnalyzer(config: AnalyzerConfig): Analyze {
       logger.result("OK");
     }
 
-    // if (dest && write) {
-    //   write(metas, dest);
-    //   logger.output(`Output : ${dest}`);
-    // }
+    if (dest && write) {
+      write(metas, dest);
+      logger.output(`Output : ${dest}`);
+    }
+
     logger.finish("components analysis");
 
     return metas;

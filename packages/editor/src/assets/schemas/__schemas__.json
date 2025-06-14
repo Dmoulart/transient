@@ -7,7 +7,15 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["primary", "secondary", "danger", "success", "warning", "info", "neutral"]
+          "enum": [
+            "primary",
+            "secondary",
+            "danger",
+            "success",
+            "warning",
+            "info",
+            "neutral"
+          ]
         }
       },
       "size": {
@@ -15,7 +23,13 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["md", "xs", "sm", "lg", "xl"]
+          "enum": [
+            "md",
+            "xs",
+            "sm",
+            "lg",
+            "xl"
+          ]
         }
       },
       "disabled": {
@@ -129,7 +143,11 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["row", "column", "row-wrap"]
+          "enum": [
+            "row",
+            "column",
+            "row-wrap"
+          ]
         }
       },
       "gap": {
@@ -137,7 +155,13 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["md", "sm", "lg", "xl", "none"]
+          "enum": [
+            "md",
+            "sm",
+            "lg",
+            "xl",
+            "none"
+          ]
         }
       },
       "justify": {
@@ -145,7 +169,12 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["start", "center", "end", "between"]
+          "enum": [
+            "start",
+            "center",
+            "end",
+            "between"
+          ]
         }
       },
       "align": {
@@ -153,7 +182,12 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["start", "center", "end", "stretch"]
+          "enum": [
+            "start",
+            "center",
+            "end",
+            "stretch"
+          ]
         }
       },
       "padding": {
@@ -161,7 +195,13 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["md", "sm", "lg", "xl", "none"]
+          "enum": [
+            "md",
+            "sm",
+            "lg",
+            "xl",
+            "none"
+          ]
         }
       },
       "border": {
@@ -169,7 +209,12 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["md", "sm", "lg", "none"]
+          "enum": [
+            "md",
+            "sm",
+            "lg",
+            "none"
+          ]
         }
       },
       "borderRadius": {
@@ -177,7 +222,14 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["md", "sm", "lg", "xl", "none", "full"]
+          "enum": [
+            "md",
+            "sm",
+            "lg",
+            "xl",
+            "none",
+            "full"
+          ]
         }
       },
       "fullWidth": {
@@ -195,7 +247,15 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["danger", "success", "info", "none", "muted", "surface", "accent"]
+          "enum": [
+            "danger",
+            "success",
+            "info",
+            "none",
+            "muted",
+            "surface",
+            "accent"
+          ]
         }
       }
     },
@@ -205,7 +265,7 @@
     "template": {
       "elements": [
         {
-          "id": 9,
+          "id": 2,
           "tag": "div",
           "isComponent": false,
           "attributes": {
@@ -217,7 +277,7 @@
           "slots": {
             "default": [
               {
-                "id": 8,
+                "id": 1,
                 "tag": "slot",
                 "isComponent": false,
                 "attributes": {}
@@ -240,7 +300,7 @@
     "template": {
       "elements": [
         {
-          "id": 19,
+          "id": 10,
           "tag": "div",
           "isComponent": false,
           "attributes": {
@@ -252,7 +312,7 @@
           "slots": {
             "default": [
               {
-                "id": 10,
+                "id": 1,
                 "tag": "h1",
                 "isComponent": false,
                 "attributes": {
@@ -263,14 +323,14 @@
                 }
               },
               {
-                "id": 18,
+                "id": 9,
                 "tag": "h3",
                 "isComponent": false,
                 "attributes": {},
                 "slots": {
                   "default": [
                     {
-                      "id": 11,
+                      "id": 2,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -281,7 +341,7 @@
                       }
                     },
                     {
-                      "id": 13,
+                      "id": 4,
                       "tag": "a",
                       "isComponent": false,
                       "attributes": {
@@ -301,7 +361,7 @@
                       "slots": {
                         "default": [
                           {
-                            "id": 12,
+                            "id": 3,
                             "tag": "#text",
                             "isComponent": false,
                             "attributes": {
@@ -315,7 +375,7 @@
                       }
                     },
                     {
-                      "id": 14,
+                      "id": 5,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -326,7 +386,7 @@
                       }
                     },
                     {
-                      "id": 16,
+                      "id": 7,
                       "tag": "a",
                       "isComponent": false,
                       "attributes": {
@@ -346,7 +406,7 @@
                       "slots": {
                         "default": [
                           {
-                            "id": 15,
+                            "id": 6,
                             "tag": "#text",
                             "isComponent": false,
                             "attributes": {
@@ -360,7 +420,7 @@
                       }
                     },
                     {
-                      "id": 17,
+                      "id": 8,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -386,96 +446,198 @@
     "template": {
       "elements": [
         {
-          "id": 29,
+          "id": 15,
           "tag": "main",
           "isComponent": false,
-          "attributes": {},
+          "attributes": {
+            "class": {
+              "type": "literal",
+              "expression": "p-12 max-w-5xl m-auto"
+            }
+          },
           "slots": {
             "default": [
               {
-                "id": 21,
-                "tag": "h1",
+                "id": 7,
+                "tag": "section",
                 "isComponent": false,
-                "attributes": {},
-                "slots": {
-                  "default": [
-                    {
-                      "id": 20,
-                      "tag": "#text",
-                      "isComponent": false,
-                      "attributes": {
-                        "value": {
-                          "type": "literal",
-                          "expression": "Hello "
-                        }
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "id": 23,
-                "tag": "p",
-                "isComponent": false,
-                "attributes": {},
-                "slots": {
-                  "default": [
-                    {
-                      "id": 22,
-                      "tag": "#text",
-                      "isComponent": false,
-                      "attributes": {
-                        "value": {
-                          "type": "literal",
-                          "expression": "Welcome abord !"
-                        }
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "id": 25,
-                "tag": "Button",
-                "isComponent": true,
-                "attributes": {},
-                "slots": {
-                  "default": [
-                    {
-                      "id": 24,
-                      "tag": "#text",
-                      "isComponent": false,
-                      "attributes": {
-                        "value": {
-                          "type": "literal",
-                          "expression": "Contact"
-                        }
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "id": 28,
-                "tag": "Section",
-                "isComponent": true,
                 "attributes": {
-                  "level": {
+                  "class": {
                     "type": "literal",
-                    "expression": "h1"
+                    "expression": "text-center py-16"
                   }
                 },
                 "slots": {
-                  "footer": [
+                  "default": [
                     {
-                      "id": 26,
-                      "tag": "#text",
+                      "id": 2,
+                      "tag": "h1",
                       "isComponent": false,
                       "attributes": {
-                        "value": {
+                        "class": {
                           "type": "literal",
-                          "expression": " Footer ! "
+                          "expression": "text-5xl font-semibold mb-6"
                         }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": 1,
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": "Welcome to Our Store"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": 4,
+                      "tag": "p",
+                      "isComponent": false,
+                      "attributes": {
+                        "class": {
+                          "type": "literal",
+                          "expression": "text-gray-500 mb-10"
+                        }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": 3,
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": " We’re delighted you’re here! Explore our range of products, grab great deals, and enjoy a wonderful shopping experience. "
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": 6,
+                      "tag": "button",
+                      "isComponent": false,
+                      "attributes": {
+                        "class": {
+                          "type": "literal",
+                          "expression": "bg-blue-500 hover:bg-blue-600 text-gray-50 font-semibold py-2 px-6 rounded-md shadow-md transform hover:translate-y-[-2px] transition-all"
+                        }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": 5,
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": " Shop Now "
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 14,
+                "tag": "section",
+                "isComponent": false,
+                "attributes": {
+                  "class": {
+                    "type": "literal",
+                    "expression": "text-center mt-16"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 9,
+                      "tag": "h2",
+                      "isComponent": false,
+                      "attributes": {
+                        "class": {
+                          "type": "literal",
+                          "expression": "text-3xl font-semibold mb-4"
+                        }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": 8,
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": "Join Our Community"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": 11,
+                      "tag": "p",
+                      "isComponent": false,
+                      "attributes": {
+                        "class": {
+                          "type": "literal",
+                          "expression": "text-gray-500 mb-6"
+                        }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": 10,
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": " Become a member today and enjoy exclusive offers and promotions. "
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": 13,
+                      "tag": "button",
+                      "isComponent": false,
+                      "attributes": {
+                        "class": {
+                          "type": "literal",
+                          "expression": "bg-green-500 hover:bg-green-600 text-gray-50 font-semibold py-2 px-6 rounded-md shadow-md transform hover:translate-y-[-2px] transition-all"
+                        }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": 12,
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": " Signup Now "
+                              }
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
@@ -504,7 +666,14 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["md", "sm", "lg", "xl", "none", "full"]
+          "enum": [
+            "md",
+            "sm",
+            "lg",
+            "xl",
+            "none",
+            "full"
+          ]
         }
       },
       "border": {
@@ -512,7 +681,12 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["md", "sm", "lg", "none"]
+          "enum": [
+            "md",
+            "sm",
+            "lg",
+            "none"
+          ]
         }
       },
       "shadow": {
@@ -520,7 +694,12 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["md", "sm", "lg", "none"]
+          "enum": [
+            "md",
+            "sm",
+            "lg",
+            "none"
+          ]
         }
       },
       "size": {
@@ -528,7 +707,12 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["md", "sm", "lg", "xl"]
+          "enum": [
+            "md",
+            "sm",
+            "lg",
+            "xl"
+          ]
         }
       },
       "opacity": {
@@ -536,7 +720,12 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["md", "sm", "lg", "none"]
+          "enum": [
+            "md",
+            "sm",
+            "lg",
+            "none"
+          ]
         }
       },
       "aspectRatio": {
@@ -544,7 +733,13 @@
         "required": false,
         "type": {
           "kind": "enum",
-          "enum": ["none", "square", "video", "wide", "portrait"]
+          "enum": [
+            "none",
+            "square",
+            "video",
+            "wide",
+            "portrait"
+          ]
         }
       }
     },
@@ -552,7 +747,7 @@
     "template": {
       "elements": [
         {
-          "id": 30,
+          "id": 1,
           "tag": "img",
           "isComponent": false,
           "attributes": {
@@ -581,7 +776,12 @@
         "required": true,
         "type": {
           "kind": "enum",
-          "enum": ["h2", "h1", "h3", "h4"]
+          "enum": [
+            "h2",
+            "h1",
+            "h3",
+            "h4"
+          ]
         }
       },
       "title": {
@@ -596,7 +796,7 @@
     "template": {
       "elements": [
         {
-          "id": 35,
+          "id": 5,
           "tag": "section",
           "isComponent": false,
           "attributes": {
@@ -612,7 +812,7 @@
           "slots": {
             "default": [
               {
-                "id": 31,
+                "id": 1,
                 "tag": "component",
                 "isComponent": false,
                 "attributes": {
@@ -627,13 +827,13 @@
                 }
               },
               {
-                "id": 32,
+                "id": 2,
                 "tag": "slot",
                 "isComponent": false,
                 "attributes": {}
               },
               {
-                "id": 34,
+                "id": 4,
                 "tag": "footer",
                 "isComponent": false,
                 "attributes": {
@@ -645,7 +845,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 33,
+                      "id": 3,
                       "tag": "slot",
                       "isComponent": false,
                       "attributes": {
@@ -685,7 +885,7 @@
     "template": {
       "elements": [
         {
-          "id": 36,
+          "id": 1,
           "tag": "component",
           "isComponent": false,
           "attributes": {
@@ -713,14 +913,14 @@
     "template": {
       "elements": [
         {
-          "id": 45,
+          "id": 9,
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
           "slots": {
             "icon": [
               {
-                "id": 37,
+                "id": 1,
                 "tag": "DocumentationIcon",
                 "isComponent": true,
                 "attributes": {}
@@ -728,7 +928,7 @@
             ],
             "heading": [
               {
-                "id": 39,
+                "id": 3,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -741,7 +941,7 @@
             ],
             "default": [
               {
-                "id": 41,
+                "id": 5,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -752,7 +952,7 @@
                 }
               },
               {
-                "id": 43,
+                "id": 7,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -772,7 +972,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 42,
+                      "id": 6,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -786,7 +986,7 @@
                 }
               },
               {
-                "id": 44,
+                "id": 8,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -800,14 +1000,14 @@
           }
         },
         {
-          "id": 75,
+          "id": 39,
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
           "slots": {
             "icon": [
               {
-                "id": 46,
+                "id": 10,
                 "tag": "ToolingIcon",
                 "isComponent": true,
                 "attributes": {}
@@ -815,7 +1015,7 @@
             ],
             "heading": [
               {
-                "id": 48,
+                "id": 12,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -828,7 +1028,7 @@
             ],
             "default": [
               {
-                "id": 50,
+                "id": 14,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -839,7 +1039,7 @@
                 }
               },
               {
-                "id": 52,
+                "id": 16,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -859,7 +1059,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 51,
+                      "id": 15,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -873,7 +1073,7 @@
                 }
               },
               {
-                "id": 53,
+                "id": 17,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -884,7 +1084,7 @@
                 }
               },
               {
-                "id": 55,
+                "id": 19,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -904,7 +1104,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 54,
+                      "id": 18,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -918,7 +1118,7 @@
                 }
               },
               {
-                "id": 56,
+                "id": 20,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -929,7 +1129,7 @@
                 }
               },
               {
-                "id": 58,
+                "id": 22,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -949,7 +1149,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 57,
+                      "id": 21,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -963,7 +1163,7 @@
                 }
               },
               {
-                "id": 59,
+                "id": 23,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -974,7 +1174,7 @@
                 }
               },
               {
-                "id": 61,
+                "id": 25,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -994,7 +1194,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 60,
+                      "id": 24,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1008,7 +1208,7 @@
                 }
               },
               {
-                "id": 62,
+                "id": 26,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1019,7 +1219,7 @@
                 }
               },
               {
-                "id": 64,
+                "id": 28,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1039,7 +1239,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 63,
+                      "id": 27,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1053,7 +1253,7 @@
                 }
               },
               {
-                "id": 65,
+                "id": 29,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1064,7 +1264,7 @@
                 }
               },
               {
-                "id": 67,
+                "id": 31,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1084,7 +1284,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 66,
+                      "id": 30,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1098,7 +1298,7 @@
                 }
               },
               {
-                "id": 68,
+                "id": 32,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1109,13 +1309,13 @@
                 }
               },
               {
-                "id": 69,
+                "id": 33,
                 "tag": "br",
                 "isComponent": false,
                 "attributes": {}
               },
               {
-                "id": 70,
+                "id": 34,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1126,7 +1326,7 @@
                 }
               },
               {
-                "id": 73,
+                "id": 37,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1142,14 +1342,14 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 72,
+                      "id": 36,
                       "tag": "code",
                       "isComponent": false,
                       "attributes": {},
                       "slots": {
                         "default": [
                           {
-                            "id": 71,
+                            "id": 35,
                             "tag": "#text",
                             "isComponent": false,
                             "attributes": {
@@ -1166,7 +1366,7 @@
                 }
               },
               {
-                "id": 74,
+                "id": 38,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1180,14 +1380,14 @@
           }
         },
         {
-          "id": 96,
+          "id": 60,
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
           "slots": {
             "icon": [
               {
-                "id": 76,
+                "id": 40,
                 "tag": "EcosystemIcon",
                 "isComponent": true,
                 "attributes": {}
@@ -1195,7 +1395,7 @@
             ],
             "heading": [
               {
-                "id": 78,
+                "id": 42,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1208,7 +1408,7 @@
             ],
             "default": [
               {
-                "id": 80,
+                "id": 44,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1219,7 +1419,7 @@
                 }
               },
               {
-                "id": 82,
+                "id": 46,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1239,7 +1439,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 81,
+                      "id": 45,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1253,7 +1453,7 @@
                 }
               },
               {
-                "id": 83,
+                "id": 47,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1264,7 +1464,7 @@
                 }
               },
               {
-                "id": 85,
+                "id": 49,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1284,7 +1484,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 84,
+                      "id": 48,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1298,7 +1498,7 @@
                 }
               },
               {
-                "id": 86,
+                "id": 50,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1309,7 +1509,7 @@
                 }
               },
               {
-                "id": 88,
+                "id": 52,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1329,7 +1529,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 87,
+                      "id": 51,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1343,7 +1543,7 @@
                 }
               },
               {
-                "id": 89,
+                "id": 53,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1354,7 +1554,7 @@
                 }
               },
               {
-                "id": 91,
+                "id": 55,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1374,7 +1574,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 90,
+                      "id": 54,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1388,7 +1588,7 @@
                 }
               },
               {
-                "id": 92,
+                "id": 56,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1399,7 +1599,7 @@
                 }
               },
               {
-                "id": 94,
+                "id": 58,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1419,7 +1619,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 93,
+                      "id": 57,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1433,7 +1633,7 @@
                 }
               },
               {
-                "id": 95,
+                "id": 59,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1447,14 +1647,14 @@
           }
         },
         {
-          "id": 114,
+          "id": 78,
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
           "slots": {
             "icon": [
               {
-                "id": 97,
+                "id": 61,
                 "tag": "CommunityIcon",
                 "isComponent": true,
                 "attributes": {}
@@ -1462,7 +1662,7 @@
             ],
             "heading": [
               {
-                "id": 99,
+                "id": 63,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1475,7 +1675,7 @@
             ],
             "default": [
               {
-                "id": 101,
+                "id": 65,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1486,7 +1686,7 @@
                 }
               },
               {
-                "id": 103,
+                "id": 67,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1506,7 +1706,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 102,
+                      "id": 66,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1520,7 +1720,7 @@
                 }
               },
               {
-                "id": 104,
+                "id": 68,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1531,7 +1731,7 @@
                 }
               },
               {
-                "id": 106,
+                "id": 70,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1551,7 +1751,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 105,
+                      "id": 69,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1565,7 +1765,7 @@
                 }
               },
               {
-                "id": 107,
+                "id": 71,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1576,7 +1776,7 @@
                 }
               },
               {
-                "id": 109,
+                "id": 73,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1596,7 +1796,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 108,
+                      "id": 72,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1610,7 +1810,7 @@
                 }
               },
               {
-                "id": 110,
+                "id": 74,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1621,7 +1821,7 @@
                 }
               },
               {
-                "id": 112,
+                "id": 76,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1641,7 +1841,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 111,
+                      "id": 75,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1655,7 +1855,7 @@
                 }
               },
               {
-                "id": 113,
+                "id": 77,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1669,14 +1869,14 @@
           }
         },
         {
-          "id": 123,
+          "id": 87,
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
           "slots": {
             "icon": [
               {
-                "id": 115,
+                "id": 79,
                 "tag": "SupportIcon",
                 "isComponent": true,
                 "attributes": {}
@@ -1684,7 +1884,7 @@
             ],
             "heading": [
               {
-                "id": 117,
+                "id": 81,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1697,7 +1897,7 @@
             ],
             "default": [
               {
-                "id": 119,
+                "id": 83,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1708,7 +1908,7 @@
                 }
               },
               {
-                "id": 121,
+                "id": 85,
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1728,7 +1928,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 120,
+                      "id": 84,
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1742,7 +1942,7 @@
                 }
               },
               {
-                "id": 122,
+                "id": 86,
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1770,7 +1970,7 @@
     "template": {
       "elements": [
         {
-          "id": 124,
+          "id": 1,
           "tag": "#text",
           "isComponent": false,
           "attributes": {
@@ -1794,7 +1994,7 @@
     "template": {
       "elements": [
         {
-          "id": 131,
+          "id": 7,
           "tag": "div",
           "isComponent": false,
           "attributes": {
@@ -1806,14 +2006,14 @@
           "slots": {
             "default": [
               {
-                "id": 126,
+                "id": 2,
                 "tag": "i",
                 "isComponent": false,
                 "attributes": {},
                 "slots": {
                   "default": [
                     {
-                      "id": 125,
+                      "id": 1,
                       "tag": "slot",
                       "isComponent": false,
                       "attributes": {
@@ -1827,7 +2027,7 @@
                 }
               },
               {
-                "id": 130,
+                "id": 6,
                 "tag": "div",
                 "isComponent": false,
                 "attributes": {
@@ -1839,14 +2039,14 @@
                 "slots": {
                   "default": [
                     {
-                      "id": 128,
+                      "id": 4,
                       "tag": "h3",
                       "isComponent": false,
                       "attributes": {},
                       "slots": {
                         "default": [
                           {
-                            "id": 127,
+                            "id": 3,
                             "tag": "slot",
                             "isComponent": false,
                             "attributes": {
@@ -1860,7 +2060,7 @@
                       }
                     },
                     {
-                      "id": 129,
+                      "id": 5,
                       "tag": "slot",
                       "isComponent": false,
                       "attributes": {}
@@ -1881,7 +2081,7 @@
     "template": {
       "elements": [
         {
-          "id": 133,
+          "id": 2,
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -1905,7 +2105,7 @@
           "slots": {
             "default": [
               {
-                "id": 132,
+                "id": 1,
                 "tag": "path",
                 "isComponent": false,
                 "attributes": {
@@ -1928,7 +2128,7 @@
     "template": {
       "elements": [
         {
-          "id": 135,
+          "id": 2,
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -1952,7 +2152,7 @@
           "slots": {
             "default": [
               {
-                "id": 134,
+                "id": 1,
                 "tag": "path",
                 "isComponent": false,
                 "attributes": {
@@ -1975,7 +2175,7 @@
     "template": {
       "elements": [
         {
-          "id": 137,
+          "id": 2,
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -1999,7 +2199,7 @@
           "slots": {
             "default": [
               {
-                "id": 136,
+                "id": 1,
                 "tag": "path",
                 "isComponent": false,
                 "attributes": {
@@ -2022,7 +2222,7 @@
     "template": {
       "elements": [
         {
-          "id": 139,
+          "id": 2,
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2046,7 +2246,7 @@
           "slots": {
             "default": [
               {
-                "id": 138,
+                "id": 1,
                 "tag": "path",
                 "isComponent": false,
                 "attributes": {
@@ -2069,7 +2269,7 @@
     "template": {
       "elements": [
         {
-          "id": 141,
+          "id": 2,
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2113,7 +2313,7 @@
           "slots": {
             "default": [
               {
-                "id": 140,
+                "id": 1,
                 "tag": "path",
                 "isComponent": false,
                 "attributes": {

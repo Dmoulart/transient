@@ -25,6 +25,8 @@ export function analyzeTemplateElements(
   componentPath: string,
   props: TransientProps
 ): TransientTemplate | undefined {
+  //@todo: this will break when parallelizing
+  id = 0;
   const source = readFileSync(componentPath, "utf-8");
   const sfc = parseSFC(source);
 

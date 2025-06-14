@@ -28,10 +28,6 @@ function render(element: TransientElement): any {
   const tag = element.tag
   const Component = isComponent ? loadedComponents.value[tag] || tag : tag
 
-  const attrs = Object.fromEntries(
-    Object.entries(element.attributes || {}).map(([k, v]) => [k, v.expression]),
-  )
-
   const slots: Record<string, () => any> = {}
 
   for (const [slotName, slotElements] of Object.entries(element.slots || {})) {
@@ -39,11 +35,16 @@ function render(element: TransientElement): any {
     slots[slotName] = () => rendered
   }
 
+  const bindings: Record<string, any> = {}
+  for (const [key, value] of Object.entries(element.attributes)) {
+    bindings[`data-attr-${key}`] = JSON.stringify(value)
+  }
+
   return h(
     Component,
     {
-      ...attrs,
-      'data-item-id': element.id, // <- attribut que tu peux récupérer ensuite
+      ...bindings,
+      'data-element-id': element.id, // <- attribut que tu peux récupérer ensuite
     },
     slots,
   )
@@ -51,9 +52,9 @@ function render(element: TransientElement): any {
 
 onMounted(() => {
   document.addEventListener('click', (e) => {
-    const item = (e.target as HTMLElement).closest('[data-item-id]')
+    const item = (e.target as HTMLElement).closest('[data-element-id]')
     if (item && item instanceof HTMLElement) {
-      const id = item.dataset.itemId
+      const id = item.dataset.elementId
       if (id) {
         const matching = findElementById(props.schema.template?.elements ?? [], Number(id))
         console.log('Élément correspondant :', matching)
@@ -70,6 +71,6 @@ onMounted(() => {
     :is="render(el)"
     contenteditable="true"
   />
-  <div v-else>Chargement des composants...</div>
+  <div v-else>Loading...</div>
 </template>
 <style></style>
