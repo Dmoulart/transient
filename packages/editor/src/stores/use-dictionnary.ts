@@ -1,7 +1,8 @@
 import type { TransientComponentDictionnary } from 'transient/src/transient'
 import { ref } from 'vue'
+import schemas from '@/assets/schemas/__schemas__.json'
 
-export const dictionnary = ref<TransientComponentDictionnary>({})
+export const dictionnary = ref<TransientComponentDictionnary>(schemas as any)
 
 export async function loadDictionnary() {
   try {
