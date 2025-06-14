@@ -1,11 +1,14 @@
 import { join, parse, resolve } from "path";
-import { sync, type Pattern } from "fast-glob";
+import fastGlob from "fast-glob";
+import type { Pattern } from "fast-glob";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import type {
   TransientComponentDictionnary,
   TransientComponentSchema,
 } from "../transient/definition";
 import { logger } from "../log/logger";
+
+const { sync } = fastGlob;
 
 export type AnalyzeOptions = {
   dir?: string;
@@ -94,10 +97,10 @@ export function defineAnalyzer(config: AnalyzerConfig): Analyze {
       logger.result("OK");
     }
 
-    if (dest && write) {
-      write(metas, dest);
-      logger.output(`Output : ${dest}`);
-    }
+    // if (dest && write) {
+    //   write(metas, dest);
+    //   logger.output(`Output : ${dest}`);
+    // }
     logger.finish("components analysis");
 
     return metas;

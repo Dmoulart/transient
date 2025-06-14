@@ -3,6 +3,7 @@ export type TransientComponentDictionnary = {
 };
 
 export type TransientElement = {
+  id: number;
   tag: string; // peut être div, my-button, par ex
   isComponent: boolean; // indique si c'est un composant custom
   attributes: Record<string, BindingInfo>;

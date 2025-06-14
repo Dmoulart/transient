@@ -16,7 +16,11 @@ import type {
   TransientElement,
 } from "../../transient/definition";
 import { assertIs, someString } from "../../core/assert";
+let id = 0;
 
+function nextID() {
+  return ++id;
+}
 export function analyzeTemplateElements(
   componentPath: string,
   props: TransientProps
@@ -41,8 +45,15 @@ function walk(
   node: TemplateChildNode,
   props: TransientProps
 ): TransientElement | null {
-  if (node.type === NodeTypes.TEXT) {
-    return parseText(node);
+  let el: TransientElement | null = null;
+
+  switch (node.type) {
+    case NodeTypes.TEXT:
+      el = parseText(node);
+      break;
+    case NodeTypes.ELEMENT:
+      el = parseElement(node, props);
+      break;
   }
 
   // if (node.type === NodeTypes.INTERPOLATION) {
@@ -60,39 +71,8 @@ function walk(
   // }
 
   // Handle named slots defined via <template #slotName> or <template v-slot:slotName>
-  // if (node.type === NodeTypes.ELEMENT && node.tag === "template") {
-  //   let slotName = "default";
 
-  //   for (const prop of node.props) {
-  //     if (prop.type === NodeTypes.DIRECTIVE && prop.name === "slot") {
-  //       if (prop.arg?.type === NodeTypes.SIMPLE_EXPRESSION) {
-  //         slotName = prop.arg.content;
-  //       }
-  //     }
-  //   }
-
-  //   const children = node.children
-  //     .map((child: any) => walk(child, props))
-  //     .filter(Boolean) as TransientElement[];
-
-  //   // Instead of returning a template node, return children keyed by slot name
-  //   return {
-  //     tag: "template",
-  //     isComponent: false,
-  //     attributes: {
-  //       name: { type: "literal", expression: slotName },
-  //     },
-  //     slots: {
-  //       [slotName]: children,
-  //     },
-  //   };
-  // }
-
-  if (node.type === NodeTypes.ELEMENT) {
-    return parseElement(node, props);
-  }
-
-  return null;
+  return el;
 }
 
 function parseText(node: TextNode): TransientElement | null {
@@ -101,6 +81,7 @@ function parseText(node: TextNode): TransientElement | null {
   if (!content) return null;
 
   return {
+    id: nextID(),
     tag: "#text",
     isComponent: false,
     attributes: {
@@ -144,6 +125,7 @@ function parseElement(
   }
 
   return {
+    id: nextID(),
     tag,
     isComponent,
     attributes,

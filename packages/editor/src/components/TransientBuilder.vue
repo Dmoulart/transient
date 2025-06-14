@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { onMounted, ref, h, shallowRef } from 'vue'
-import { loadAllComponents } from '@/stores/use-prototype'
+import { onMounted, h, shallowRef } from 'vue'
 import type {
   TransientElement,
   TransientComponentSchema,
   TransientComponentDictionnary,
 } from 'transient/src/transient/definition'
+import { loadAllComponents } from '@/stores/use-dictionnary'
+import { findElementById } from '@/stores/use-editor'
 
 const props = defineProps<{
   schema: TransientComponentSchema
@@ -18,20 +19,9 @@ onMounted(async () => {
   loadedComponents.value = await loadAllComponents()
 })
 
-function renderElement(element: TransientElement): any {
+function render(element: TransientElement): any {
   if (element.tag === '#text') {
     return element.attributes?.value?.expression
-  }
-
-  if (element.tag === 'template') {
-    console.log({ element })
-    // Handle <template #slotName>
-    const slotName = element.attributes?.name?.expression || 'default'
-    const children = (element.slots?.default || []).map(renderElement)
-    return {
-      slotName,
-      render: () => children,
-    }
   }
 
   const isComponent = element.isComponent
@@ -45,27 +35,40 @@ function renderElement(element: TransientElement): any {
   const slots: Record<string, () => any> = {}
 
   for (const [slotName, slotElements] of Object.entries(element.slots || {})) {
-    const rendered = slotElements.map(renderElement)
-    const hasWrappedTemplateSlot = rendered.every((r) => typeof r === 'object' && 'slotName' in r)
-    if (hasWrappedTemplateSlot) {
-      for (const slot of rendered as { slotName: string; render: () => any }[]) {
-        slots[slot.slotName] = slot.render
-      }
-    } else {
-      slots[slotName] = () => rendered
-    }
+    const rendered = slotElements.map(render)
+    slots[slotName] = () => rendered
   }
 
-  return h(Component, attrs, slots)
+  return h(
+    Component,
+    {
+      ...attrs,
+      'data-item-id': element.id, // <- attribut que tu peux récupérer ensuite
+    },
+    slots,
+  )
 }
+
+onMounted(() => {
+  document.addEventListener('click', (e) => {
+    const item = (e.target as HTMLElement).closest('[data-item-id]')
+    if (item && item instanceof HTMLElement) {
+      const id = item.dataset.itemId
+      if (id) {
+        const matching = findElementById(props.schema.template?.elements ?? [], Number(id))
+        console.log('Élément correspondant :', matching)
+      }
+    }
+  })
+})
 </script>
 
 <template>
   <component
-    class="c"
     v-if="loadedComponents"
     v-for="el in props.schema.template?.elements || []"
-    :is="renderElement(el)"
+    :is="render(el)"
+    contenteditable="true"
   />
   <div v-else>Chargement des composants...</div>
 </template>

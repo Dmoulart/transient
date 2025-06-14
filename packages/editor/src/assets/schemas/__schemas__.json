@@ -1,0 +1,2136 @@
+{
+  "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/Button.vue": {
+    "path": "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/Button.vue",
+    "props": {
+      "variant": {
+        "default": "primary",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["primary", "secondary", "danger", "success", "warning", "info", "neutral"]
+        }
+      },
+      "size": {
+        "default": "md",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["md", "xs", "sm", "lg", "xl"]
+        }
+      },
+      "disabled": {
+        "default": false,
+        "required": false,
+        "type": "boolean"
+      }
+    },
+    "slots": {
+      "left": {},
+      "default": {},
+      "right": {}
+    },
+    "template": {
+      "elements": [
+        {
+          "id": 7,
+          "tag": "button",
+          "isComponent": false,
+          "attributes": {
+            "bind:class": {
+              "type": "prop",
+              "expression": "not supported"
+            },
+            "bind:disabled": {
+              "type": "prop",
+              "expression": "disabled"
+            }
+          },
+          "slots": {
+            "default": [
+              {
+                "id": 2,
+                "tag": "span",
+                "isComponent": false,
+                "attributes": {
+                  "class": {
+                    "type": "literal",
+                    "expression": "flex items-center"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 1,
+                      "tag": "slot",
+                      "isComponent": false,
+                      "attributes": {
+                        "name": {
+                          "type": "literal",
+                          "expression": "left"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 4,
+                "tag": "span",
+                "isComponent": false,
+                "attributes": {},
+                "slots": {
+                  "default": [
+                    {
+                      "id": 3,
+                      "tag": "slot",
+                      "isComponent": false,
+                      "attributes": {}
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 6,
+                "tag": "span",
+                "isComponent": false,
+                "attributes": {
+                  "class": {
+                    "type": "literal",
+                    "expression": "flex items-center"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 5,
+                      "tag": "slot",
+                      "isComponent": false,
+                      "attributes": {
+                        "name": {
+                          "type": "literal",
+                          "expression": "right"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/Container.vue": {
+    "path": "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/Container.vue",
+    "props": {
+      "direction": {
+        "default": "row",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["row", "column", "row-wrap"]
+        }
+      },
+      "gap": {
+        "default": "md",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["md", "sm", "lg", "xl", "none"]
+        }
+      },
+      "justify": {
+        "default": "start",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["start", "center", "end", "between"]
+        }
+      },
+      "align": {
+        "default": "center",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["start", "center", "end", "stretch"]
+        }
+      },
+      "padding": {
+        "default": "none",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["md", "sm", "lg", "xl", "none"]
+        }
+      },
+      "border": {
+        "default": "none",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["md", "sm", "lg", "none"]
+        }
+      },
+      "borderRadius": {
+        "default": "none",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["md", "sm", "lg", "xl", "none", "full"]
+        }
+      },
+      "fullWidth": {
+        "default": false,
+        "required": false,
+        "type": "boolean"
+      },
+      "fullHeight": {
+        "default": false,
+        "required": false,
+        "type": "boolean"
+      },
+      "background": {
+        "default": "none",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["danger", "success", "info", "none", "muted", "surface", "accent"]
+        }
+      }
+    },
+    "slots": {
+      "default": {}
+    },
+    "template": {
+      "elements": [
+        {
+          "id": 9,
+          "tag": "div",
+          "isComponent": false,
+          "attributes": {
+            "bind:class": {
+              "type": "prop",
+              "expression": "not supported"
+            }
+          },
+          "slots": {
+            "default": [
+              {
+                "id": 8,
+                "tag": "slot",
+                "isComponent": false,
+                "attributes": {}
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HelloWorld.vue": {
+    "path": "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HelloWorld.vue",
+    "props": {
+      "msg": {
+        "required": true,
+        "type": "string"
+      }
+    },
+    "slots": {},
+    "template": {
+      "elements": [
+        {
+          "id": 19,
+          "tag": "div",
+          "isComponent": false,
+          "attributes": {
+            "class": {
+              "type": "literal",
+              "expression": "greetings"
+            }
+          },
+          "slots": {
+            "default": [
+              {
+                "id": 10,
+                "tag": "h1",
+                "isComponent": false,
+                "attributes": {
+                  "class": {
+                    "type": "literal",
+                    "expression": "green"
+                  }
+                }
+              },
+              {
+                "id": 18,
+                "tag": "h3",
+                "isComponent": false,
+                "attributes": {},
+                "slots": {
+                  "default": [
+                    {
+                      "id": 11,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": " You’ve successfully created a project with "
+                        }
+                      }
+                    },
+                    {
+                      "id": 13,
+                      "tag": "a",
+                      "isComponent": false,
+                      "attributes": {
+                        "href": {
+                          "type": "literal",
+                          "expression": "https://vite.dev/"
+                        },
+                        "target": {
+                          "type": "literal",
+                          "expression": "_blank"
+                        },
+                        "rel": {
+                          "type": "literal",
+                          "expression": "noopener"
+                        }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": 12,
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": "Vite"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": 14,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": " + "
+                        }
+                      }
+                    },
+                    {
+                      "id": 16,
+                      "tag": "a",
+                      "isComponent": false,
+                      "attributes": {
+                        "href": {
+                          "type": "literal",
+                          "expression": "https://vuejs.org/"
+                        },
+                        "target": {
+                          "type": "literal",
+                          "expression": "_blank"
+                        },
+                        "rel": {
+                          "type": "literal",
+                          "expression": "noopener"
+                        }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": 15,
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": "Vue 3"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": 17,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": ". What's next? "
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HomePage.vue": {
+    "path": "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HomePage.vue",
+    "props": {},
+    "slots": {},
+    "template": {
+      "elements": [
+        {
+          "id": 29,
+          "tag": "main",
+          "isComponent": false,
+          "attributes": {},
+          "slots": {
+            "default": [
+              {
+                "id": 21,
+                "tag": "h1",
+                "isComponent": false,
+                "attributes": {},
+                "slots": {
+                  "default": [
+                    {
+                      "id": 20,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Hello "
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 23,
+                "tag": "p",
+                "isComponent": false,
+                "attributes": {},
+                "slots": {
+                  "default": [
+                    {
+                      "id": 22,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Welcome abord !"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 25,
+                "tag": "Button",
+                "isComponent": true,
+                "attributes": {},
+                "slots": {
+                  "default": [
+                    {
+                      "id": 24,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Contact"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 28,
+                "tag": "Section",
+                "isComponent": true,
+                "attributes": {
+                  "level": {
+                    "type": "literal",
+                    "expression": "h1"
+                  }
+                },
+                "slots": {
+                  "footer": [
+                    {
+                      "id": 26,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": " Footer ! "
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/Image.vue": {
+    "path": "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/Image.vue",
+    "props": {
+      "src": {
+        "default": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.mos.cms.futurecdn.net%2FjTNKUAeoKHeoaCcHkrKsxC.jpg&f=1&nofb=1&ipt=3567819babe534de8b6b9fe69da89ccaf9a1f8865633bcefc35bcb088a08e553",
+        "required": false,
+        "type": "string"
+      },
+      "alt": {
+        "required": true,
+        "type": "string"
+      },
+      "borderRadius": {
+        "default": "none",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["md", "sm", "lg", "xl", "none", "full"]
+        }
+      },
+      "border": {
+        "default": "none",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["md", "sm", "lg", "none"]
+        }
+      },
+      "shadow": {
+        "default": "none",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["md", "sm", "lg", "none"]
+        }
+      },
+      "size": {
+        "default": "md",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["md", "sm", "lg", "xl"]
+        }
+      },
+      "opacity": {
+        "default": "none",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["md", "sm", "lg", "none"]
+        }
+      },
+      "aspectRatio": {
+        "default": "none",
+        "required": false,
+        "type": {
+          "kind": "enum",
+          "enum": ["none", "square", "video", "wide", "portrait"]
+        }
+      }
+    },
+    "slots": {},
+    "template": {
+      "elements": [
+        {
+          "id": 30,
+          "tag": "img",
+          "isComponent": false,
+          "attributes": {
+            "bind:src": {
+              "type": "prop",
+              "expression": "src"
+            },
+            "bind:alt": {
+              "type": "prop",
+              "expression": "alt"
+            },
+            "bind:class": {
+              "type": "prop",
+              "expression": "not supported"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/Section.vue": {
+    "path": "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/Section.vue",
+    "props": {
+      "level": {
+        "default": "h2",
+        "required": true,
+        "type": {
+          "kind": "enum",
+          "enum": ["h2", "h1", "h3", "h4"]
+        }
+      },
+      "title": {
+        "required": false,
+        "type": "string"
+      }
+    },
+    "slots": {
+      "default": {},
+      "footer": {}
+    },
+    "template": {
+      "elements": [
+        {
+          "id": 35,
+          "tag": "section",
+          "isComponent": false,
+          "attributes": {
+            "class": {
+              "type": "literal",
+              "expression": "p-6 rounded-lg shadow-md"
+            },
+            "bind:style": {
+              "type": "prop",
+              "expression": "not supported"
+            }
+          },
+          "slots": {
+            "default": [
+              {
+                "id": 31,
+                "tag": "component",
+                "isComponent": false,
+                "attributes": {
+                  "bind:is": {
+                    "type": "prop",
+                    "expression": "level"
+                  },
+                  "class": {
+                    "type": "literal",
+                    "expression": "text-2xl font-semibold text-gray-800"
+                  }
+                }
+              },
+              {
+                "id": 32,
+                "tag": "slot",
+                "isComponent": false,
+                "attributes": {}
+              },
+              {
+                "id": 34,
+                "tag": "footer",
+                "isComponent": false,
+                "attributes": {
+                  "class": {
+                    "type": "literal",
+                    "expression": "mt-4 border-t pt-4 text-gray-600"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 33,
+                      "tag": "slot",
+                      "isComponent": false,
+                      "attributes": {
+                        "name": {
+                          "type": "literal",
+                          "expression": "footer"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/Text.vue": {
+    "path": "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/Text.vue",
+    "props": {
+      "as": {
+        "default": "div",
+        "required": false,
+        "type": "string"
+      },
+      "className": {
+        "required": false,
+        "type": "string"
+      },
+      "text": {
+        "required": false,
+        "type": "string"
+      }
+    },
+    "slots": {},
+    "template": {
+      "elements": [
+        {
+          "id": 36,
+          "tag": "component",
+          "isComponent": false,
+          "attributes": {
+            "class": {
+              "type": "literal",
+              "expression": "text-component"
+            },
+            "bind:is": {
+              "type": "prop",
+              "expression": "as"
+            },
+            "bind:class": {
+              "type": "prop",
+              "expression": "className"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/TheWelcome.vue": {
+    "path": "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/TheWelcome.vue",
+    "props": {},
+    "slots": {},
+    "template": {
+      "elements": [
+        {
+          "id": 45,
+          "tag": "WelcomeItem",
+          "isComponent": true,
+          "attributes": {},
+          "slots": {
+            "icon": [
+              {
+                "id": 37,
+                "tag": "DocumentationIcon",
+                "isComponent": true,
+                "attributes": {}
+              }
+            ],
+            "heading": [
+              {
+                "id": 39,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": "Documentation"
+                  }
+                }
+              }
+            ],
+            "default": [
+              {
+                "id": 41,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " Vue’s "
+                  }
+                }
+              },
+              {
+                "id": 43,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://vuejs.org/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 42,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "official documentation"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 44,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " provides you with all information you need to get started. "
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": 75,
+          "tag": "WelcomeItem",
+          "isComponent": true,
+          "attributes": {},
+          "slots": {
+            "icon": [
+              {
+                "id": 46,
+                "tag": "ToolingIcon",
+                "isComponent": true,
+                "attributes": {}
+              }
+            ],
+            "heading": [
+              {
+                "id": 48,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": "Tooling"
+                  }
+                }
+              }
+            ],
+            "default": [
+              {
+                "id": 50,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " This project is served and bundled with "
+                  }
+                }
+              },
+              {
+                "id": 52,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://vite.dev/guide/features.html"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 51,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Vite"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 53,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ". The recommended IDE setup is "
+                  }
+                }
+              },
+              {
+                "id": 55,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://code.visualstudio.com/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 54,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "VSCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 56,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " + "
+                  }
+                }
+              },
+              {
+                "id": 58,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://github.com/vuejs/language-tools"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 57,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Vue - Official"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 59,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ". If you need to test your components and web pages, check out "
+                  }
+                }
+              },
+              {
+                "id": 61,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://vitest.dev/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 60,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Vitest"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 62,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " and "
+                  }
+                }
+              },
+              {
+                "id": 64,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://www.cypress.io/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 63,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Cypress"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 65,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " / "
+                  }
+                }
+              },
+              {
+                "id": 67,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://playwright.dev/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 66,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Playwright"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 68,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ". "
+                  }
+                }
+              },
+              {
+                "id": 69,
+                "tag": "br",
+                "isComponent": false,
+                "attributes": {}
+              },
+              {
+                "id": 70,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " More instructions are available in "
+                  }
+                }
+              },
+              {
+                "id": 73,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "javascript:void(0)"
+                  },
+                  "on:click": {
+                    "type": "prop",
+                    "expression": "not supported"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 72,
+                      "tag": "code",
+                      "isComponent": false,
+                      "attributes": {},
+                      "slots": {
+                        "default": [
+                          {
+                            "id": 71,
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": "README.md"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 74,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ". "
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": 96,
+          "tag": "WelcomeItem",
+          "isComponent": true,
+          "attributes": {},
+          "slots": {
+            "icon": [
+              {
+                "id": 76,
+                "tag": "EcosystemIcon",
+                "isComponent": true,
+                "attributes": {}
+              }
+            ],
+            "heading": [
+              {
+                "id": 78,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": "Ecosystem"
+                  }
+                }
+              }
+            ],
+            "default": [
+              {
+                "id": 80,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " Get official tools and libraries for your project: "
+                  }
+                }
+              },
+              {
+                "id": 82,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://pinia.vuejs.org/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 81,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Pinia"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 83,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ", "
+                  }
+                }
+              },
+              {
+                "id": 85,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://router.vuejs.org/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 84,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Vue Router"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 86,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ", "
+                  }
+                }
+              },
+              {
+                "id": 88,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://test-utils.vuejs.org/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 87,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Vue Test Utils"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 89,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ", and "
+                  }
+                }
+              },
+              {
+                "id": 91,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://github.com/vuejs/devtools"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 90,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Vue Dev Tools"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 92,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ". If you need more resources, we suggest paying "
+                  }
+                }
+              },
+              {
+                "id": 94,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://github.com/vuejs/awesome-vue"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 93,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Awesome Vue"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 95,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " a visit. "
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": 114,
+          "tag": "WelcomeItem",
+          "isComponent": true,
+          "attributes": {},
+          "slots": {
+            "icon": [
+              {
+                "id": 97,
+                "tag": "CommunityIcon",
+                "isComponent": true,
+                "attributes": {}
+              }
+            ],
+            "heading": [
+              {
+                "id": 99,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": "Community"
+                  }
+                }
+              }
+            ],
+            "default": [
+              {
+                "id": 101,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " Got stuck? Ask your question on "
+                  }
+                }
+              },
+              {
+                "id": 103,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://chat.vuejs.org"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 102,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Vue Land"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 104,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " (our official Discord server), or "
+                  }
+                }
+              },
+              {
+                "id": 106,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://stackoverflow.com/questions/tagged/vue.js"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 105,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "StackOverflow"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 107,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ". You should also follow the official "
+                  }
+                }
+              },
+              {
+                "id": 109,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://bsky.app/profile/vuejs.org"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 108,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "@vuejs.org"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 110,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " Bluesky account or the "
+                  }
+                }
+              },
+              {
+                "id": 112,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://x.com/vuejs"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 111,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "@vuejs"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 113,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " X account for latest news in the Vue world. "
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": 123,
+          "tag": "WelcomeItem",
+          "isComponent": true,
+          "attributes": {},
+          "slots": {
+            "icon": [
+              {
+                "id": 115,
+                "tag": "SupportIcon",
+                "isComponent": true,
+                "attributes": {}
+              }
+            ],
+            "heading": [
+              {
+                "id": 117,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": "Support Vue"
+                  }
+                }
+              }
+            ],
+            "default": [
+              {
+                "id": 119,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " As an independent project, Vue relies on community backing for its sustainability. You can help us by "
+                  }
+                }
+              },
+              {
+                "id": 121,
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://vuejs.org/sponsor/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 120,
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "becoming a sponsor"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 122,
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ". "
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/Virgile.vue": {
+    "path": "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/Virgile.vue",
+    "props": {
+      "sandwich": {
+        "required": true,
+        "type": "boolean"
+      }
+    },
+    "slots": {},
+    "template": {
+      "elements": [
+        {
+          "id": 124,
+          "tag": "#text",
+          "isComponent": false,
+          "attributes": {
+            "value": {
+              "type": "literal",
+              "expression": "Virgile "
+            }
+          }
+        }
+      ]
+    }
+  },
+  "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/WelcomeItem.vue": {
+    "path": "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/WelcomeItem.vue",
+    "props": {},
+    "slots": {
+      "icon": {},
+      "heading": {},
+      "default": {}
+    },
+    "template": {
+      "elements": [
+        {
+          "id": 131,
+          "tag": "div",
+          "isComponent": false,
+          "attributes": {
+            "class": {
+              "type": "literal",
+              "expression": "item"
+            }
+          },
+          "slots": {
+            "default": [
+              {
+                "id": 126,
+                "tag": "i",
+                "isComponent": false,
+                "attributes": {},
+                "slots": {
+                  "default": [
+                    {
+                      "id": 125,
+                      "tag": "slot",
+                      "isComponent": false,
+                      "attributes": {
+                        "name": {
+                          "type": "literal",
+                          "expression": "icon"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": 130,
+                "tag": "div",
+                "isComponent": false,
+                "attributes": {
+                  "class": {
+                    "type": "literal",
+                    "expression": "details"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": 128,
+                      "tag": "h3",
+                      "isComponent": false,
+                      "attributes": {},
+                      "slots": {
+                        "default": [
+                          {
+                            "id": 127,
+                            "tag": "slot",
+                            "isComponent": false,
+                            "attributes": {
+                              "name": {
+                                "type": "literal",
+                                "expression": "heading"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": 129,
+                      "tag": "slot",
+                      "isComponent": false,
+                      "attributes": {}
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/icons/IconCommunity.vue": {
+    "path": "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/icons/IconCommunity.vue",
+    "props": {},
+    "slots": {},
+    "template": {
+      "elements": [
+        {
+          "id": 133,
+          "tag": "svg",
+          "isComponent": false,
+          "attributes": {
+            "xmlns": {
+              "type": "literal",
+              "expression": "http://www.w3.org/2000/svg"
+            },
+            "width": {
+              "type": "literal",
+              "expression": "20"
+            },
+            "height": {
+              "type": "literal",
+              "expression": "20"
+            },
+            "fill": {
+              "type": "literal",
+              "expression": "currentColor"
+            }
+          },
+          "slots": {
+            "default": [
+              {
+                "id": 132,
+                "tag": "path",
+                "isComponent": false,
+                "attributes": {
+                  "d": {
+                    "type": "literal",
+                    "expression": "M15 4a1 1 0 1 0 0 2V4zm0 11v-1a1 1 0 0 0-1 1h1zm0 4l-.707.707A1 1 0 0 0 16 19h-1zm-4-4l.707-.707A1 1 0 0 0 11 14v1zm-4.707-1.293a1 1 0 0 0-1.414 1.414l1.414-1.414zm-.707.707l-.707-.707.707.707zM9 11v-1a1 1 0 0 0-.707.293L9 11zm-4 0h1a1 1 0 0 0-1-1v1zm0 4H4a1 1 0 0 0 1.707.707L5 15zm10-9h2V4h-2v2zm2 0a1 1 0 0 1 1 1h2a3 3 0 0 0-3-3v2zm1 1v6h2V7h-2zm0 6a1 1 0 0 1-1 1v2a3 3 0 0 0 3-3h-2zm-1 1h-2v2h2v-2zm-3 1v4h2v-4h-2zm1.707 3.293l-4-4-1.414 1.414 4 4 1.414-1.414zM11 14H7v2h4v-2zm-4 0c-.276 0-.525-.111-.707-.293l-1.414 1.414C5.42 15.663 6.172 16 7 16v-2zm-.707 1.121l3.414-3.414-1.414-1.414-3.414 3.414 1.414 1.414zM9 12h4v-2H9v2zm4 0a3 3 0 0 0 3-3h-2a1 1 0 0 1-1 1v2zm3-3V3h-2v6h2zm0-6a3 3 0 0 0-3-3v2a1 1 0 0 1 1 1h2zm-3-3H3v2h10V0zM3 0a3 3 0 0 0-3 3h2a1 1 0 0 1 1-1V0zM0 3v6h2V3H0zm0 6a3 3 0 0 0 3 3v-2a1 1 0 0 1-1-1H0zm3 3h2v-2H3v2zm1-1v4h2v-4H4zm1.707 4.707l.586-.586-1.414-1.414-.586.586 1.414 1.414z"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/icons/IconDocumentation.vue": {
+    "path": "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/icons/IconDocumentation.vue",
+    "props": {},
+    "slots": {},
+    "template": {
+      "elements": [
+        {
+          "id": 135,
+          "tag": "svg",
+          "isComponent": false,
+          "attributes": {
+            "xmlns": {
+              "type": "literal",
+              "expression": "http://www.w3.org/2000/svg"
+            },
+            "width": {
+              "type": "literal",
+              "expression": "20"
+            },
+            "height": {
+              "type": "literal",
+              "expression": "17"
+            },
+            "fill": {
+              "type": "literal",
+              "expression": "currentColor"
+            }
+          },
+          "slots": {
+            "default": [
+              {
+                "id": 134,
+                "tag": "path",
+                "isComponent": false,
+                "attributes": {
+                  "d": {
+                    "type": "literal",
+                    "expression": "M11 2.253a1 1 0 1 0-2 0h2zm-2 13a1 1 0 1 0 2 0H9zm.447-12.167a1 1 0 1 0 1.107-1.666L9.447 3.086zM1 2.253L.447 1.42A1 1 0 0 0 0 2.253h1zm0 13H0a1 1 0 0 0 1.553.833L1 15.253zm8.447.833a1 1 0 1 0 1.107-1.666l-1.107 1.666zm0-14.666a1 1 0 1 0 1.107 1.666L9.447 1.42zM19 2.253h1a1 1 0 0 0-.447-.833L19 2.253zm0 13l-.553.833A1 1 0 0 0 20 15.253h-1zm-9.553-.833a1 1 0 1 0 1.107 1.666L9.447 14.42zM9 2.253v13h2v-13H9zm1.553-.833C9.203.523 7.42 0 5.5 0v2c1.572 0 2.961.431 3.947 1.086l1.107-1.666zM5.5 0C3.58 0 1.797.523.447 1.42l1.107 1.666C2.539 2.431 3.928 2 5.5 2V0zM0 2.253v13h2v-13H0zm1.553 13.833C2.539 15.431 3.928 15 5.5 15v-2c-1.92 0-3.703.523-5.053 1.42l1.107 1.666zM5.5 15c1.572 0 2.961.431 3.947 1.086l1.107-1.666C9.203 13.523 7.42 13 5.5 13v2zm5.053-11.914C11.539 2.431 12.928 2 14.5 2V0c-1.92 0-3.703.523-5.053 1.42l1.107 1.666zM14.5 2c1.573 0 2.961.431 3.947 1.086l1.107-1.666C18.203.523 16.421 0 14.5 0v2zm3.5.253v13h2v-13h-2zm1.553 12.167C18.203 13.523 16.421 13 14.5 13v2c1.573 0 2.961.431 3.947 1.086l1.107-1.666zM14.5 13c-1.92 0-3.703.523-5.053 1.42l1.107 1.666C11.539 15.431 12.928 15 14.5 15v-2z"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/icons/IconEcosystem.vue": {
+    "path": "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/icons/IconEcosystem.vue",
+    "props": {},
+    "slots": {},
+    "template": {
+      "elements": [
+        {
+          "id": 137,
+          "tag": "svg",
+          "isComponent": false,
+          "attributes": {
+            "xmlns": {
+              "type": "literal",
+              "expression": "http://www.w3.org/2000/svg"
+            },
+            "width": {
+              "type": "literal",
+              "expression": "18"
+            },
+            "height": {
+              "type": "literal",
+              "expression": "20"
+            },
+            "fill": {
+              "type": "literal",
+              "expression": "currentColor"
+            }
+          },
+          "slots": {
+            "default": [
+              {
+                "id": 136,
+                "tag": "path",
+                "isComponent": false,
+                "attributes": {
+                  "d": {
+                    "type": "literal",
+                    "expression": "M11.447 8.894a1 1 0 1 0-.894-1.789l.894 1.789zm-2.894-.789a1 1 0 1 0 .894 1.789l-.894-1.789zm0 1.789a1 1 0 1 0 .894-1.789l-.894 1.789zM7.447 7.106a1 1 0 1 0-.894 1.789l.894-1.789zM10 9a1 1 0 1 0-2 0h2zm-2 2.5a1 1 0 1 0 2 0H8zm9.447-5.606a1 1 0 1 0-.894-1.789l.894 1.789zm-2.894-.789a1 1 0 1 0 .894 1.789l-.894-1.789zm2 .789a1 1 0 1 0 .894-1.789l-.894 1.789zm-1.106-2.789a1 1 0 1 0-.894 1.789l.894-1.789zM18 5a1 1 0 1 0-2 0h2zm-2 2.5a1 1 0 1 0 2 0h-2zm-5.447-4.606a1 1 0 1 0 .894-1.789l-.894 1.789zM9 1l.447-.894a1 1 0 0 0-.894 0L9 1zm-2.447.106a1 1 0 1 0 .894 1.789l-.894-1.789zm-6 3a1 1 0 1 0 .894 1.789L.553 4.106zm2.894.789a1 1 0 1 0-.894-1.789l.894 1.789zm-2-.789a1 1 0 1 0-.894 1.789l.894-1.789zm1.106 2.789a1 1 0 1 0 .894-1.789l-.894 1.789zM2 5a1 1 0 1 0-2 0h2zM0 7.5a1 1 0 1 0 2 0H0zm8.553 12.394a1 1 0 1 0 .894-1.789l-.894 1.789zm-1.106-2.789a1 1 0 1 0-.894 1.789l.894-1.789zm1.106 1a1 1 0 1 0 .894 1.789l-.894-1.789zm2.894.789a1 1 0 1 0-.894-1.789l.894 1.789zM8 19a1 1 0 1 0 2 0H8zm2-2.5a1 1 0 1 0-2 0h2zm-7.447.394a1 1 0 1 0 .894-1.789l-.894 1.789zM1 15H0a1 1 0 0 0 .553.894L1 15zm1-2.5a1 1 0 1 0-2 0h2zm12.553 2.606a1 1 0 1 0 .894 1.789l-.894-1.789zM17 15l.447.894A1 1 0 0 0 18 15h-1zm1-2.5a1 1 0 1 0-2 0h2zm-7.447-5.394l-2 1 .894 1.789 2-1-.894-1.789zm-1.106 1l-2-1-.894 1.789 2 1 .894-1.789zM8 9v2.5h2V9H8zm8.553-4.894l-2 1 .894 1.789 2-1-.894-1.789zm.894 0l-2-1-.894 1.789 2 1 .894-1.789zM16 5v2.5h2V5h-2zm-4.553-3.894l-2-1-.894 1.789 2 1 .894-1.789zm-2.894-1l-2 1 .894 1.789 2-1L8.553.106zM1.447 5.894l2-1-.894-1.789-2 1 .894 1.789zm-.894 0l2 1 .894-1.789-2-1-.894 1.789zM0 5v2.5h2V5H0zm9.447 13.106l-2-1-.894 1.789 2 1 .894-1.789zm0 1.789l2-1-.894-1.789-2 1 .894 1.789zM10 19v-2.5H8V19h2zm-6.553-3.894l-2-1-.894 1.789 2 1 .894-1.789zM2 15v-2.5H0V15h2zm13.447 1.894l2-1-.894-1.789-2 1 .894 1.789zM18 15v-2.5h-2V15h2z"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/icons/IconSupport.vue": {
+    "path": "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/icons/IconSupport.vue",
+    "props": {},
+    "slots": {},
+    "template": {
+      "elements": [
+        {
+          "id": 139,
+          "tag": "svg",
+          "isComponent": false,
+          "attributes": {
+            "xmlns": {
+              "type": "literal",
+              "expression": "http://www.w3.org/2000/svg"
+            },
+            "width": {
+              "type": "literal",
+              "expression": "20"
+            },
+            "height": {
+              "type": "literal",
+              "expression": "20"
+            },
+            "fill": {
+              "type": "literal",
+              "expression": "currentColor"
+            }
+          },
+          "slots": {
+            "default": [
+              {
+                "id": 138,
+                "tag": "path",
+                "isComponent": false,
+                "attributes": {
+                  "d": {
+                    "type": "literal",
+                    "expression": "M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.666.105 5.5 5.5 0 0 0-.114 7.665L10 18.78l8.39-8.4a5.5 5.5 0 0 0-.114-7.665 5.5 5.5 0 0 0-7.666-.105l-.61.61z"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/icons/IconTooling.vue": {
+    "path": "/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/icons/IconTooling.vue",
+    "props": {},
+    "slots": {},
+    "template": {
+      "elements": [
+        {
+          "id": 141,
+          "tag": "svg",
+          "isComponent": false,
+          "attributes": {
+            "xmlns": {
+              "type": "literal",
+              "expression": "http://www.w3.org/2000/svg"
+            },
+            "xmlns:xlink": {
+              "type": "literal",
+              "expression": "http://www.w3.org/1999/xlink"
+            },
+            "aria-hidden": {
+              "type": "literal",
+              "expression": "true"
+            },
+            "role": {
+              "type": "literal",
+              "expression": "img"
+            },
+            "class": {
+              "type": "literal",
+              "expression": "iconify iconify--mdi"
+            },
+            "width": {
+              "type": "literal",
+              "expression": "24"
+            },
+            "height": {
+              "type": "literal",
+              "expression": "24"
+            },
+            "preserveAspectRatio": {
+              "type": "literal",
+              "expression": "xMidYMid meet"
+            },
+            "viewBox": {
+              "type": "literal",
+              "expression": "0 0 24 24"
+            }
+          },
+          "slots": {
+            "default": [
+              {
+                "id": 140,
+                "tag": "path",
+                "isComponent": false,
+                "attributes": {
+                  "d": {
+                    "type": "literal",
+                    "expression": "M20 18v-4h-3v1h-2v-1H9v1H7v-1H4v4h16M6.33 8l-1.74 4H7v-1h2v1h6v-1h2v1h2.41l-1.74-4H6.33M9 5v1h6V5H9m12.84 7.61c.1.22.16.48.16.8V18c0 .53-.21 1-.6 1.41c-.4.4-.85.59-1.4.59H4c-.55 0-1-.19-1.4-.59C2.21 19 2 18.53 2 18v-4.59c0-.32.06-.58.16-.8L4.5 7.22C4.84 6.41 5.45 6 6.33 6H7V5c0-.55.18-1 .57-1.41C7.96 3.2 8.44 3 9 3h6c.56 0 1.04.2 1.43.59c.39.41.57.86.57 1.41v1h.67c.88 0 1.49.41 1.83 1.22l2.34 5.39z"
+                  },
+                  "fill": {
+                    "type": "literal",
+                    "expression": "currentColor"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

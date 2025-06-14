@@ -16,7 +16,7 @@
     "@types/bun": "latest"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --outDir dist",
     "build:watch": "tsc --watch index.ts --outDir dist --declaration"
   }
 }
