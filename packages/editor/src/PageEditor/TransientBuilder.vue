@@ -68,7 +68,7 @@ onMounted(() => {
     if (item && item instanceof HTMLElement) {
       const id = item.dataset.transientId
       if (id) {
-        const matching = findElementById(props.schema.template?.elements ?? [], Number(id))
+        const matching = findElementById(props.schema.template?.elements ?? [], id)
       }
     }
   })
@@ -111,7 +111,7 @@ function onTextChange(textNode: Node) {
     const match = prev.nodeValue!.match(/#text data-transient-id=(\d+)/)
 
     if (match) {
-      const id = Number(match[1])
+      const id = match[1]
 
       const newElement = htmlNodeToTransientElement(textNode, id)
 

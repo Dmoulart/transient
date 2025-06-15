@@ -16,17 +16,13 @@ import type {
   TransientElement,
 } from "../../transient/definition";
 import { assertIs, someString } from "../../core/assert";
+import crypto from "crypto";
 let id = 0;
 
-function nextID() {
-  return ++id;
-}
 export function analyzeTemplateElements(
   componentPath: string,
   props: TransientProps
 ): TransientTemplate | undefined {
-  //@todo: this will break when parallelizing
-  id = 0;
   const source = readFileSync(componentPath, "utf-8");
   const sfc = parseSFC(source);
 
@@ -83,7 +79,7 @@ function parseText(node: TextNode): TransientElement | null {
   if (!content) return null;
 
   return {
-    id: nextID(),
+    id: crypto.randomUUID(),
     tag: "#text",
     isComponent: false,
     attributes: {
@@ -127,7 +123,7 @@ function parseElement(
   }
 
   return {
-    id: nextID(),
+    id: crypto.randomUUID(),
     tag,
     isComponent,
     attributes,

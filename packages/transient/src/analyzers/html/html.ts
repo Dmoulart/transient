@@ -2,7 +2,7 @@ import type { TransientElement, BindingInfo } from "../../transient/definition";
 
 export function htmlNodeToTransientElement(
   node: Element | Text | Node,
-  id: number
+  id: string
 ): TransientElement {
   if (node.nodeType === Node.TEXT_NODE) {
     return {

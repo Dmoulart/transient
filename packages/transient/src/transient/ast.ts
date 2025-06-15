@@ -30,7 +30,7 @@ export function hasTextChildren(element: TransientElement): boolean {
 
 export function findElementById(
   elements: TransientElement[],
-  id: number
+  id: string
 ): TransientElement | undefined {
   for (const element of elements) {
     if (element.id === id) return element;
