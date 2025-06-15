@@ -84,8 +84,12 @@ onMounted(() => {
           if (mutation.oldValue === mutation.target.textContent) {
             continue
           }
-          console.log({ mutation })
-          onTextChange(mutation)
+
+          const textNode = mutation.target
+
+          if (textNode.nodeType === Node.TEXT_NODE) {
+            onTextChange(textNode)
+          }
         }
       }
     })
@@ -98,30 +102,27 @@ onMounted(() => {
   }
 })
 
-const emit = defineEmits<{
-  replace: [newElement: TransientElement]
-}>()
+function onTextChange(textNode: Node) {
+  // le précédent est le commentaire
+  const prev = textNode.previousSibling
 
-function onTextChange(mutation: MutationRecord) {
-  const textNode = mutation.target
+  if (prev && prev.nodeType === Node.COMMENT_NODE) {
+    // extraire l'ID depuis le commentaire
+    const match = prev.nodeValue!.match(/#text data-transient-id=(\d+)/)
 
-  if (textNode.nodeType === Node.TEXT_NODE) {
-    // le précédent est le commentaire
-    const prev = textNode.previousSibling
+    if (match) {
+      const id = Number(match[1])
 
-    if (prev && prev.nodeType === Node.COMMENT_NODE) {
-      // extraire l'ID depuis le commentaire
-      const match = prev.nodeValue!.match(/#text data-transient-id=(\d+)/)
-      if (match) {
-        const id = Number(match[1])
+      const newElement = htmlNodeToTransientElement(textNode, id)
 
-        const newElement = htmlNodeToTransientElement(textNode, id)
-
-        emit('replace', newElement)
-      }
+      emit('replace', newElement)
     }
   }
 }
+
+const emit = defineEmits<{
+  replace: [newElement: TransientElement]
+}>()
 </script>
 
 <template>
