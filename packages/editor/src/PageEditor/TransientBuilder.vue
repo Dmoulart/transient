@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, h, shallowRef, createCommentVNode } from 'vue'
+import { onMounted, h, shallowRef, createCommentVNode, watch } from 'vue'
 import type {
   TransientElement,
   TransientComponentSchema,
@@ -13,6 +13,8 @@ import {
   getTransientID,
   htmlNodeToTransientElement,
 } from 'transient/src/analyzers/html/html'
+import { useEventListener } from '@vueuse/core'
+import { useEditedNode } from '@/stores/use-edition'
 
 const props = defineProps<{
   schema: TransientComponentSchema
@@ -26,9 +28,12 @@ const emit = defineEmits<{
   remove: [id: string]
   append: [parentId: string, newElement: TransientElement]
 }>()
+
 onMounted(async () => {
   loadedComponents.value = await loadAllComponents()
 })
+
+const editedNode = useEditedNode()
 
 function render(element: TransientElement): any {
   if (element.tag === '#text') {
@@ -84,58 +89,58 @@ onMounted(() => {
   })
 })
 
-onMounted(() => {
-  const root = document.querySelector('[data-transient-id]')
+// onMounted(() => {
+//   const root = document.querySelector('[data-transient-id]')
 
-  if (root) {
-    const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
-      for (const mutation of mutationsList) {
-        console.log({ mutation })
-        if (mutation.type === 'characterData') {
-          if (mutation.oldValue === mutation.target.textContent) {
-            continue
-          }
+//   if (root) {
+//     const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
+//       for (const mutation of mutationsList) {
+//         console.log({ mutation })
+//         if (mutation.type === 'characterData') {
+//           if (mutation.oldValue === mutation.target.textContent) {
+//             continue
+//           }
 
-          const textNode = mutation.target
+//           const textNode = mutation.target
 
-          if (textNode.nodeType === Node.TEXT_NODE) {
-            onTextChange(textNode)
-          }
-        } else if (mutation.type === 'childList') {
-          console.log('Enfant ajouté ou supprimé!', mutation)
-          for (const removedNode of mutation.removedNodes) {
-            const id = getTransientID(removedNode)
-            if (id) {
-              emit('remove', id)
-            }
-          }
-          for (const addedNode of mutation.addedNodes) {
-            console.log('Nœud ajouté!', { addedNode })
+//           if (textNode.nodeType === Node.TEXT_NODE) {
+//             onTextChange(textNode)
+//           }
+//         } else if (mutation.type === 'childList') {
+//           console.log('Enfant ajouté ou supprimé!', mutation)
+//           for (const removedNode of mutation.removedNodes) {
+//             const id = getTransientID(removedNode)
+//             if (id) {
+//               emit('remove', id)
+//             }
+//           }
+//           for (const addedNode of mutation.addedNodes) {
+//             console.log('Nœud ajouté!', { addedNode })
 
-            if (!addedNode.parentElement) {
-              throw new Error('Unknown parent')
-            }
-            const parentId = getTransientID(addedNode.parentElement as Node)
+//             if (!addedNode.parentElement) {
+//               throw new Error('Unknown parent')
+//             }
+//             const parentId = getTransientID(addedNode.parentElement as Node)
 
-            if (!parentId) {
-              throw new Error('Unknown parent ID')
-            }
+//             if (!parentId) {
+//               throw new Error('Unknown parent ID')
+//             }
 
-            const newElement = htmlNodeToTransientElement(addedNode, crypto.randomUUID())
-            emit('append', parentId, newElement)
-          }
-        }
-      }
-    })
+//             const newElement = htmlNodeToTransientElement(addedNode, crypto.randomUUID())
+//             emit('append', parentId, newElement)
+//           }
+//         }
+//       }
+//     })
 
-    observer.observe(root, {
-      characterData: true,
-      subtree: true,
-      characterDataOldValue: true,
-      childList: true,
-    })
-  }
-})
+//     observer.observe(root, {
+//       characterData: true,
+//       subtree: true,
+//       characterDataOldValue: true,
+//       childList: true,
+//     })
+//   }
+// })
 
 function onTextChange(textNode: Node) {
   const id = getTextNodeTransientId(textNode)

@@ -1,13 +1,6 @@
 <template>
   <Suspense>
-    <TransientBuilder
-      v-if="page"
-      :schema="page"
-      :registry="registry"
-      @replace="replace"
-      @remove="remove"
-      @append="append"
-    />
+    <TransientBuilder v-if="page" :schema="page" :registry="registry" />
   </Suspense>
 
   <JsonViewer
@@ -33,6 +26,27 @@ import 'vue3-json-viewer/dist/index.css'
 import TransientBuilder from './TransientBuilder.vue'
 import Button from '@/samples/Button.vue'
 import { usePage } from '@/stores/use-page'
+import { useEdition } from '@/stores/use-edition'
+import { findElementById } from 'transient/src/transient/ast'
 
-const { page, replace, remove, append, saveToLocalStorage, loadFromLocalStorage } = usePage()
+const {
+  page,
+  replace,
+  remove,
+  append,
+  render,
+  find,
+  patch,
+  saveToLocalStorage,
+  loadFromLocalStorage,
+} = usePage()
+
+useEdition({
+  onEnd(parent) {
+    patch(parent)
+    render()
+
+    console.log('end', find(parent.id))
+  },
+})
 </script>
