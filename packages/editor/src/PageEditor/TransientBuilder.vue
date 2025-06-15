@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, h, shallowRef } from 'vue'
+import { onMounted, h, shallowRef, nextTick } from 'vue'
 import type {
   TransientElement,
   TransientComponentSchema,
@@ -8,6 +8,7 @@ import type {
 import { loadAllComponents } from '@/stores/use-dictionnary'
 import { findElementById, hasTextChildren, replaceElement } from 'transient/src/transient/ast'
 import { htmlNodeToTransientElement } from 'transient/src/analyzers/html/html'
+import { useTextSelection } from '@vueuse/core'
 
 const props = defineProps<{
   schema: TransientComponentSchema
@@ -19,6 +20,8 @@ const loadedComponents = shallowRef<Record<string, any>>({})
 onMounted(async () => {
   loadedComponents.value = await loadAllComponents()
 })
+
+const selection = useTextSelection()
 
 function render(element: TransientElement): any {
   if (element.tag === '#text') {
@@ -51,7 +54,7 @@ function render(element: TransientElement): any {
       ...attrs,
       ...meta,
       contenteditable: hasTextChildren(element),
-      'data-transient-id': element.id, // <- attribut que tu peux récupérer ensuite
+      'data-transient-id': element.id,
     },
     slots,
   )
@@ -60,6 +63,8 @@ function render(element: TransientElement): any {
 onMounted(() => {
   document.addEventListener('click', (e) => {
     const item = (e.target as HTMLElement).closest('[data-transient-id]')
+    console.log(selection)
+
     if (item && item instanceof HTMLElement) {
       const id = item.dataset.transientId
       if (id) {
@@ -71,7 +76,6 @@ onMounted(() => {
 })
 
 onMounted(() => {
-  // garde une référence sur le conteneur root
   const root = document.querySelector('[data-transient-id]')
 
   if (root) {
@@ -79,14 +83,9 @@ onMounted(() => {
       for (const mutation of mutationsList) {
         if (mutation.type === 'characterData') {
           const parent = mutation.target.parentElement
+          console.log({ mutation })
           if (parent && parent.dataset.transientId) {
-            console.log({ mutation })
-            const newElement = htmlNodeToTransientElement(
-              parent,
-              Number(parent.dataset.transientId),
-            )
-            newElement.id = Number(parent.dataset.transientId)
-            replaceElement(props.schema.template?.elements ?? [], newElement)
+            syncElement(parent)
           }
         }
       }
@@ -99,6 +98,36 @@ onMounted(() => {
     })
   }
 })
+
+function syncElement(parent: HTMLElement) {
+  if (!parent.dataset.transientId) {
+    throw new Error(
+      'Expected HTML element to have a data-transient-id attribute before replacing it',
+    )
+  }
+  const newElement = htmlNodeToTransientElement(parent, Number(parent.dataset.transientId))
+  replaceElement(props.schema.template?.elements ?? [], newElement)
+}
+
+// function syncElementSlots(parent: HTMLElement) {
+//   if (!parent.dataset.transientId) {
+//     throw new Error(
+//       'Expected HTML element to have a data-transient-id attribute before replacing it',
+//     )
+//   }
+//   const newElement = htmlNodeToTransientElement(parent.childNodes.item(0)!, Number(parent.dataset.transientId) + 1)
+//   replaceElement(props.schema.template?.elements ?? [], newElement)
+// }
+
+function restoreSelectionRange(range: Range | null): void {
+  if (range) {
+    const selection = window.getSelection()
+    if (selection) {
+      selection.removeAllRanges()
+      selection.addRange(range)
+    }
+  }
+}
 </script>
 
 <template>
