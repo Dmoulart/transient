@@ -6,8 +6,13 @@ import type {
   TransientComponentDictionnary,
 } from 'transient/src/transient/definition'
 import { loadAllComponents } from '@/stores/use-dictionnary'
-import { findElementById, hasTextChildren } from 'transient/src/transient/ast'
-import { htmlNodeToTransientElement } from 'transient/src/analyzers/html/html'
+import { findElementById, hasTextChildren, removeElement } from 'transient/src/transient/ast'
+import {
+  getElementTransientId,
+  getTextNodeTransientId,
+  getTransientID,
+  htmlNodeToTransientElement,
+} from 'transient/src/analyzers/html/html'
 
 const props = defineProps<{
   schema: TransientComponentSchema
@@ -16,6 +21,11 @@ const props = defineProps<{
 
 const loadedComponents = shallowRef<Record<string, any>>({})
 
+const emit = defineEmits<{
+  replace: [newElement: TransientElement]
+  remove: [id: string]
+  append: [parentId: string, newElement: TransientElement]
+}>()
 onMounted(async () => {
   loadedComponents.value = await loadAllComponents()
 })
@@ -80,6 +90,7 @@ onMounted(() => {
   if (root) {
     const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
       for (const mutation of mutationsList) {
+        console.log({ mutation })
         if (mutation.type === 'characterData') {
           if (mutation.oldValue === mutation.target.textContent) {
             continue
@@ -90,6 +101,29 @@ onMounted(() => {
           if (textNode.nodeType === Node.TEXT_NODE) {
             onTextChange(textNode)
           }
+        } else if (mutation.type === 'childList') {
+          console.log('Enfant ajouté ou supprimé!', mutation)
+          for (const removedNode of mutation.removedNodes) {
+            const id = getTransientID(removedNode)
+            if (id) {
+              emit('remove', id)
+            }
+          }
+          for (const addedNode of mutation.addedNodes) {
+            console.log('Nœud ajouté!', { addedNode })
+
+            if (!addedNode.parentElement) {
+              throw new Error('Unknown parent')
+            }
+            const parentId = getTransientID(addedNode.parentElement as Node)
+
+            if (!parentId) {
+              throw new Error('Unknown parent ID')
+            }
+
+            const newElement = htmlNodeToTransientElement(addedNode, crypto.randomUUID())
+            emit('append', parentId, newElement)
+          }
         }
       }
     })
@@ -98,31 +132,24 @@ onMounted(() => {
       characterData: true,
       subtree: true,
       characterDataOldValue: true,
+      childList: true,
     })
   }
 })
 
 function onTextChange(textNode: Node) {
-  // le précédent est le commentaire
-  const prev = textNode.previousSibling
+  const id = getTextNodeTransientId(textNode)
+  console.log({ id })
 
-  if (prev && prev.nodeType === Node.COMMENT_NODE) {
-    // extraire l'ID depuis le commentaire
-    const match = prev.nodeValue!.match(/#text data-transient-id=(\d+)/)
+  if (id) {
+    const newElement = htmlNodeToTransientElement(textNode, id)
 
-    if (match) {
-      const id = match[1]
-
-      const newElement = htmlNodeToTransientElement(textNode, id)
-
-      emit('replace', newElement)
-    }
+    emit('replace', newElement)
+  } else {
+    const newElement = htmlNodeToTransientElement(textNode, crypto.randomUUID())
+    emit('append', getTransientID(textNode.parentElement as Node)!, newElement)
   }
 }
-
-const emit = defineEmits<{
-  replace: [newElement: TransientElement]
-}>()
 </script>
 
 <template>

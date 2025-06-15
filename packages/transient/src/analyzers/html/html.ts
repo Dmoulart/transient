@@ -56,3 +56,47 @@ export function htmlNodeToTransientElement(
     slots,
   };
 }
+
+export function getTransientID(node: Node) {
+  switch (node.nodeType) {
+    case Node.TEXT_NODE:
+      return getTextNodeTransientId(node);
+    case Node.COMMENT_NODE:
+      return getTransientIdFromComment(node);
+    case Node.ELEMENT_NODE:
+      return getElementTransientId(node as Element);
+    default: {
+      console.error("not implemented transient id on node", node);
+      return undefined;
+    }
+  }
+}
+
+export function getElementTransientId(elementNode: Element) {
+  if (elementNode instanceof HTMLElement) {
+    return elementNode.dataset.transientId;
+  }
+}
+
+export function getTextNodeTransientId(textNode: Node) {
+  // le précédent est le commentaire
+  const prev = textNode.previousSibling;
+
+  if (prev && prev.nodeType === Node.COMMENT_NODE) {
+    return getTransientIdFromComment(prev);
+  }
+}
+
+export function getTransientIdFromComment(commentNode: Node) {
+  if (commentNode.nodeValue) {
+    // extraire l'ID depuis le commentaire
+    const match = commentNode.nodeValue.match(
+      /#text data-transient-id=([0-9a-fA-F-]+)/
+    );
+
+    if (match) {
+      const id = match[1];
+      return id;
+    }
+  }
+}

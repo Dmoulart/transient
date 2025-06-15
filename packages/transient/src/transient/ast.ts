@@ -46,8 +46,8 @@ export function findElementById(
 }
 
 export function replaceElement(
-  elements: TransientElement[],
-  newElement: TransientElement
+  newElement: TransientElement,
+  elements: TransientElement[]
 ): TransientElement | undefined {
   for (let i = 0; i < elements.length; i++) {
     if (elements[i]!.id === newElement.id) {
@@ -60,7 +60,7 @@ export function replaceElement(
         const slotElements = elements[i]!.slots![slotName];
 
         if (slotElements) {
-          const updated = replaceElement(slotElements, newElement);
+          const updated = replaceElement(newElement, slotElements);
 
           if (updated) {
             return updated;
@@ -71,4 +71,91 @@ export function replaceElement(
   }
 
   return undefined;
+}
+
+export function appendElement(
+  element: TransientElement,
+  parentId: string,
+  elements: TransientElement[]
+) {
+  const parent = findElementById(elements, parentId);
+  if (!parent) {
+    console.warn(`appendElement: parent ${parentId} non trouvé.`);
+    return false;
+  }
+
+  parent.slots = parent.slots ?? {};
+  parent.slots.default = parent.slots.default ?? [];
+
+  parent.slots.default.push(element);
+  return true;
+}
+
+export function removeElement(
+  idToRemove: string,
+  elements: TransientElement[]
+): boolean {
+  for (let i = 0; i < elements.length; i++) {
+    if (elements[i]!.id === idToRemove) {
+      elements.splice(i, 1);
+      return true;
+    }
+
+    if (elements[i]!.slots) {
+      for (const slotName in elements[i]!.slots) {
+        if (removeElement(idToRemove, elements[i]!.slots![slotName]!)) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+export function insertAfterElement(
+  newElement: TransientElement,
+  id: string,
+  elements: TransientElement[]
+): boolean {
+  for (let i = 0; i < elements.length; i++) {
+    if (elements[i]!.id === id) {
+      elements.splice(i + 1, 0, newElement);
+      return true;
+    }
+
+    if (elements[i]!.slots) {
+      for (const slotName in elements[i]!.slots) {
+        if (
+          insertAfterElement(newElement, id, elements[i]!.slots![slotName]!)
+        ) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+export function insertBeforeElement(
+  newElement: TransientElement,
+  id: string,
+  elements: TransientElement[]
+): boolean {
+  for (let i = 0; i < elements.length; i++) {
+    if (elements[i]!.id === id) {
+      elements.splice(i, 0, newElement);
+      return true;
+    }
+
+    if (elements[i]!.slots) {
+      for (const slotName in elements[i]!.slots) {
+        if (
+          insertBeforeElement(newElement, id, elements[i]!.slots![slotName]!)
+        ) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
 }

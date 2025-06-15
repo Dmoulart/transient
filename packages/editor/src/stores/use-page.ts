@@ -1,7 +1,7 @@
 import { shallowRef, onMounted, onBeforeUnmount } from 'vue'
 import { registry } from '@/stores/use-dictionnary'
 import type { TransientElement, TransientComponentSchema } from 'transient/src/transient/definition'
-import { replaceElement } from 'transient/src/transient/ast'
+import { appendElement, removeElement, replaceElement } from 'transient/src/transient/ast'
 
 const cloneSchema = (name: string) => ({
   ...registry[name],
@@ -12,20 +12,28 @@ const STORAGE_KEY = 'page-schema'
 export function usePage(
   pageName = '/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HomePage.vue',
 ) {
-  // État de la page
   const page = shallowRef<TransientComponentSchema | undefined>(undefined)
 
-  // État de la page modifiée
   const modifiedPage = shallowRef<TransientComponentSchema | undefined>(undefined)
 
-  // Remplacer un élément
   function replace(newElement: TransientElement) {
     if (modifiedPage.value?.template?.elements) {
-      replaceElement(modifiedPage.value.template.elements, newElement)
+      replaceElement(newElement, modifiedPage.value.template.elements)
     }
   }
 
-  // Sauvegarder dans le localStorage
+  function remove(id: string) {
+    if (modifiedPage.value?.template?.elements) {
+      removeElement(id, modifiedPage.value.template.elements)
+    }
+  }
+
+  function append(parentId: string, newElement: TransientElement) {
+    if (modifiedPage.value?.template?.elements) {
+      appendElement(newElement, parentId, modifiedPage.value.template.elements)
+    }
+  }
+
   function saveToLocalStorage() {
     if (page.value) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(page.value))
@@ -33,7 +41,6 @@ export function usePage(
     }
   }
 
-  // Charger depuis le localStorage
   function loadFromLocalStorage() {
     const item = localStorage.getItem(STORAGE_KEY)
     if (item) {
@@ -44,7 +51,6 @@ export function usePage(
     }
   }
 
-  // Synchroniser sur focusout
   function handleFocusOut(e: FocusEvent) {
     page.value = modifiedPage.value
     console.log('re-render!', page.value)
@@ -65,6 +71,8 @@ export function usePage(
     page,
     modifiedPage,
     replace,
+    remove,
+    append,
     saveToLocalStorage,
     loadFromLocalStorage,
   }

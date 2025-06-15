@@ -1,6 +1,13 @@
 <template>
   <Suspense>
-    <TransientBuilder v-if="page" :schema="page" :registry="registry" @replace="replace" />
+    <TransientBuilder
+      v-if="page"
+      :schema="page"
+      :registry="registry"
+      @replace="replace"
+      @remove="remove"
+      @append="append"
+    />
   </Suspense>
 
   <JsonViewer
@@ -27,5 +34,5 @@ import TransientBuilder from './TransientBuilder.vue'
 import Button from '@/samples/Button.vue'
 import { usePage } from '@/stores/use-page'
 
-const { page, replace, saveToLocalStorage, loadFromLocalStorage } = usePage()
+const { page, replace, remove, append, saveToLocalStorage, loadFromLocalStorage } = usePage()
 </script>
