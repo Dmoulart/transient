@@ -1,10 +1,21 @@
 <template>
   <Suspense>
-    <TransientBuilder :schema="page" :registry="registry" @replace="onReplace" />
+    <TransientBuilder v-if="page" :schema="page" :registry="registry" @replace="replace" />
   </Suspense>
 
-  <JsonViewer :value="page" copyable boxed sort expanded :expanded-depth="4" theme="dark" />
-  <!-- <HomePage /> -->
+  <JsonViewer
+    v-if="page"
+    :value="page"
+    copyable
+    boxed
+    sort
+    expanded
+    :expanded-depth="4"
+    theme="dark"
+  />
+
+  <Button @click="saveToLocalStorage">Save</Button>
+  <Button @click="loadFromLocalStorage">Load</Button>
 </template>
 
 <script setup lang="ts">
@@ -13,30 +24,8 @@ import { registry } from '@/stores/use-dictionnary'
 import { JsonViewer } from 'vue3-json-viewer'
 import 'vue3-json-viewer/dist/index.css'
 import TransientBuilder from './TransientBuilder.vue'
-import { shallowRef } from 'vue'
-import type { TransientElement } from 'transient/src/transient/definition'
-import { replaceElement } from 'transient/src/transient/ast'
+import Button from '@/samples/Button.vue'
+import { usePage } from '@/stores/use-page'
 
-const cloneSchema = (name: string) => ({
-  ...registry[name],
-})
-
-const page = shallowRef(
-  cloneSchema(
-    '/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HomePage.vue',
-  ),
-)
-
-const modifiedPage = cloneSchema(
-  '/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HomePage.vue',
-)
-
-function onReplace(newElement: TransientElement) {
-  replaceElement(modifiedPage.template?.elements ?? [], newElement)
-}
-
-document.addEventListener('focusout', (e) => {
-  page.value = modifiedPage
-  console.log('re-render', page.value)
-})
+const { page, replace, saveToLocalStorage, loadFromLocalStorage } = usePage()
 </script>
