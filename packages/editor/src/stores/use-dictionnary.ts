@@ -1,8 +1,8 @@
 import type { TransientComponentDictionnary } from 'transient/src/transient'
-import { ref } from 'vue'
+import { shallowRef } from 'vue'
 import schemas from '@/assets/schemas/__schemas__.json'
 
-export const dictionnary = ref<TransientComponentDictionnary>(schemas as any)
+export const dictionnary = shallowRef<TransientComponentDictionnary>(schemas as any)
 
 export async function loadDictionnary() {
   try {
@@ -32,3 +32,6 @@ export async function loadAllComponents(): Promise<Record<string, any>> {
 export function useDictionnary() {
   return dictionnary
 }
+
+export const registry: TransientComponentDictionnary =
+  schemas as unknown as TransientComponentDictionnary

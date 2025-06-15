@@ -1,7 +1,7 @@
 import type { TransientElement, BindingInfo } from "../../transient/definition";
 
 export function htmlNodeToTransientElement(
-  node: Element | Text,
+  node: Element | Text | Node,
   id: number
 ): TransientElement {
   if (node.nodeType === Node.TEXT_NODE) {
@@ -12,7 +12,7 @@ export function htmlNodeToTransientElement(
       attributes: {
         value: {
           type: "literal",
-          expression: node.textContent?.trim() ?? "",
+          expression: node.textContent ?? "",
         },
       },
     };
