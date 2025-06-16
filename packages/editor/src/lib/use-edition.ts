@@ -16,6 +16,7 @@ useEventListener('focusin', (e) => {
 })
 
 useEventListener('focusout', (e) => {
+  console.log({ ...editedNode })
   editedNode.value = undefined
 })
 

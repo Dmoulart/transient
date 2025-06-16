@@ -1,6 +1,11 @@
 <template>
   <Suspense>
-    <TransientBuilder v-if="contents" :template="contents" :registry="registry" />
+    <TransientBuilder
+      :key="forceRerender"
+      v-if="contents"
+      :template="contents"
+      :registry="registry"
+    />
   </Suspense>
 
   <JsonViewer
@@ -27,23 +32,24 @@ import TransientBuilder from './TransientBuilder.vue'
 import Button from '@/samples/Button.vue'
 import { usePage } from '@/lib/use-page'
 import { useEdition } from '@/lib/use-edition'
-import { ref, shallowRef, triggerRef } from 'vue'
+import { ref, triggerRef } from 'vue'
 
 const component = getTransientComponentSchema(
   '/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HomePage.vue',
 )
 
-const { contents, replace, render, saveToLocalStorage, loadFromLocalStorage } = usePage(
+const { contents, replace, render, patch, saveToLocalStorage, loadFromLocalStorage } = usePage(
   component.template!,
 )
-const k = ref(0)
+
+const forceRerender = ref(0)
 
 const { onEditEnd } = useEdition()
 
-onEditEnd((parent) => {
-  replace(parent)
+onEditEnd((element) => {
+  // patch(element)
+  replace(element)
   render()
-  triggerRef(page)
-  k.value += 1
+  forceRerender.value++
 })
 </script>
