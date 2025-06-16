@@ -11,9 +11,9 @@ import {
 const STORAGE_KEY = 'page-schema'
 
 export function usePage(template: TransientTemplate) {
-  const page = ref<TransientTemplate>(template)
+  const contents = ref<TransientTemplate>(template)
 
-  const modifiedPage = shallowRef<TransientTemplate>(template)
+  const modifiedContents = shallowRef<TransientTemplate>(template)
 
   function replace(newElement: TransientElement) {
     const replaced = replaceElement(newElement, template.elements)
@@ -24,31 +24,31 @@ export function usePage(template: TransientTemplate) {
   }
 
   function remove(id: string) {
-    removeElement(id, modifiedPage.value.elements)
+    removeElement(id, modifiedContents.value.elements)
   }
 
   function patch(element: TransientElement) {
-    const oldElement = findElementById(modifiedPage.value.elements!, element.id)!
+    const oldElement = findElementById(modifiedContents.value.elements!, element.id)!
     patchElement(element, oldElement)
   }
 
   function append(parentId: string, newElement: TransientElement) {
-    appendElement(newElement, parentId, modifiedPage.value.elements)
+    appendElement(newElement, parentId, modifiedContents.value.elements)
   }
 
   function find(id: string) {
-    return findElementById(modifiedPage.value.elements!, id)
+    return findElementById(modifiedContents.value.elements!, id)
   }
 
   function saveToLocalStorage() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(page.value))
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(contents.value))
     console.log('Sauvegardé dans le localStorage.')
   }
 
   function loadFromLocalStorage() {
     const item = localStorage.getItem(STORAGE_KEY)
     if (item) {
-      page.value = JSON.parse(item)
+      contents.value = JSON.parse(item)
       console.log('Chargé depuis le localStorage.')
     } else {
       console.log('Aucun élément dans le localStorage.')
@@ -56,12 +56,12 @@ export function usePage(template: TransientTemplate) {
   }
 
   function render() {
-    page.value = modifiedPage.value
+    contents.value = modifiedContents.value
   }
 
   return {
-    page,
-    modifiedPage,
+    contents,
+    modifiedContents,
     replace,
     find,
     render,

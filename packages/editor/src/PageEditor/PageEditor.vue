@@ -1,11 +1,11 @@
 <template>
   <Suspense>
-    <TransientBuilder :key="k" v-if="page" :template="page" :registry="registry" />
+    <TransientBuilder v-if="contents" :template="contents" :registry="registry" />
   </Suspense>
 
   <JsonViewer
-    v-if="page"
-    :value="page"
+    v-if="contents"
+    :value="contents"
     copyable
     boxed
     sort
@@ -33,7 +33,7 @@ const component = getTransientComponentSchema(
   '/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HomePage.vue',
 )
 
-const { page, replace, render, saveToLocalStorage, loadFromLocalStorage } = usePage(
+const { contents, replace, render, saveToLocalStorage, loadFromLocalStorage } = usePage(
   component.template!,
 )
 const k = ref(0)
