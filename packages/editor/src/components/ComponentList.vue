@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { type TransientComponentDictionnary } from 'transient'
 import ComponentItem from './ComponentItem.vue'
-import { createPrototype } from '@/stores/use-prototype'
+import { createPrototype } from '@/lib/use-prototype'
 defineProps<{ dictionnary: TransientComponentDictionnary; draggable?: boolean }>()
 
 defineEmits<{ (e: 'select', data: string): void }>()

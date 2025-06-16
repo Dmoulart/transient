@@ -143,13 +143,13 @@ import LeftSidebar from './LeftSidebar.vue'
 import RightSidebar from './RightSidebar.vue'
 import ComponentExplorer from './ComponentExplorer.vue'
 import { getComponentDefaultPropsValues } from 'transient/src/transient'
-import { useTransient } from '@/stores/use-transient'
-import { useSelectedPrototype, createPrototype, useRootPrototype } from '@/stores/use-prototype'
+import { useTransient } from '@/lib/use-transient'
+import { useSelectedPrototype, createPrototype, useRootPrototype } from '@/lib/use-prototype'
 import PrototypeView from './PrototypeView.vue'
 import ComponentPanel from './AddComponentPanel.vue'
 import AddComponentPanel from './AddComponentPanel.vue'
-import { useDictionnary } from '@/stores/use-dictionnary'
-const dictionnary = useDictionnary()
+import { useRegistry } from '@/lib/use-dictionnary'
+const dictionnary = useRegistry()
 const editedPrototype = useSelectedPrototype()
 const rootPrototype = useRootPrototype()
 

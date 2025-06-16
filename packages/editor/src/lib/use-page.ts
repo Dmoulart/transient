@@ -1,6 +1,5 @@
-import { shallowRef, onMounted, onBeforeUnmount } from 'vue'
-import { registry } from '@/stores/use-dictionnary'
-import type { TransientElement, TransientComponentSchema } from 'transient/src/transient/definition'
+import { ref, shallowRef } from 'vue'
+import type { TransientElement, TransientTemplate } from 'transient/src/transient/definition'
 import {
   appendElement,
   findElementById,
@@ -9,40 +8,36 @@ import {
   replaceElement,
 } from 'transient/src/transient/ast'
 
-const cloneSchema = (name: string) => ({
-  ...registry[name],
-})
-
 const STORAGE_KEY = 'page-schema'
 
-export function usePage(
-  pageName = '/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HomePage.vue',
-) {
-  const page = shallowRef<TransientComponentSchema>(cloneSchema(pageName))
+export function usePage(template: TransientTemplate) {
+  const page = ref<TransientTemplate>(template)
 
-  const modifiedPage = shallowRef<TransientComponentSchema>(cloneSchema(pageName))
+  const modifiedPage = shallowRef<TransientTemplate>(template)
 
   function replace(newElement: TransientElement) {
-    replaceElement(newElement, modifiedPage.value.template!.elements)
-  }
+    const replaced = replaceElement(newElement, template.elements)
 
-  function remove(id: string) {
-    if (modifiedPage.value?.template?.elements) {
-      removeElement(id, modifiedPage.value.template!.elements)
+    if (!replaced) {
+      console.log('cannot replace')
     }
   }
 
+  function remove(id: string) {
+    removeElement(id, modifiedPage.value.elements)
+  }
+
   function patch(element: TransientElement) {
-    const oldElement = findElementById(modifiedPage.value.template!.elements!, element.id)!
+    const oldElement = findElementById(modifiedPage.value.elements!, element.id)!
     patchElement(element, oldElement)
   }
 
   function append(parentId: string, newElement: TransientElement) {
-    appendElement(newElement, parentId, modifiedPage.value.template!.elements)
+    appendElement(newElement, parentId, modifiedPage.value.elements)
   }
 
   function find(id: string) {
-    return findElementById(modifiedPage.value.template!.elements!, id)
+    return findElementById(modifiedPage.value.elements!, id)
   }
 
   function saveToLocalStorage() {

@@ -81,8 +81,8 @@
 import Component from './Component.vue'
 import ComponentList from './ComponentList.vue'
 import { ref, useTemplateRef } from 'vue'
-import { useTransient } from '@/stores/use-transient'
-import type { Prototype } from '@/stores/use-prototype'
+import { useTransient } from '@/lib/use-transient'
+import type { Prototype } from '@/lib/use-prototype'
 
 defineProps<{ prototype: Prototype; selectable?: boolean }>()
 const dictionnary = useTransient().dictionnary

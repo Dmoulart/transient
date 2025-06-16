@@ -23,7 +23,11 @@ export function htmlNodeToTransientElement(
   const attributes: Record<string, BindingInfo> = {};
 
   for (const attr of Array.from(element.attributes)) {
-    if (attr.name.startsWith("data-transient")) continue;
+    if (
+      attr.name === "contenteditable" ||
+      attr.name.startsWith("data-transient")
+    )
+      continue;
 
     attributes[attr.name] = {
       type: "literal",

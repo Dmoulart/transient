@@ -18,8 +18,8 @@
   </Suspense>
 </template>
 <script setup lang="ts">
-import type { Prototype } from '@/stores/use-prototype'
-import { useTransient } from '@/stores/use-transient'
+import type { Prototype } from '@/lib/use-prototype'
+import { useTransient } from '@/lib/use-transient'
 import { computed, defineAsyncComponent, type PropType } from 'vue'
 
 const props = defineProps<{ prototype: Prototype; selectable?: boolean }>()

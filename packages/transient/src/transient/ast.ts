@@ -1,3 +1,4 @@
+import { assert } from "../core/assert";
 import {
   type TransientComponentSchema,
   type TransientElement,
@@ -10,6 +11,10 @@ export function getTypeKind(type: TransientType): TransientTypeName {
   return typeof type === "string" ? type : type.kind;
 }
 
+export function getTextValue(element: TransientElement) {
+  assert(element.tag === "#text");
+  return element.attributes?.value?.expression;
+}
 export function getComponentDefaultPropsValues(props: TransientProps) {
   const data: Record<string, any> = {};
 

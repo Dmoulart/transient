@@ -4,22 +4,22 @@ import type {
   TransientElement,
   TransientComponentSchema,
   TransientComponentDictionnary,
+  TransientTemplate,
 } from 'transient/src/transient/definition'
-import { loadAllComponents } from '@/stores/use-dictionnary'
-import { findElementById, hasTextChildren, removeElement } from 'transient/src/transient/ast'
-import {
-  getElementTransientId,
-  getTextNodeTransientId,
-  getTransientID,
-  htmlNodeToTransientElement,
-} from 'transient/src/analyzers/html/html'
-import { useEventListener } from '@vueuse/core'
-import { useEditedNode } from '@/stores/use-edition'
+import { loadAllComponents } from '@/lib/use-dictionnary'
+import { findElementById, getTextValue, hasTextChildren } from 'transient/src/transient/ast'
 
 const props = defineProps<{
-  schema: TransientComponentSchema
+  template: TransientTemplate
   registry: TransientComponentDictionnary
 }>()
+
+watch(
+  () => props.template,
+  () => {
+    console.log('template changed')
+  },
+)
 
 const loadedComponents = shallowRef<Record<string, any>>({})
 
@@ -33,12 +33,11 @@ onMounted(async () => {
   loadedComponents.value = await loadAllComponents()
 })
 
-const editedNode = useEditedNode()
-
 function render(element: TransientElement): any {
   if (element.tag === '#text') {
+    console.log('render text node', getTextValue(element))
     return [
-      createCommentVNode(`#text data-transient-id=${element.id}`),
+      createCommentVNode(`#text data-transient-id=${element.id}`, true),
       element.attributes?.value?.expression,
     ]
   }
@@ -68,7 +67,7 @@ function render(element: TransientElement): any {
     {
       ...attrs,
       ...meta,
-      contenteditable: hasTextChildren(element),
+      contenteditable: hasTextChildren(element) ? true : null,
       'data-transient-id': element.id,
     },
     slots,
@@ -83,84 +82,17 @@ onMounted(() => {
     if (item && item instanceof HTMLElement) {
       const id = item.dataset.transientId
       if (id) {
-        const matching = findElementById(props.schema.template?.elements ?? [], id)
+        const matching = findElementById(props.template?.elements ?? [], id)
       }
     }
   })
 })
-
-// onMounted(() => {
-//   const root = document.querySelector('[data-transient-id]')
-
-//   if (root) {
-//     const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
-//       for (const mutation of mutationsList) {
-//         console.log({ mutation })
-//         if (mutation.type === 'characterData') {
-//           if (mutation.oldValue === mutation.target.textContent) {
-//             continue
-//           }
-
-//           const textNode = mutation.target
-
-//           if (textNode.nodeType === Node.TEXT_NODE) {
-//             onTextChange(textNode)
-//           }
-//         } else if (mutation.type === 'childList') {
-//           console.log('Enfant ajouté ou supprimé!', mutation)
-//           for (const removedNode of mutation.removedNodes) {
-//             const id = getTransientID(removedNode)
-//             if (id) {
-//               emit('remove', id)
-//             }
-//           }
-//           for (const addedNode of mutation.addedNodes) {
-//             console.log('Nœud ajouté!', { addedNode })
-
-//             if (!addedNode.parentElement) {
-//               throw new Error('Unknown parent')
-//             }
-//             const parentId = getTransientID(addedNode.parentElement as Node)
-
-//             if (!parentId) {
-//               throw new Error('Unknown parent ID')
-//             }
-
-//             const newElement = htmlNodeToTransientElement(addedNode, crypto.randomUUID())
-//             emit('append', parentId, newElement)
-//           }
-//         }
-//       }
-//     })
-
-//     observer.observe(root, {
-//       characterData: true,
-//       subtree: true,
-//       characterDataOldValue: true,
-//       childList: true,
-//     })
-//   }
-// })
-
-function onTextChange(textNode: Node) {
-  const id = getTextNodeTransientId(textNode)
-  console.log({ id })
-
-  if (id) {
-    const newElement = htmlNodeToTransientElement(textNode, id)
-
-    emit('replace', newElement)
-  } else {
-    const newElement = htmlNodeToTransientElement(textNode, crypto.randomUUID())
-    emit('append', getTransientID(textNode.parentElement as Node)!, newElement)
-  }
-}
 </script>
 
 <template>
   <component
     v-if="loadedComponents"
-    v-for="el in props.schema.template?.elements || []"
+    v-for="el in props.template?.elements || []"
     :is="render(el)"
   />
   <div v-else>Loading...</div>

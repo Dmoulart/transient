@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import ComponentView from './ComponentView.vue'
-import { getPrototypeName, type Prototype } from '@/stores/use-prototype'
+import { getPrototypeName, type Prototype } from '@/lib/use-prototype'
 import { useTemplateRef, watch } from 'vue'
 import { useDraggable, useMouse } from '@vueuse/core'
 

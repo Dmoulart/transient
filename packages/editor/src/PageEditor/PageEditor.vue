@@ -1,6 +1,6 @@
 <template>
   <Suspense>
-    <TransientBuilder v-if="page" :schema="page" :registry="registry" />
+    <TransientBuilder :key="k" v-if="page" :template="page" :registry="registry" />
   </Suspense>
 
   <JsonViewer
@@ -19,34 +19,36 @@
 </template>
 
 <script setup lang="ts">
-import { registry } from '@/stores/use-dictionnary'
+import { getTransientComponentSchema, registry } from '@/lib/use-dictionnary'
 // @ts-expect-error : oups no types
 import { JsonViewer } from 'vue3-json-viewer'
 import 'vue3-json-viewer/dist/index.css'
 import TransientBuilder from './TransientBuilder.vue'
 import Button from '@/samples/Button.vue'
-import { usePage } from '@/stores/use-page'
-import { useEdition } from '@/stores/use-edition'
-import { findElementById } from 'transient/src/transient/ast'
+import { usePage } from '@/lib/use-page'
+import { useEdition } from '@/lib/use-edition'
+import { ref, triggerRef, watch } from 'vue'
 
-const {
-  page,
-  replace,
-  remove,
-  append,
-  render,
-  find,
-  patch,
-  saveToLocalStorage,
-  loadFromLocalStorage,
-} = usePage()
+const component = getTransientComponentSchema(
+  '/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HomePage.vue',
+)
+
+const { page, replace, render, find, saveToLocalStorage, loadFromLocalStorage } = usePage(
+  component.template!,
+)
+
+const k = ref(0)
 
 useEdition({
   onEnd(parent) {
-    patch(parent)
-    render()
+    replace(parent)
+    console.log('replaced element', find(parent.id))
 
-    console.log('end', find(parent.id))
+    render()
+    console.log('-- page re-render --')
+    console.log({ page })
+    triggerRef(page)
+    k.value += 1
   },
 })
 </script>

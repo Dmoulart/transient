@@ -46,7 +46,7 @@ import {
   getSchemaSlots,
   hasSchemaSlots,
   findParent,
-} from '@/stores/use-prototype'
+} from '@/lib/use-prototype'
 import { capitalize, computed, triggerRef } from 'vue'
 import { type TreeItem } from '@nuxt/ui/components/Tree.vue'
 import UTree from '@nuxt/ui/components/Tree.vue'

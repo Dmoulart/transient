@@ -2,9 +2,11 @@
   <ComponentView selectable :prototype="prototype" @append="emit('append', $event)" />
 </template>
 <script setup lang="ts">
-import type { Prototype } from '@/stores/use-prototype'
+import type { Prototype } from '@/lib/use-prototype'
 
-const emit = defineEmits<{ (e: 'append', data: { slot: string; path: string; to: Prototype }): void }>()
+const emit = defineEmits<{
+  (e: 'append', data: { slot: string; path: string; to: Prototype }): void
+}>()
 
 defineProps<{
   prototype: Prototype

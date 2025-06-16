@@ -3,7 +3,7 @@ import {
   type TransientComponentDictionnary,
 } from 'transient/src/transient'
 import { computed, ref } from 'vue'
-import { dictionnary, useDictionnary } from './use-dictionnary'
+import { registry, useRegistry } from './use-dictionnary'
 
 export type PrototypeSlot<T extends 'unique' | 'list'> = { type: T; prototype: Prototype }
 
@@ -52,17 +52,17 @@ export function useSchema(prototype = useSelectedPrototype()) {
 }
 
 export function getSchema(prototype: Prototype) {
-  return dictionnary.value[prototype.path]
+  return registry.value[prototype.path]
 }
 
 export function getSchemaSlots(prototype: Prototype) {
-  return dictionnary.value[prototype.path]?.slots
+  return registry.value[prototype.path]?.slots
 }
 
 export function hasSchemaSlots(prototype: Prototype) {
   return (
-    dictionnary.value[prototype.path]?.slots &&
-    Object.keys(dictionnary.value[prototype.path].slots).length > 0
+    registry.value[prototype.path]?.slots &&
+    Object.keys(registry.value[prototype.path].slots).length > 0
   )
 }
 
@@ -72,7 +72,7 @@ export function getPrototypeName(path: string) {
 
 let id = 0
 export function createPrototype(path: string): Prototype {
-  const dictionnary = useDictionnary()
+  const dictionnary = useRegistry()
 
   if (!dictionnary.value[path]) {
     throw new Error(`Unknown component ${path}`)

@@ -38,8 +38,8 @@ import {
   usePrototypeSlotEdition,
   type Prototype,
   useRootPrototype,
-} from '@/stores/use-prototype'
-import { useTransient } from '@/stores/use-transient'
+} from '@/lib/use-prototype'
+import { useTransient } from '@/lib/use-transient'
 import ComponentList from './ComponentList.vue'
 
 const transient = useTransient()
