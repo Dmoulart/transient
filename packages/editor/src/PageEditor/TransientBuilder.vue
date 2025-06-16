@@ -2,7 +2,6 @@
 import { onMounted, h, shallowRef, createCommentVNode, watch } from 'vue'
 import type {
   TransientElement,
-  TransientComponentSchema,
   TransientComponentDictionnary,
   TransientTemplate,
 } from 'transient/src/transient/definition'
@@ -23,19 +22,12 @@ watch(
 
 const loadedComponents = shallowRef<Record<string, any>>({})
 
-const emit = defineEmits<{
-  replace: [newElement: TransientElement]
-  remove: [id: string]
-  append: [parentId: string, newElement: TransientElement]
-}>()
-
 onMounted(async () => {
   loadedComponents.value = await loadAllComponents()
 })
 
-function render(element: TransientElement): any {
+function render(element: TransientElement) {
   if (element.tag === '#text') {
-    console.log('render text node', getTextValue(element))
     return [
       createCommentVNode(`#text data-transient-id=${element.id}`, true),
       element.attributes?.value?.expression,

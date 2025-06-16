@@ -1,4 +1,4 @@
-import { useEventListener, useFavicon, watchDebounced, whenever } from '@vueuse/core'
+import { useEventBus, useEventListener, useFavicon, watchDebounced, whenever } from '@vueuse/core'
 import { getTransientID, htmlNodeToTransientElement } from 'transient/src/analyzers/html/html'
 import type { TransientElement } from 'transient/src/transient/definition'
 import { computed, ref, watch } from 'vue'
@@ -38,20 +38,32 @@ export function useEditedTransientElement() {
   return editedTransientElement
 }
 
-export function useEdition(edition: {
-  onStart?: () => void
-  onEnd: (element: TransientElement) => void
-}) {
+type OnEditCallback = (element: TransientElement) => void
+
+export function useEdition() {
+  const cbs = {
+    onEditStart: [] as OnEditCallback[],
+    onEditEnd: [] as OnEditCallback[],
+  }
+
   watch(editedNode, (newNode, oldNode) => {
     if (newNode !== undefined) {
-      console.log('start edition')
+      const newElement = htmlNodeToTransientElement(newNode, getTransientID(newNode)!)
+      cbs.onEditStart.forEach((cb) => cb(newElement))
     }
 
     if (oldNode !== undefined) {
-      const node = htmlNodeToTransientElement(oldNode, getTransientID(oldNode)!)
-      edition.onEnd(node)
+      const newElement = htmlNodeToTransientElement(oldNode, getTransientID(oldNode)!)
+      cbs.onEditEnd.forEach((cb) => cb(newElement))
     }
   })
 
-  return {}
+  return {
+    onEditStart(cb: OnEditCallback) {
+      cbs.onEditStart.push(cb)
+    },
+    onEditEnd(cb: OnEditCallback) {
+      cbs.onEditEnd.push(cb)
+    },
+  }
 }

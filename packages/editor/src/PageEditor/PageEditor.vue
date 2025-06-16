@@ -27,28 +27,23 @@ import TransientBuilder from './TransientBuilder.vue'
 import Button from '@/samples/Button.vue'
 import { usePage } from '@/lib/use-page'
 import { useEdition } from '@/lib/use-edition'
-import { ref, triggerRef, watch } from 'vue'
+import { ref, shallowRef, triggerRef } from 'vue'
 
 const component = getTransientComponentSchema(
   '/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HomePage.vue',
 )
 
-const { page, replace, render, find, saveToLocalStorage, loadFromLocalStorage } = usePage(
+const { page, replace, render, saveToLocalStorage, loadFromLocalStorage } = usePage(
   component.template!,
 )
-
 const k = ref(0)
 
-useEdition({
-  onEnd(parent) {
-    replace(parent)
-    console.log('replaced element', find(parent.id))
+const { onEditEnd } = useEdition()
 
-    render()
-    console.log('-- page re-render --')
-    console.log({ page })
-    triggerRef(page)
-    k.value += 1
-  },
+onEditEnd((parent) => {
+  replace(parent)
+  render()
+  triggerRef(page)
+  k.value += 1
 })
 </script>
