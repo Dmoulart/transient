@@ -7,6 +7,7 @@ import type {
 } from 'transient/src/transient/definition'
 import { loadAllComponents } from '@/lib/use-dictionnary'
 import { findElementById, getTextValue, hasTextChildren } from 'transient/src/transient/ast'
+import { detectElementEdition, isElementEditable } from '@/lib/use-edition'
 
 const props = defineProps<{
   template: TransientTemplate
@@ -54,11 +55,19 @@ function render(element: TransientElement) {
     meta[`data-transient-attr-${key}`] = JSON.stringify(value)
   }
 
+  const listeners: Record<string, (e: Event) => void> = {}
+
+  // if (isElementEditable(element)) {
+  //   listeners.selectionchange = detectElementEdition
+  // }
+
   return h(
     Component,
     {
       ...attrs,
       ...meta,
+      ...listeners,
+      'data-transient-editable': isElementEditable(element),
       contenteditable: hasTextChildren(element) ? true : null,
       'data-transient-id': element.id,
     },

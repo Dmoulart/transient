@@ -1,5 +1,6 @@
 <template>
-  <div id="richtext-editor"></div>
+  <RichTextEditor :node="editedNode" class="text-editor" />
+
   <Suspense>
     <TransientBuilder
       :key="forceRerender"
@@ -22,6 +23,10 @@
 
   <Button @click="saveToLocalStorage">Save</Button>
   <Button @click="loadFromLocalStorage">Load</Button>
+  <div id="app">
+    QUILL
+    <quill-editor theme="snow"></quill-editor>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -44,11 +49,14 @@ import {
   type Ref,
   type ShallowRef,
 } from 'vue'
-import { Editor, EditorContent, useEditor } from '@tiptap/vue-3'
-import Color from '@tiptap/extension-color'
-import ListItem from '@tiptap/extension-list-item'
-import TextStyle from '@tiptap/extension-text-style'
-import StarterKit from '@tiptap/starter-kit'
+// import { Editor, EditorContent, useEditor } from '@tiptap/vue-3'
+// import Color from '@tiptap/extension-color'
+// import ListItem from '@tiptap/extension-list-item'
+// import TextStyle from '@tiptap/extension-text-style'
+// import StarterKit from '@tiptap/starter-kit'
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
+import RichTextEditor from './RichTextEditor.vue'
 
 const component = getTransientComponentSchema(
   '/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HomePage.vue',
@@ -61,16 +69,17 @@ const { contents, replace, render, patch, saveToLocalStorage, loadFromLocalStora
 const forceRerender = ref(0)
 
 const { onEditStart, onEditEnd } = useEdition()
-
+const editedNode = useEditedNode()
 onEditEnd((element) => {
   // patch(element)
+  console.log({ replaceElement: element })
   replace(element)
   render()
   forceRerender.value++
 })
 
-let richText: App<Element> | null = null
-let richTextContent: App<Element> | null = null
+// let richText: App<Element> | null = null
+// let richTextContent: App<Element> | null = null
 
 // watch(useEditedNode(), (newNode, oldNode) => {
 //   // Unmount previous instance if there was any
@@ -104,3 +113,12 @@ let richTextContent: App<Element> | null = null
 //   }
 // })
 </script>
+
+<style scoped>
+.text-editor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+</style>

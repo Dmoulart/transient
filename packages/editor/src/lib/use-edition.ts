@@ -1,24 +1,30 @@
-
 import { useEventBus, useEventListener, useFavicon, watchDebounced, whenever } from '@vueuse/core'
 import { getTransientID, htmlNodeToTransientElement } from 'transient/src/analyzers/html/html'
+import { hasTextChildren } from 'transient/src/transient/ast'
 import type { TransientElement } from 'transient/src/transient/definition'
 import { computed, createApp, ref, watch, type App } from 'vue'
 
-const editedNode = ref<Node | undefined>()
+const editedNode = ref<HTMLElement | undefined>()
 
+export function isElementEditable(element: TransientElement) {
+  return hasTextChildren(element)
+}
 
+export function isNodeEditable(node: HTMLElement) {
+  return node.dataset.transientEditable
+}
 
-useEventListener('focusin', (e) => {
+export function detectElementEdition(e: Event) {
   const element = e.target
   if (element instanceof HTMLElement) {
-    const id = getTransientID(element)
-    if (id) {
+    if (isNodeEditable(element)) {
       editedNode.value = element
     }
   }
-})
+}
+useEventListener(document, 'focusin', detectElementEdition)
 
-useEventListener('focusout', (e) => {
+useEventListener(document, 'focusout', (e) => {
   console.log({ ...editedNode })
   editedNode.value = undefined
 })
