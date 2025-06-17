@@ -1,9 +1,12 @@
+
 import { useEventBus, useEventListener, useFavicon, watchDebounced, whenever } from '@vueuse/core'
 import { getTransientID, htmlNodeToTransientElement } from 'transient/src/analyzers/html/html'
 import type { TransientElement } from 'transient/src/transient/definition'
-import { computed, ref, watch } from 'vue'
+import { computed, createApp, ref, watch, type App } from 'vue'
 
 const editedNode = ref<Node | undefined>()
+
+
 
 useEventListener('focusin', (e) => {
   const element = e.target
