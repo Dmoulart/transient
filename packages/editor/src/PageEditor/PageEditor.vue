@@ -1,5 +1,17 @@
 <template>
-  <RichTextEditor v-if="editedNode" :node="editedNode" class="text-editor" />
+  <RichTextEditor
+    v-if="!!editedNode"
+    :style="{
+      '--richtext-opacity': editedNodeBoundingBox ? 1 : 0,
+      '--richtext-editor-top': editedNodeBoundingBox
+        ? `calc(${editedNodeBoundingBox.top}px - ${editedNodeBoundingBox.height}px)`
+        : undefined,
+      '--richtext-editor-left': editedNodeBoundingBox
+        ? editedNodeBoundingBox?.left + 'px'
+        : undefined,
+    }"
+    class="text-editor"
+  />
 
   <Suspense>
     <TransientBuilder
@@ -33,7 +45,7 @@ import 'vue3-json-viewer/dist/index.css'
 import TransientBuilder from './TransientBuilder.vue'
 import Button from '@/samples/Button.vue'
 import { usePage } from '@/lib/use-page'
-import { useEditedNode, useEdition } from '@/lib/use-edition'
+import { useEditedNode, useEditedNodeBoundingBox, useEdition } from '@/lib/use-edition'
 import { ref } from 'vue'
 
 import RichTextEditor from './RichTextEditor.vue'
@@ -50,6 +62,8 @@ const forceRerender = ref(0)
 
 const { onEditEnd } = useEdition()
 const editedNode = useEditedNode()
+const editedNodeBoundingBox = useEditedNodeBoundingBox()
+
 onEditEnd((element) => {
   // patch(element)
   console.log({ replaceElement: element })
@@ -62,7 +76,10 @@ onEditEnd((element) => {
 <style scoped>
 .text-editor {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: var(--richtext-editor-top);
+  left: var(--richtext-editor-left);
+  opacity: var(--richtext-opacity);
+  transition: opacity 0.2s ease-in-out;
+  z-index: 1000;
 }
 </style>

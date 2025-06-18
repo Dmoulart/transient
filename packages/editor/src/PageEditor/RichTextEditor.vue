@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useSelection } from '@/lib/use-selection'
-import { computed, ref, watch, type ComputedRef } from 'vue'
-
-const props = defineProps<{ node: HTMLElement }>()
+import { computed, type ComputedRef } from 'vue'
 
 const selection = useSelection()
 

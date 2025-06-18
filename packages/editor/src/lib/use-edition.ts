@@ -33,6 +33,23 @@ export function useEditedNode() {
   return editedNode
 }
 
+export function useEditedNodeBoundingBox() {
+  return computed(() => {
+    if (editedNode.value) {
+      const rect = editedNode.value.getBoundingClientRect()
+      return {
+        top: rect.top,
+        left: rect.left,
+        bottom: rect.bottom,
+        right: rect.right,
+        width: rect.width,
+        height: rect.height,
+      }
+    }
+    return undefined
+  })
+}
+
 const editedTransientElement = computed(() => {
   if (editedNode.value) {
     return htmlNodeToTransientElement(
@@ -48,7 +65,7 @@ export function useEditedTransientElement() {
   return editedTransientElement
 }
 
-type OnEditCallback = (element: TransientElement) => void
+type OnEditCallback = (element: TransientElement, node: Node) => void
 
 export function useEdition() {
   const cbs = {
@@ -59,12 +76,12 @@ export function useEdition() {
   watch(editedNode, (newNode, oldNode) => {
     if (newNode !== undefined) {
       const newElement = htmlNodeToTransientElement(newNode, getTransientID(newNode)!)
-      cbs.onEditStart.forEach((cb) => cb(newElement))
+      cbs.onEditStart.forEach((cb) => cb(newElement, newNode))
     }
 
     if (oldNode !== undefined) {
       const newElement = htmlNodeToTransientElement(oldNode, getTransientID(oldNode)!)
-      cbs.onEditEnd.forEach((cb) => cb(newElement))
+      cbs.onEditEnd.forEach((cb) => cb(newElement, oldNode))
     }
   })
 
