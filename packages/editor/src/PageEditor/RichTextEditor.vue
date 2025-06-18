@@ -5,8 +5,10 @@ import { computed, ref, watch, type ComputedRef } from 'vue'
 const props = defineProps<{ node: HTMLElement }>()
 
 const selection = useSelection()
+
 function wrap(tag: string, sel: Selection) {
   if (!sel.rangeCount) return
+
   const range = sel.getRangeAt(0)
   const contents = range.extractContents()
 
@@ -25,6 +27,8 @@ function unwrap(tag: string, sel: Selection) {
   if (sel.rangeCount === 0) return
 
   const range = sel.getRangeAt(0)
+  const savedRange = range.cloneRange()
+
   const ancestor = range.commonAncestorContainer
   const container = (
     ancestor instanceof Element ? ancestor.closest(tag) : ancestor.parentElement?.closest(tag)
@@ -35,14 +39,13 @@ function unwrap(tag: string, sel: Selection) {
   const parent = container.parentNode
   if (!parent) return
 
-  // Optional: Save selection range here if needed
-
   while (container.firstChild) {
     parent.insertBefore(container.firstChild, container)
   }
   parent.removeChild(container)
-
-  // Optional: Restore selection range here if needed
+  // does not work why ?
+  sel.removeAllRanges()
+  sel.addRange(savedRange)
 }
 function nodeIn(tagNames: string[], selection: Selection) {
   let el = selection?.focusNode
