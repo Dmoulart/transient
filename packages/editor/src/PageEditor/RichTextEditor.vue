@@ -82,7 +82,7 @@ function setParentStyle(styles: Record<string, any>, selection: Selection) {
   if (!(el instanceof HTMLElement)) return false
 
   for (const style in styles) {
-    el.style[style] = styles[style]
+    el.attributeStyleMap.append(style, styles[style])
   }
 }
 
@@ -96,7 +96,7 @@ function unsetParentStyle(styles: Record<string, any>, selection: Selection) {
   if (!(el instanceof HTMLElement)) return false
 
   for (const style in styles) {
-    el.style[style] = 'unset'
+    el.attributeStyleMap.append(style, 'unset')
   }
 }
 
@@ -132,7 +132,7 @@ type ToolbarButton = {
   title: string
   svg: string
   selected: ComputedRef<boolean>
-  toggle(): (selected: boolean) => void
+  toggle(selected: boolean): void
 }
 
 type ToolbarSeparator = {

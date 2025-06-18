@@ -7,7 +7,7 @@ import { computed, createApp, ref, watch, type App } from 'vue'
 const editedNode = ref<HTMLElement | undefined>()
 
 export function isElementEditable(element: TransientElement) {
-  return hasTextChildren(element)
+  return !!element.slots //hasTextChildren(element)
 }
 
 export function isNodeEditable(node: HTMLElement) {
