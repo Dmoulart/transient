@@ -53,12 +53,51 @@ function nodeIn(tagNames: string[], selection: Selection) {
   }
   if (!(el instanceof HTMLElement)) return false
 
-  console.log(
-    'in',
-    tagNames,
-    tagNames.some((tag) => el!.closest(tag)),
-  )
   return tagNames.some((tag) => el!.closest(tag))
+}
+
+function nodeParentStyles(styles: Record<string, any>, selection: Selection) {
+  let el = selection?.focusNode
+
+  while (el && el.nodeType === Node.TEXT_NODE) {
+    el = el.parentNode
+  }
+  if (!(el instanceof HTMLElement)) return false
+  for (const style in styles) {
+    if (el.computedStyleMap().get(style)?.toString() !== styles[style]) {
+      return false
+    }
+  }
+
+  return true
+}
+
+function setParentStyle(styles: Record<string, any>, selection: Selection) {
+  let el = selection?.focusNode
+
+  while (el && el.nodeType === Node.TEXT_NODE) {
+    el = el.parentNode
+  }
+
+  if (!(el instanceof HTMLElement)) return false
+
+  for (const style in styles) {
+    el.style[style] = styles[style]
+  }
+}
+
+function unsetParentStyle(styles: Record<string, any>, selection: Selection) {
+  let el = selection?.focusNode
+
+  while (el && el.nodeType === Node.TEXT_NODE) {
+    el = el.parentNode
+  }
+
+  if (!(el instanceof HTMLElement)) return false
+
+  for (const style in styles) {
+    el.style[style] = 'unset'
+  }
 }
 
 function defineTextState(
@@ -138,21 +177,31 @@ const toolbarItems: ToolbarItem[] = [
     type: 'item',
     title: 'Justify Left',
     svg: '<path d="M4 6h16v2H4zm0 4h10v2H4zm0 4h16v2H4zm0 4h10v2H4z" />',
-    selected: defineTextState(() => false), // Hard to detect reliably with DOM only
-    toggle: () => document.execCommand('justifyLeft'),
+    selected: defineTextState((sel) =>
+      nodeParentStyles({ 'text-align': 'left' }, sel.value as Selection),
+    ),
+    toggle: () =>
+      defineActionToggle(
+        (sel) => setParentStyle({ 'text-align': 'left' }, sel!),
+        (sel) => unsetParentStyle({ 'text-align': 'left' }, sel!),
+      ),
   },
   {
     type: 'item',
     title: 'Justify Center',
     svg: '<path d="M4 6h16v2H4zm3 4h10v2H7zm-3 4h16v2H4zm3 4h10v2H7z" />',
-    selected: defineTextState(() => false),
+    selected: defineTextState((sel) =>
+      nodeParentStyles({ 'text-align': 'center' }, sel.value as Selection),
+    ),
     toggle: () => document.execCommand('justifyCenter'),
   },
   {
     type: 'item',
     title: 'Justify Right',
     svg: '<path d="M4 6h16v2H4zm6 4h10v2H10zm-6 4h16v2H4zm6 4h10v2H10z" />',
-    selected: defineTextState(() => false),
+    selected: defineTextState((sel) =>
+      nodeParentStyles({ 'text-align': 'right' }, sel.value as Selection),
+    ),
     toggle: () => document.execCommand('justifyRight'),
   },
   { type: 'separator' },
