@@ -1,20 +1,11 @@
 <script setup lang="ts">
 import { useSelection } from '@/lib/use-selection'
-import { useTextSelection } from '@vueuse/core'
 import { computed, ref, watch, type ComputedRef } from 'vue'
 
 const props = defineProps<{ node: HTMLElement }>()
 
 const selection = useSelection()
-
-const updateTrigger = ref(0)
-
-function forceUpdate() {
-  updateTrigger.value++
-}
-
-function wrapSelectionWithTag(tag: string, sel: Selection) {
-  debugger
+function wrap(tag: string, sel: Selection) {
   if (!sel.rangeCount) return
   const range = sel.getRangeAt(0)
   const contents = range.extractContents()
@@ -24,35 +15,43 @@ function wrapSelectionWithTag(tag: string, sel: Selection) {
 
   range.insertNode(wrapper)
 
-  // Optionnel : replacer le curseur après
   sel.removeAllRanges()
   const newRange = document.createRange()
   newRange.selectNodeContents(wrapper)
-  //   newRange.collapse(false)
   sel.addRange(newRange)
 }
 
-function unwrapTag(tag: string, sel: Selection) {
+function unwrap(tag: string, sel: Selection) {
+  if (sel.rangeCount === 0) return
+
   const range = sel.getRangeAt(0)
-  const container = sel.focusNode?.parentElement?.closest(tag)
-  if (!container || !(container instanceof HTMLElement)) return
+  const ancestor = range.commonAncestorContainer
+  const container = (
+    ancestor instanceof Element ? ancestor.closest(tag) : ancestor.parentElement?.closest(tag)
+  ) as HTMLElement | null
+
+  if (!container) return
 
   const parent = container.parentNode
   if (!parent) return
+
+  // Optional: Save selection range here if needed
 
   while (container.firstChild) {
     parent.insertBefore(container.firstChild, container)
   }
   parent.removeChild(container)
-}
 
-function nodeIn(tagNames: string[], selection: ReturnType<typeof useSelection>) {
-  let el = selection.focusNode.value
+  // Optional: Restore selection range here if needed
+}
+function nodeIn(tagNames: string[], selection: Selection) {
+  let el = selection?.focusNode
 
   while (el && el.nodeType === Node.TEXT_NODE) {
     el = el.parentNode
   }
   if (!(el instanceof HTMLElement)) return false
+
   console.log(
     'in',
     tagNames,
@@ -65,25 +64,26 @@ function defineTextState(
   isSelected: (selectionValue: typeof selection) => boolean,
 ): ComputedRef<boolean> {
   return computed(() => {
-    console.log('update text state', updateTrigger.value)
-    updateTrigger.value // depend on trigger
-    if (!selection.focusNode.value) return false
+    console.log('textState')
+    // console.log('update text state', updateTrigger.value)
+    // updateTrigger.value // depend on trigger
+    if (!selection.value?.focusNode) return false
     return isSelected(selection)
   })
 }
 
 function defineActionToggle(
-  onEnable: (selectionValue: typeof selection) => void,
-  onDisable: (selectionValue: typeof selection) => void,
+  onEnable: (selectionValue: Selection) => void,
+  onDisable: (selectionValue: Selection) => void,
 ) {
   return function (selected: boolean) {
-    console.log('run', selected)
+    if (selection.value === null) return
+
     if (!selected) {
-      onEnable(selection)
+      onEnable(selection.value)
     } else {
-      onDisable(selection)
+      onDisable(selection.value)
     }
-    forceUpdate()
   }
 }
 
@@ -106,30 +106,30 @@ const toolbarItems: ToolbarItem[] = [
     type: 'item',
     title: 'Bold',
     svg: '<path d="M6 4h8a4 4 0 0 1 0 8H6zm0 8h9a4 4 0 1 1 0 8H6z" />',
-    selected: defineTextState((sel) => nodeIn(['strong', 'b'], sel)),
+    selected: defineTextState((sel) => nodeIn(['strong', 'b'], sel.value as Selection)),
     toggle: defineActionToggle(
-      (sel) => wrapSelectionWithTag('strong', sel.selection.value!),
-      (sel) => unwrapTag('strong', sel.selection.value!),
+      (sel) => wrap('strong', sel!),
+      (sel) => unwrap('strong', sel!),
     ),
   },
   {
     type: 'item',
     title: 'Italic',
     svg: '<path d="M10 4v3h2.21l-3.42 10H6v3h8v-3h-2.21l3.42-10H18V4z" />',
-    selected: defineTextState((sel) => nodeIn(['i', 'em'], sel)),
+    selected: defineTextState((sel) => nodeIn(['i', 'em'], sel.value as Selection)),
     toggle: defineActionToggle(
-      (sel) => wrapSelectionWithTag('em', sel.selection.value!),
-      (sel) => unwrapTag('em', sel.selection.value!),
+      (sel) => wrap('em', sel),
+      (sel) => unwrap('em', sel),
     ),
   },
   {
     type: 'item',
     title: 'Underline',
     svg: '<path d="M12 17a5 5 0 0 0 5-5V4h-2v8a3 3 0 0 1-6 0V4H7v8a5 5 0 0 0 5 5zm-7 2v2h14v-2z" />',
-    selected: defineTextState((sel) => nodeIn(['u'], sel)),
+    selected: defineTextState((sel) => nodeIn(['u'], sel.value as Selection)),
     toggle: defineActionToggle(
-      (sel) => wrapSelectionWithTag('u', sel.selection.value!),
-      (sel) => unwrapTag('u', sel.selection!.value!),
+      (sel) => wrap('u', sel),
+      (sel) => unwrap('u', sel),
     ),
   },
   { type: 'separator' },
