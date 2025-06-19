@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useSelection } from '@/lib/use-selection'
+import { get } from 'http'
 import { computed, type ComputedRef } from 'vue'
 
 const selection = useSelection()
@@ -25,26 +26,47 @@ function unwrap(tag: string, sel: Selection) {
   if (sel.rangeCount === 0) return
 
   const range = sel.getRangeAt(0)
-  const savedRange = range.cloneRange()
 
-  const ancestor = range.commonAncestorContainer
-  const container = (
-    ancestor instanceof Element ? ancestor.closest(tag) : ancestor.parentElement?.closest(tag)
+  const editedTextAncestor = range.commonAncestorContainer
+
+  const wrappingTag = (
+    editedTextAncestor instanceof Element
+      ? editedTextAncestor.closest(tag)
+      : editedTextAncestor.parentElement?.closest(tag)
   ) as HTMLElement | null
+  if (!wrappingTag) return
 
-  if (!container) return
+  const parentOfWrappingTag = wrappingTag.parentNode
 
-  const parent = container.parentNode
-  if (!parent) return
+  if (!parentOfWrappingTag) return
 
-  while (container.firstChild) {
-    parent.insertBefore(container.firstChild, container)
+  const offset = getElementCharacterOffsets(
+    wrappingTag as HTMLElement,
+    parentOfWrappingTag as HTMLElement,
+  )
+
+  while (wrappingTag.firstChild) {
+    parentOfWrappingTag.insertBefore(wrappingTag.firstChild, wrappingTag)
   }
-  parent.removeChild(container)
-  // does not work why ?
+
+  parentOfWrappingTag.removeChild(wrappingTag)
+
   sel.removeAllRanges()
-  sel.addRange(savedRange)
+
+  const newRange = document.createRange()
+  const startPos = getNodeForCharacterOffset(parentOfWrappingTag, offset.start)
+  const endPos = getNodeForCharacterOffset(parentOfWrappingTag, offset.end)
+
+  console.log(startPos, endPos)
+  if (startPos && endPos) {
+    newRange.setStart(startPos.node, startPos.offset)
+    newRange.setEnd(endPos.node, endPos.offset)
+  } else {
+    console.warn('Invalid offsets for range')
+  }
+  sel.addRange(newRange)
 }
+
 function nodeIn(tagNames: string[], selection: Selection) {
   let el = selection?.focusNode
 
@@ -104,7 +126,6 @@ function defineTextState(
   isSelected: (selectionValue: typeof selection) => boolean,
 ): ComputedRef<boolean> {
   return computed(() => {
-    console.log('textState')
     // console.log('update text state', updateTrigger.value)
     // updateTrigger.value // depend on trigger
     if (!selection.value?.focusNode) return false
@@ -125,6 +146,47 @@ function defineActionToggle(
       onDisable(selection.value)
     }
   }
+}
+
+function getElementCharacterOffsets(
+  element: HTMLElement,
+  container: HTMLElement,
+): { start: number; end: number } {
+  let start = 0
+  const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT)
+
+  // Find start: sum text length until first text node inside element
+  while (walker.nextNode()) {
+    const node = walker.currentNode
+    if (element.contains(node)) break
+    start += node.textContent?.length ?? 0
+  }
+
+  // Now get the total length of all text inside the element
+  let length = 0
+  const innerWalker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT)
+  while (innerWalker.nextNode()) {
+    length += innerWalker.currentNode.textContent?.length ?? 0
+  }
+
+  return { start, end: start + length }
+}
+
+function getNodeForCharacterOffset(root, charOffset) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT)
+  let currentCharCount = 0
+
+  while (walker.nextNode()) {
+    const node = walker.currentNode
+    const length = node.textContent?.length ?? 0
+
+    if (currentCharCount + length >= charOffset) {
+      return { node, offset: charOffset - currentCharCount }
+    }
+
+    currentCharCount += length
+  }
+  return null
 }
 
 type ToolbarButton = {
