@@ -1,10 +1,8 @@
 <template>
   <RichTextEditor
-    v-if="!!editedNode"
     :style="{
-      '--richtext-opacity': editedNodeBoundingBox ? 1 : 0,
-      '--richtext-editor-top': editedNodeBoundingBox
-        ? `calc(${editedNodeBoundingBox.top}px - ${editedNodeBoundingBox.height}px)`
+      '--richtext-editor-bottom': editedNodeBoundingBox
+        ? `${windowSize.height.value - editedNodeBoundingBox.top}px`
         : undefined,
       '--richtext-editor-left': editedNodeBoundingBox
         ? editedNodeBoundingBox?.left + 'px'
@@ -49,6 +47,7 @@ import { useEditedNode, useEditedNodeBoundingBox, useEdition } from '@/lib/use-e
 import { ref } from 'vue'
 
 import RichTextEditor from './RichTextEditor.vue'
+import { useWindowSize } from '@vueuse/core'
 
 const component = getTransientComponentSchema(
   '/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HomePage.vue',
@@ -63,6 +62,7 @@ const forceRerender = ref(0)
 const { onEditEnd } = useEdition()
 const editedNode = useEditedNode()
 const editedNodeBoundingBox = useEditedNodeBoundingBox()
+const windowSize = useWindowSize()
 
 onEditEnd((element) => {
   // patch(element)
@@ -76,10 +76,8 @@ onEditEnd((element) => {
 <style scoped>
 .text-editor {
   position: fixed;
-  top: var(--richtext-editor-top);
+  bottom: var(--richtext-editor-bottom);
   left: var(--richtext-editor-left);
-  opacity: var(--richtext-opacity);
-  transition: opacity 0.2s ease-in-out;
   z-index: 1000;
 }
 </style>

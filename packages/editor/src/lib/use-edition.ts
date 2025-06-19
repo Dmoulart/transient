@@ -37,6 +37,7 @@ export function useEditedNodeBoundingBox() {
   return computed(() => {
     if (editedNode.value) {
       const rect = editedNode.value.getBoundingClientRect()
+      console.log({ rect })
       return {
         top: rect.top,
         left: rect.left,
