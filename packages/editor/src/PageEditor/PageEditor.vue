@@ -1,5 +1,6 @@
 <template>
   <RichTextEditor
+    v-if="editedNode"
     :style="{
       '--richtext-editor-bottom': editedNodeBoundingBox
         ? `${windowSize.height.value - editedNodeBoundingBox.top}px`
