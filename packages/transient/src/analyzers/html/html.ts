@@ -18,7 +18,7 @@ export function htmlNodeToTransientElement(
     };
   }
 
-  const element = node as HTMLElement;
+  const element = node as Element;
 
   const attributes: Record<string, BindingInfo> = {};
 
@@ -26,8 +26,9 @@ export function htmlNodeToTransientElement(
     if (
       attr.name === "contenteditable" ||
       attr.name.startsWith("data-transient")
-    )
+    ) {
       continue;
+    }
 
     attributes[attr.name] = {
       type: "literal",
@@ -35,18 +36,50 @@ export function htmlNodeToTransientElement(
     };
   }
 
-  const children = Array.from(element.childNodes)
-    .filter((child) => {
-      return (
-        child.nodeType === Node.ELEMENT_NODE ||
-        (child.nodeType === Node.TEXT_NODE &&
-          child.textContent &&
-          child.textContent.trim().length > 0)
-      );
-    })
-    .map((child) =>
-      htmlNodeToTransientElement(child as HTMLElement | Text, id)
-    );
+  const children: TransientElement[] = [];
+  const childNodes = Array.from(element.childNodes);
+
+  for (let i = 0; i < childNodes.length; i++) {
+    const child = childNodes[i]!;
+
+    if (
+      child.nodeType === Node.TEXT_NODE &&
+      child.textContent !== null &&
+      child.textContent.length > 0
+    ) {
+      let textContent = child.textContent ?? "";
+      let textId = getTransientID(child) ?? id;
+
+      // Merge consecutive text nodes
+      while (
+        i + 1 < childNodes.length &&
+        childNodes[i + 1]!.nodeType === Node.TEXT_NODE &&
+        childNodes[i + 1]!.textContent !== null &&
+        childNodes[i + 1]!.textContent!.length > 0
+      ) {
+        i++;
+        textContent += childNodes[i]!.textContent ?? "";
+      }
+
+      children.push({
+        id: textId,
+        tag: "#text",
+        isComponent: false,
+        attributes: {
+          value: {
+            type: "literal",
+            expression: textContent,
+          },
+        },
+      });
+
+      continue;
+    }
+
+    if (child.nodeType === Node.ELEMENT_NODE) {
+      children.push(htmlNodeToTransientElement(child as Element, id));
+    }
+  }
 
   const slots: Record<string, TransientElement[]> = {
     default: children,
@@ -64,11 +97,11 @@ export function htmlNodeToTransientElement(
 export function getTransientID(node: Node) {
   switch (node.nodeType) {
     case Node.TEXT_NODE:
-      return getTextNodeTransientId(node);
+      return getTextNodeTransientID(node);
     case Node.COMMENT_NODE:
-      return getTransientIdFromComment(node);
+      return getCommentNodeTransientID(node);
     case Node.ELEMENT_NODE:
-      return getElementTransientId(node as Element);
+      return getElementNodeTransientID(node as Element);
     default: {
       console.error("not implemented transient id on node", node);
       return undefined;
@@ -76,22 +109,21 @@ export function getTransientID(node: Node) {
   }
 }
 
-export function getElementTransientId(elementNode: Element) {
+export function getElementNodeTransientID(elementNode: Element) {
   if (elementNode instanceof HTMLElement) {
     return elementNode.dataset.transientId;
   }
 }
 
-export function getTextNodeTransientId(textNode: Node) {
-  // le précédent est le commentaire
+export function getTextNodeTransientID(textNode: Node) {
   const prev = textNode.previousSibling;
 
   if (prev && prev.nodeType === Node.COMMENT_NODE) {
-    return getTransientIdFromComment(prev);
+    return getCommentNodeTransientID(prev);
   }
 }
 
-export function getTransientIdFromComment(commentNode: Node) {
+export function getCommentNodeTransientID(commentNode: Node) {
   if (commentNode.nodeValue) {
     // extraire l'ID depuis le commentaire
     const match = commentNode.nodeValue.match(

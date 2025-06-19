@@ -29,7 +29,7 @@
     boxed
     sort
     expanded
-    :expanded-depth="4"
+    :expanded-depth="5"
     theme="dark"
   />
 

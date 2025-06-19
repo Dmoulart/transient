@@ -82,7 +82,7 @@ function setParentStyle(styles: Record<string, any>, selection: Selection) {
   if (!(el instanceof HTMLElement)) return false
 
   for (const style in styles) {
-    el.attributeStyleMap.append(style, styles[style])
+    el.attributeStyleMap.set(style, styles[style])
   }
 }
 
@@ -96,7 +96,7 @@ function unsetParentStyle(styles: Record<string, any>, selection: Selection) {
   if (!(el instanceof HTMLElement)) return false
 
   for (const style in styles) {
-    el.attributeStyleMap.append(style, 'unset')
+    el.attributeStyleMap.set(style, 'unset')
   }
 }
 
@@ -180,11 +180,13 @@ const toolbarItems: ToolbarItem[] = [
     selected: defineTextState((sel) =>
       nodeParentStyles({ 'text-align': 'left' }, sel.value as Selection),
     ),
-    toggle: () =>
-      defineActionToggle(
-        (sel) => setParentStyle({ 'text-align': 'left' }, sel!),
-        (sel) => unsetParentStyle({ 'text-align': 'left' }, sel!),
-      ),
+    toggle: defineActionToggle(
+      (sel) => {
+        console.log('justify left')
+        setParentStyle({ 'text-align': 'left' }, sel!)
+      },
+      (sel) => unsetParentStyle({ 'text-align': 'left' }, sel!),
+    ),
   },
   {
     type: 'item',

@@ -65,6 +65,19 @@ export function useEditedTransientElement() {
   return editedTransientElement
 }
 
+// export function useLastEditedTransientElement() {
+//   const lastEditedTransientElement = ref<TransientElement | undefined>(editedTransientElement.value)
+
+//   watch(editedTransientElement, (newElement, oldElement) => {
+//     if (newElement) {
+//       lastEditedTransientElement.value = editedTransientElement.value
+//       console.log('lastEditedTransientElement updated', newElement)
+//     }
+//   })
+
+//   return lastEditedTransientElement.value
+// }
+
 type OnEditCallback = (element: TransientElement, node: Node) => void
 
 export function useEdition() {
