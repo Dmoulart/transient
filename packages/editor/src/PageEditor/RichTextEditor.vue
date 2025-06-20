@@ -30,6 +30,12 @@ function wrapSelection(tag: string, sel: Selection): HTMLElement {
   const contents = range.extractContents()
 
   const wrapper = document.createElement(tag)
+
+  if (contents.parentNode?.nodeName === tag) {
+    // If the contents are already wrapped in the same tag, just return it
+    return contents.parentNode as HTMLElement
+  }
+
   wrapper.appendChild(contents)
 
   range.insertNode(wrapper)
@@ -43,8 +49,8 @@ function wrapSelection(tag: string, sel: Selection): HTMLElement {
 }
 
 function unwrapSelection(tag: string, sel: Selection) {
-  if (sel.rangeCount === 0) return
-
+  assert(sel.rangeCount > 0, 'Selection must have a range')
+  console.log('unwrap', tag)
   const range = sel.getRangeAt(0)
 
   const editedTextAncestor = range.commonAncestorContainer
