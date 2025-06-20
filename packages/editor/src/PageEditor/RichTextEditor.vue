@@ -1,12 +1,30 @@
 <script setup lang="ts">
 import { useSelection } from '@/lib/use-selection'
-import { get } from 'http'
+import { assert, assertIsDefined } from 'transient/src/core/assert'
 import { computed, type ComputedRef } from 'vue'
 
 const selection = useSelection()
 
-function wrap(tag: string, sel: Selection) {
-  if (!sel.rangeCount) return
+function wrap(tag: string, node: Node) {
+  assertIsDefined(selection.value, 'Selection must have a range')
+
+  const wrapper = document.createElement(tag)
+  wrapper.appendChild(node.cloneNode(true))
+
+  const parent = node.parentNode
+  if (parent) {
+    parent.replaceChild(wrapper, node)
+  }
+  selection.value.removeAllRanges()
+  const newRange = document.createRange()
+  newRange.selectNodeContents(wrapper)
+  selection.value.addRange(newRange)
+
+  return wrapper
+}
+
+function wrapSelection(tag: string, sel: Selection): HTMLElement {
+  assert(sel.rangeCount > 0, 'Selection must have a range')
 
   const range = sel.getRangeAt(0)
   const contents = range.extractContents()
@@ -20,9 +38,11 @@ function wrap(tag: string, sel: Selection) {
   const newRange = document.createRange()
   newRange.selectNodeContents(wrapper)
   sel.addRange(newRange)
+
+  return wrapper
 }
 
-function unwrap(tag: string, sel: Selection) {
+function unwrapSelection(tag: string, sel: Selection) {
   if (sel.rangeCount === 0) return
 
   const range = sel.getRangeAt(0)
@@ -57,13 +77,13 @@ function unwrap(tag: string, sel: Selection) {
   const startPos = getNodeForCharacterOffset(parentOfWrappingTag, offset.start)
   const endPos = getNodeForCharacterOffset(parentOfWrappingTag, offset.end)
 
-  console.log(startPos, endPos)
   if (startPos && endPos) {
     newRange.setStart(startPos.node, startPos.offset)
     newRange.setEnd(endPos.node, endPos.offset)
   } else {
     console.warn('Invalid offsets for range')
   }
+
   sel.addRange(newRange)
 }
 
@@ -78,15 +98,13 @@ function nodeIn(tagNames: string[], selection: Selection) {
   return tagNames.some((tag) => el!.closest(tag))
 }
 
-function nodeParentStyles(styles: Record<string, any>, selection: Selection) {
-  let el = selection?.focusNode
+function blockAncestorStyle(styles: Record<string, any>, selection: Selection) {
+  const block = getBlockContainer(selection)
 
-  while (el && el.nodeType === Node.TEXT_NODE) {
-    el = el.parentNode
-  }
-  if (!(el instanceof HTMLElement)) return false
+  if (!(block instanceof HTMLElement)) return false
+
   for (const style in styles) {
-    if (el.computedStyleMap().get(style)?.toString() !== styles[style]) {
+    if (block.computedStyleMap().get(style)?.toString() !== styles[style]) {
       return false
     }
   }
@@ -94,31 +112,23 @@ function nodeParentStyles(styles: Record<string, any>, selection: Selection) {
   return true
 }
 
-function setParentStyle(styles: Record<string, any>, selection: Selection) {
-  let el = selection?.focusNode
+function setBlockAncestorStyle(styles: Record<string, any>, selection: Selection) {
+  const block = getBlockContainer(selection)
 
-  while (el && el.nodeType === Node.TEXT_NODE) {
-    el = el.parentNode
-  }
-
-  if (!(el instanceof HTMLElement)) return false
+  if (!(block instanceof HTMLElement)) return
 
   for (const style in styles) {
-    el.attributeStyleMap.set(style, styles[style])
+    block.attributeStyleMap.set(style, styles[style])
   }
 }
 
-function unsetParentStyle(styles: Record<string, any>, selection: Selection) {
-  let el = selection?.focusNode
+function unsetBlockAncestorStyle(styles: Record<string, any>, selection: Selection) {
+  const block = getBlockContainer(selection)
 
-  while (el && el.nodeType === Node.TEXT_NODE) {
-    el = el.parentNode
-  }
-
-  if (!(el instanceof HTMLElement)) return false
+  if (!(block instanceof HTMLElement)) return
 
   for (const style in styles) {
-    el.attributeStyleMap.set(style, 'unset')
+    block.attributeStyleMap.delete(style)
   }
 }
 
@@ -126,8 +136,6 @@ function defineTextState(
   isSelected: (selectionValue: typeof selection) => boolean,
 ): ComputedRef<boolean> {
   return computed(() => {
-    // console.log('update text state', updateTrigger.value)
-    // updateTrigger.value // depend on trigger
     if (!selection.value?.focusNode) return false
     return isSelected(selection)
   })
@@ -172,7 +180,7 @@ function getElementCharacterOffsets(
   return { start, end: start + length }
 }
 
-function getNodeForCharacterOffset(root, charOffset) {
+function getNodeForCharacterOffset(root: ParentNode, charOffset: number) {
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT)
   let currentCharCount = 0
 
@@ -187,6 +195,25 @@ function getNodeForCharacterOffset(root, charOffset) {
     currentCharCount += length
   }
   return null
+}
+
+function getBlockContainer(selection: Selection): HTMLElement | null {
+  let node = selection.focusNode
+
+  while (node && node.nodeType === Node.TEXT_NODE) {
+    node = node.parentNode
+  }
+
+  if (!(node instanceof HTMLElement)) return null
+
+  // Traverse up until a block-level element is found (simplified)
+  let el: HTMLElement | null = node as HTMLElement
+
+  while (el && window.getComputedStyle(el).display !== 'block' && el.parentElement) {
+    el = el.parentElement
+  }
+
+  return el
 }
 
 type ToolbarButton = {
@@ -210,8 +237,8 @@ const toolbarItems: ToolbarItem[] = [
     svg: '<path d="M6 4h8a4 4 0 0 1 0 8H6zm0 8h9a4 4 0 1 1 0 8H6z" />',
     selected: defineTextState((sel) => nodeIn(['strong', 'b'], sel.value as Selection)),
     toggle: defineActionToggle(
-      (sel) => wrap('strong', sel!),
-      (sel) => unwrap('strong', sel!),
+      (sel) => wrapSelection('strong', sel!),
+      (sel) => unwrapSelection('strong', sel!),
     ),
   },
   {
@@ -220,8 +247,8 @@ const toolbarItems: ToolbarItem[] = [
     svg: '<path d="M10 4v3h2.21l-3.42 10H6v3h8v-3h-2.21l3.42-10H18V4z" />',
     selected: defineTextState((sel) => nodeIn(['i', 'em'], sel.value as Selection)),
     toggle: defineActionToggle(
-      (sel) => wrap('em', sel),
-      (sel) => unwrap('em', sel),
+      (sel) => wrapSelection('em', sel),
+      (sel) => unwrapSelection('em', sel),
     ),
   },
   {
@@ -230,8 +257,8 @@ const toolbarItems: ToolbarItem[] = [
     svg: '<path d="M12 17a5 5 0 0 0 5-5V4h-2v8a3 3 0 0 1-6 0V4H7v8a5 5 0 0 0 5 5zm-7 2v2h14v-2z" />',
     selected: defineTextState((sel) => nodeIn(['u'], sel.value as Selection)),
     toggle: defineActionToggle(
-      (sel) => wrap('u', sel),
-      (sel) => unwrap('u', sel),
+      (sel) => wrapSelection('u', sel),
+      (sel) => unwrapSelection('u', sel),
     ),
   },
   { type: 'separator' },
@@ -240,14 +267,13 @@ const toolbarItems: ToolbarItem[] = [
     title: 'Justify Left',
     svg: '<path d="M4 6h16v2H4zm0 4h10v2H4zm0 4h16v2H4zm0 4h10v2H4z" />',
     selected: defineTextState((sel) =>
-      nodeParentStyles({ 'text-align': 'left' }, sel.value as Selection),
+      blockAncestorStyle({ 'text-align': 'left' }, sel.value as Selection),
     ),
     toggle: defineActionToggle(
       (sel) => {
-        console.log('justify left')
-        setParentStyle({ 'text-align': 'left' }, sel!)
+        setBlockAncestorStyle({ 'text-align': 'left' }, sel!)
       },
-      (sel) => unsetParentStyle({ 'text-align': 'left' }, sel!),
+      (sel) => unsetBlockAncestorStyle({ 'text-align': 'left' }, sel!),
     ),
   },
   {
@@ -255,33 +281,59 @@ const toolbarItems: ToolbarItem[] = [
     title: 'Justify Center',
     svg: '<path d="M4 6h16v2H4zm3 4h10v2H7zm-3 4h16v2H4zm3 4h10v2H7z" />',
     selected: defineTextState((sel) =>
-      nodeParentStyles({ 'text-align': 'center' }, sel.value as Selection),
+      blockAncestorStyle({ 'text-align': 'center' }, sel.value as Selection),
     ),
-    toggle: () => document.execCommand('justifyCenter'),
+    toggle: defineActionToggle(
+      (sel) => {
+        setBlockAncestorStyle({ 'text-align': 'center' }, sel!)
+      },
+      (sel) => unsetBlockAncestorStyle({ 'text-align': 'center' }, sel!),
+    ),
   },
   {
     type: 'item',
     title: 'Justify Right',
     svg: '<path d="M4 6h16v2H4zm6 4h10v2H10zm-6 4h16v2H4zm6 4h10v2H10z" />',
     selected: defineTextState((sel) =>
-      nodeParentStyles({ 'text-align': 'right' }, sel.value as Selection),
+      blockAncestorStyle({ 'text-align': 'right' }, sel.value as Selection),
     ),
-    toggle: () => document.execCommand('justifyRight'),
+    toggle: defineActionToggle(
+      (sel) => {
+        setBlockAncestorStyle({ 'text-align': 'right' }, sel!)
+      },
+      (sel) => unsetBlockAncestorStyle({ 'text-align': 'right' }, sel!),
+    ),
   },
   { type: 'separator' },
   {
     type: 'item',
     title: 'Ordered List',
     svg: '<path d="M8 6h13v2H8zM8 11h13v2H8zM8 16h13v2H8zM3 6h2v2H3zM3 11h2v2H3zM3 16h2v2H3z" />',
-    selected: defineTextState((sel) => nodeIn(['ol'], sel)),
-    toggle: () => document.execCommand('insertOrderedList'),
+    selected: defineTextState((sel) => nodeIn(['ol'], sel.value as Selection)),
+    toggle: defineActionToggle(
+      (sel) => {
+        wrap('ol', wrapSelection('li', sel))
+      },
+      (sel) => {
+        unwrapSelection('li', sel)
+        unwrapSelection('ol', sel)
+      },
+    ),
   },
   {
     type: 'item',
     title: 'Unordered List',
     svg: '<path d="M8 6h13v2H8zM8 11h13v2H8zM8 16h13v2H8zM3 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />',
-    selected: defineTextState((sel) => nodeIn(['ul'], sel)),
-    toggle: () => document.execCommand('insertUnorderedList'),
+    selected: defineTextState((sel) => nodeIn(['ul'], sel.value as Selection)),
+    toggle: defineActionToggle(
+      (sel) => {
+        wrap('ul', wrapSelection('li', sel))
+      },
+      (sel) => {
+        unwrapSelection('li', sel)
+        unwrapSelection('ul', sel)
+      },
+    ),
   },
 ]
 </script>

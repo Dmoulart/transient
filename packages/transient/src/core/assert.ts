@@ -1,4 +1,5 @@
 import type { PropertyMetaSchema } from "vue-component-meta";
+
 export function assert(value: unknown, message?: string): void {
   if (Boolean(value) === false) {
     throw new Error(message ?? "expected defined value");
