@@ -1,4 +1,5 @@
 <template>
+  <ComponentPanel open />
   <RichTextEditor
     v-if="editedNode"
     :style="{
@@ -46,9 +47,10 @@ import Button from '@/samples/Button.vue'
 import { usePage } from '@/lib/use-page'
 import { useEditedNode, useEditedNodeBoundingBox, useEdition } from '@/lib/use-edition'
 import { ref } from 'vue'
-
 import RichTextEditor from './RichTextEditor.vue'
 import { useWindowSize } from '@vueuse/core'
+import EditorComponents from './EditorComponents.vue'
+import ComponentPanel from './ComponentPanel.vue'
 
 const component = getTransientComponentSchema(
   '/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HomePage.vue',

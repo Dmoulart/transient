@@ -6,8 +6,8 @@ import type {
   TransientTemplate,
 } from 'transient/src/transient/definition'
 import { loadAllComponents } from '@/lib/use-dictionnary'
-import { findElementById, getTextValue, hasTextChildren } from 'transient/src/transient/ast'
-import { detectElementEdition, isElementEditable } from '@/lib/use-edition'
+import { findElementById, hasTextChildren } from 'transient/src/transient/ast'
+import { isElementEditable } from '@/lib/use-edition'
 
 const props = defineProps<{
   template: TransientTemplate
