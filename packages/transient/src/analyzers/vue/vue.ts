@@ -36,6 +36,12 @@ function describeComponent(
   src: string,
   path: string
 ): TransientComponentSchema {
+  const name =
+    src
+      .split("/")
+      .pop()
+      ?.replace(/\.vue$/, "") ?? "unknown";
+
   const props: TransientProps = {};
   const slots: TransientSlots = {};
 
@@ -62,6 +68,7 @@ function describeComponent(
   const template = analyzeTemplateElements(src, props);
 
   return {
+    name,
     path,
     props,
     slots,

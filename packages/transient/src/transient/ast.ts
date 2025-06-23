@@ -33,6 +33,10 @@ export function hasTextChildren(element: TransientElement): boolean {
   return (element.slots?.default ?? []).some((child) => child.tag === "#text");
 }
 
+export function hasSlots(element: TransientElement): boolean {
+  return element.slots !== undefined;
+}
+
 export function findElementById(
   elements: TransientElement[],
   id: string

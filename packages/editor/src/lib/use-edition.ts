@@ -2,7 +2,7 @@ import { useEventBus, useEventListener, useFavicon, watchDebounced, whenever } f
 import { getTransientID, htmlNodeToTransientElement } from 'transient/src/analyzers/html/html'
 import { hasTextChildren } from 'transient/src/transient/ast'
 import type { TransientElement } from 'transient/src/transient/definition'
-import { computed, createApp, ref, watch, type App } from 'vue'
+import { computed, createApp, readonly, ref, watch, type App } from 'vue'
 
 const editedNode = ref<HTMLElement | undefined>()
 
@@ -105,6 +105,25 @@ export function useEdition() {
     },
     onEditEnd(cb: OnEditCallback) {
       cbs.onEditEnd.push(cb)
+    },
+  }
+}
+
+const componentPanelIsOpen = ref(false)
+const targetNodeID = ref<string | undefined>(undefined)
+
+export function useComponentPanel() {
+  return {
+    targetNodeID: targetNodeID,
+    isOpen: readonly(componentPanelIsOpen),
+    toggle() {
+      componentPanelIsOpen.value = !componentPanelIsOpen.value
+    },
+    open() {
+      componentPanelIsOpen.value = true
+    },
+    close() {
+      componentPanelIsOpen.value = false
     },
   }
 }

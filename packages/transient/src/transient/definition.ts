@@ -15,6 +15,7 @@ export type TransientTemplate = {
 };
 
 export type TransientComponentSchema = {
+  name: string;
   path: string;
   props: TransientProps;
   slots: TransientSlots;

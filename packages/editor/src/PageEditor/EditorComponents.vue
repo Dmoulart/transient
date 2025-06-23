@@ -7,7 +7,8 @@
           :key="path"
           :path="path as string"
           :schema="schema"
-          @select="$emit('select', path as string)"
+          v-on="$attrs"
+          @select="(data) => $emit('select', data)"
         />
       </div>
     </div>

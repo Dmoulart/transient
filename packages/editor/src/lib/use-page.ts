@@ -3,12 +3,12 @@ import type { TransientElement, TransientTemplate } from 'transient/src/transien
 import {
   appendElement,
   findElementById,
-  patchElement,
+  insertAfterElement,
+  insertBeforeElement,
   removeElement,
   replaceElement,
 } from 'transient/src/transient/ast'
 import { updatedDiff } from 'deep-object-diff'
-import { assertIsDefined } from 'transient/src/core/assert'
 
 const STORAGE_KEY = 'page-schema'
 
@@ -80,6 +80,13 @@ export function usePage(template: TransientTemplate) {
     return findElementById(modifiedContents.value.elements!, id)
   }
 
+  function insertAfter(id: string, newElement: TransientElement) {
+    return insertAfterElement(newElement, id, modifiedContents.value.elements)
+  }
+
+  function insertBefore(id: string, newElement: TransientElement) {
+    return insertBeforeElement(newElement, id, modifiedContents.value.elements)
+  }
   function saveToLocalStorage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(contents.value))
     console.log('Sauvegardé dans le localStorage.')
@@ -108,6 +115,8 @@ export function usePage(template: TransientTemplate) {
     remove,
     patch,
     append,
+    insertAfter,
+    insertBefore,
     saveToLocalStorage,
     loadFromLocalStorage,
   }

@@ -1,6 +1,6 @@
 <template>
   <Suspense>
-    <div :style="item ? styles.item : undefined">
+    <div :style="item ? styles.item : undefined" @click="emit('select', props)">
       <component v-if="component" :is="component" v-bind="defaultProps" />
     </div>
   </Suspense>
@@ -20,9 +20,11 @@ const props = withDefaults(
     item: true,
   },
 )
+
+const emit = defineEmits<{ (e: 'select', data: typeof props): void }>()
 const styles = {
   item: {
-    cursor: 'grabbing',
+    cursor: 'pointer',
     width: '7.5rem',
     height: '7.5rem',
     display: 'flex',

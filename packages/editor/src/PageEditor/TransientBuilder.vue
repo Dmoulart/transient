@@ -5,8 +5,8 @@ import type {
   TransientComponentDictionnary,
   TransientTemplate,
 } from 'transient/src/transient/definition'
-import { loadAllComponents } from '@/lib/use-dictionnary'
-import { findElementById, hasTextChildren } from 'transient/src/transient/ast'
+import { getTransientComponentSchemaByTag, loadAllComponents } from '@/lib/use-dictionnary'
+import { findElementById, hasSlots, hasTextChildren } from 'transient/src/transient/ast'
 import { isElementEditable } from '@/lib/use-edition'
 
 const props = defineProps<{
@@ -37,6 +37,10 @@ function render(element: TransientElement) {
 
   const isComponent = element.isComponent
   const tag = element.tag
+  // if (isComponent) {
+  //   const schema = getTransientComponentSchemaByTag(tag)
+  //   console.log({ schema })
+  // }
   const Component = isComponent ? loadedComponents.value[tag] || tag : tag
 
   const attrs = Object.fromEntries(

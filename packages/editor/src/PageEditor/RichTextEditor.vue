@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { useSelection } from '@/lib/use-selection'
 import { assert, assertIsDefined } from 'transient/src/core/assert'
-import { computed, type ComputedRef } from 'vue'
+import { computed, ref, type ComputedRef, type Ref } from 'vue'
+import ComponentPanel from './ComponentPanel.vue'
+import { useComponentPanel, useEditedNode } from '@/lib/use-edition'
+import { getTransientID } from 'transient/src/analyzers/html/html'
 
 const selection = useSelection()
 
@@ -226,7 +229,7 @@ type ToolbarButton = {
   type: 'item'
   title: string
   svg: string
-  selected: ComputedRef<boolean>
+  selected: Ref<boolean>
   toggle(selected: boolean): void
 }
 
@@ -235,6 +238,8 @@ type ToolbarSeparator = {
 }
 
 type ToolbarItem = ToolbarButton | ToolbarSeparator
+
+const panelIsOpen = ref(false)
 
 const toolbarItems: ToolbarItem[] = [
   {
@@ -311,35 +316,49 @@ const toolbarItems: ToolbarItem[] = [
     ),
   },
   { type: 'separator' },
+  // {
+  //   type: 'item',
+  //   title: 'Ordered List',
+  //   svg: '<path d="M8 6h13v2H8zM8 11h13v2H8zM8 16h13v2H8zM3 6h2v2H3zM3 11h2v2H3zM3 16h2v2H3z" />',
+  //   selected: defineTextState((sel) => nodeIn(['ol'], sel.value as Selection)),
+  //   toggle: defineActionToggle(
+  //     (sel) => {
+  //       wrap('ol', wrapSelection('li', sel))
+  //     },
+  //     (sel) => {
+  //       unwrapSelection('li', sel)
+  //       unwrapSelection('ol', sel)
+  //     },
+  //   ),
+  // },
+  // {
+  //   type: 'item',
+  //   title: 'Unordered List',
+  //   svg: '<path d="M8 6h13v2H8zM8 11h13v2H8zM8 16h13v2H8zM3 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />',
+  //   selected: defineTextState((sel) => nodeIn(['ul'], sel.value as Selection)),
+  //   toggle: defineActionToggle(
+  //     (sel) => {
+  //       wrap('ul', wrapSelection('li', sel))
+  //     },
+  //     (sel) => {
+  //       unwrapSelection('li', sel)
+  //       unwrapSelection('ul', sel)
+  //     },
+  //   ),
+  // },
   {
     type: 'item',
-    title: 'Ordered List',
-    svg: '<path d="M8 6h13v2H8zM8 11h13v2H8zM8 16h13v2H8zM3 6h2v2H3zM3 11h2v2H3zM3 16h2v2H3z" />',
-    selected: defineTextState((sel) => nodeIn(['ol'], sel.value as Selection)),
-    toggle: defineActionToggle(
-      (sel) => {
-        wrap('ol', wrapSelection('li', sel))
-      },
-      (sel) => {
-        unwrapSelection('li', sel)
-        unwrapSelection('ol', sel)
-      },
-    ),
-  },
-  {
-    type: 'item',
-    title: 'Unordered List',
-    svg: '<path d="M8 6h13v2H8zM8 11h13v2H8zM8 16h13v2H8zM3 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />',
-    selected: defineTextState((sel) => nodeIn(['ul'], sel.value as Selection)),
-    toggle: defineActionToggle(
-      (sel) => {
-        wrap('ul', wrapSelection('li', sel))
-      },
-      (sel) => {
-        unwrapSelection('li', sel)
-        unwrapSelection('ul', sel)
-      },
-    ),
+    title: 'Add component',
+    svg: ' <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" />',
+    selected: useComponentPanel().isOpen,
+    toggle: () => {
+      const panel = useComponentPanel()
+      const editedNode = useEditedNode()
+      assertIsDefined(editedNode.value, 'Edited node must be defined to open component panel')
+      panel.targetNodeID.value = getTransientID(editedNode.value)
+      console.log('Opening component panel for node:', panel.targetNodeID.value)
+      panel.open()
+    },
   },
 ]
 </script>
