@@ -148,8 +148,8 @@ import { useSelectedPrototype, createPrototype, useRootPrototype } from '@/lib/u
 import PrototypeView from './PrototypeView.vue'
 import ComponentPanel from './AddComponentPanel.vue'
 import AddComponentPanel from './AddComponentPanel.vue'
-import { useRegistry } from '@/lib/use-dictionnary'
-const dictionnary = useRegistry()
+import { useDictionnary } from '@/lib/use-dictionnary'
+const dictionnary = useDictionnary()
 const editedPrototype = useSelectedPrototype()
 const rootPrototype = useRootPrototype()
 

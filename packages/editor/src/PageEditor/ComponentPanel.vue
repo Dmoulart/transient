@@ -6,8 +6,8 @@
   </UDrawer>
 </template>
 <script setup lang="ts">
-import { useRegistry } from '@/lib/use-dictionnary'
+import { useDictionnary } from '@/lib/use-dictionnary'
 import EditorComponents from './EditorComponents.vue'
 
-const registry = useRegistry()
+const registry = useDictionnary()
 </script>

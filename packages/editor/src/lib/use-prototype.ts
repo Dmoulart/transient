@@ -3,7 +3,7 @@ import {
   type TransientComponentDictionnary,
 } from 'transient/src/transient'
 import { computed, ref } from 'vue'
-import { registry, useRegistry } from './use-dictionnary'
+import { useDictionnary } from './use-dictionnary'
 
 export type PrototypeSlot<T extends 'unique' | 'list'> = { type: T; prototype: Prototype }
 
@@ -52,18 +52,18 @@ export function useSchema(prototype = useSelectedPrototype()) {
 }
 
 export function getSchema(prototype: Prototype) {
-  return registry.value[prototype.path]
+  // return dictionnary.value[prototype.path]
 }
 
 export function getSchemaSlots(prototype: Prototype) {
-  return registry.value[prototype.path]?.slots
+  // return dictionnary.value[prototype.path]?.slots
 }
 
 export function hasSchemaSlots(prototype: Prototype) {
-  return (
-    registry.value[prototype.path]?.slots &&
-    Object.keys(registry.value[prototype.path].slots).length > 0
-  )
+  // return (
+  //   // dictionnary.value[prototype.path]?.slots &&
+  //   // Object.keys(dictionnary.value[prototype.path].slots).length > 0
+  // )
 }
 
 export function getPrototypeName(path: string) {
@@ -71,19 +71,19 @@ export function getPrototypeName(path: string) {
 }
 
 let id = 0
-export function createPrototype(path: string): Prototype {
-  const dictionnary = useRegistry()
+export function createPrototype(path: string) {
+  const dictionnary = useDictionnary()
 
-  if (!dictionnary.value[path]) {
-    throw new Error(`Unknown component ${path}`)
-  }
+  // if (!dictionnary.value[path]) {
+  //   throw new Error(`Unknown component ${path}`)
+  // }
 
-  return {
-    id: ++id,
-    path,
-    data: getComponentDefaultPropsValues(dictionnary.value[path].props),
-    slots: {},
-  }
+  // return {
+  //   id: ++id,
+  //   path,
+  //   data: getComponentDefaultPropsValues(dictionnary.value[path].props),
+  //   slots: {},
+  // }
 }
 
 type ParentSearchResult = {

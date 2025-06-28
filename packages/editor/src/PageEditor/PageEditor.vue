@@ -14,12 +14,7 @@
   />
 
   <Suspense>
-    <TransientBuilder
-      :key="forceRerender"
-      v-if="contents"
-      :template="contents"
-      :registry="registry"
-    />
+    <TransientBuilder :key="forceRerender" v-if="contents" :template="contents" />
   </Suspense>
 
   <JsonViewer
@@ -38,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { getTransientComponentSchemaByPath, registry } from '@/lib/use-dictionnary'
+import { useDictionnary } from '@/lib/use-dictionnary'
 // @ts-expect-error : oups no types
 import { JsonViewer } from 'vue3-json-viewer'
 import 'vue3-json-viewer/dist/index.css'
@@ -62,7 +57,7 @@ import { findElementById, insertAfterElement } from 'transient/src/transient/ast
 import { getTransientID } from 'transient/src/analyzers/html/html'
 import { assert, assertIsArrayOfLength, assertIsDefined } from 'transient/src/core/assert'
 
-const component = getTransientComponentSchemaByPath('HomePage')
+const component = useDictionnary().get('HomePage')
 
 const { contents, replace, render, insertAfter, saveToLocalStorage, loadFromLocalStorage } =
   usePage(component.template!)
@@ -85,7 +80,7 @@ const componentPanel = useComponentPanel()
 
 const addComponent = ({ path, schema }: { path: string; schema: TransientComponentSchema }) => {
   console.log('Adding component:', path, schema)
-  const componentSchema = registry.value[path]
+  const componentSchema = useDictionnary().get(schema.tag)
 
   if (!componentSchema) {
     console.error(`Component schema not found for path: ${path}`)

@@ -6,7 +6,7 @@
   </Suspense>
 </template>
 <script setup lang="ts">
-import { useRegistry } from '@/lib/use-dictionnary'
+import { useDictionnary } from '@/lib/use-dictionnary'
 import { getComponentDefaultPropsValues } from 'transient/src/transient/ast'
 import type { TransientComponentSchema } from 'transient/src/transient/definition'
 import { computed, defineAsyncComponent } from 'vue'
@@ -36,9 +36,9 @@ const styles = {
     overflow: 'hidden',
   },
 }
-const registry = useRegistry()
+const dictionnary = useDictionnary()
 
-const defaultProps = getComponentDefaultPropsValues(registry.value[props.path].props)
+const defaultProps = getComponentDefaultPropsValues(dictionnary.get(props.schema.tag).props)
 
 const component = computed(() => {
   props.path // don't remove this haaha

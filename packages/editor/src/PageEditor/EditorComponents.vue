@@ -3,7 +3,7 @@
     <div class="full-width">
       <div class="component-container">
         <EditorComponent
-          v-for="(schema, name) in registry"
+          v-for="(schema, name) in registry.all()"
           :key="schema.path"
           :path="schema.path as string"
           :schema="schema"
@@ -16,10 +16,10 @@
 </template>
 
 <script setup lang="ts">
-import { useRegistry } from '@/lib/use-dictionnary'
+import { useDictionnary } from '@/lib/use-dictionnary'
 import EditorComponent from './EditorComponent.vue'
 
-const registry = useRegistry()
+const registry = useDictionnary()
 </script>
 
 <style scoped>

@@ -5,31 +5,30 @@ import type {
 import { ref, shallowRef } from 'vue'
 import schemas from '@/assets/schemas/__schemas__.json'
 
-export const registry = shallowRef<TransientComponentDictionnary>(schemas as any)
+class ComponentDictionnary {
+  constructor(private schemas: TransientComponentDictionnary) {}
 
-export function useRegistry() {
-  return registry
-}
+  get(tag: string): TransientComponentSchema {
+    const component = this.schemas[tag]
+    if (!component) {
+      throw new MissingComponentError(`Unknown component ${tag}`)
+    }
 
-export function getTransientComponentSchemaByPath(path: string): TransientComponentSchema {
-  if (!registry.value[path]) {
-    throw new Error(`Unknown schema ${path}`)
+    return component
   }
 
-  return { ...registry.value[path] }
+  all() {
+    return this.schemas
+  }
 }
 
-export function getTransientComponentSchemaByTag(tag: string): TransientComponentSchema {
-  if (!schemasByName.value[tag]) {
-    throw new Error(`Unknown schema ${tag}`)
-  }
+const dictionnary = new ComponentDictionnary(schemas as any)
 
-  return { ...schemasByName.value[tag] }
+export function useDictionnary() {
+  return dictionnary
 }
 
 const componentModules = import.meta.glob('@/samples/**/*.vue')
-
-const schemasByName = ref({} as Record<string, TransientComponentSchema>)
 
 export async function loadAllComponents(): Promise<Record<string, any>> {
   const result: Record<string, any> = {}
@@ -44,18 +43,6 @@ export async function loadAllComponents(): Promise<Record<string, any>> {
   }
 
   return result
-}
-
-class ComponentDictionnary {
-  constructor(private schemas: TransientComponentDictionnary) {}
-
-  getByPath(path: string) {
-    if (this.schemas[path]) {
-      throw new MissingComponentError(`Unknown schema ${path}`)
-    }
-
-    return registry.value[path]
-  }
 }
 
 class MissingComponentError extends Error {}

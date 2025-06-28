@@ -5,13 +5,12 @@ import type {
   TransientComponentDictionnary,
   TransientTemplate,
 } from 'transient/src/transient/definition'
-import { getTransientComponentSchemaByTag, loadAllComponents } from '@/lib/use-dictionnary'
+import { loadAllComponents } from '@/lib/use-dictionnary'
 import { findElementById, hasSlots, hasTextChildren } from 'transient/src/transient/ast'
 import { isElementEditable } from '@/lib/use-edition'
 
 const props = defineProps<{
   template: TransientTemplate
-  registry: TransientComponentDictionnary
 }>()
 
 watch(
