@@ -26,7 +26,7 @@ export function getTransientComponentSchemaByTag(tag: string): TransientComponen
 
   return { ...schemasByName.value[tag] }
 }
-// Crée un résolveur global de composants
+
 const componentModules = import.meta.glob('@/samples/**/*.vue')
 
 const schemasByName = ref({} as Record<string, TransientComponentSchema>)
@@ -45,3 +45,17 @@ export async function loadAllComponents(): Promise<Record<string, any>> {
 
   return result
 }
+
+class ComponentDictionnary {
+  constructor(private schemas: TransientComponentDictionnary) {}
+
+  getByPath(path: string) {
+    if (this.schemas[path]) {
+      throw new MissingComponentError(`Unknown schema ${path}`)
+    }
+
+    return registry.value[path]
+  }
+}
+
+class MissingComponentError extends Error {}

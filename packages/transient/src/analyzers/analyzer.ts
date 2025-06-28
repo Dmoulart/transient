@@ -80,8 +80,7 @@ export function defineAnalyzer(config: AnalyzerConfig): Analyze {
     ...config,
   } as Analyzer;
 
-  const { defaultDir, describe, tsConfigPath, scanDir, write, dest, glob } =
-    analyzer;
+  const { defaultDir, describe, scanDir, write, dest, glob } = analyzer;
 
   return ({ dir }) => {
     logger.announce("components analysis");
@@ -93,7 +92,8 @@ export function defineAnalyzer(config: AnalyzerConfig): Analyze {
 
     for (const componentPath of componentPaths) {
       logger.processing(componentPath);
-      metas[componentPath] = describe(componentPath, dir ?? defaultDir);
+      const component = describe(componentPath, dir ?? defaultDir);
+      metas[component.tag] = component;
       logger.result("OK");
     }
 

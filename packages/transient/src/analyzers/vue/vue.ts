@@ -36,14 +36,14 @@ function describeComponent(
   src: string,
   path: string
 ): TransientComponentSchema {
-  const name =
+  const tag =
     src
       .split("/")
       .pop()
       ?.replace(/\.vue$/, "") ?? "unknown";
 
   const props: TransientProps = {};
-  const slots: TransientSlots = {};
+  let slots: TransientSlots | undefined = undefined;
 
   for (const prop of meta.props) {
     if (prop.global) continue;
@@ -62,16 +62,20 @@ function describeComponent(
     };
   }
 
-  for (const slot of meta.slots) {
-    slots[slot.name] = {};
+  if (meta.slots.length > 0) {
+    slots = {};
+    for (const slot of meta.slots) {
+      slots[slot.name] = {};
+    }
   }
+
   const template = analyzeTemplateElements(src, props);
 
   return {
-    name,
+    tag,
     path,
     props,
     slots,
-    ...(template ? { template } : {}),
+    template,
   };
 }

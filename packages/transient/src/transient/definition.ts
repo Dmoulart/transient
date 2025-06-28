@@ -1,5 +1,5 @@
 export type TransientComponentDictionnary = {
-  [path: string]: TransientComponentSchema;
+  [tag: string]: TransientComponentSchema;
 };
 
 export type TransientElement = {
@@ -15,10 +15,10 @@ export type TransientTemplate = {
 };
 
 export type TransientComponentSchema = {
-  name: string;
+  tag: string;
   path: string;
   props: TransientProps;
-  slots: TransientSlots;
+  slots?: TransientSlots;
   template?: TransientTemplate;
 };
 

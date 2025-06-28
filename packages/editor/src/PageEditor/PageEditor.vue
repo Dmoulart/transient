@@ -62,9 +62,7 @@ import { findElementById, insertAfterElement } from 'transient/src/transient/ast
 import { getTransientID } from 'transient/src/analyzers/html/html'
 import { assert, assertIsArrayOfLength, assertIsDefined } from 'transient/src/core/assert'
 
-const component = getTransientComponentSchemaByPath(
-  '/Users/dorianmoulart/Documents/code/study/cms-make/bridge/packages/editor/src/samples/HomePage.vue',
-)
+const component = getTransientComponentSchemaByPath('HomePage')
 
 const { contents, replace, render, insertAfter, saveToLocalStorage, loadFromLocalStorage } =
   usePage(component.template!)
@@ -77,7 +75,6 @@ const editedNodeBoundingBox = useEditedNodeBoundingBox()
 const windowSize = useWindowSize()
 
 onEditEnd((element) => {
-  // patch(element)
   console.log({ replaceElement: element })
   replace(element)
   render()
@@ -101,7 +98,7 @@ const addComponent = ({ path, schema }: { path: string; schema: TransientCompone
   )
 
   const newComponent: TransientElement = {
-    tag: componentSchema.name,
+    tag: componentSchema.tag,
     isComponent: true,
     attributes: {},
     // isComponent: boolean;
