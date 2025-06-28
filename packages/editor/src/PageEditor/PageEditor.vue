@@ -11,6 +11,11 @@
         : undefined,
     }"
     class="text-editor"
+    @remove="
+      (transientID) => {
+        remove(transientID)
+      }
+    "
   />
 
   <Suspense>
@@ -59,7 +64,7 @@ import { assert, assertIsArrayOfLength, assertIsDefined } from 'transient/src/co
 
 const component = useDictionnary().get('HomePage')
 
-const { contents, replace, render, insertAfter, saveToLocalStorage, loadFromLocalStorage } =
+const { contents, replace, render, remove, insertAfter, saveToLocalStorage, loadFromLocalStorage } =
   usePage(component.template!)
 
 const forceRerender = ref(0)

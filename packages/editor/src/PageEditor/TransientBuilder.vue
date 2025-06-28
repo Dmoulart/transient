@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import { onMounted, h, shallowRef, createCommentVNode, watch } from 'vue'
-import type {
-  TransientElement,
-  TransientComponentDictionnary,
-  TransientTemplate,
-} from 'transient/src/transient/definition'
+import type { TransientElement, TransientTemplate } from 'transient/src/transient/definition'
 import { loadAllComponents } from '@/lib/use-dictionnary'
-import { findElementById, hasSlots, hasTextChildren } from 'transient/src/transient/ast'
+import { findElementById, hasTextChildren } from 'transient/src/transient/ast'
 import { isElementEditable } from '@/lib/use-edition'
 
 const props = defineProps<{

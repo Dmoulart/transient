@@ -1,8 +1,7 @@
-import { useEventBus, useEventListener, useFavicon, watchDebounced, whenever } from '@vueuse/core'
+import { useEventListener } from '@vueuse/core'
 import { getTransientID, htmlNodeToTransientElement } from 'transient/src/analyzers/html/html'
-import { hasTextChildren } from 'transient/src/transient/ast'
 import type { TransientElement } from 'transient/src/transient/definition'
-import { computed, createApp, readonly, ref, watch, type App } from 'vue'
+import { computed, readonly, ref, watch, type App } from 'vue'
 
 const editedNode = ref<HTMLElement | undefined>()
 

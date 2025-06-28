@@ -5,8 +5,11 @@ import { computed, ref, type ComputedRef, type Ref } from 'vue'
 import ComponentPanel from './ComponentPanel.vue'
 import { useComponentPanel, useEditedNode } from '@/lib/use-edition'
 import { getTransientID } from 'transient/src/analyzers/html/html'
+import { usePage } from '@/lib/use-page'
 
 const selection = useSelection()
+
+const emit = defineEmits(['remove'])
 
 function wrap(tag: string, node: Node) {
   assertIsDefined(selection.value, 'Selection must have a range')
@@ -358,6 +361,21 @@ const toolbarItems: ToolbarItem[] = [
       panel.targetNodeID.value = getTransientID(editedNode.value)
       console.log('Opening component panel for node:', panel.targetNodeID.value)
       panel.open()
+    },
+  },
+  {
+    type: 'item',
+    title: 'Remove',
+    svg: '<path d="M6 20a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zm13-13h-3.5l-1-1h-5l-1 1H5v2h14z"/>',
+    selected: ref(false),
+    toggle: () => {
+      const editedNode = useEditedNode()
+      assertIsDefined(editedNode.value)
+      const transientID = getTransientID(editedNode.value)
+      assertIsDefined(transientID)
+      emit('remove', transientID)
+      console.log('Remove button clicked')
+      // TODO: implement logic
     },
   },
 ]
