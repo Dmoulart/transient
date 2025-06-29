@@ -4,10 +4,10 @@ export type TransientComponentDictionnary = {
 
 export type TransientElement = {
   id: string;
-  tag: string; // peut être div, my-button, par ex
-  isComponent: boolean; // indique si c'est un composant custom
+  tag: string;
+  isComponent: boolean;
   attributes: Record<string, BindingInfo>;
-  slots?: Record<string, TransientElement[]>;
+  children?: TransientElement[];
 };
 
 export type TransientTemplate = {

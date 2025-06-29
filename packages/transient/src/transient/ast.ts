@@ -30,11 +30,11 @@ export function getComponentDefaultPropsValues(props: TransientProps) {
 }
 
 export function hasTextChildren(element: TransientElement): boolean {
-  return (element.slots?.default ?? []).some((child) => child.tag === "#text");
+  return (element.children ?? []).some((child) => child.tag === "#text");
 }
 
-export function hasSlots(element: TransientElement): boolean {
-  return element.slots !== undefined;
+export function hasChildren(element: TransientElement): boolean {
+  return element.children !== undefined;
 }
 
 export function findElementById(
@@ -44,11 +44,9 @@ export function findElementById(
   for (const element of elements) {
     if (element.id === id) return element;
 
-    if (element.slots) {
-      for (const slotElements of Object.values(element.slots)) {
-        const found = findElementById(slotElements, id);
-        if (found) return found;
-      }
+    if (element.children) {
+      const found = findElementById(element.children, id);
+      if (found) return found;
     }
   }
   return undefined;
@@ -64,16 +62,14 @@ export function replaceElement(
       return newElement;
     }
 
-    if (elements[i]!.slots) {
-      for (const slotName in elements[i]!.slots) {
-        const slotElements = elements[i]!.slots![slotName];
+    if (elements[i]!.children) {
+      const slotElements = elements[i]!.children;
 
-        if (slotElements) {
-          const updated = replaceElement(newElement, slotElements);
+      if (slotElements) {
+        const updated = replaceElement(newElement, slotElements);
 
-          if (updated) {
-            return updated;
-          }
+        if (updated) {
+          return updated;
         }
       }
     }
@@ -93,10 +89,9 @@ export function appendElement(
     return false;
   }
 
-  parent.slots = parent.slots ?? {};
-  parent.slots.default = parent.slots.default ?? [];
+  parent.children ??= [];
 
-  parent.slots.default.push(element);
+  parent.children.push(element);
   return true;
 }
 
@@ -110,11 +105,9 @@ export function removeElement(
       return true;
     }
 
-    if (elements[i]!.slots) {
-      for (const slotName in elements[i]!.slots) {
-        if (removeElement(idToRemove, elements[i]!.slots![slotName]!)) {
-          return true;
-        }
+    if (elements[i]!.children) {
+      if (removeElement(idToRemove, elements[i]!.children!)) {
+        return true;
       }
     }
   }
@@ -132,13 +125,9 @@ export function insertAfterElement(
       return true;
     }
 
-    if (elements[i]!.slots) {
-      for (const slotName in elements[i]!.slots) {
-        if (
-          insertAfterElement(newElement, id, elements[i]!.slots![slotName]!)
-        ) {
-          return true;
-        }
+    if (elements[i]!.children) {
+      if (insertAfterElement(newElement, id, elements[i]!.children!)) {
+        return true;
       }
     }
   }
@@ -156,13 +145,9 @@ export function insertBeforeElement(
       return true;
     }
 
-    if (elements[i]!.slots) {
-      for (const slotName in elements[i]!.slots) {
-        if (
-          insertBeforeElement(newElement, id, elements[i]!.slots![slotName]!)
-        ) {
-          return true;
-        }
+    if (elements[i]!.children) {
+      if (insertBeforeElement(newElement, id, elements[i]!.children!)) {
+        return true;
       }
     }
   }

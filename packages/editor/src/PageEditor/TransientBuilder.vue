@@ -9,13 +9,6 @@ const props = defineProps<{
   template: TransientTemplate
 }>()
 
-watch(
-  () => props.template,
-  () => {
-    console.log('template changed')
-  },
-)
-
 const loadedComponents = shallowRef<Record<string, any>>({})
 
 onMounted(async () => {
@@ -44,10 +37,8 @@ function render(element: TransientElement) {
 
   const slots: Record<string, () => any> = {}
 
-  for (const [slotName, slotElements] of Object.entries(element.slots || {})) {
-    const rendered = slotElements.map(render)
-    slots[slotName] = () => rendered
-  }
+  const rendered = (element.children ?? []).map(render)
+  slots.default = () => rendered
 
   const meta: Record<string, any> = {}
   for (const [key, value] of Object.entries(element.attributes)) {

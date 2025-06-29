@@ -97,37 +97,16 @@ function parseElement(
   const isComponent = /^[A-Z]/.test(tag);
   const attributes = parseElementAttributes(node.props, props);
 
-  if (tag === "template") {
-    debugger;
-  }
-
-  const slots: Record<string, TransientElement[]> = {};
-
   const children = node.children
     .map((child) => walk(child, props))
     .filter(Boolean) as TransientElement[];
-
-  for (const child of children) {
-    if (
-      child.tag === "template" &&
-      child.slots &&
-      child.attributes["v-slot"]?.expression
-    ) {
-      const slotName = child.attributes["v-slot"].expression;
-      assertIs(someString, slotName);
-      slots[slotName] = child.slots.default || [];
-    } else {
-      if (!slots.default) slots.default = [];
-      slots.default.push(child);
-    }
-  }
 
   return {
     id: crypto.randomUUID(),
     tag,
     isComponent,
     attributes,
-    slots: Object.keys(slots).length ? slots : undefined,
+    children: children.length > 0 ? children : undefined,
   };
 }
 
