@@ -6,11 +6,12 @@ import { computed, readonly, ref, watch, type App } from 'vue'
 const editedNode = ref<HTMLElement | undefined>()
 
 export function isElementEditable(element: TransientElement) {
-  return !!element.children //hasTextChildren(element)
+  return true
+  // return !!element.children //hasTextChildren(element)
 }
 
 export function isNodeEditable(node: HTMLElement) {
-  return node.dataset.transientEditable
+  return node.dataset.transientId
 }
 
 export function detectElementEdition(e: Event) {
@@ -21,10 +22,21 @@ export function detectElementEdition(e: Event) {
     }
   }
 }
+
 useEventListener(document, 'focusin', detectElementEdition)
 
+// useEventListener(document, 'click', (e) => {
+//   const element = e.target
+//   if (element instanceof HTMLElement) {
+//     // element.tabIndex = 0
+//     // element.focus()
+//     // if (isNodeEditable(element)) {
+//     //   editedNode.value = element
+//     // }
+//   }
+// })
+
 useEventListener(document, 'focusout', (e) => {
-  console.log({ ...editedNode })
   editedNode.value = undefined
 })
 

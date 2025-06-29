@@ -31,9 +31,12 @@ function render(element: TransientElement) {
   // }
   const Component = isComponent ? loadedComponents.value[tag] || tag : tag
 
-  const attrs = Object.fromEntries(
-    Object.entries(element.attributes || {}).map(([k, v]) => [k, v.expression]),
-  )
+  const attrs = {
+    ...Object.fromEntries(
+      Object.entries(element.attributes || {}).map(([k, v]) => [k, v.expression]),
+    ),
+    tabIndex: 0,
+  }
 
   const slots: Record<string, () => any> = {}
 
@@ -88,4 +91,10 @@ onMounted(() => {
   />
   <div v-else>Loading...</div>
 </template>
-<style></style>
+<style>
+/* [data-transient-editable='true']:hover {
+  background-color: pink;
+  min-height: 20px;
+  width: 100%;
+} */
+</style>
