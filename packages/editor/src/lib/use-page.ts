@@ -1,4 +1,4 @@
-import { ref, shallowRef } from 'vue'
+import { ref, shallowRef, triggerRef } from 'vue'
 import type { TransientElement, TransientTemplate } from 'transient/src/transient/definition'
 import {
   appendElement,
@@ -15,8 +15,6 @@ const STORAGE_KEY = 'page-schema'
 export function usePage(template: TransientTemplate) {
   const contents = ref<TransientTemplate>(template)
 
-  const modifiedContents = ref<TransientTemplate>(template)
-
   function replace(newElement: TransientElement) {
     const replaced = replaceElement(newElement, contents.value.elements)
 
@@ -26,23 +24,23 @@ export function usePage(template: TransientTemplate) {
   }
 
   function remove(id: string) {
-    removeElement(id, modifiedContents.value.elements)
+    removeElement(id, contents.value.elements)
   }
 
   function append(parentId: string, newElement: TransientElement) {
-    appendElement(newElement, parentId, modifiedContents.value.elements)
+    appendElement(newElement, parentId, contents.value.elements)
   }
 
   function find(id: string) {
-    return findElementById(modifiedContents.value.elements!, id)
+    return findElementById(contents.value.elements!, id)
   }
 
   function insertAfter(id: string, newElement: TransientElement) {
-    return insertAfterElement(newElement, id, modifiedContents.value.elements)
+    return insertAfterElement(newElement, id, contents.value.elements)
   }
 
   function insertBefore(id: string, newElement: TransientElement) {
-    return insertBeforeElement(newElement, id, modifiedContents.value.elements)
+    return insertBeforeElement(newElement, id, contents.value.elements)
   }
   function saveToLocalStorage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(contents.value))
@@ -60,12 +58,11 @@ export function usePage(template: TransientTemplate) {
   }
 
   function render() {
-    contents.value = modifiedContents.value
+    triggerRef(contents)
   }
 
   return {
     contents,
-    modifiedContents,
     replace,
     find,
     render,

@@ -64,7 +64,7 @@ import { assert, assertIsArrayOfLength, assertIsDefined } from 'transient/src/co
 
 const component = useDictionnary().get('HomePage')
 
-const { contents, replace, render, remove, insertAfter, saveToLocalStorage, loadFromLocalStorage } =
+const { contents, replace, remove, insertAfter, saveToLocalStorage, loadFromLocalStorage } =
   usePage(component.template!)
 
 const forceRerender = ref(0)
@@ -77,8 +77,8 @@ const windowSize = useWindowSize()
 onEditEnd((element) => {
   console.log({ replaceElement: element })
   replace(element)
-  render()
-  forceRerender.value++
+  // render()
+  // forceRerender.value++
 })
 
 const componentPanel = useComponentPanel()
@@ -111,8 +111,8 @@ const addComponent = ({ path, schema }: { path: string; schema: TransientCompone
 
   insertAfter(componentPanel.targetNodeID.value, newComponent)
 
-  render()
-  forceRerender.value++
+  // render()
+  // forceRerender.value++
   componentPanel.close()
 }
 </script>

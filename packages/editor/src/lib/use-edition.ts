@@ -15,6 +15,7 @@ export function isNodeEditable(node: HTMLElement) {
 }
 
 export function detectElementEdition(e: Event) {
+  console.log('focusin', e.target)
   const element = e.target
   if (element instanceof HTMLElement) {
     if (isNodeEditable(element)) {
@@ -37,6 +38,7 @@ useEventListener(document, 'focusin', detectElementEdition)
 // })
 
 useEventListener(document, 'focusout', (e) => {
+  console.log('focusout', e.target)
   editedNode.value = undefined
 })
 
@@ -48,7 +50,6 @@ export function useEditedNodeBoundingBox() {
   return computed(() => {
     if (editedNode.value) {
       const rect = editedNode.value.getBoundingClientRect()
-      console.log({ rect })
       return {
         top: rect.top,
         left: rect.left,
@@ -99,6 +100,7 @@ export function useEdition() {
   }
 
   watch(editedNode, (newNode, oldNode) => {
+    console.log({ newNode, oldNode })
     if (newNode !== undefined) {
       const newElement = htmlNodeToTransientElement(newNode, getTransientID(newNode)!)
       cbs.onEditStart.forEach((cb) => cb(newElement, newNode))

@@ -35,7 +35,8 @@ function render(element: TransientElement) {
     ...Object.fromEntries(
       Object.entries(element.attributes || {}).map(([k, v]) => [k, v.expression]),
     ),
-    tabIndex: 0,
+    // allow focusin to edit
+    tabIndex: isComponent ? 0 : undefined,
   }
 
   const slots: Record<string, () => any> = {}
