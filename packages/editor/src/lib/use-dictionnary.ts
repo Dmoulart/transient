@@ -5,19 +5,14 @@ import type {
 import { ref, shallowRef } from 'vue'
 import schemas from '@/assets/schemas/__schemas__.json'
 
-class ComponentDictionnary {
+export class ComponentDictionnary {
   constructor(private schemas: TransientComponentDictionnary) {}
 
   get(tag: string): TransientComponentSchema {
-    const component = this.schemas[tag]
-    if (!component) {
-      throw new MissingComponentError(`Unknown component ${tag}`)
-    }
-
-    return component
+    return this.schemas[tag]
   }
 
-  all() {
+  all(): TransientComponentDictionnary {
     return this.schemas
   }
 }

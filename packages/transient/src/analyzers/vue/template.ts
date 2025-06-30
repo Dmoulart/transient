@@ -15,7 +15,6 @@ import type {
   TransientTemplate,
   TransientElement,
 } from "../../transient/definition";
-import { assertIs, someString } from "../../core/assert";
 import crypto from "crypto";
 let id = 0;
 
@@ -107,6 +106,7 @@ function parseElement(
     isComponent,
     attributes,
     children: children.length > 0 ? children : undefined,
+    hasSlot: children.some((child) => child.tag === "slot"),
   };
 }
 

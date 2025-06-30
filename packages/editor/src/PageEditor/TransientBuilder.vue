@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import { onMounted, h, shallowRef, createCommentVNode, watch } from 'vue'
-import type { TransientElement, TransientTemplate } from 'transient/src/transient/definition'
-import { loadAllComponents } from '@/lib/use-dictionnary'
+import { onMounted, h, shallowRef, createCommentVNode, watch, useTemplateRef, ref } from 'vue'
+import type {
+  TransientComponentDictionnary,
+  TransientElement,
+  TransientTemplate,
+} from 'transient/src/transient/definition'
+import { ComponentDictionnary, loadAllComponents } from '@/lib/use-dictionnary'
 import { findElementById, hasTextChildren } from 'transient/src/transient/ast'
-import { isElementEditable } from '@/lib/use-edition'
+import { assertIs, someHTMLElement } from 'transient/src/core/assert'
+import type { TransientComponentSchema } from 'transient/src'
+import { getTransientID } from 'transient/src/analyzers/html/html'
 
 const props = defineProps<{
   template: TransientTemplate
+  dictionnary: ComponentDictionnary
 }>()
 
 const loadedComponents = shallowRef<Record<string, any>>({})
@@ -45,9 +52,9 @@ function render(element: TransientElement) {
   slots.default = () => rendered
 
   const meta: Record<string, any> = {}
-  for (const [key, value] of Object.entries(element.attributes)) {
-    meta[`data-transient-attr-${key}`] = JSON.stringify(value)
-  }
+  // for (const [key, value] of Object.entries(element.attributes)) {
+  //   meta[`data-transient-attr-${key}`] = JSON.stringify(value)
+  // }
 
   const listeners: Record<string, (e: Event) => void> = {}
 
@@ -61,13 +68,44 @@ function render(element: TransientElement) {
       ...attrs,
       ...meta,
       ...listeners,
-      'data-transient-editable': isElementEditable(element),
-      contenteditable: hasTextChildren(element) ? true : null,
+      // 'data-transient-editable': isElementEditable(element),
+      // 'data-transient-text-editable': hasTextChildren(element),
+      contenteditable:
+        element.hasSlot || (element.isComponent === false && hasTextChildren(element))
+          ? true
+          : null,
       'data-transient-id': element.id,
+      onVnodeMounted(vnode) {
+        const el = vnode.el
+        console.log({ el })
+        debugger
+        assertIs(someHTMLElement, el)
+
+        const schema = props.dictionnary.get(tag)
+
+        if (schema?.slots) {
+          Object.entries(schema.slots).forEach(([name, { parentId }]) => {
+            const parentSlot = el.querySelector(`[data-transient-id="${parentId}"]`)
+            if (parentSlot) {
+              assertIs(someHTMLElement, parentSlot)
+              parentSlot.contentEditable = 'true'
+              console.log('gooo')
+            }
+          })
+        }
+        // if (props.schema.slots) {
+        //   for (const [slotName, { parentId }] of Object.entries(props.schema.slots)) {
+        //     const slotParent = el.querySelector(`[data-transient-id="${parentId}"]`)
+        //     console.log({ slotParent })
+        //   }
+        // }
+        // el.quer
+      },
     },
     slots,
   )
 }
+const root = ref<HTMLElement | null>()
 
 onMounted(() => {
   document.addEventListener('click', (e) => {
@@ -77,7 +115,7 @@ onMounted(() => {
     if (item && item instanceof HTMLElement) {
       const id = item.dataset.transientId
       if (id) {
-        const matching = findElementById(props.template?.elements ?? [], id)
+        const matching = findElementById(props.template.elements ?? [], id)
       }
     }
   })
@@ -86,8 +124,9 @@ onMounted(() => {
 
 <template>
   <component
+    ref="root"
     v-if="loadedComponents"
-    v-for="el in props.template?.elements || []"
+    v-for="el in props.template.elements || []"
     :is="render(el)"
   />
   <div v-else>Loading...</div>

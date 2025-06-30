@@ -15,11 +15,13 @@ export function isNodeEditable(node: HTMLElement) {
 }
 
 export function detectElementEdition(e: Event) {
-  console.log('focusin', e.target)
   const element = e.target
   if (element instanceof HTMLElement) {
     if (isNodeEditable(element)) {
+      console.log('focusin', e.target)
       editedNode.value = element
+      // const tid = element.closest(`[contenteditable="true"`)
+      // console.log({ tid })
     }
   }
 }

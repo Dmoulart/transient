@@ -1,6 +1,6 @@
 <template>
   <button data-test="btn" :size-attr="size" size-lit="size" :stuff="true">
-    {{ text }}
+    <slot />
   </button>
 </template>
 <script setup lang="ts">

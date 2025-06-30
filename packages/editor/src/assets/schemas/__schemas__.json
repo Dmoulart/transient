@@ -40,14 +40,20 @@
       }
     },
     "slots": {
-      "left": {},
-      "default": {},
-      "right": {}
+      "left": {
+        "parentId": "bb06bb6e-e7f0-4e7e-a511-94abd5415e6e"
+      },
+      "default": {
+        "parentId": "2c7ed739-3f62-478b-b4b2-0833d3447ff3"
+      },
+      "right": {
+        "parentId": "69bc11c1-0fbd-440f-9387-2999abab598f"
+      }
     },
     "template": {
       "elements": [
         {
-          "id": "4f612ad7-a728-4204-a4d4-359776d83929",
+          "id": "ad9a5111-077d-48c6-88e1-eb0bce9951ae",
           "tag": "button",
           "isComponent": false,
           "attributes": {
@@ -62,7 +68,7 @@
           },
           "children": [
             {
-              "id": "4f03106b-c705-4526-9f80-c70172d0603b",
+              "id": "bb06bb6e-e7f0-4e7e-a511-94abd5415e6e",
               "tag": "span",
               "isComponent": false,
               "attributes": {
@@ -73,7 +79,7 @@
               },
               "children": [
                 {
-                  "id": "08bce2b0-61a6-461c-b55b-30f6eeac0e60",
+                  "id": "105dbe36-f945-4e9c-93fd-21e488c79305",
                   "tag": "slot",
                   "isComponent": false,
                   "attributes": {
@@ -81,26 +87,30 @@
                       "type": "literal",
                       "expression": "left"
                     }
-                  }
+                  },
+                  "hasSlot": false
                 }
-              ]
+              ],
+              "hasSlot": true
             },
             {
-              "id": "215c8ae1-44a8-4dd3-a618-640b89c9615f",
+              "id": "2c7ed739-3f62-478b-b4b2-0833d3447ff3",
               "tag": "span",
               "isComponent": false,
               "attributes": {},
               "children": [
                 {
-                  "id": "adc35496-54e0-4f41-a77b-6b3b76411a1f",
+                  "id": "8b6e26d7-3a1c-46bc-b23a-83fc25d3d07a",
                   "tag": "slot",
                   "isComponent": false,
-                  "attributes": {}
+                  "attributes": {},
+                  "hasSlot": false
                 }
-              ]
+              ],
+              "hasSlot": true
             },
             {
-              "id": "d07ca878-bb71-46d0-81ef-e498dc256b8a",
+              "id": "69bc11c1-0fbd-440f-9387-2999abab598f",
               "tag": "span",
               "isComponent": false,
               "attributes": {
@@ -111,7 +121,7 @@
               },
               "children": [
                 {
-                  "id": "612bda18-252f-4d40-ad02-91b1c08e59ef",
+                  "id": "516a7b06-dd97-43ee-bcfa-8c5752bc1424",
                   "tag": "slot",
                   "isComponent": false,
                   "attributes": {
@@ -119,11 +129,14 @@
                       "type": "literal",
                       "expression": "right"
                     }
-                  }
+                  },
+                  "hasSlot": false
                 }
-              ]
+              ],
+              "hasSlot": true
             }
-          ]
+          ],
+          "hasSlot": false
         }
       ]
     }
@@ -254,12 +267,14 @@
       }
     },
     "slots": {
-      "default": {}
+      "default": {
+        "parentId": "377ef240-db2e-45f5-a0aa-d8d8bc9fbf28"
+      }
     },
     "template": {
       "elements": [
         {
-          "id": "32c91a46-b457-4bd0-9108-198c977175a3",
+          "id": "377ef240-db2e-45f5-a0aa-d8d8bc9fbf28",
           "tag": "div",
           "isComponent": false,
           "attributes": {
@@ -270,12 +285,14 @@
           },
           "children": [
             {
-              "id": "da1d5217-6754-4723-85ea-76d5ce86ac17",
+              "id": "6eebbc3a-ec7a-48a8-9dfa-e4048074ea36",
               "tag": "slot",
               "isComponent": false,
-              "attributes": {}
+              "attributes": {},
+              "hasSlot": false
             }
-          ]
+          ],
+          "hasSlot": true
         }
       ]
     }
@@ -292,7 +309,7 @@
     "template": {
       "elements": [
         {
-          "id": "2c06199c-7b9c-463f-a56d-4ec3dd32a689",
+          "id": "ece13d2a-04ec-4197-b3a9-dac51d88313d",
           "tag": "div",
           "isComponent": false,
           "attributes": {
@@ -303,7 +320,7 @@
           },
           "children": [
             {
-              "id": "097f811e-c3cb-4865-8f2b-bccab86093dd",
+              "id": "76a8e630-4292-4850-8495-23a002733412",
               "tag": "h1",
               "isComponent": false,
               "attributes": {
@@ -311,16 +328,17 @@
                   "type": "literal",
                   "expression": "green"
                 }
-              }
+              },
+              "hasSlot": false
             },
             {
-              "id": "b7982c99-c472-442c-98ef-1cafaa4a0015",
+              "id": "0b4b852c-253b-4842-87b6-274cb5edfeb2",
               "tag": "h3",
               "isComponent": false,
               "attributes": {},
               "children": [
                 {
-                  "id": "c8345796-9ef3-49a8-839f-4e3ac0743988",
+                  "id": "9b1f89c5-ddf2-48b4-9cb9-c673f7c73ae5",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -331,7 +349,7 @@
                   }
                 },
                 {
-                  "id": "a1b4f7d5-6086-4f06-82f6-1967ee5eeebf",
+                  "id": "5a152548-37e1-4d70-a313-111bc15514b6",
                   "tag": "a",
                   "isComponent": false,
                   "attributes": {
@@ -350,7 +368,7 @@
                   },
                   "children": [
                     {
-                      "id": "c144e66f-b748-4abf-bc7e-ab192bc3e211",
+                      "id": "f87ea841-254d-496f-a7b1-712494786fa0",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -360,10 +378,11 @@
                         }
                       }
                     }
-                  ]
+                  ],
+                  "hasSlot": false
                 },
                 {
-                  "id": "77b2a59a-3cc3-4af2-9ea0-2761837901b6",
+                  "id": "e6950bfb-de7d-4fff-8848-a9ee2d5354af",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -374,7 +393,7 @@
                   }
                 },
                 {
-                  "id": "8cf2fb18-97b8-430a-a6b8-a60cf3c46a9a",
+                  "id": "059d7801-9d5d-4c69-beb6-2ff27edcddf9",
                   "tag": "a",
                   "isComponent": false,
                   "attributes": {
@@ -393,7 +412,7 @@
                   },
                   "children": [
                     {
-                      "id": "cd2ae1e2-a900-4087-9916-aecab9f92904",
+                      "id": "787e81bc-a8a9-478a-9d14-b9fc30e33610",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -403,10 +422,11 @@
                         }
                       }
                     }
-                  ]
+                  ],
+                  "hasSlot": false
                 },
                 {
-                  "id": "e3055995-2428-4fda-b5f8-3e2c4b945802",
+                  "id": "b5b88009-c3b5-4988-8be9-6cb69d34c834",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -416,9 +436,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             }
-          ]
+          ],
+          "hasSlot": false
         }
       ]
     }
@@ -430,7 +452,7 @@
     "template": {
       "elements": [
         {
-          "id": "6c060af1-beba-48f3-b5d8-cec0a0135e68",
+          "id": "1625dd0f-1dcc-4586-9760-9b08aa9b9732",
           "tag": "main",
           "isComponent": false,
           "attributes": {
@@ -441,7 +463,7 @@
           },
           "children": [
             {
-              "id": "b7b38de5-bac6-4f23-97cd-39c7b2097ebc",
+              "id": "a2275f89-aeb0-4e24-b764-305cbc7ea394",
               "tag": "section",
               "isComponent": false,
               "attributes": {
@@ -452,7 +474,7 @@
               },
               "children": [
                 {
-                  "id": "b64f6555-b647-4e3b-849c-a42b9f4d89c1",
+                  "id": "387e135a-7c7d-42bf-81a7-93bc23b43257",
                   "tag": "h1",
                   "isComponent": false,
                   "attributes": {
@@ -463,7 +485,7 @@
                   },
                   "children": [
                     {
-                      "id": "37852b98-a7d9-4262-ac92-8ac53c80c8fd",
+                      "id": "6eac731c-d409-4732-9e10-ae3dfc7c8c42",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -473,10 +495,11 @@
                         }
                       }
                     }
-                  ]
+                  ],
+                  "hasSlot": false
                 },
                 {
-                  "id": "63907db5-6eb7-4e7b-aa3d-066030c432c4",
+                  "id": "2447b6f7-ea04-4673-b743-12b10f428d95",
                   "tag": "p",
                   "isComponent": false,
                   "attributes": {
@@ -487,7 +510,7 @@
                   },
                   "children": [
                     {
-                      "id": "9d956c41-bf1f-4962-8f06-0a11f82c303a",
+                      "id": "a0180e08-df8b-4d08-aa32-1c6a050d905a",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -497,10 +520,11 @@
                         }
                       }
                     }
-                  ]
+                  ],
+                  "hasSlot": false
                 },
                 {
-                  "id": "f8c9c1f6-82d2-4df6-a792-0af022517e24",
+                  "id": "e09830cd-1a34-4487-bf0a-b479d7a1b12c",
                   "tag": "button",
                   "isComponent": false,
                   "attributes": {
@@ -511,7 +535,7 @@
                   },
                   "children": [
                     {
-                      "id": "30dbe97c-e6af-4ad0-adc1-b5001296f7b4",
+                      "id": "b93cd5e9-f615-4529-b22a-3607c119e445",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -521,12 +545,14 @@
                         }
                       }
                     }
-                  ]
+                  ],
+                  "hasSlot": false
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "d499d648-fab5-4f8d-a330-ae4154cf2199",
+              "id": "4a8d5960-2ce6-4cba-9d98-bd98b147864b",
               "tag": "section",
               "isComponent": false,
               "attributes": {
@@ -537,7 +563,7 @@
               },
               "children": [
                 {
-                  "id": "da94d980-0254-43ae-90fa-755a72fc4ef4",
+                  "id": "b2e578d3-e5cf-4f42-aa3c-a88f572ffdc2",
                   "tag": "h2",
                   "isComponent": false,
                   "attributes": {
@@ -548,7 +574,7 @@
                   },
                   "children": [
                     {
-                      "id": "77f5f33c-89dc-4908-98ee-42c27b915618",
+                      "id": "adf31fb5-fa78-47d7-8ec3-57245eb89921",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -558,10 +584,11 @@
                         }
                       }
                     }
-                  ]
+                  ],
+                  "hasSlot": false
                 },
                 {
-                  "id": "7717ed9d-091a-45f4-b9c1-26bb64e2c5b6",
+                  "id": "c464663d-128a-47de-88c8-9884ba7f6d9d",
                   "tag": "p",
                   "isComponent": false,
                   "attributes": {
@@ -572,7 +599,7 @@
                   },
                   "children": [
                     {
-                      "id": "f08080dd-69ad-46c1-b0f8-6d492d09eb0c",
+                      "id": "6f1c4466-4ddc-4766-84c2-e7b2eff769ae",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -582,10 +609,11 @@
                         }
                       }
                     }
-                  ]
+                  ],
+                  "hasSlot": false
                 },
                 {
-                  "id": "f54ebe87-62cc-4110-923d-2291e8ad53fa",
+                  "id": "07202c76-3086-4d5d-9580-b52a70df473e",
                   "tag": "button",
                   "isComponent": false,
                   "attributes": {
@@ -596,7 +624,7 @@
                   },
                   "children": [
                     {
-                      "id": "16139be4-f7e0-4bf2-89bf-463d12b399ae",
+                      "id": "d59f42d6-7357-4d3b-9d0d-340a8235df77",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -606,11 +634,14 @@
                         }
                       }
                     }
-                  ]
+                  ],
+                  "hasSlot": false
                 }
-              ]
+              ],
+              "hasSlot": false
             }
-          ]
+          ],
+          "hasSlot": false
         }
       ]
     }
@@ -713,7 +744,7 @@
     "template": {
       "elements": [
         {
-          "id": "a6c35e32-125b-4a69-b45e-06a360d6c70f",
+          "id": "52f95fc6-0a08-42a5-a58f-5a35cebb001c",
           "tag": "img",
           "isComponent": false,
           "attributes": {
@@ -729,7 +760,8 @@
               "type": "prop",
               "expression": "not supported"
             }
-          }
+          },
+          "hasSlot": false
         }
       ]
     }
@@ -757,13 +789,17 @@
       }
     },
     "slots": {
-      "default": {},
-      "footer": {}
+      "default": {
+        "parentId": "f1675898-f397-408e-87c8-85e7c2b29923"
+      },
+      "footer": {
+        "parentId": "4541672d-34d1-4444-bb07-ae0055f1fd1c"
+      }
     },
     "template": {
       "elements": [
         {
-          "id": "18d1a0be-7d2d-4ccc-84d2-4cb0842d4ea3",
+          "id": "f1675898-f397-408e-87c8-85e7c2b29923",
           "tag": "section",
           "isComponent": false,
           "attributes": {
@@ -778,7 +814,7 @@
           },
           "children": [
             {
-              "id": "4279b8ff-af59-468a-98f7-c54289c5e606",
+              "id": "466309db-2dd9-4aa6-8acb-e3e210588f3e",
               "tag": "component",
               "isComponent": false,
               "attributes": {
@@ -790,16 +826,18 @@
                   "type": "literal",
                   "expression": "text-2xl font-semibold text-gray-800"
                 }
-              }
+              },
+              "hasSlot": false
             },
             {
-              "id": "612b8d54-447a-44fb-bd81-61414788247d",
+              "id": "9d90b913-49cc-4250-becb-64ef674d012a",
               "tag": "slot",
               "isComponent": false,
-              "attributes": {}
+              "attributes": {},
+              "hasSlot": false
             },
             {
-              "id": "1ae35d39-bc78-433c-a805-42826a7bd950",
+              "id": "4541672d-34d1-4444-bb07-ae0055f1fd1c",
               "tag": "footer",
               "isComponent": false,
               "attributes": {
@@ -810,7 +848,7 @@
               },
               "children": [
                 {
-                  "id": "2e3da3c9-61a2-45bf-b654-bab38a5a5336",
+                  "id": "aa6bcfc9-3cdb-4ef5-b965-cf3d9c6603b4",
                   "tag": "slot",
                   "isComponent": false,
                   "attributes": {
@@ -818,11 +856,14 @@
                       "type": "literal",
                       "expression": "footer"
                     }
-                  }
+                  },
+                  "hasSlot": false
                 }
-              ]
+              ],
+              "hasSlot": true
             }
-          ]
+          ],
+          "hasSlot": true
         }
       ]
     }
@@ -848,7 +889,7 @@
     "template": {
       "elements": [
         {
-          "id": "df4d4f49-978e-4a76-a089-062a416790f1",
+          "id": "7add884c-20d6-4f2a-8df0-350b95b76350",
           "tag": "component",
           "isComponent": false,
           "attributes": {
@@ -864,7 +905,8 @@
               "type": "prop",
               "expression": "className"
             }
-          }
+          },
+          "hasSlot": false
         }
       ]
     }
@@ -876,13 +918,13 @@
     "template": {
       "elements": [
         {
-          "id": "394cea59-11a4-4d81-9532-e5ab78ee2bf7",
+          "id": "6405c019-81c8-4e21-85ef-9d0e4085b276",
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
           "children": [
             {
-              "id": "a13ceeee-7fd4-4de9-927c-c2f3c03c4578",
+              "id": "4baf09e8-b67f-425c-9c65-ece04a33dead",
               "tag": "template",
               "isComponent": false,
               "attributes": {
@@ -893,15 +935,17 @@
               },
               "children": [
                 {
-                  "id": "997c4447-824d-4d78-990b-d742fb207a0c",
+                  "id": "3a7cb87e-e738-415c-b456-79800281bd86",
                   "tag": "DocumentationIcon",
                   "isComponent": true,
-                  "attributes": {}
+                  "attributes": {},
+                  "hasSlot": false
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "c926701b-c833-45f6-becb-c11dac2233da",
+              "id": "bb652e70-b250-48c1-8c10-8a22441f55cf",
               "tag": "template",
               "isComponent": false,
               "attributes": {
@@ -912,7 +956,7 @@
               },
               "children": [
                 {
-                  "id": "24bfd5d4-392b-4f0e-b33e-496ccb24e4fb",
+                  "id": "8cd5a035-a2ca-4db8-8425-e47715c4497e",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -922,10 +966,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "ab6d991b-edcb-41be-a8ac-71a0f9767b69",
+              "id": "d625b818-bb74-49e8-9ea9-ec6420778963",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -936,7 +981,7 @@
               }
             },
             {
-              "id": "d735a71f-cd7f-40b3-bb84-daf81bd229e5",
+              "id": "6576315c-fa2f-405b-8017-9ea5dfbdef1a",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -955,7 +1000,7 @@
               },
               "children": [
                 {
-                  "id": "7473463c-8c1c-44f1-82bf-ed7ff6ab43a0",
+                  "id": "666f3934-d727-4b8d-b132-490ce416838d",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -965,10 +1010,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "ac7834e3-9676-45f4-b6cb-aa6f8662b8a6",
+              "id": "9f166594-ae28-4785-b4aa-783092f43b88",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -978,16 +1024,17 @@
                 }
               }
             }
-          ]
+          ],
+          "hasSlot": false
         },
         {
-          "id": "06ec322e-cb11-48c0-9d66-d02d6b6c8b77",
+          "id": "eea82b59-3d66-4383-8e25-dd4e23d0c763",
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
           "children": [
             {
-              "id": "09069fbf-baa3-4d48-b2a3-380575605e91",
+              "id": "1946c4d2-cee2-4fa8-874e-19026c124c8a",
               "tag": "template",
               "isComponent": false,
               "attributes": {
@@ -998,15 +1045,17 @@
               },
               "children": [
                 {
-                  "id": "fc1b2179-e0b8-4df7-99a8-c2e00de5c088",
+                  "id": "45fddd53-6e7f-4fd1-a4dc-6f06b0599ec9",
                   "tag": "ToolingIcon",
                   "isComponent": true,
-                  "attributes": {}
+                  "attributes": {},
+                  "hasSlot": false
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "14a3062b-97ff-499e-9aa1-af7db472c552",
+              "id": "8f448a9e-85a0-4fac-919c-7223ec0fdc07",
               "tag": "template",
               "isComponent": false,
               "attributes": {
@@ -1017,7 +1066,7 @@
               },
               "children": [
                 {
-                  "id": "f82f0440-e491-47f1-8a7f-8d1df7d81919",
+                  "id": "1ad96ed1-f466-4a6e-a155-d5d9d5b5c274",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1027,10 +1076,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "33a21315-821a-457e-9749-c571673dc2fd",
+              "id": "e5c043cc-f642-4513-b058-b8360e97bba3",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1041,7 +1091,7 @@
               }
             },
             {
-              "id": "acba2715-0675-4812-a1b0-927097c27b88",
+              "id": "a967e6f9-e531-4cd9-8249-93cfab7f3b61",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1060,7 +1110,7 @@
               },
               "children": [
                 {
-                  "id": "d162a9c9-d1b1-4bda-90a1-f487642294b4",
+                  "id": "bf23c1c8-ab2a-4d6e-b74e-59821d641a26",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1070,10 +1120,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "f1f6062b-6bae-49d1-b8e5-f8e5fca74506",
+              "id": "c4c844fb-1fbd-4622-aea0-07fa37af3178",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1084,7 +1135,7 @@
               }
             },
             {
-              "id": "cf79eaa9-f646-4d5b-b808-db241e13bc52",
+              "id": "5d83da78-3932-4d20-9e6f-9732d6865398",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1103,7 +1154,7 @@
               },
               "children": [
                 {
-                  "id": "c8d905e4-ab35-455d-a17f-5c34f16cac07",
+                  "id": "187eb03a-5c5d-471e-acd2-edfcb2cc1180",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1113,10 +1164,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "5ea3930b-1a47-4f80-bac0-ec9226929e85",
+              "id": "5949feb7-a2ef-4246-a6b6-923c29b9eeb8",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1127,7 +1179,7 @@
               }
             },
             {
-              "id": "d98c5214-5c59-496a-8674-21bb7bef1e16",
+              "id": "b8aa560b-ea70-49d5-940c-39421c495acf",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1146,7 +1198,7 @@
               },
               "children": [
                 {
-                  "id": "364fdf15-ec78-4077-890b-7bc81ce09d4c",
+                  "id": "e8fec92a-be60-448d-b147-f34b4126da1b",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1156,10 +1208,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "0d1a1dd7-76ed-4b28-a1f5-64b93b205ba2",
+              "id": "6f628ceb-1189-4a2a-abcd-dd900a1860a0",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1170,7 +1223,7 @@
               }
             },
             {
-              "id": "ace18f96-2e5c-4379-b12b-dc2de2a00aa9",
+              "id": "00476af2-4286-4764-955e-8e4aeb98b1be",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1189,7 +1242,7 @@
               },
               "children": [
                 {
-                  "id": "dc20cc4d-df25-4938-a137-ec55807e8531",
+                  "id": "378e01f7-58c9-4c45-ac6d-c1dc9bf60407",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1199,10 +1252,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "3649156f-a534-4494-9fc0-55fb834f7e5b",
+              "id": "3d5d4035-104e-4ede-9e0b-a5ebcf9d06d6",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1213,7 +1267,7 @@
               }
             },
             {
-              "id": "2a1c38e1-cac2-4631-aae2-44a72a10ff8a",
+              "id": "9540a27a-c72f-477d-b3a4-fceb1ab9620d",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1232,7 +1286,7 @@
               },
               "children": [
                 {
-                  "id": "17963e90-7a7f-40bf-a674-ef5dd12b5126",
+                  "id": "45650512-706c-41a3-a6e9-682f6849ddcf",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1242,10 +1296,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "6a2fa899-d8df-4ab6-8bdb-7e0e53122e89",
+              "id": "9f526a33-6374-47b9-b159-29baf14051ed",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1256,7 +1311,7 @@
               }
             },
             {
-              "id": "b49f1866-dde3-4d9a-910d-ab124c0cb580",
+              "id": "03b809d3-8965-40e9-8591-7f7b4a29202b",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1275,7 +1330,7 @@
               },
               "children": [
                 {
-                  "id": "188588ab-8797-4118-9d51-2095d41bf471",
+                  "id": "22e405ad-0129-464a-9476-8ee2d1fe9da2",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1285,10 +1340,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "a5c76a14-7320-4293-9988-0e0b7f29e156",
+              "id": "a53f948b-1d87-4aed-abca-258fc9415750",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1299,13 +1355,14 @@
               }
             },
             {
-              "id": "cc4421a6-b60a-4cd2-8a05-bc7b1ed4f8ea",
+              "id": "5be26e4a-a137-4b23-838a-7367fd9e8167",
               "tag": "br",
               "isComponent": false,
-              "attributes": {}
+              "attributes": {},
+              "hasSlot": false
             },
             {
-              "id": "0bdb2c77-02d6-4958-b227-8b6f43605bed",
+              "id": "f305b1a1-54df-491a-9a1f-03a5e51f0519",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1316,7 +1373,7 @@
               }
             },
             {
-              "id": "86021197-a9c7-4c68-893e-214f3538b8eb",
+              "id": "eb194c05-d9a8-4aef-81fd-5e1eb21540a3",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1331,13 +1388,13 @@
               },
               "children": [
                 {
-                  "id": "fd347827-c0a6-43d8-bcb4-b477080c5b78",
+                  "id": "018e3c09-46c0-4f60-bc43-be02eed5494d",
                   "tag": "code",
                   "isComponent": false,
                   "attributes": {},
                   "children": [
                     {
-                      "id": "0bb24d7b-6c57-439d-9458-a85bb0c21769",
+                      "id": "d578d9b5-af2d-4ddc-8d56-9f2e7d525eee",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1347,12 +1404,14 @@
                         }
                       }
                     }
-                  ]
+                  ],
+                  "hasSlot": false
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "9184d716-c757-4f44-a574-ef1edd775f01",
+              "id": "2241d8e9-e9b7-4ce3-917e-9fcb2382d8d1",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1362,16 +1421,17 @@
                 }
               }
             }
-          ]
+          ],
+          "hasSlot": false
         },
         {
-          "id": "ed7bc7fb-6235-419f-8e44-25d2d8b571ee",
+          "id": "9cd29ae9-8faa-4294-bd5c-b8dc2e09d782",
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
           "children": [
             {
-              "id": "a3fa4b31-d716-49bb-8ffc-c58564ce0eb0",
+              "id": "7729ea45-36ad-4051-8a53-fa5370627786",
               "tag": "template",
               "isComponent": false,
               "attributes": {
@@ -1382,15 +1442,17 @@
               },
               "children": [
                 {
-                  "id": "4d407926-9e9d-48a2-a46b-ce82e59472e0",
+                  "id": "232001d3-8355-4595-9657-dba41b4aa3a7",
                   "tag": "EcosystemIcon",
                   "isComponent": true,
-                  "attributes": {}
+                  "attributes": {},
+                  "hasSlot": false
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "e280c016-3331-45b6-86a6-479ab4e94d7b",
+              "id": "a33e6afe-e63e-4aeb-92fb-88f7b8c206fc",
               "tag": "template",
               "isComponent": false,
               "attributes": {
@@ -1401,7 +1463,7 @@
               },
               "children": [
                 {
-                  "id": "343f5971-e5c2-4b03-9a10-ee4236d398ca",
+                  "id": "d99e0280-4eab-4dd9-907d-183e4d96f93d",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1411,10 +1473,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "be388d19-8ba6-41b0-b5db-280aec7696c1",
+              "id": "1d7ebb8d-092e-491f-a343-3f3fd22edaf7",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1425,7 +1488,7 @@
               }
             },
             {
-              "id": "fabddc70-3be4-4907-a869-462a3cfd98b7",
+              "id": "a5bac52a-3b7d-44c4-a593-188bf4daa688",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1444,7 +1507,7 @@
               },
               "children": [
                 {
-                  "id": "d072c77e-2df3-4b53-9800-d18b87e2963e",
+                  "id": "1580592c-3db1-4c3a-8b58-eb69a2bcb2c4",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1454,10 +1517,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "53bb5382-37b6-41aa-a28a-202310507ef8",
+              "id": "03ef08bf-f763-484c-8179-d616d1a1c79a",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1468,7 +1532,7 @@
               }
             },
             {
-              "id": "20242df0-0e82-451d-8575-726e87e81ba9",
+              "id": "e06e7213-66be-4e1a-9d0f-86b4c83b1ef5",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1487,7 +1551,7 @@
               },
               "children": [
                 {
-                  "id": "6365ae53-1645-473c-b28d-0f9d9ba9a187",
+                  "id": "02f56991-3c9e-4d2d-967e-275484b94551",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1497,10 +1561,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "7849b7d2-f56f-448d-a16f-38c0d0a3ad6b",
+              "id": "8dab0a19-7faa-4cdd-b5a9-ef18cf403369",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1511,7 +1576,7 @@
               }
             },
             {
-              "id": "09254b5f-c4df-4805-8758-f8726286f5c6",
+              "id": "65693acf-a9b0-4ac5-9fda-43ab533694ba",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1530,7 +1595,7 @@
               },
               "children": [
                 {
-                  "id": "5195b24a-6fa5-4c7e-9b77-125606ba2fc3",
+                  "id": "e645c2d5-6d55-46e8-acf9-145b98d1cbf9",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1540,10 +1605,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "1c1f3407-d92e-4a9f-931d-0cb2d73274dc",
+              "id": "4e252dbe-8182-4c82-81c7-2bbf6824288a",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1554,7 +1620,7 @@
               }
             },
             {
-              "id": "00d645e2-499f-44db-bf29-500f857354c9",
+              "id": "fb8436cb-2b6a-48c6-b7fe-a2021322d7e0",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1573,7 +1639,7 @@
               },
               "children": [
                 {
-                  "id": "b4220ff4-b88f-4ef4-b095-5d2df6b6d56a",
+                  "id": "e392aa7a-ee80-4a35-85db-b580dc350de4",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1583,10 +1649,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "67b72b1d-0bcb-447f-81ac-106d0fd2a2a0",
+              "id": "65766e8b-03e5-4823-b5f4-d220f11369a5",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1597,7 +1664,7 @@
               }
             },
             {
-              "id": "45b06b52-9f82-46a5-92c5-abc9604b8749",
+              "id": "42f6add6-23bb-4c37-9cdd-4cdbac7c07c5",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1616,7 +1683,7 @@
               },
               "children": [
                 {
-                  "id": "5af01795-6088-4263-8c44-55d5ddf2ad6f",
+                  "id": "7081d9e0-37bf-4d27-a7f4-ef215d5e515f",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1626,10 +1693,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "6d065ddb-c1e4-4f30-83f4-c56795427fd8",
+              "id": "c70dee66-683a-4d4c-a868-e0a34d0d61c6",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1639,16 +1707,17 @@
                 }
               }
             }
-          ]
+          ],
+          "hasSlot": false
         },
         {
-          "id": "234ec09b-5029-4e44-9821-fc8428d569f2",
+          "id": "82dcaeae-33e2-40e6-ba16-bd9fe7be158d",
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
           "children": [
             {
-              "id": "13a01088-62ab-413d-abb8-a9a6eca27dee",
+              "id": "1596d101-cb7d-46ac-a676-07eaf3936594",
               "tag": "template",
               "isComponent": false,
               "attributes": {
@@ -1659,15 +1728,17 @@
               },
               "children": [
                 {
-                  "id": "5735ac2e-da76-4678-a8d8-1416156d6d60",
+                  "id": "8177143c-5d5f-4ed3-ba30-b7e1d50696b7",
                   "tag": "CommunityIcon",
                   "isComponent": true,
-                  "attributes": {}
+                  "attributes": {},
+                  "hasSlot": false
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "41c58464-e1bf-4e2e-a04d-e31771c9b368",
+              "id": "f45ec5ed-1107-4722-8410-31dfef377220",
               "tag": "template",
               "isComponent": false,
               "attributes": {
@@ -1678,7 +1749,7 @@
               },
               "children": [
                 {
-                  "id": "c47655b0-668a-4af4-99ff-ad39a2d3cb9f",
+                  "id": "6e30902c-b20b-4f48-82fb-8fb04a4da88c",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1688,10 +1759,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "5270cf16-1b38-4534-8b61-7961be50db29",
+              "id": "d2c24e3e-e305-438c-b76c-859941d0b0a4",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1702,7 +1774,7 @@
               }
             },
             {
-              "id": "37b50d24-28a7-4c97-a1ba-9e5a0a969460",
+              "id": "c627104d-5eac-4d18-9801-e30a8d751300",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1721,7 +1793,7 @@
               },
               "children": [
                 {
-                  "id": "db63493f-eefc-4dcf-acf5-9f0eef0ae3db",
+                  "id": "c8bd09ed-a247-4ffb-90bc-96a62cb9760e",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1731,10 +1803,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "025ebff0-48cf-4dc7-98a2-037863c39128",
+              "id": "aed535b9-435a-482f-aac0-4a08051cdecb",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1745,7 +1818,7 @@
               }
             },
             {
-              "id": "d7221559-fd72-4a8e-b9db-73e61c43e82b",
+              "id": "06cb705c-8eed-4481-bbe4-8b9d177f9266",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1764,7 +1837,7 @@
               },
               "children": [
                 {
-                  "id": "d38cfe9b-e819-4e29-a7da-1da13fffaeb6",
+                  "id": "9c6fbdfa-9bb8-4c05-b3b5-d406f731d959",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1774,10 +1847,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "44e13f12-8762-4a22-a10c-88aff69cfcb8",
+              "id": "a997aa6a-433b-4371-9821-1280715b1dde",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1788,7 +1862,7 @@
               }
             },
             {
-              "id": "7e7b6bf2-9bfc-4f65-8086-48e097f08673",
+              "id": "5501d02c-0cc7-4e23-9b33-c56d007a3a30",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1807,7 +1881,7 @@
               },
               "children": [
                 {
-                  "id": "aa1898cc-9055-49aa-9497-239a98ab9f28",
+                  "id": "81c66442-7ce7-4bda-8fbf-cd4f4b08baeb",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1817,10 +1891,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "8e71f0e8-83ff-4416-a35b-bdfd48a7ab4d",
+              "id": "6f51ece2-8e16-4ea2-b967-3dc80eb369c6",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1831,7 +1906,7 @@
               }
             },
             {
-              "id": "2e9448d5-fdc2-478a-867d-f85d8ce3aa53",
+              "id": "a83a7636-af03-473f-894b-030d586f470e",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1850,7 +1925,7 @@
               },
               "children": [
                 {
-                  "id": "c5eeb9d5-e2e8-4ced-86b5-48fe826ff368",
+                  "id": "5a8bd4bb-3dee-4a3d-9fa3-700f5a34c7eb",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1860,10 +1935,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "fa5ad672-5178-409b-b033-a30338dc4521",
+              "id": "b19a796d-068b-4fd7-a1a9-dbe22511aef6",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1873,16 +1949,17 @@
                 }
               }
             }
-          ]
+          ],
+          "hasSlot": false
         },
         {
-          "id": "2ee8280f-262a-433b-9ba5-de4aed924d05",
+          "id": "daa0ffd3-93ac-47f4-91e1-cda264072913",
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
           "children": [
             {
-              "id": "7e89bb8e-65ff-4271-afe1-e76aa41d0913",
+              "id": "43036a75-7c22-450a-abdf-a26c5c5d8dd3",
               "tag": "template",
               "isComponent": false,
               "attributes": {
@@ -1893,15 +1970,17 @@
               },
               "children": [
                 {
-                  "id": "35d2cd0b-4dc4-42d0-ab40-37167300292a",
+                  "id": "8ed305ef-b9ed-4331-830a-ef0fce1b8e62",
                   "tag": "SupportIcon",
                   "isComponent": true,
-                  "attributes": {}
+                  "attributes": {},
+                  "hasSlot": false
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "e35f0b92-3139-4e0b-8c0e-1ce8c8d3b8d1",
+              "id": "092d8e1b-cdad-4a9f-8eea-c398e629e427",
               "tag": "template",
               "isComponent": false,
               "attributes": {
@@ -1912,7 +1991,7 @@
               },
               "children": [
                 {
-                  "id": "92612512-8788-4346-8195-f20050987eec",
+                  "id": "6d209541-f3f9-472e-ad25-d5802343609c",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1922,10 +2001,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "eed78c67-41cc-4116-8c72-3d798f160b68",
+              "id": "e71095a2-a60d-4b52-ba5a-e1bac4b2182c",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1936,7 +2016,7 @@
               }
             },
             {
-              "id": "eecc2ef3-89cb-4a65-bcf1-75017c0f794e",
+              "id": "9d5028ca-55f6-4b45-a268-4a4a8c3dfb3c",
               "tag": "a",
               "isComponent": false,
               "attributes": {
@@ -1955,7 +2035,7 @@
               },
               "children": [
                 {
-                  "id": "14582eff-296b-4dfd-8a85-0f33130e890f",
+                  "id": "5475e761-0ebd-46fc-bb98-a883567eb745",
                   "tag": "#text",
                   "isComponent": false,
                   "attributes": {
@@ -1965,10 +2045,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "hasSlot": false
             },
             {
-              "id": "9e38877a-d191-420e-8cfa-419e4196d3f7",
+              "id": "213f4cbe-312c-48db-9467-2d4d0800f0b2",
               "tag": "#text",
               "isComponent": false,
               "attributes": {
@@ -1978,7 +2059,8 @@
                 }
               }
             }
-          ]
+          ],
+          "hasSlot": false
         }
       ]
     }
@@ -1995,7 +2077,7 @@
     "template": {
       "elements": [
         {
-          "id": "ff987040-75f8-4d31-933a-1834a22842a6",
+          "id": "1c01f913-0b45-483a-8153-6f784c8a3ecb",
           "tag": "#text",
           "isComponent": false,
           "attributes": {
@@ -2013,14 +2095,20 @@
     "path": "/Users/dorianmoulart/Documents/code/study/bridge/packages/editor/src/samples/WelcomeItem.vue",
     "props": {},
     "slots": {
-      "icon": {},
-      "heading": {},
-      "default": {}
+      "icon": {
+        "parentId": "1f601a35-063e-4442-b8f2-85d8eec5af70"
+      },
+      "heading": {
+        "parentId": "41818cc1-b35f-49a5-a368-cd3e08e89d3d"
+      },
+      "default": {
+        "parentId": "a89a2757-d46c-4edb-94ca-d92118f52a8f"
+      }
     },
     "template": {
       "elements": [
         {
-          "id": "9b354090-2cf5-4d85-8d0a-9a3dc1e2865c",
+          "id": "363dcc37-bb06-409e-b9e0-a3d7f93cea2a",
           "tag": "div",
           "isComponent": false,
           "attributes": {
@@ -2031,13 +2119,13 @@
           },
           "children": [
             {
-              "id": "908f51f5-e80d-4f4b-8098-293e43fd25ca",
+              "id": "1f601a35-063e-4442-b8f2-85d8eec5af70",
               "tag": "i",
               "isComponent": false,
               "attributes": {},
               "children": [
                 {
-                  "id": "f704b6b2-c85d-4714-917e-48b2adfa1007",
+                  "id": "f65b55a2-94ed-461f-890a-8c9c27baad3e",
                   "tag": "slot",
                   "isComponent": false,
                   "attributes": {
@@ -2045,12 +2133,14 @@
                       "type": "literal",
                       "expression": "icon"
                     }
-                  }
+                  },
+                  "hasSlot": false
                 }
-              ]
+              ],
+              "hasSlot": true
             },
             {
-              "id": "565e7c84-b779-4159-ab70-75b68ce80583",
+              "id": "a89a2757-d46c-4edb-94ca-d92118f52a8f",
               "tag": "div",
               "isComponent": false,
               "attributes": {
@@ -2061,13 +2151,13 @@
               },
               "children": [
                 {
-                  "id": "9a51b000-3d7c-4a78-bc64-1639b65ec94b",
+                  "id": "41818cc1-b35f-49a5-a368-cd3e08e89d3d",
                   "tag": "h3",
                   "isComponent": false,
                   "attributes": {},
                   "children": [
                     {
-                      "id": "aa218206-7807-4a95-86b2-48dba71ac759",
+                      "id": "8f3fab72-a53b-46f2-94aa-5216a3fb0b44",
                       "tag": "slot",
                       "isComponent": false,
                       "attributes": {
@@ -2075,19 +2165,24 @@
                           "type": "literal",
                           "expression": "heading"
                         }
-                      }
+                      },
+                      "hasSlot": false
                     }
-                  ]
+                  ],
+                  "hasSlot": true
                 },
                 {
-                  "id": "b4e1ffd6-66e3-4b1d-a1ce-8bb3db2eeb21",
+                  "id": "b2aa1f4b-15e4-4632-ba39-6123e493d857",
                   "tag": "slot",
                   "isComponent": false,
-                  "attributes": {}
+                  "attributes": {},
+                  "hasSlot": false
                 }
-              ]
+              ],
+              "hasSlot": true
             }
-          ]
+          ],
+          "hasSlot": false
         }
       ]
     }
@@ -2099,7 +2194,7 @@
     "template": {
       "elements": [
         {
-          "id": "b04d5333-8ab2-4861-a713-a136aff901d1",
+          "id": "0bfb34c2-a0dd-4c8a-b73a-80ba7035bd33",
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2122,7 +2217,7 @@
           },
           "children": [
             {
-              "id": "210768c1-c103-40ba-b858-2fde2d0efa42",
+              "id": "5a446ba1-dd79-4ae3-9f79-3aef7fe78902",
               "tag": "path",
               "isComponent": false,
               "attributes": {
@@ -2130,9 +2225,11 @@
                   "type": "literal",
                   "expression": "M15 4a1 1 0 1 0 0 2V4zm0 11v-1a1 1 0 0 0-1 1h1zm0 4l-.707.707A1 1 0 0 0 16 19h-1zm-4-4l.707-.707A1 1 0 0 0 11 14v1zm-4.707-1.293a1 1 0 0 0-1.414 1.414l1.414-1.414zm-.707.707l-.707-.707.707.707zM9 11v-1a1 1 0 0 0-.707.293L9 11zm-4 0h1a1 1 0 0 0-1-1v1zm0 4H4a1 1 0 0 0 1.707.707L5 15zm10-9h2V4h-2v2zm2 0a1 1 0 0 1 1 1h2a3 3 0 0 0-3-3v2zm1 1v6h2V7h-2zm0 6a1 1 0 0 1-1 1v2a3 3 0 0 0 3-3h-2zm-1 1h-2v2h2v-2zm-3 1v4h2v-4h-2zm1.707 3.293l-4-4-1.414 1.414 4 4 1.414-1.414zM11 14H7v2h4v-2zm-4 0c-.276 0-.525-.111-.707-.293l-1.414 1.414C5.42 15.663 6.172 16 7 16v-2zm-.707 1.121l3.414-3.414-1.414-1.414-3.414 3.414 1.414 1.414zM9 12h4v-2H9v2zm4 0a3 3 0 0 0 3-3h-2a1 1 0 0 1-1 1v2zm3-3V3h-2v6h2zm0-6a3 3 0 0 0-3-3v2a1 1 0 0 1 1 1h2zm-3-3H3v2h10V0zM3 0a3 3 0 0 0-3 3h2a1 1 0 0 1 1-1V0zM0 3v6h2V3H0zm0 6a3 3 0 0 0 3 3v-2a1 1 0 0 1-1-1H0zm3 3h2v-2H3v2zm1-1v4h2v-4H4zm1.707 4.707l.586-.586-1.414-1.414-.586.586 1.414 1.414z"
                 }
-              }
+              },
+              "hasSlot": false
             }
-          ]
+          ],
+          "hasSlot": false
         }
       ]
     }
@@ -2144,7 +2241,7 @@
     "template": {
       "elements": [
         {
-          "id": "565ba42f-a7e0-48d4-a718-811c82c7a765",
+          "id": "1724a358-8371-4037-8084-f616331cbe71",
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2167,7 +2264,7 @@
           },
           "children": [
             {
-              "id": "86e863fe-7232-44c7-bff8-8fafb3fb4f3b",
+              "id": "46da5ff1-eab9-4018-aaf4-6e6bcf6dafd6",
               "tag": "path",
               "isComponent": false,
               "attributes": {
@@ -2175,9 +2272,11 @@
                   "type": "literal",
                   "expression": "M11 2.253a1 1 0 1 0-2 0h2zm-2 13a1 1 0 1 0 2 0H9zm.447-12.167a1 1 0 1 0 1.107-1.666L9.447 3.086zM1 2.253L.447 1.42A1 1 0 0 0 0 2.253h1zm0 13H0a1 1 0 0 0 1.553.833L1 15.253zm8.447.833a1 1 0 1 0 1.107-1.666l-1.107 1.666zm0-14.666a1 1 0 1 0 1.107 1.666L9.447 1.42zM19 2.253h1a1 1 0 0 0-.447-.833L19 2.253zm0 13l-.553.833A1 1 0 0 0 20 15.253h-1zm-9.553-.833a1 1 0 1 0 1.107 1.666L9.447 14.42zM9 2.253v13h2v-13H9zm1.553-.833C9.203.523 7.42 0 5.5 0v2c1.572 0 2.961.431 3.947 1.086l1.107-1.666zM5.5 0C3.58 0 1.797.523.447 1.42l1.107 1.666C2.539 2.431 3.928 2 5.5 2V0zM0 2.253v13h2v-13H0zm1.553 13.833C2.539 15.431 3.928 15 5.5 15v-2c-1.92 0-3.703.523-5.053 1.42l1.107 1.666zM5.5 15c1.572 0 2.961.431 3.947 1.086l1.107-1.666C9.203 13.523 7.42 13 5.5 13v2zm5.053-11.914C11.539 2.431 12.928 2 14.5 2V0c-1.92 0-3.703.523-5.053 1.42l1.107 1.666zM14.5 2c1.573 0 2.961.431 3.947 1.086l1.107-1.666C18.203.523 16.421 0 14.5 0v2zm3.5.253v13h2v-13h-2zm1.553 12.167C18.203 13.523 16.421 13 14.5 13v2c1.573 0 2.961.431 3.947 1.086l1.107-1.666zM14.5 13c-1.92 0-3.703.523-5.053 1.42l1.107 1.666C11.539 15.431 12.928 15 14.5 15v-2z"
                 }
-              }
+              },
+              "hasSlot": false
             }
-          ]
+          ],
+          "hasSlot": false
         }
       ]
     }
@@ -2189,7 +2288,7 @@
     "template": {
       "elements": [
         {
-          "id": "4ea3e2c8-68b4-4b51-966c-2cda3c4d0622",
+          "id": "2eb77cde-64b5-451f-9067-76eca23185c0",
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2212,7 +2311,7 @@
           },
           "children": [
             {
-              "id": "75829913-26bc-4505-8a7b-e5da83706d39",
+              "id": "1ea55a8e-ffa9-453c-963b-2965cfc27499",
               "tag": "path",
               "isComponent": false,
               "attributes": {
@@ -2220,9 +2319,11 @@
                   "type": "literal",
                   "expression": "M11.447 8.894a1 1 0 1 0-.894-1.789l.894 1.789zm-2.894-.789a1 1 0 1 0 .894 1.789l-.894-1.789zm0 1.789a1 1 0 1 0 .894-1.789l-.894 1.789zM7.447 7.106a1 1 0 1 0-.894 1.789l.894-1.789zM10 9a1 1 0 1 0-2 0h2zm-2 2.5a1 1 0 1 0 2 0H8zm9.447-5.606a1 1 0 1 0-.894-1.789l.894 1.789zm-2.894-.789a1 1 0 1 0 .894 1.789l-.894-1.789zm2 .789a1 1 0 1 0 .894-1.789l-.894 1.789zm-1.106-2.789a1 1 0 1 0-.894 1.789l.894-1.789zM18 5a1 1 0 1 0-2 0h2zm-2 2.5a1 1 0 1 0 2 0h-2zm-5.447-4.606a1 1 0 1 0 .894-1.789l-.894 1.789zM9 1l.447-.894a1 1 0 0 0-.894 0L9 1zm-2.447.106a1 1 0 1 0 .894 1.789l-.894-1.789zm-6 3a1 1 0 1 0 .894 1.789L.553 4.106zm2.894.789a1 1 0 1 0-.894-1.789l.894 1.789zm-2-.789a1 1 0 1 0-.894 1.789l.894-1.789zm1.106 2.789a1 1 0 1 0 .894-1.789l-.894 1.789zM2 5a1 1 0 1 0-2 0h2zM0 7.5a1 1 0 1 0 2 0H0zm8.553 12.394a1 1 0 1 0 .894-1.789l-.894 1.789zm-1.106-2.789a1 1 0 1 0-.894 1.789l.894-1.789zm1.106 1a1 1 0 1 0 .894 1.789l-.894-1.789zm2.894.789a1 1 0 1 0-.894-1.789l.894 1.789zM8 19a1 1 0 1 0 2 0H8zm2-2.5a1 1 0 1 0-2 0h2zm-7.447.394a1 1 0 1 0 .894-1.789l-.894 1.789zM1 15H0a1 1 0 0 0 .553.894L1 15zm1-2.5a1 1 0 1 0-2 0h2zm12.553 2.606a1 1 0 1 0 .894 1.789l-.894-1.789zM17 15l.447.894A1 1 0 0 0 18 15h-1zm1-2.5a1 1 0 1 0-2 0h2zm-7.447-5.394l-2 1 .894 1.789 2-1-.894-1.789zm-1.106 1l-2-1-.894 1.789 2 1 .894-1.789zM8 9v2.5h2V9H8zm8.553-4.894l-2 1 .894 1.789 2-1-.894-1.789zm.894 0l-2-1-.894 1.789 2 1 .894-1.789zM16 5v2.5h2V5h-2zm-4.553-3.894l-2-1-.894 1.789 2 1 .894-1.789zm-2.894-1l-2 1 .894 1.789 2-1L8.553.106zM1.447 5.894l2-1-.894-1.789-2 1 .894 1.789zm-.894 0l2 1 .894-1.789-2-1-.894 1.789zM0 5v2.5h2V5H0zm9.447 13.106l-2-1-.894 1.789 2 1 .894-1.789zm0 1.789l2-1-.894-1.789-2 1 .894 1.789zM10 19v-2.5H8V19h2zm-6.553-3.894l-2-1-.894 1.789 2 1 .894-1.789zM2 15v-2.5H0V15h2zm13.447 1.894l2-1-.894-1.789-2 1 .894 1.789zM18 15v-2.5h-2V15h2z"
                 }
-              }
+              },
+              "hasSlot": false
             }
-          ]
+          ],
+          "hasSlot": false
         }
       ]
     }
@@ -2234,7 +2335,7 @@
     "template": {
       "elements": [
         {
-          "id": "e9677d94-a215-4e4c-92cd-4e24389ab9a7",
+          "id": "5ecbfbc5-45c9-4350-828d-cfa8393b5385",
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2257,7 +2358,7 @@
           },
           "children": [
             {
-              "id": "0c6b0e45-d0f7-4aff-98f3-c80504403931",
+              "id": "a6808f25-f975-43df-9e0f-9806cc4c30c3",
               "tag": "path",
               "isComponent": false,
               "attributes": {
@@ -2265,9 +2366,11 @@
                   "type": "literal",
                   "expression": "M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.666.105 5.5 5.5 0 0 0-.114 7.665L10 18.78l8.39-8.4a5.5 5.5 0 0 0-.114-7.665 5.5 5.5 0 0 0-7.666-.105l-.61.61z"
                 }
-              }
+              },
+              "hasSlot": false
             }
-          ]
+          ],
+          "hasSlot": false
         }
       ]
     }
@@ -2279,7 +2382,7 @@
     "template": {
       "elements": [
         {
-          "id": "7425697c-e9ae-4659-88d8-f2c2f290bdcb",
+          "id": "f6eed814-4b23-41c8-9065-fd00ca74195a",
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2322,7 +2425,7 @@
           },
           "children": [
             {
-              "id": "30dab188-a7df-4818-8abb-fad727c27698",
+              "id": "a0ef39ca-d5bb-4ed5-85eb-a4d862a4c331",
               "tag": "path",
               "isComponent": false,
               "attributes": {
@@ -2334,9 +2437,11 @@
                   "type": "literal",
                   "expression": "currentColor"
                 }
-              }
+              },
+              "hasSlot": false
             }
-          ]
+          ],
+          "hasSlot": false
         }
       ]
     }

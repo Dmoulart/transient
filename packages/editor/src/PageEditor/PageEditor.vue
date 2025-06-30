@@ -19,7 +19,7 @@
   />
 
   <Suspense>
-    <TransientBuilder :key="forceRerender" v-if="contents" :template="contents" />
+    <TransientBuilder v-if="contents" :dictionnary="dictionnary" :template="contents" />
   </Suspense>
 
   <JsonViewer
@@ -61,13 +61,12 @@ import type { TransientElement } from 'transient/src/transient/definition'
 import { findElementById, insertAfterElement } from 'transient/src/transient/ast'
 import { getTransientID } from 'transient/src/analyzers/html/html'
 import { assert, assertIsArrayOfLength, assertIsDefined } from 'transient/src/core/assert'
+const dictionnary = useDictionnary()
 
-const component = useDictionnary().get('HomePage')
+const component = dictionnary.get('HomePage')
 
 const { contents, replace, remove, insertAfter, saveToLocalStorage, loadFromLocalStorage } =
   usePage(component.template!)
-
-const forceRerender = ref(0)
 
 const { onEditEnd } = useEdition()
 const editedNode = useEditedNode()
@@ -77,8 +76,6 @@ const windowSize = useWindowSize()
 onEditEnd((element) => {
   console.log({ replaceElement: element })
   replace(element)
-  // render()
-  // forceRerender.value++
 })
 
 const componentPanel = useComponentPanel()
@@ -111,8 +108,6 @@ const addComponent = ({ path, schema }: { path: string; schema: TransientCompone
 
   insertAfter(componentPanel.targetNodeID.value, newComponent)
 
-  // render()
-  // forceRerender.value++
   componentPanel.close()
 }
 </script>

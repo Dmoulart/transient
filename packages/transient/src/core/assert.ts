@@ -54,6 +54,9 @@ export function assertIsArrayOfLength<L extends number, T>(
   }
 }
 
+export const someHTMLElement = (value: unknown): value is HTMLElement =>
+  value instanceof HTMLElement;
+
 export const someString = (value: unknown): value is string =>
   typeof value === "string";
 
