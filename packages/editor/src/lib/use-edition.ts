@@ -18,7 +18,6 @@ export function detectElementEdition(e: Event) {
   const element = e.target
   if (element instanceof HTMLElement) {
     if (isNodeEditable(element)) {
-      console.log('focusin', e.target)
       editedNode.value = element
       // const tid = element.closest(`[contenteditable="true"`)
       // console.log({ tid })
@@ -40,7 +39,6 @@ useEventListener(document, 'focusin', detectElementEdition)
 // })
 
 useEventListener(document, 'focusout', (e) => {
-  console.log('focusout', e.target)
   editedNode.value = undefined
 })
 

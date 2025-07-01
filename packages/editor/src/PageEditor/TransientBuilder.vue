@@ -1,24 +1,8 @@
 <script setup lang="ts">
-import {
-  onMounted,
-  h,
-  shallowRef,
-  createCommentVNode,
-  watch,
-  useTemplateRef,
-  ref,
-  nextTick,
-} from 'vue'
-import type {
-  TransientComponentDictionnary,
-  TransientElement,
-  TransientTemplate,
-} from 'transient/src/transient/definition'
+import { onMounted, h, shallowRef, createCommentVNode, ref, nextTick } from 'vue'
+import type { TransientElement, TransientTemplate } from 'transient/src/transient/definition'
 import { ComponentDictionnary, loadAllComponents, useDictionnary } from '@/lib/use-dictionnary'
 import { createTextElement, findElementById, hasTextChildren } from 'transient/src/transient/ast'
-import { assertIs, someHTMLElement } from 'transient/src/core/assert'
-import type { TransientComponentSchema } from 'transient/src'
-import { getTransientID } from 'transient/src/analyzers/html/html'
 
 const props = defineProps<{
   template: TransientTemplate
@@ -32,17 +16,20 @@ onMounted(async () => {
 })
 
 function render(element: TransientElement, context?: { slot: { name: string; ownerId: string } }) {
+  console.log({ element })
   if (element.tag === '#text') {
+    // return h('div', element.attributes?.value?.expression)
+
     return [
       createCommentVNode(`#text data-transient-id=${element.id}`, true),
-      element.attributes?.value?.expression,
+      element.attributes?.value?.expression ?? '',
     ]
   }
 
   const isComponent = element.isComponent
   const tag = element.tag
 
-  const Component = isComponent ? loadedComponents.value[tag] || tag : tag
+  const Component = isComponent ? loadedComponents.value[tag] : tag
 
   const attrs = {
     ...Object.fromEntries(

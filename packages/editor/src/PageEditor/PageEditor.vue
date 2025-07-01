@@ -87,8 +87,6 @@ const editedNodeBoundingBox = useEditedNodeBoundingBox()
 const windowSize = useWindowSize()
 
 onEditEnd((element, node) => {
-  console.log({ replaceElement: element })
-
   assertIs(someHTMLElement, node)
   if (node.dataset.transientSlot) {
     const [slot, ownerId] = node.dataset.transientSlot.split(':')

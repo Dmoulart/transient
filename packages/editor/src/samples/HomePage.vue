@@ -24,18 +24,14 @@ const cards = [
 <template>
   <main class="p-12 max-w-5xl m-auto">
     <!-- Hero Section -->
-    <section class="text-center py-16">
-      <h1 class="text-5xl font-semibold mb-6">Welcome to Our Store</h1>
-      <p class="text-gray-500 mb-10">
-        We’re delighted you’re here! Explore our range of products, grab great deals, and enjoy a
-        wonderful shopping experience.
-      </p>
-      <button
-        class="bg-blue-500 hover:bg-blue-600 text-gray-50 font-semibold py-2 px-6 rounded-md shadow-md transform hover:translate-y-[-2px] transition-all"
-      >
-        Shop Now
-      </button>
-    </section>
+    <!-- <section class="text-center py-16"> -->
+    <h1 class="text-5xl font-semibold mb-6">Welcome to Our Store</h1>
+    <p class="text-gray-500 mb-10">
+      We’re delighted you’re here! Explore our range of products, grab great deals, and enjoy a
+      wonderful shopping experience.
+    </p>
+
+    <!-- </section> -->
 
     <!-- Cards Section -->
     <!-- <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -52,7 +48,7 @@ const cards = [
       </div>
     </section> -->
 
-    <!-- Call to Action Section -->
+    <!-- Call to Action Section
     <section class="text-center mt-16">
       <h2 class="text-3xl font-semibold mb-4">Join Our Community</h2>
       <p class="text-gray-500 mb-6">
@@ -64,6 +60,7 @@ const cards = [
         Signup Now
       </button>
     </section>
+    -->
   </main>
 </template>
 
