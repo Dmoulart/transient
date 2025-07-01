@@ -102,7 +102,6 @@ export function useEdition() {
   }
 
   watch(editedNode, (newNode, oldNode) => {
-    console.log({ newNode, oldNode })
     if (newNode !== undefined) {
       const newElement = htmlNodeToTransientElement(newNode, getTransientID(newNode)!)
       cbs.onEditStart.forEach((cb) => cb(newElement, newNode))

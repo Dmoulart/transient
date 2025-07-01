@@ -6,7 +6,13 @@ import type {
   TransientTemplate,
 } from 'transient/src/transient/definition'
 import { ComponentDictionnary, loadAllComponents } from '@/lib/use-dictionnary'
-import { findElementById, hasTextChildren } from 'transient/src/transient/ast'
+import {
+  findElementById,
+  findSlots,
+  groupElementsBySlot,
+  hasTextChildren,
+  substituteSlots,
+} from 'transient/src/transient/ast'
 import { assertIs, someHTMLElement } from 'transient/src/core/assert'
 import type { TransientComponentSchema } from 'transient/src'
 import { getTransientID } from 'transient/src/analyzers/html/html'
@@ -46,21 +52,45 @@ function render(element: TransientElement) {
     tabIndex: isComponent ? 0 : undefined,
   }
 
-  const slots: Record<string, () => any> = {}
+  const elementSlots: Record<string, TransientElement[]> = {}
+  for (const [name, content] of Object.entries(groupElementsBySlot(element.children ?? []))) {
+    elementSlots[name] = substituteSlots(content, (slotName, slot) => {
+      return {
+        tag: 'ui-slot',
+        isComponent: false,
+        id: crypto.randomUUID(),
+        children: [
+          {
+            id: crypto.randomUUID(),
+            isComponent: false,
+            tag: '#text',
+            attributes: {
+              value: {
+                type: 'literal',
+                expression: `SLOT ${slotName}!`,
+              },
+            },
+          } as TransientElement,
+        ],
+        attributes: {
+          'data-transient-slot': {
+            type: 'literal',
+            expression: slotName,
+          },
+        },
+      } as TransientElement
+    })
+  }
 
-  const rendered = (element.children ?? []).map(render)
-  slots.default = () => rendered
+  const slots: Record<string, () => any> = {}
+  for (const [name, content] of Object.entries(elementSlots)) {
+    const rendered = content.map(render)
+    slots[name] = () => rendered
+  }
 
   const meta: Record<string, any> = {}
-  // for (const [key, value] of Object.entries(element.attributes)) {
-  //   meta[`data-transient-attr-${key}`] = JSON.stringify(value)
-  // }
 
   const listeners: Record<string, (e: Event) => void> = {}
-
-  // if (isElementEditable(element)) {
-  //   listeners.selectionchange = detectElementEdition
-  // }
 
   return h(
     Component,
@@ -70,36 +100,17 @@ function render(element: TransientElement) {
       ...listeners,
       // 'data-transient-editable': isElementEditable(element),
       // 'data-transient-text-editable': hasTextChildren(element),
-      contenteditable:
-        element.hasSlot || (element.isComponent === false && hasTextChildren(element))
-          ? true
-          : null,
+      contenteditable: hasTextChildren(element) ? true : null,
       'data-transient-id': element.id,
       onVnodeMounted(vnode) {
         const el = vnode.el
-        console.log({ el })
-        debugger
         assertIs(someHTMLElement, el)
 
-        const schema = props.dictionnary.get(tag)
-
-        if (schema?.slots) {
-          Object.entries(schema.slots).forEach(([name, { parentId }]) => {
-            const parentSlot = el.querySelector(`[data-transient-id="${parentId}"]`)
-            if (parentSlot) {
-              assertIs(someHTMLElement, parentSlot)
-              parentSlot.contentEditable = 'true'
-              console.log('gooo')
-            }
-          })
-        }
-        // if (props.schema.slots) {
-        //   for (const [slotName, { parentId }] of Object.entries(props.schema.slots)) {
-        //     const slotParent = el.querySelector(`[data-transient-id="${parentId}"]`)
-        //     console.log({ slotParent })
-        //   }
-        // }
-        // el.quer
+        const slots = el.querySelectorAll('slot')
+        slots.forEach((slotEl) => {
+          const name = slotEl.getAttribute('name') || 'default'
+          console.log(`Slot found in component ${element.tag}:`, name, slotEl)
+        })
       },
     },
     slots,

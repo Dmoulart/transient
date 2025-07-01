@@ -8,7 +8,6 @@ export type TransientElement = {
   isComponent: boolean;
   attributes: Record<string, BindingInfo>;
   children?: TransientElement[];
-  hasSlot?: boolean;
 };
 
 export type TransientTemplate = {

@@ -82,7 +82,7 @@ const componentPanel = useComponentPanel()
 
 const addComponent = ({ path, schema }: { path: string; schema: TransientComponentSchema }) => {
   console.log('Adding component:', path, schema)
-  const componentSchema = useDictionnary().get(schema.tag)
+  const componentSchema = dictionnary.get(schema.tag)
 
   if (!componentSchema) {
     console.error(`Component schema not found for path: ${path}`)
@@ -93,14 +93,13 @@ const addComponent = ({ path, schema }: { path: string; schema: TransientCompone
     componentSchema.template?.elements,
     'editedNode should be defined when adding a component',
   )
-
   const newComponent: TransientElement = {
+    // isComponent: boolean;
+    // attributes: Record<string, BindingInfo>;
+    ...componentSchema.template.elements[0],
     tag: componentSchema.tag,
     isComponent: true,
     attributes: {},
-    // isComponent: boolean;
-    // attributes: Record<string, BindingInfo>;
-    // ...componentSchema.template.elements[0],
     id: crypto.randomUUID(),
   }
 
