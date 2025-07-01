@@ -15,7 +15,7 @@ import type {
   TransientTemplate,
 } from 'transient/src/transient/definition'
 import { ComponentDictionnary, loadAllComponents, useDictionnary } from '@/lib/use-dictionnary'
-import { findElementById, hasTextChildren } from 'transient/src/transient/ast'
+import { createTextElement, findElementById, hasTextChildren } from 'transient/src/transient/ast'
 import { assertIs, someHTMLElement } from 'transient/src/core/assert'
 import type { TransientComponentSchema } from 'transient/src'
 import { getTransientID } from 'transient/src/analyzers/html/html'
@@ -31,7 +31,7 @@ onMounted(async () => {
   loadedComponents.value = await loadAllComponents()
 })
 
-function render(element: TransientElement) {
+function render(element: TransientElement, context?: { slot: { name: string; ownerId: string } }) {
   if (element.tag === '#text') {
     return [
       createCommentVNode(`#text data-transient-id=${element.id}`, true),
@@ -53,25 +53,46 @@ function render(element: TransientElement) {
   }
 
   const slots: Record<string, () => any> = {}
-  for (const [name, content] of Object.entries(element.slots ?? {})) {
-    const rendered = content.map(render)
+  const component = useDictionnary().get(tag)
 
-    slots[name] = () => rendered
-  }
+  if ((isComponent && component?.slots) || (!isComponent && element.slots)) {
+    for (const slot in component?.slots ?? element.slots) {
+      const content = element?.slots?.[slot]
 
-  if (isComponent) {
-    const component = useDictionnary().get(tag)
-    if (component.slots) {
-      for (const slot of Object.keys(component.slots)) {
-        if (!element.slots?.[slot]) {
-          slots[slot] = () =>
-            createTemporaryNode((parent) => {
-              parent.contentEditable = 'true'
-              parent.textContent = slot
-              parent.dataset.transientSlot = `${slot}:${element.id}`
-              parent.tabIndex = 0
-            })
-        }
+      if (content) {
+        const rendered = (content ?? []).map((child, i) =>
+          render(
+            child,
+            i === 0 && isComponent
+              ? {
+                  slot: {
+                    name: slot,
+                    ownerId: element.id,
+                  },
+                }
+              : undefined,
+          ),
+        )
+        slots[slot] = () => rendered
+      } else if (isComponent) {
+        slots[slot] = () =>
+          render(
+            {
+              id: crypto.randomUUID(),
+              attributes: {},
+              isComponent: false,
+              tag: 'div',
+              slots: {
+                default: [createTextElement(slot)],
+              },
+            },
+            {
+              slot: {
+                name: slot,
+                ownerId: element.id,
+              },
+            },
+          )
       }
     }
   }
@@ -88,6 +109,18 @@ function render(element: TransientElement) {
       ...listeners,
       contenteditable: hasTextChildren(element) ? true : null,
       'data-transient-id': element.id,
+      onVnodeMounted(vnode) {
+        if (context?.slot) {
+          const el = vnode.el as HTMLElement
+          const parent = el.parentElement
+          if (parent) {
+            parent.contentEditable = 'true'
+            parent.textContent = context.slot.name
+            parent.dataset.transientSlot = `${context.slot.name}:${context.slot.ownerId}`
+            parent.tabIndex = 0
+          }
+        }
+      },
     },
     slots,
   )

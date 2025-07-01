@@ -90,12 +90,11 @@ onEditEnd((element, node) => {
   console.log({ replaceElement: element })
 
   assertIs(someHTMLElement, node)
-  debugger
   if (node.dataset.transientSlot) {
     const [slot, ownerId] = node.dataset.transientSlot.split(':')
     const contents = element.slots![slot]!
-    console.log({ contents })
     replaceSlot(contents, slot, ownerId)
+    console.log('replace slots')
     // replace(element)
   } else if (node.dataset.transientId) {
     replace(element)

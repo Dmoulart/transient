@@ -6,7 +6,6 @@ import {
   type TransientType,
   type TransientTypeName,
 } from "./definition";
-import { addedDiff, deletedDiff, updatedDiff } from "deep-object-diff";
 export function getTypeKind(type: TransientType): TransientTypeName {
   return typeof type === "string" ? type : type.kind;
 }
@@ -181,4 +180,18 @@ export function insertBeforeElement(
     }
   }
   return false;
+}
+
+export function createTextElement(text: string): TransientElement {
+  return {
+    id: crypto.randomUUID(),
+    tag: "#text",
+    isComponent: false,
+    attributes: {
+      value: {
+        type: "literal",
+        expression: text,
+      },
+    },
+  };
 }

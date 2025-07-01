@@ -98,6 +98,7 @@ export function useEdition() {
         newNode,
         getTransientID(newNode) ?? crypto.randomUUID(),
       )
+      console.log({ newElement })
       cbs.onEditStart.forEach((cb) => cb(newElement, newNode))
       // nodeBeforeEdition = newNode.cloneNode(true) as HTMLElement
     }
@@ -107,6 +108,7 @@ export function useEdition() {
         oldNode,
         getTransientID(oldNode) ?? crypto.randomUUID(),
       )
+      console.log({ newElement })
       cbs.onEditEnd.forEach((cb) => cb(newElement, oldNode))
       // if (nodeBeforeEdition) {
       //   const diff = dd.diff(nodeBeforeEdition, oldNode)
