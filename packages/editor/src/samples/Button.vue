@@ -9,9 +9,9 @@
     :disabled="disabled"
   >
     <!-- Left Slot -->
-    <span v-if="$slots.left" class="flex items-center">
+    <!-- <span v-if="$slots.left" class="flex items-center">
       <slot name="left" />
-    </span>
+    </span> -->
 
     <!-- Default Slot -->
     <span>
@@ -19,9 +19,9 @@
     </span>
 
     <!-- Right Slot -->
-    <span v-if="$slots.right" class="flex items-center">
+    <!-- <span v-if="$slots.right" class="flex items-center">
       <slot name="right" />
-    </span>
+    </span> -->
   </button>
 </template>
 

@@ -40,6 +40,7 @@ export default defineComponent({
       context?: { slot: { name: string; ownerId: string } },
     ): any {
       if (element.tag === '#text') {
+        // return element.attributes?.value?.expression ?? ''
         return [
           createCommentVNode(`#text data-transient-id=${element.id}`, true),
           element.attributes?.value?.expression ?? '',

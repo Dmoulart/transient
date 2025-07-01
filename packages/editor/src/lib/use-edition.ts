@@ -63,21 +63,6 @@ export function useEditedNodeBoundingBox() {
   })
 }
 
-const editedTransientElement = computed(() => {
-  if (editedNode.value) {
-    return htmlNodeToTransientElement(
-      editedNode.value,
-      getTransientID(editedNode.value) ?? crypto.randomUUID(),
-    )
-  }
-
-  return undefined
-})
-
-export function useEditedTransientElement() {
-  return editedTransientElement
-}
-
 type OnEditCallback = (element: TransientElement, node: Node) => void
 
 const dd = new DiffDOM()

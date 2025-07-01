@@ -40,14 +40,12 @@
       }
     },
     "slots": {
-      "left": {},
-      "default": {},
-      "right": {}
+      "default": {}
     },
     "template": {
       "elements": [
         {
-          "id": "26eff721-f451-4b91-976f-1f4e7656b76e",
+          "id": "09845ea5-ca5e-4feb-b365-f1d24ba18819",
           "tag": "button",
           "isComponent": false,
           "attributes": {
@@ -63,69 +61,17 @@
           "slots": {
             "default": [
               {
-                "id": "f9009536-88bd-4c2c-9ef4-5b975d8ebd55",
-                "tag": "span",
-                "isComponent": false,
-                "attributes": {
-                  "class": {
-                    "type": "literal",
-                    "expression": "flex items-center"
-                  }
-                },
-                "slots": {
-                  "default": [
-                    {
-                      "id": "869d8d04-45f5-44d8-94fd-919a97484890",
-                      "tag": "slot",
-                      "isComponent": false,
-                      "attributes": {
-                        "name": {
-                          "type": "literal",
-                          "expression": "left"
-                        }
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "id": "d9ecda6b-63a4-45de-815d-8c05ea255851",
+                "id": "6246f37d-757f-4439-96d0-5800f8799d91",
                 "tag": "span",
                 "isComponent": false,
                 "attributes": {},
                 "slots": {
                   "default": [
                     {
-                      "id": "81cf1a2b-15f7-4114-ac9c-47354d6f95d2",
+                      "id": "cf69faeb-5aac-4b70-81a2-cc0d4262da2e",
                       "tag": "slot",
                       "isComponent": false,
                       "attributes": {}
-                    }
-                  ]
-                }
-              },
-              {
-                "id": "3bd34a8c-fb8f-4bba-ae99-4f4dea426b99",
-                "tag": "span",
-                "isComponent": false,
-                "attributes": {
-                  "class": {
-                    "type": "literal",
-                    "expression": "flex items-center"
-                  }
-                },
-                "slots": {
-                  "default": [
-                    {
-                      "id": "3e090ced-abde-4c8d-915f-4557285d1fc5",
-                      "tag": "slot",
-                      "isComponent": false,
-                      "attributes": {
-                        "name": {
-                          "type": "literal",
-                          "expression": "right"
-                        }
-                      }
                     }
                   ]
                 }
@@ -267,7 +213,7 @@
     "template": {
       "elements": [
         {
-          "id": "5879259e-bda2-45dd-a93e-35d238079c89",
+          "id": "c93c80c0-11ad-4b37-995a-d5084fc7c98b",
           "tag": "div",
           "isComponent": false,
           "attributes": {
@@ -279,7 +225,7 @@
           "slots": {
             "default": [
               {
-                "id": "451dc3cb-cc6a-4f71-8423-462ebe5ad97e",
+                "id": "5a3d3635-a2ce-441b-be14-88b3698bd0f5",
                 "tag": "slot",
                 "isComponent": false,
                 "attributes": {}
@@ -302,7 +248,7 @@
     "template": {
       "elements": [
         {
-          "id": "24d8383b-db26-4b74-b463-e3caacf35a78",
+          "id": "a71d39cf-5ec7-4587-a4f5-f54c438c6acf",
           "tag": "div",
           "isComponent": false,
           "attributes": {
@@ -314,7 +260,7 @@
           "slots": {
             "default": [
               {
-                "id": "cb565284-a9bf-4935-b2d1-9827a13249f9",
+                "id": "35014e6d-1597-42c7-850c-f9ed8f67b7e0",
                 "tag": "h1",
                 "isComponent": false,
                 "attributes": {
@@ -325,14 +271,14 @@
                 }
               },
               {
-                "id": "0403f6b3-cce2-45a7-8f4e-568bfff31cee",
+                "id": "807770d9-d2b6-4fad-a6fe-7b4af29cea63",
                 "tag": "h3",
                 "isComponent": false,
                 "attributes": {},
                 "slots": {
                   "default": [
                     {
-                      "id": "f6311a85-f22b-4c3f-ade7-eb99140a1636",
+                      "id": "6793961c-aa5c-4304-804b-d41ba8658c81",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -343,7 +289,7 @@
                       }
                     },
                     {
-                      "id": "f8340bfd-03b1-41ef-9876-87fece399e4f",
+                      "id": "910f2e53-902e-46a7-8dca-9e91c8622a36",
                       "tag": "a",
                       "isComponent": false,
                       "attributes": {
@@ -363,7 +309,7 @@
                       "slots": {
                         "default": [
                           {
-                            "id": "5d8e804e-8125-4137-a1e7-a50236b76519",
+                            "id": "61cf554f-8b87-4cf1-863d-413c7fcdedfb",
                             "tag": "#text",
                             "isComponent": false,
                             "attributes": {
@@ -377,7 +323,7 @@
                       }
                     },
                     {
-                      "id": "d7bc5846-b28d-4b84-b546-048885604181",
+                      "id": "2d725912-147b-48e4-8be0-c0d12268b14a",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -388,7 +334,7 @@
                       }
                     },
                     {
-                      "id": "ce786960-6928-413b-b160-3450ccf3458f",
+                      "id": "08192c9c-0ae6-42be-ade6-79aada37d105",
                       "tag": "a",
                       "isComponent": false,
                       "attributes": {
@@ -408,7 +354,7 @@
                       "slots": {
                         "default": [
                           {
-                            "id": "fb533746-4ff6-4ec1-8518-9f640b1a45b7",
+                            "id": "950a0795-17d3-42b1-b7d9-64eb195983f7",
                             "tag": "#text",
                             "isComponent": false,
                             "attributes": {
@@ -422,7 +368,7 @@
                       }
                     },
                     {
-                      "id": "bc574cfc-30fc-41cd-baf9-ad0e527b9308",
+                      "id": "4e26a901-65e7-4d22-a6ab-128408460670",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -448,7 +394,7 @@
     "template": {
       "elements": [
         {
-          "id": "c4997da0-7c1b-415d-9a88-f2a1160a31de",
+          "id": "0d7364fe-2955-466b-91ec-bff8d7182308",
           "tag": "main",
           "isComponent": false,
           "attributes": {
@@ -460,7 +406,7 @@
           "slots": {
             "default": [
               {
-                "id": "db3f832b-f7b7-4e38-9f7d-950d69b0ad05",
+                "id": "2c046071-45f1-45cd-a5cc-4dae3a7f0df9",
                 "tag": "h1",
                 "isComponent": false,
                 "attributes": {
@@ -472,7 +418,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "581e9963-a7d0-48b3-a6af-0ee7cbea06b1",
+                      "id": "36f4e8ce-8888-49cb-a650-8e4c3de5a003",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -486,7 +432,7 @@
                 }
               },
               {
-                "id": "803180b1-f588-4047-abbe-dba326b66757",
+                "id": "83713725-163a-4d63-8f97-c7bd6a8f6603",
                 "tag": "p",
                 "isComponent": false,
                 "attributes": {
@@ -498,7 +444,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "5577bde9-65f0-4d23-ab74-455bcf73e944",
+                      "id": "50b18437-5e4e-4d1f-9267-102a98721fc8",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -615,7 +561,7 @@
     "template": {
       "elements": [
         {
-          "id": "f9fb1711-f904-4e56-9398-23c511c4d773",
+          "id": "762b4350-544f-4441-933b-455455cb7af3",
           "tag": "img",
           "isComponent": false,
           "attributes": {
@@ -665,7 +611,7 @@
     "template": {
       "elements": [
         {
-          "id": "de556554-f4a3-4313-9c61-39557ab46a5e",
+          "id": "8f5be8c9-e33b-4c01-9c2a-7f1a2f275238",
           "tag": "section",
           "isComponent": false,
           "attributes": {
@@ -681,7 +627,7 @@
           "slots": {
             "default": [
               {
-                "id": "23473cbe-3d4f-422e-b626-611983598677",
+                "id": "b9868e58-f087-4a0a-a9c7-68673fce856e",
                 "tag": "component",
                 "isComponent": false,
                 "attributes": {
@@ -696,13 +642,13 @@
                 }
               },
               {
-                "id": "482f3177-29a0-4d91-bd66-294eb3556b0b",
+                "id": "a1ae01b3-b897-4047-a442-c7ce8aa948d3",
                 "tag": "slot",
                 "isComponent": false,
                 "attributes": {}
               },
               {
-                "id": "d8648b66-4ae0-4c60-adb2-f2b4e179aa5a",
+                "id": "b2804065-32bc-4e6a-873f-c9c8d7f07090",
                 "tag": "footer",
                 "isComponent": false,
                 "attributes": {
@@ -714,7 +660,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "a259d41c-712c-4cfb-88c5-7665ccaa9279",
+                      "id": "98f0a219-f528-4524-a919-13a7cd1f7505",
                       "tag": "slot",
                       "isComponent": false,
                       "attributes": {
@@ -740,14 +686,14 @@
     "template": {
       "elements": [
         {
-          "id": "1b4a0ef1-f7ac-48bf-a31e-c0c8be2ec460",
+          "id": "7a0388df-5dfe-4493-8cf9-e0cc41dac871",
           "tag": "div",
           "isComponent": false,
           "attributes": {},
           "slots": {
             "default": [
               {
-                "id": "a8f52398-50ba-43d3-9605-8cb1432b6c56",
+                "id": "7442f802-da2a-4966-9285-eadbf04d1ce7",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -784,7 +730,7 @@
     "template": {
       "elements": [
         {
-          "id": "9044e0b1-f1c8-469d-8029-0c373bd27d4a",
+          "id": "4e1c552f-8ee9-449b-9d4a-22a238979e6e",
           "tag": "component",
           "isComponent": false,
           "attributes": {
@@ -812,14 +758,14 @@
     "template": {
       "elements": [
         {
-          "id": "aa9828d6-9ef4-49ff-aa4d-cb052817a63f",
+          "id": "9d65c4af-ddb9-456b-b339-98cfe54ca370",
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
           "slots": {
             "icon": [
               {
-                "id": "23fc0f32-d4d9-467b-b010-240b00a9bf02",
+                "id": "4d0d7349-a948-45cd-b6d1-5074f4efad9f",
                 "tag": "DocumentationIcon",
                 "isComponent": true,
                 "attributes": {}
@@ -827,7 +773,7 @@
             ],
             "heading": [
               {
-                "id": "38f972f5-6d82-4d6f-90c6-8bb98e5b672f",
+                "id": "c8d95d58-c7c0-4c98-8204-aa9f997eb49a",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -840,7 +786,7 @@
             ],
             "default": [
               {
-                "id": "792a9b97-1327-45b0-9dc3-53ff3f28f741",
+                "id": "b737f658-daac-40b9-834a-71b8f5b07c97",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -851,7 +797,7 @@
                 }
               },
               {
-                "id": "4d110049-c844-45d7-8b7f-d7cd030c250b",
+                "id": "369db12a-11e7-47cb-b534-1c41f77adc8e",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -871,7 +817,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "582a1774-fa6a-4c81-a696-e6a6c322483c",
+                      "id": "b7f432ec-b9a1-4117-b52a-9406606fba49",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -885,7 +831,7 @@
                 }
               },
               {
-                "id": "1131e1d3-bfde-487d-8a9f-e3e907b36ffc",
+                "id": "ae75bb85-2d4e-4e22-87c6-fb863e32ea10",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -899,14 +845,14 @@
           }
         },
         {
-          "id": "cb5fdfd1-22ac-4fce-be9c-65333c4d84b2",
+          "id": "681e879f-bfbb-49e0-b95d-de1f8a314591",
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
           "slots": {
             "icon": [
               {
-                "id": "cdb32561-d5f4-42bb-a256-f3d5dbbf6c2c",
+                "id": "4f3b77fc-77a2-4fec-8a23-f1d24d83f64d",
                 "tag": "ToolingIcon",
                 "isComponent": true,
                 "attributes": {}
@@ -914,7 +860,7 @@
             ],
             "heading": [
               {
-                "id": "8953dbed-6362-4abe-9613-e5036bd1d01d",
+                "id": "33b4e2d4-68a9-442e-b8f3-31b2a514b232",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -927,7 +873,7 @@
             ],
             "default": [
               {
-                "id": "62309ac7-5252-41d4-8c49-0f4c9be4fed9",
+                "id": "855b21f4-24ab-4873-a817-d994b6200c8c",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -938,7 +884,7 @@
                 }
               },
               {
-                "id": "8d930765-aa52-449d-94c4-c63fe3b99105",
+                "id": "e64c988e-d303-4039-813f-efa41ea9726d",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -958,7 +904,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "b4d3c486-89e3-48e4-a5e5-b00773aaf0e5",
+                      "id": "8f723b43-c897-45d3-bef6-f966a3c7c3cd",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -972,7 +918,7 @@
                 }
               },
               {
-                "id": "5fb1bae4-17ac-4e59-b1db-f00375642bc5",
+                "id": "1a4b7ae6-bd6a-4269-8086-b90b804ef92a",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -983,7 +929,7 @@
                 }
               },
               {
-                "id": "483cfb14-6361-4a0a-8a12-1912a9a861ac",
+                "id": "2984c5d6-5276-4512-bda0-fd1171292860",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1003,7 +949,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "562e32d8-77fd-4014-9aef-90a07d5c2d8b",
+                      "id": "4a6d09b0-252d-4825-a2c5-25431f8b0029",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1017,7 +963,7 @@
                 }
               },
               {
-                "id": "c74608bd-4634-48e0-96a3-3f416af8f8e0",
+                "id": "d2fe6506-0de4-4c1e-8be0-57429d271e37",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1028,7 +974,7 @@
                 }
               },
               {
-                "id": "1389bbdb-7ba2-4a36-a0e5-fb5ad88870c4",
+                "id": "c251f383-a370-4d97-8392-53a56f407bba",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1048,7 +994,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "2ffaa0da-597f-4689-9c56-5ad45aca0d47",
+                      "id": "73e63824-3328-4b17-8d21-42ea8b72f5fd",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1062,7 +1008,7 @@
                 }
               },
               {
-                "id": "560de2b7-ffd7-4e08-b2b9-02766b3f038f",
+                "id": "14f634a3-6bfe-482b-8911-dcc9c89501ef",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1073,7 +1019,7 @@
                 }
               },
               {
-                "id": "1d2e3ac0-2330-45e1-869c-5b3b81aad198",
+                "id": "22f395f9-af97-4b19-99b1-ca96988f77ab",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1093,7 +1039,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "4a9e5c32-0c6a-4fdc-a349-fdf99bfb70b4",
+                      "id": "2d1dd064-441b-47da-9e7e-2d6b2395d1eb",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1107,7 +1053,7 @@
                 }
               },
               {
-                "id": "b50945a0-bb6e-4354-82a3-db953ed3451e",
+                "id": "e099b2a8-b3d6-4a80-b35f-bce95bd85594",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1118,7 +1064,7 @@
                 }
               },
               {
-                "id": "25ebfe43-c92a-479f-b0d3-2123b6fa3e0b",
+                "id": "141eb5a0-186c-4c20-86b1-e26cec5e215a",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1138,7 +1084,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "951577ee-7c54-4f6d-9a08-a140c5cb970f",
+                      "id": "1214b08a-26bc-4f58-942a-20110bf6e9d6",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1152,7 +1098,7 @@
                 }
               },
               {
-                "id": "64f35085-a2cd-4945-b3de-e7d89fdf3964",
+                "id": "b9c285a8-b509-443b-bcc4-52160e556dc3",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1163,7 +1109,7 @@
                 }
               },
               {
-                "id": "4af68dab-226d-4761-b2b7-b203b333e0d3",
+                "id": "54508fad-f644-47bc-8503-04a8f4e041f8",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1183,7 +1129,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "e765d2a1-3f6c-4594-bee6-2165d706d75d",
+                      "id": "c2ca8d7e-5583-4e96-8ca6-9ced58c97d53",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1197,7 +1143,7 @@
                 }
               },
               {
-                "id": "eb83402d-671f-4b60-a4a8-87497fbf94d2",
+                "id": "7d6158c1-4ab1-4124-b8dc-0863a15e86b1",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1208,13 +1154,13 @@
                 }
               },
               {
-                "id": "2c1d699c-1503-44d8-9167-d33f8d0aa923",
+                "id": "b983fded-362e-48cd-aba9-3eed0c3c342f",
                 "tag": "br",
                 "isComponent": false,
                 "attributes": {}
               },
               {
-                "id": "afa371f7-f7aa-4e1b-b585-9abc4f2610c4",
+                "id": "a330abce-3c07-4bbf-b58e-bc3baadfef40",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1225,7 +1171,7 @@
                 }
               },
               {
-                "id": "4851bc98-c4f9-4c39-929e-61535fd04eb3",
+                "id": "fc500271-c1c0-4054-9123-4f6623f1cf75",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1241,14 +1187,14 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "83e0dd29-2eea-410d-b5fa-b9d55a826593",
+                      "id": "0ae2410d-7d09-472c-9069-bc2bcf4d1b68",
                       "tag": "code",
                       "isComponent": false,
                       "attributes": {},
                       "slots": {
                         "default": [
                           {
-                            "id": "4c36cfc4-c8dd-4466-a7f0-0935d810e937",
+                            "id": "4abc99ed-e0ff-4410-b6c5-76e547b83d47",
                             "tag": "#text",
                             "isComponent": false,
                             "attributes": {
@@ -1265,7 +1211,7 @@
                 }
               },
               {
-                "id": "b735ff5a-a46b-4a37-8156-f00c5e01fd4d",
+                "id": "9b7a13b1-7001-4e9a-b360-660a23687640",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1279,14 +1225,14 @@
           }
         },
         {
-          "id": "ad5cd598-f7e2-4aac-ad17-209dd237984f",
+          "id": "4995144c-6074-4bae-b65d-11f8d4b48381",
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
           "slots": {
             "icon": [
               {
-                "id": "7ad91efa-cde8-4c1a-8852-a06a93481022",
+                "id": "35c3798b-3bc3-42f5-a368-f508d3ba3a0a",
                 "tag": "EcosystemIcon",
                 "isComponent": true,
                 "attributes": {}
@@ -1294,7 +1240,7 @@
             ],
             "heading": [
               {
-                "id": "87986f03-906a-41c4-b47a-226188a3d9b8",
+                "id": "a419f5aa-fa30-4479-a91a-9a52f2eefc78",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1307,7 +1253,7 @@
             ],
             "default": [
               {
-                "id": "958b6453-3bed-4ee0-aa29-759990fe81cb",
+                "id": "87a77814-98aa-4f23-9335-f6625c61de7f",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1318,7 +1264,7 @@
                 }
               },
               {
-                "id": "daca99eb-e1b9-4565-8860-36299b488258",
+                "id": "e3890a74-4613-419b-8c30-5fcdbfe16114",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1338,7 +1284,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "059037be-0fd9-49c3-aaf9-0b0f18711d43",
+                      "id": "e83929bf-68d0-4ed1-80ed-d5984c579ff1",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1352,7 +1298,7 @@
                 }
               },
               {
-                "id": "5755f02c-c06e-437f-9b1e-7150bc723a2e",
+                "id": "ba2dc3d1-698d-4eb1-ba4d-21740ea5e4d1",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1363,7 +1309,7 @@
                 }
               },
               {
-                "id": "10eb40b3-cafb-4d51-b8b2-a099fa8b140a",
+                "id": "51280dd3-67b4-4746-8604-64b83a825542",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1383,7 +1329,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "26512051-c502-44af-ae81-81b2b5d4a1a9",
+                      "id": "f5202406-3931-4af7-89f8-47e12989f0a3",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1397,7 +1343,7 @@
                 }
               },
               {
-                "id": "15e59358-fb0d-4448-83e1-7d1aede01667",
+                "id": "ebfb484f-4ea5-442a-af86-80d87c95682b",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1408,7 +1354,7 @@
                 }
               },
               {
-                "id": "e811d59d-b2f9-4d61-8516-d92956b9e3ae",
+                "id": "5228f9c2-d4bd-4731-ba77-8ff8f8418182",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1428,7 +1374,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "d72a3c0d-837b-4afe-86ac-14b420b53e67",
+                      "id": "fa40c275-e6ef-43c3-b706-241121b73291",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1442,7 +1388,7 @@
                 }
               },
               {
-                "id": "224f3fa5-766f-4b51-8cb9-db90a9c8edde",
+                "id": "f65e457e-1f07-4931-b81c-0ac32a85e7d3",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1453,7 +1399,7 @@
                 }
               },
               {
-                "id": "c7e4011f-16d2-4ebe-857a-b7e3d9ead256",
+                "id": "16d57dc4-3cd4-4bb0-9c8b-5e8ba896b2ae",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1473,7 +1419,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "57c3adce-92e6-4345-a4c5-f0c65dbb5cff",
+                      "id": "c502e6a3-e920-4db7-aab6-0ff65a20a37c",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1487,7 +1433,7 @@
                 }
               },
               {
-                "id": "a15abd07-6867-419f-9dc8-ebc5f55e2b75",
+                "id": "3309dddc-256d-46b9-872c-1664dd93a911",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1498,7 +1444,7 @@
                 }
               },
               {
-                "id": "57f8a3c5-9df3-4ebc-9041-ea08948404d2",
+                "id": "e6831a90-cfcc-4058-b65f-df2d2747869b",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1518,7 +1464,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "97777309-102d-4982-9c50-79d64e0ca27d",
+                      "id": "f7c613a5-15af-4ce6-9ac7-02838e4ad0b6",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1532,7 +1478,7 @@
                 }
               },
               {
-                "id": "07dfab4e-1ad4-4130-be75-ce5a5098525b",
+                "id": "238c9553-d32f-4663-b7f0-65e9e9249113",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1546,14 +1492,14 @@
           }
         },
         {
-          "id": "eae916a1-49bc-4754-9b3f-2ec13c0de0f7",
+          "id": "cefb33d2-a592-4743-8498-d53f88cfa1fe",
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
           "slots": {
             "icon": [
               {
-                "id": "0687a653-738f-41e5-9061-c0eddd77c7fc",
+                "id": "7e324f3c-01da-4271-88ba-bbe3285c5ba2",
                 "tag": "CommunityIcon",
                 "isComponent": true,
                 "attributes": {}
@@ -1561,7 +1507,7 @@
             ],
             "heading": [
               {
-                "id": "ff2b2696-9f53-4661-b159-10b39ec8832f",
+                "id": "ba22b0a1-204a-4278-a9bd-40bc024065ad",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1574,7 +1520,7 @@
             ],
             "default": [
               {
-                "id": "7f9e796c-1f3a-4fb3-a7fd-bc041185c2e4",
+                "id": "fced28cf-2616-4738-ae2e-6af419eadaa7",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1585,7 +1531,7 @@
                 }
               },
               {
-                "id": "bac05cd6-2600-40de-89af-7d5a3a2ee9cd",
+                "id": "cf3ad19a-01ae-4c22-9a1f-15e1cc93ffc4",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1605,7 +1551,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "368460ab-0dd5-4738-81bc-11757f2dac85",
+                      "id": "0a8a5e48-0173-4cf5-9b62-6411b53d9603",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1619,7 +1565,7 @@
                 }
               },
               {
-                "id": "fcf9b8b1-17d8-418e-bd5e-0e2f92a55995",
+                "id": "45b4242e-f1a0-4f4a-99e4-5b7464ace07c",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1630,7 +1576,7 @@
                 }
               },
               {
-                "id": "234053a5-7e0c-4ade-8dc4-ec269aab183f",
+                "id": "48c86cc7-469e-4b4f-8fd4-0497906fd5cc",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1650,7 +1596,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "df5d4c0e-95eb-4dcc-8edb-0b7a59bca168",
+                      "id": "b302a69b-25bf-4951-b8b1-05f9d46d9f38",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1664,7 +1610,7 @@
                 }
               },
               {
-                "id": "fa3e05cd-6b33-4a0d-8bd3-9e5f20605e60",
+                "id": "bc3deb37-49e7-4182-93f1-20e0f9fc85b6",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1675,7 +1621,7 @@
                 }
               },
               {
-                "id": "cf22f905-e671-4a41-a3ce-85a7510dfeb3",
+                "id": "c7ccb318-b618-4006-a69f-ceee894f9f5e",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1695,7 +1641,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "80ccecd7-ad37-4757-ba45-d5019ab16175",
+                      "id": "d58ee8ce-ec00-4bf4-b547-7eb7cb626ff7",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1709,7 +1655,7 @@
                 }
               },
               {
-                "id": "443de62b-ef3d-4d08-adc0-b5347aa1674c",
+                "id": "bbbf84ce-99b5-4bf0-abb9-e852d8dca27d",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1720,7 +1666,7 @@
                 }
               },
               {
-                "id": "69f48232-f954-4356-b7dd-213325137efb",
+                "id": "72562d9b-b13f-42f1-bf84-5e4f5555c916",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1740,7 +1686,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "83a3b7d9-6860-439c-ad9f-5a04935d2619",
+                      "id": "b221444c-2d7c-4709-8a2d-eb0e184f33fd",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1754,7 +1700,7 @@
                 }
               },
               {
-                "id": "c74bc82f-b731-425d-bd8a-d9d54011efec",
+                "id": "116e5829-c2d2-4192-bafb-bf5fff435b87",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1768,14 +1714,14 @@
           }
         },
         {
-          "id": "84d63bef-36e0-49ce-89f3-03d2742ae721",
+          "id": "12ecee2b-3858-4100-b7de-b35ce50417a3",
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
           "slots": {
             "icon": [
               {
-                "id": "58bc9f4f-4f70-4194-a44b-735e70f4f85d",
+                "id": "ddac2442-4351-4f36-aba6-4ebcd24df3b5",
                 "tag": "SupportIcon",
                 "isComponent": true,
                 "attributes": {}
@@ -1783,7 +1729,7 @@
             ],
             "heading": [
               {
-                "id": "9379e171-ed71-487e-8a03-9bd6d6c3b8cf",
+                "id": "42ec3370-ea3a-4cf8-861b-019845aad94e",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1796,7 +1742,7 @@
             ],
             "default": [
               {
-                "id": "08dc9cf0-466f-4b2f-8439-fa700801c12a",
+                "id": "1b823baa-4c72-49a0-8b4f-e873f7da6e85",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1807,7 +1753,7 @@
                 }
               },
               {
-                "id": "49482159-d963-4507-94c3-8c3f0a3371b8",
+                "id": "8e4a673b-20ea-4c50-8dc6-820698ae1e1e",
                 "tag": "a",
                 "isComponent": false,
                 "attributes": {
@@ -1827,7 +1773,7 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "2905fd57-031b-4657-a154-6f11e122b51e",
+                      "id": "e4af595c-0c6b-41f9-acf5-f098738df0e5",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
@@ -1841,7 +1787,7 @@
                 }
               },
               {
-                "id": "ad74bba5-9863-491d-a711-d88c0d68ea21",
+                "id": "45bd2ef4-250e-4390-b19c-afb6108b9e56",
                 "tag": "#text",
                 "isComponent": false,
                 "attributes": {
@@ -1869,7 +1815,7 @@
     "template": {
       "elements": [
         {
-          "id": "6a608e9f-8698-476a-981c-25f52d40c5dc",
+          "id": "b2269207-0174-4445-8aa8-d3169085b334",
           "tag": "#text",
           "isComponent": false,
           "attributes": {
@@ -1894,7 +1840,7 @@
     "template": {
       "elements": [
         {
-          "id": "8d74fff8-45bc-4d4e-8ee8-a6f3ea99fe6b",
+          "id": "5722f5bb-fe98-4185-9268-3fd24fbe6a91",
           "tag": "div",
           "isComponent": false,
           "attributes": {
@@ -1906,14 +1852,14 @@
           "slots": {
             "default": [
               {
-                "id": "a8266e8f-e4d8-412e-80ff-644a89cb3ddf",
+                "id": "3df1a8b8-672f-40b0-9f1b-1af092bcffd1",
                 "tag": "i",
                 "isComponent": false,
                 "attributes": {},
                 "slots": {
                   "default": [
                     {
-                      "id": "574b2965-09bb-43a1-bfbb-6f6c6f4aea61",
+                      "id": "680c1fc0-8f83-45d3-8e1c-6940290bae68",
                       "tag": "slot",
                       "isComponent": false,
                       "attributes": {
@@ -1927,7 +1873,7 @@
                 }
               },
               {
-                "id": "b4a831df-a640-4afc-a5b6-477286883685",
+                "id": "9b8779d7-c90d-40a2-820f-a519a9513165",
                 "tag": "div",
                 "isComponent": false,
                 "attributes": {
@@ -1939,14 +1885,14 @@
                 "slots": {
                   "default": [
                     {
-                      "id": "ff370b17-c1f3-4d74-9a8e-16a2f8cc33cf",
+                      "id": "3721d72b-5ea4-4ec2-9214-179cd70b282c",
                       "tag": "h3",
                       "isComponent": false,
                       "attributes": {},
                       "slots": {
                         "default": [
                           {
-                            "id": "df3d5174-cf78-4fb9-95ac-6226d5a3a553",
+                            "id": "29d21dbe-86f1-4bb6-a8a8-ab9e4c0c6c24",
                             "tag": "slot",
                             "isComponent": false,
                             "attributes": {
@@ -1960,7 +1906,7 @@
                       }
                     },
                     {
-                      "id": "c41ae787-daec-4aff-8f23-60730848e0e3",
+                      "id": "67fda2ac-661c-4e86-8647-c52a6b1e34f9",
                       "tag": "slot",
                       "isComponent": false,
                       "attributes": {}
@@ -1981,7 +1927,7 @@
     "template": {
       "elements": [
         {
-          "id": "0c717112-4f56-4ca8-9c74-18b29960b77b",
+          "id": "78a2ebcd-d267-472a-8d2f-ff4f6a7d5986",
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2005,7 +1951,7 @@
           "slots": {
             "default": [
               {
-                "id": "03009e29-3783-4110-b60e-870c8f3315a2",
+                "id": "9a4ee7c1-2274-4fec-a596-a8f135dc08da",
                 "tag": "path",
                 "isComponent": false,
                 "attributes": {
@@ -2028,7 +1974,7 @@
     "template": {
       "elements": [
         {
-          "id": "2ba2a4eb-b36f-4851-8501-8896549196c6",
+          "id": "009f0d1b-7417-4f7d-a997-f7e090249c90",
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2052,7 +1998,7 @@
           "slots": {
             "default": [
               {
-                "id": "c535cbd1-ad05-4814-8838-7b5abdd0264c",
+                "id": "33c48d4c-0187-4a0c-a475-7ade3123fb91",
                 "tag": "path",
                 "isComponent": false,
                 "attributes": {
@@ -2075,7 +2021,7 @@
     "template": {
       "elements": [
         {
-          "id": "66ff90e8-49d6-4158-9c00-3e12ef2f68d7",
+          "id": "4607a64d-2458-4561-aee2-4a0b0d1c2478",
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2099,7 +2045,7 @@
           "slots": {
             "default": [
               {
-                "id": "cff19584-55f9-4e9b-a69f-720341e5146a",
+                "id": "e11e70ee-b353-4a41-9476-4eca87e39b70",
                 "tag": "path",
                 "isComponent": false,
                 "attributes": {
@@ -2122,7 +2068,7 @@
     "template": {
       "elements": [
         {
-          "id": "cd0d854e-6011-4155-b05b-6fe40747d27f",
+          "id": "e7d35699-824c-4ca7-b002-e9cb266dab68",
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2146,7 +2092,7 @@
           "slots": {
             "default": [
               {
-                "id": "0d70ac61-6da3-4a40-9596-7461122c6165",
+                "id": "479f1e98-2929-4f02-ad30-80e0eac50f9b",
                 "tag": "path",
                 "isComponent": false,
                 "attributes": {
@@ -2169,7 +2115,7 @@
     "template": {
       "elements": [
         {
-          "id": "0a06f758-ad9b-42ba-878b-f074d112752c",
+          "id": "9ac57977-2a71-404e-b255-c6ac48fdace6",
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2213,7 +2159,7 @@
           "slots": {
             "default": [
               {
-                "id": "67f42b06-b60c-4e77-aa2b-6ce2613897f2",
+                "id": "faba4eb7-1d45-434b-b121-6545740ea3be",
                 "tag": "path",
                 "isComponent": false,
                 "attributes": {

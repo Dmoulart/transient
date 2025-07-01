@@ -80,6 +80,7 @@ const {
   saveToLocalStorage,
   loadFromLocalStorage,
 } = usePage(component.template!)
+const pageCOntents = contents
 
 const { onEditEnd } = useEdition()
 const editedNode = useEditedNode()
@@ -92,7 +93,7 @@ onEditEnd((element, node) => {
     const [slot, ownerId] = node.dataset.transientSlot.split(':')
     const contents = element.slots![slot]!
     replaceSlot(contents, slot, ownerId)
-    console.log('replace slots')
+    console.log('replace slots', { contents: pageCOntents })
     // replace(element)
   } else if (node.dataset.transientId) {
     replace(element)

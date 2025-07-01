@@ -87,7 +87,7 @@ export function htmlNodeToTransientElement(
 
   return {
     id,
-    tag: element.tagName,
+    tag: element.tagName.toLowerCase(),
     isComponent: false,
     attributes,
     slots,
