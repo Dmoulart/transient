@@ -1,4 +1,4 @@
-import { assert, assertIs, someString } from "../core/assert";
+import { assert } from "../core/assert";
 import {
   type TransientComponentSchema,
   type TransientElement,
@@ -6,9 +6,7 @@ import {
   type TransientType,
   type TransientTypeName,
 } from "./definition";
-
-export type SlotElement = TransientElement & { tag: "slot" };
-
+import { addedDiff, deletedDiff, updatedDiff } from "deep-object-diff";
 export function getTypeKind(type: TransientType): TransientTypeName {
   return typeof type === "string" ? type : type.kind;
 }
@@ -17,7 +15,6 @@ export function getTextValue(element: TransientElement) {
   assert(element.tag === "#text");
   return element.attributes?.value?.expression;
 }
-
 export function getComponentDefaultPropsValues(props: TransientProps) {
   const data: Record<string, any> = {};
 
@@ -33,11 +30,11 @@ export function getComponentDefaultPropsValues(props: TransientProps) {
 }
 
 export function hasTextChildren(element: TransientElement): boolean {
-  return (element.children ?? []).some((child) => child.tag === "#text");
+  return (element.slots?.default ?? []).some((child) => child.tag === "#text");
 }
 
-export function hasChildren(element: TransientElement): boolean {
-  return element.children !== undefined;
+export function hasSlots(element: TransientElement): boolean {
+  return element.slots !== undefined;
 }
 
 export function findElementById(
@@ -47,9 +44,11 @@ export function findElementById(
   for (const element of elements) {
     if (element.id === id) return element;
 
-    if (element.children) {
-      const found = findElementById(element.children, id);
-      if (found) return found;
+    if (element.slots) {
+      for (const slotElements of Object.values(element.slots)) {
+        const found = findElementById(slotElements, id);
+        if (found) return found;
+      }
     }
   }
   return undefined;
@@ -65,20 +64,36 @@ export function replaceElement(
       return newElement;
     }
 
-    if (elements[i]!.children) {
-      const slotElements = elements[i]!.children;
+    if (elements[i]!.slots) {
+      for (const slotName in elements[i]!.slots) {
+        const slotElements = elements[i]!.slots![slotName];
 
-      if (slotElements) {
-        const updated = replaceElement(newElement, slotElements);
+        if (slotElements) {
+          const updated = replaceElement(newElement, slotElements);
 
-        if (updated) {
-          return updated;
+          if (updated) {
+            return updated;
+          }
         }
       }
     }
   }
 
   return undefined;
+}
+export function replaceElementSlot(
+  newSlotContent: TransientElement[],
+  slot: string,
+  ownerId: string,
+  elements: TransientElement[] // assumed root or current branch
+) {
+  const owner = findElementById(elements, ownerId);
+  if (!owner) {
+    throw new Error("Unknown slot parent");
+  }
+  console.log({ owner });
+  owner.slots ??= {};
+  owner.slots[slot] = newSlotContent;
 }
 
 export function appendElement(
@@ -92,9 +107,10 @@ export function appendElement(
     return false;
   }
 
-  parent.children ??= [];
+  parent.slots = parent.slots ?? {};
+  parent.slots.default = parent.slots.default ?? [];
 
-  parent.children.push(element);
+  parent.slots.default.push(element);
   return true;
 }
 
@@ -108,9 +124,11 @@ export function removeElement(
       return true;
     }
 
-    if (elements[i]!.children) {
-      if (removeElement(idToRemove, elements[i]!.children!)) {
-        return true;
+    if (elements[i]!.slots) {
+      for (const slotName in elements[i]!.slots) {
+        if (removeElement(idToRemove, elements[i]!.slots![slotName]!)) {
+          return true;
+        }
       }
     }
   }
@@ -128,9 +146,13 @@ export function insertAfterElement(
       return true;
     }
 
-    if (elements[i]!.children) {
-      if (insertAfterElement(newElement, id, elements[i]!.children!)) {
-        return true;
+    if (elements[i]!.slots) {
+      for (const slotName in elements[i]!.slots) {
+        if (
+          insertAfterElement(newElement, id, elements[i]!.slots![slotName]!)
+        ) {
+          return true;
+        }
       }
     }
   }
@@ -148,81 +170,15 @@ export function insertBeforeElement(
       return true;
     }
 
-    if (elements[i]!.children) {
-      if (insertBeforeElement(newElement, id, elements[i]!.children!)) {
-        return true;
+    if (elements[i]!.slots) {
+      for (const slotName in elements[i]!.slots) {
+        if (
+          insertBeforeElement(newElement, id, elements[i]!.slots![slotName]!)
+        ) {
+          return true;
+        }
       }
     }
   }
   return false;
-}
-
-export function isSlot(element: TransientElement): element is SlotElement {
-  return element.tag === "slot";
-}
-
-export function findSlots(element: TransientElement): SlotElement[] {
-  if (!element.children) return [];
-
-  return element.children.filter(isSlot);
-}
-
-export function substituteSlots(
-  elements: TransientElement[],
-  createSubstitute: (slotName: string, slot: SlotElement) => TransientElement
-): TransientElement[] {
-  if (elements.length === 0) return [];
-
-  const substitutedChildren = elements.flatMap((element) => {
-    if (isSlot(element)) {
-      const slotName = getSlotName(element);
-      return createSubstitute(slotName, element);
-    }
-
-    if (element.children) {
-      return {
-        ...element,
-        children: substituteSlots(element.children, createSubstitute),
-      };
-    }
-
-    return element;
-  });
-
-  return substitutedChildren;
-}
-
-/**
- * Groups a flat array of TransientElements by their slot name.
- * - Elements without a `slot` attribute go under the "default" key.
- * - The order is preserved within each slot.
- */
-export function groupElementsBySlot(
-  elements: TransientElement[]
-): Record<string, TransientElement[]> {
-  const grouped: Record<string, TransientElement[]> = {};
-
-  for (const element of elements) {
-    // if (isSlot(element)) {
-    const slotName = getSlotName(element);
-    if (!grouped[slotName]) {
-      grouped[slotName] = [];
-    }
-    grouped[slotName].push(element);
-    // }
-  }
-
-  return grouped;
-}
-
-/**
- * Déduit le nom du slot à partir des attributs de l'élément slot.
- * Fallback sur "default" si rien n'est précisé.
- */
-function getSlotName(slot: SlotElement): string {
-  const nameAttr = slot.attributes?.name;
-  if (nameAttr?.type === "literal" && typeof nameAttr.expression === "string") {
-    return nameAttr.expression;
-  }
-  return "default";
 }

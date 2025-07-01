@@ -7,6 +7,7 @@ import {
   insertBeforeElement,
   removeElement,
   replaceElement,
+  replaceElementSlot,
 } from 'transient/src/transient/ast'
 import { updatedDiff } from 'deep-object-diff'
 
@@ -25,6 +26,10 @@ export function usePage(template: TransientTemplate) {
 
   function remove(id: string) {
     removeElement(id, contents.value.elements)
+  }
+
+  function replaceSlot(content: TransientElement[], id: string, slot: string) {
+    replaceElementSlot(content, id, slot, contents.value.elements)
   }
 
   function append(parentId: string, newElement: TransientElement) {
@@ -72,5 +77,6 @@ export function usePage(template: TransientTemplate) {
     insertBefore,
     saveToLocalStorage,
     loadFromLocalStorage,
+    replaceSlot,
   }
 }

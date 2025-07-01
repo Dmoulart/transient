@@ -60,22 +60,46 @@ import type { TransientComponentSchema } from 'transient/src/transient'
 import type { TransientElement } from 'transient/src/transient/definition'
 import { findElementById, insertAfterElement } from 'transient/src/transient/ast'
 import { getTransientID } from 'transient/src/analyzers/html/html'
-import { assert, assertIsArrayOfLength, assertIsDefined } from 'transient/src/core/assert'
+import {
+  assert,
+  assertIs,
+  assertIsArrayOfLength,
+  assertIsDefined,
+  someHTMLElement,
+} from 'transient/src/core/assert'
 const dictionnary = useDictionnary()
 
 const component = dictionnary.get('HomePage')
 
-const { contents, replace, remove, insertAfter, saveToLocalStorage, loadFromLocalStorage } =
-  usePage(component.template!)
+const {
+  contents,
+  replace,
+  remove,
+  replaceSlot,
+  insertAfter,
+  saveToLocalStorage,
+  loadFromLocalStorage,
+} = usePage(component.template!)
 
 const { onEditEnd } = useEdition()
 const editedNode = useEditedNode()
 const editedNodeBoundingBox = useEditedNodeBoundingBox()
 const windowSize = useWindowSize()
 
-onEditEnd((element) => {
+onEditEnd((element, node) => {
   console.log({ replaceElement: element })
-  replace(element)
+
+  assertIs(someHTMLElement, node)
+  debugger
+  if (node.dataset.transientSlot) {
+    const [slot, ownerId] = node.dataset.transientSlot.split(':')
+    const contents = element.slots![slot]!
+    console.log({ contents })
+    replaceSlot(contents, slot, ownerId)
+    // replace(element)
+  } else if (node.dataset.transientId) {
+    replace(element)
+  }
 })
 
 const componentPanel = useComponentPanel()
@@ -96,7 +120,7 @@ const addComponent = ({ path, schema }: { path: string; schema: TransientCompone
   const newComponent: TransientElement = {
     // isComponent: boolean;
     // attributes: Record<string, BindingInfo>;
-    ...componentSchema.template.elements[0],
+    // ...componentSchema.template.elements[0],
     tag: componentSchema.tag,
     isComponent: true,
     attributes: {},

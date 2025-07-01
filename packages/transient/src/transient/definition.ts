@@ -7,7 +7,7 @@ export type TransientElement = {
   tag: string;
   isComponent: boolean;
   attributes: Record<string, BindingInfo>;
-  children?: TransientElement[];
+  slots?: Record<string, TransientElement[]>;
 };
 
 export type TransientTemplate = {
@@ -33,9 +33,7 @@ export type TransientProp = {
   default?: string | boolean | undefined;
 };
 
-export type TransientSlot = {
-  parentId: string;
-};
+export type TransientSlot = {};
 
 export type TransientType<T extends TransientTypeName = TransientTypeName> =
   T extends TransientPrimitiveTypeName

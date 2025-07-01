@@ -81,12 +81,16 @@ export function htmlNodeToTransientElement(
     }
   }
 
+  const slots: Record<string, TransientElement[]> = {
+    default: children,
+  };
+
   return {
     id,
     tag: element.tagName,
     isComponent: false,
     attributes,
-    children,
+    slots,
   };
 }
 

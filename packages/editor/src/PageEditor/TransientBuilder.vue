@@ -1,18 +1,21 @@
 <script setup lang="ts">
-import { onMounted, h, shallowRef, createCommentVNode, watch, useTemplateRef, ref } from 'vue'
+import {
+  onMounted,
+  h,
+  shallowRef,
+  createCommentVNode,
+  watch,
+  useTemplateRef,
+  ref,
+  nextTick,
+} from 'vue'
 import type {
   TransientComponentDictionnary,
   TransientElement,
   TransientTemplate,
 } from 'transient/src/transient/definition'
-import { ComponentDictionnary, loadAllComponents } from '@/lib/use-dictionnary'
-import {
-  findElementById,
-  findSlots,
-  groupElementsBySlot,
-  hasTextChildren,
-  substituteSlots,
-} from 'transient/src/transient/ast'
+import { ComponentDictionnary, loadAllComponents, useDictionnary } from '@/lib/use-dictionnary'
+import { findElementById, hasTextChildren } from 'transient/src/transient/ast'
 import { assertIs, someHTMLElement } from 'transient/src/core/assert'
 import type { TransientComponentSchema } from 'transient/src'
 import { getTransientID } from 'transient/src/analyzers/html/html'
@@ -38,10 +41,7 @@ function render(element: TransientElement) {
 
   const isComponent = element.isComponent
   const tag = element.tag
-  // if (isComponent) {
-  //   const schema = getTransientComponentSchemaByTag(tag)
-  //   console.log({ schema })
-  // }
+
   const Component = isComponent ? loadedComponents.value[tag] || tag : tag
 
   const attrs = {
@@ -52,40 +52,28 @@ function render(element: TransientElement) {
     tabIndex: isComponent ? 0 : undefined,
   }
 
-  const elementSlots: Record<string, TransientElement[]> = {}
-  for (const [name, content] of Object.entries(groupElementsBySlot(element.children ?? []))) {
-    elementSlots[name] = substituteSlots(content, (slotName, slot) => {
-      return {
-        tag: 'ui-slot',
-        isComponent: false,
-        id: crypto.randomUUID(),
-        children: [
-          {
-            id: crypto.randomUUID(),
-            isComponent: false,
-            tag: '#text',
-            attributes: {
-              value: {
-                type: 'literal',
-                expression: `SLOT ${slotName}!`,
-              },
-            },
-          } as TransientElement,
-        ],
-        attributes: {
-          'data-transient-slot': {
-            type: 'literal',
-            expression: slotName,
-          },
-        },
-      } as TransientElement
-    })
+  const slots: Record<string, () => any> = {}
+  for (const [name, content] of Object.entries(element.slots ?? {})) {
+    const rendered = content.map(render)
+
+    slots[name] = () => rendered
   }
 
-  const slots: Record<string, () => any> = {}
-  for (const [name, content] of Object.entries(elementSlots)) {
-    const rendered = content.map(render)
-    slots[name] = () => rendered
+  if (isComponent) {
+    const component = useDictionnary().get(tag)
+    if (component.slots) {
+      for (const slot of Object.keys(component.slots)) {
+        if (!element.slots?.[slot]) {
+          slots[slot] = () =>
+            createTemporaryNode((parent) => {
+              parent.contentEditable = 'true'
+              parent.textContent = slot
+              parent.dataset.transientSlot = `${slot}:${element.id}`
+              parent.tabIndex = 0
+            })
+        }
+      }
+    }
   }
 
   const meta: Record<string, any> = {}
@@ -98,20 +86,8 @@ function render(element: TransientElement) {
       ...attrs,
       ...meta,
       ...listeners,
-      // 'data-transient-editable': isElementEditable(element),
-      // 'data-transient-text-editable': hasTextChildren(element),
       contenteditable: hasTextChildren(element) ? true : null,
       'data-transient-id': element.id,
-      onVnodeMounted(vnode) {
-        const el = vnode.el
-        assertIs(someHTMLElement, el)
-
-        const slots = el.querySelectorAll('slot')
-        slots.forEach((slotEl) => {
-          const name = slotEl.getAttribute('name') || 'default'
-          console.log(`Slot found in component ${element.tag}:`, name, slotEl)
-        })
-      },
     },
     slots,
   )
@@ -131,6 +107,24 @@ onMounted(() => {
     }
   })
 })
+
+function createTemporaryNode(callback: (el: HTMLElement) => void) {
+  return h('div', {
+    style: { display: 'none' }, // or use `visibility: hidden` if needed
+    onVnodeMounted(vnode) {
+      const el = vnode.el as HTMLElement
+      const parent = el.parentElement
+      if (parent) {
+        callback(parent)
+      }
+
+      // Remove self after next tick
+      nextTick(() => {
+        el.remove()
+      })
+    },
+  })
+}
 </script>
 
 <template>

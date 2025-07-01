@@ -73,28 +73,28 @@ function describeComponent(
 
   const template = analyzeTemplateElements(src, props);
 
-  if (slots && template) {
-    function assignSlotParents(elements: TransientElement[]) {
-      for (const el of elements) {
-        if (el.children) {
-          for (const child of el.children) {
-            if (child.tag === "slot") {
-              const name = child.attributes?.name?.expression ?? "default";
+  // if (slots && template) {
+  //   function assignSlotParents(elements: TransientElement[]) {
+  //     for (const el of elements) {
+  //       if (el.children) {
+  //         for (const child of el.children) {
+  //           if (child.tag === "slot") {
+  //             const name = child.attributes?.name?.expression ?? "default";
 
-              assertIs(someString, name);
+  //             assertIs(someString, name);
 
-              if (slots![name]) {
-                slots![name].parentId = el.id;
-              }
-            }
-          }
-          assignSlotParents(el.children);
-        }
-      }
-    }
+  //             if (slots![name]) {
+  //               slots![name].parentId = el.id;
+  //             }
+  //           }
+  //         }
+  //         assignSlotParents(el.children);
+  //       }
+  //     }
+  //   }
 
-    assignSlotParents(template.elements);
-  }
+  //   assignSlotParents(template.elements);
+  // }
 
   return {
     tag,

@@ -40,20 +40,14 @@
       }
     },
     "slots": {
-      "left": {
-        "parentId": "cd2022c4-5244-45f5-8980-6e411f7d638e"
-      },
-      "default": {
-        "parentId": "956f893e-617b-4a1b-84d1-3168df5d5421"
-      },
-      "right": {
-        "parentId": "2a35c190-0ca7-47e3-8841-ae44b12b1635"
-      }
+      "left": {},
+      "default": {},
+      "right": {}
     },
     "template": {
       "elements": [
         {
-          "id": "44a5150b-97ed-4a43-b3fb-d5f4408a7079",
+          "id": "430012aa-0fa9-4edf-8636-935dcaeee989",
           "tag": "button",
           "isComponent": false,
           "attributes": {
@@ -66,77 +60,78 @@
               "expression": "disabled"
             }
           },
-          "children": [
-            {
-              "id": "cd2022c4-5244-45f5-8980-6e411f7d638e",
-              "tag": "span",
-              "isComponent": false,
-              "attributes": {
-                "class": {
-                  "type": "literal",
-                  "expression": "flex items-center"
+          "slots": {
+            "default": [
+              {
+                "id": "b79260fd-32af-4e6a-a3b0-ed7be741d9e3",
+                "tag": "span",
+                "isComponent": false,
+                "attributes": {
+                  "class": {
+                    "type": "literal",
+                    "expression": "flex items-center"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "e5dc57c5-f60d-40a9-8253-ad36a362cfde",
+                      "tag": "slot",
+                      "isComponent": false,
+                      "attributes": {
+                        "name": {
+                          "type": "literal",
+                          "expression": "left"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
-              "children": [
-                {
-                  "id": "229be91a-8f2c-4bfd-94f9-aeaf751f2374",
-                  "tag": "slot",
-                  "isComponent": false,
-                  "attributes": {
-                    "name": {
-                      "type": "literal",
-                      "expression": "left"
+              {
+                "id": "68cf1fa9-7bda-469b-bfbe-be5f00672b51",
+                "tag": "span",
+                "isComponent": false,
+                "attributes": {},
+                "slots": {
+                  "default": [
+                    {
+                      "id": "0b4acf16-2863-4419-bfa8-02ebf8574fac",
+                      "tag": "slot",
+                      "isComponent": false,
+                      "attributes": {}
                     }
-                  },
-                  "hasSlot": false
-                }
-              ],
-              "hasSlot": true
-            },
-            {
-              "id": "956f893e-617b-4a1b-84d1-3168df5d5421",
-              "tag": "span",
-              "isComponent": false,
-              "attributes": {},
-              "children": [
-                {
-                  "id": "fea46f00-e2aa-4e03-b868-b6d7992a229b",
-                  "tag": "slot",
-                  "isComponent": false,
-                  "attributes": {},
-                  "hasSlot": false
-                }
-              ],
-              "hasSlot": true
-            },
-            {
-              "id": "2a35c190-0ca7-47e3-8841-ae44b12b1635",
-              "tag": "span",
-              "isComponent": false,
-              "attributes": {
-                "class": {
-                  "type": "literal",
-                  "expression": "flex items-center"
+                  ]
                 }
               },
-              "children": [
-                {
-                  "id": "672fe340-bdb6-4767-97b2-f43a1ce86293",
-                  "tag": "slot",
-                  "isComponent": false,
-                  "attributes": {
-                    "name": {
-                      "type": "literal",
-                      "expression": "right"
+              {
+                "id": "549c1bd4-24f7-4d88-b10e-0002b9187098",
+                "tag": "span",
+                "isComponent": false,
+                "attributes": {
+                  "class": {
+                    "type": "literal",
+                    "expression": "flex items-center"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "4fe89808-e0f9-485f-afe7-966f63930d79",
+                      "tag": "slot",
+                      "isComponent": false,
+                      "attributes": {
+                        "name": {
+                          "type": "literal",
+                          "expression": "right"
+                        }
+                      }
                     }
-                  },
-                  "hasSlot": false
+                  ]
                 }
-              ],
-              "hasSlot": true
-            }
-          ],
-          "hasSlot": false
+              }
+            ]
+          }
         }
       ]
     }
@@ -267,14 +262,12 @@
       }
     },
     "slots": {
-      "default": {
-        "parentId": "27a682a7-1100-46a6-bd8b-e16801be6826"
-      }
+      "default": {}
     },
     "template": {
       "elements": [
         {
-          "id": "27a682a7-1100-46a6-bd8b-e16801be6826",
+          "id": "2ad774cd-1762-47d2-8f17-e36afdac6a5d",
           "tag": "div",
           "isComponent": false,
           "attributes": {
@@ -283,16 +276,16 @@
               "expression": "not supported"
             }
           },
-          "children": [
-            {
-              "id": "aea767d7-2ba4-4e37-984d-e049d5186993",
-              "tag": "slot",
-              "isComponent": false,
-              "attributes": {},
-              "hasSlot": false
-            }
-          ],
-          "hasSlot": true
+          "slots": {
+            "default": [
+              {
+                "id": "d80825ef-4be6-409a-aefe-0ec4245e24e5",
+                "tag": "slot",
+                "isComponent": false,
+                "attributes": {}
+              }
+            ]
+          }
         }
       ]
     }
@@ -309,7 +302,7 @@
     "template": {
       "elements": [
         {
-          "id": "4d3a628a-b60f-4ecf-8416-2bcf03b3fac4",
+          "id": "2baa158b-5d3c-4b4e-93b1-8b146a409264",
           "tag": "div",
           "isComponent": false,
           "attributes": {
@@ -318,129 +311,132 @@
               "expression": "greetings"
             }
           },
-          "children": [
-            {
-              "id": "1ea35ba8-a9c4-466c-be9b-01b83b62c2eb",
-              "tag": "h1",
-              "isComponent": false,
-              "attributes": {
-                "class": {
-                  "type": "literal",
-                  "expression": "green"
+          "slots": {
+            "default": [
+              {
+                "id": "36998961-4e1b-427b-9bdd-03bb94bcd017",
+                "tag": "h1",
+                "isComponent": false,
+                "attributes": {
+                  "class": {
+                    "type": "literal",
+                    "expression": "green"
+                  }
                 }
               },
-              "hasSlot": false
-            },
-            {
-              "id": "2fa9e21b-b413-42f7-8585-3a92dbc286a1",
-              "tag": "h3",
-              "isComponent": false,
-              "attributes": {},
-              "children": [
-                {
-                  "id": "f4e9e480-9244-495c-b20e-317052a78e72",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": " You’ve successfully created a project with "
-                    }
-                  }
-                },
-                {
-                  "id": "756eb41d-800c-4b38-b840-edb4a6b43133",
-                  "tag": "a",
-                  "isComponent": false,
-                  "attributes": {
-                    "href": {
-                      "type": "literal",
-                      "expression": "https://vite.dev/"
-                    },
-                    "target": {
-                      "type": "literal",
-                      "expression": "_blank"
-                    },
-                    "rel": {
-                      "type": "literal",
-                      "expression": "noopener"
-                    }
-                  },
-                  "children": [
+              {
+                "id": "cd892ff0-57c9-4e05-8c76-778575de0221",
+                "tag": "h3",
+                "isComponent": false,
+                "attributes": {},
+                "slots": {
+                  "default": [
                     {
-                      "id": "0fbacef0-ed4d-4911-bbe1-aabb3b319f85",
+                      "id": "6aa99512-5acb-4f4a-8b22-c1386ac95252",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
                         "value": {
                           "type": "literal",
-                          "expression": "Vite"
+                          "expression": " You’ve successfully created a project with "
                         }
                       }
-                    }
-                  ],
-                  "hasSlot": false
-                },
-                {
-                  "id": "3d5e21b0-3e31-4e64-9108-2f4db9e14451",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": " + "
-                    }
-                  }
-                },
-                {
-                  "id": "20d459c4-832c-42bf-b2a8-0f319750e37a",
-                  "tag": "a",
-                  "isComponent": false,
-                  "attributes": {
-                    "href": {
-                      "type": "literal",
-                      "expression": "https://vuejs.org/"
                     },
-                    "target": {
-                      "type": "literal",
-                      "expression": "_blank"
-                    },
-                    "rel": {
-                      "type": "literal",
-                      "expression": "noopener"
-                    }
-                  },
-                  "children": [
                     {
-                      "id": "12de393b-5388-4d6b-99fc-b093d85c5f3c",
+                      "id": "a7d5052f-f137-4759-9be9-eb66dc87cdc1",
+                      "tag": "a",
+                      "isComponent": false,
+                      "attributes": {
+                        "href": {
+                          "type": "literal",
+                          "expression": "https://vite.dev/"
+                        },
+                        "target": {
+                          "type": "literal",
+                          "expression": "_blank"
+                        },
+                        "rel": {
+                          "type": "literal",
+                          "expression": "noopener"
+                        }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": "36359add-2243-4b5f-930f-505a3017b153",
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": "Vite"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "023aa0a7-9d7d-423f-862c-2d9f199ef313",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
                         "value": {
                           "type": "literal",
-                          "expression": "Vue 3"
+                          "expression": " + "
+                        }
+                      }
+                    },
+                    {
+                      "id": "8539aa9c-0df5-4605-95ae-c4b0f1851bb6",
+                      "tag": "a",
+                      "isComponent": false,
+                      "attributes": {
+                        "href": {
+                          "type": "literal",
+                          "expression": "https://vuejs.org/"
+                        },
+                        "target": {
+                          "type": "literal",
+                          "expression": "_blank"
+                        },
+                        "rel": {
+                          "type": "literal",
+                          "expression": "noopener"
+                        }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": "4abf720e-87f0-4bf2-871f-6dfb632da751",
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": "Vue 3"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "d83a1adb-10c3-4ac3-8fd5-53ef78f5e022",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": ". What's next? "
                         }
                       }
                     }
-                  ],
-                  "hasSlot": false
-                },
-                {
-                  "id": "fd977f15-2b4c-4ec9-ba3e-beb5ee8a721f",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": ". What's next? "
-                    }
-                  }
+                  ]
                 }
-              ],
-              "hasSlot": false
-            }
-          ],
-          "hasSlot": false
+              }
+            ]
+          }
         }
       ]
     }
@@ -452,7 +448,7 @@
     "template": {
       "elements": [
         {
-          "id": "e25f2a59-214c-4836-8bbe-87a432bd6393",
+          "id": "ae44dba8-a633-4eb5-873f-bf4f003f7063",
           "tag": "main",
           "isComponent": false,
           "attributes": {
@@ -461,187 +457,196 @@
               "expression": "p-12 max-w-5xl m-auto"
             }
           },
-          "children": [
-            {
-              "id": "17ab88ad-4546-4ac3-87ec-04e55918508e",
-              "tag": "section",
-              "isComponent": false,
-              "attributes": {
-                "class": {
-                  "type": "literal",
-                  "expression": "text-center py-16"
+          "slots": {
+            "default": [
+              {
+                "id": "7f5ab4bd-ec14-4d67-95ab-cc55343ad8f5",
+                "tag": "section",
+                "isComponent": false,
+                "attributes": {
+                  "class": {
+                    "type": "literal",
+                    "expression": "text-center py-16"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "5560bc4f-f0af-4024-a2da-f950717b3dce",
+                      "tag": "h1",
+                      "isComponent": false,
+                      "attributes": {
+                        "class": {
+                          "type": "literal",
+                          "expression": "text-5xl font-semibold mb-6"
+                        }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": "b7ce86da-3935-4864-aace-fb04aedb8b79",
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": "Welcome to Our Store"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "3ba68cf2-882f-4914-95c4-c7f75487193a",
+                      "tag": "p",
+                      "isComponent": false,
+                      "attributes": {
+                        "class": {
+                          "type": "literal",
+                          "expression": "text-gray-500 mb-10"
+                        }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": "584e61e8-7e88-4449-ba6b-b1cc47709e28",
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": " We’re delighted you’re here! Explore our range of products, grab great deals, and enjoy a wonderful shopping experience. "
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "9e9b7f6e-ffcb-4b8a-b56a-4681013027eb",
+                      "tag": "button",
+                      "isComponent": false,
+                      "attributes": {
+                        "class": {
+                          "type": "literal",
+                          "expression": "bg-blue-500 hover:bg-blue-600 text-gray-50 font-semibold py-2 px-6 rounded-md shadow-md transform hover:translate-y-[-2px] transition-all"
+                        }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": "ce66ae18-4189-4b90-98b9-bf3187ce5e06",
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": " Shop Now "
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
                 }
               },
-              "children": [
-                {
-                  "id": "dc42483d-a5e9-4d67-8442-a7d411755a57",
-                  "tag": "h1",
-                  "isComponent": false,
-                  "attributes": {
-                    "class": {
-                      "type": "literal",
-                      "expression": "text-5xl font-semibold mb-6"
-                    }
-                  },
-                  "children": [
-                    {
-                      "id": "3fd8173f-e1fb-43a9-ad4a-2253263561bf",
-                      "tag": "#text",
-                      "isComponent": false,
-                      "attributes": {
-                        "value": {
-                          "type": "literal",
-                          "expression": "Welcome to Our Store"
-                        }
-                      }
-                    }
-                  ],
-                  "hasSlot": false
+              {
+                "id": "21a2173f-308c-46c6-842f-7d3e7f67c2b4",
+                "tag": "section",
+                "isComponent": false,
+                "attributes": {
+                  "class": {
+                    "type": "literal",
+                    "expression": "text-center mt-16"
+                  }
                 },
-                {
-                  "id": "4f76fb93-cf36-4fff-9858-abef18475fe2",
-                  "tag": "p",
-                  "isComponent": false,
-                  "attributes": {
-                    "class": {
-                      "type": "literal",
-                      "expression": "text-gray-500 mb-10"
-                    }
-                  },
-                  "children": [
+                "slots": {
+                  "default": [
                     {
-                      "id": "77a3aeda-8d88-4237-ae38-32f60ae88f0e",
-                      "tag": "#text",
+                      "id": "3ea1e9fd-8d33-4167-8c1b-c31d9e30ee3a",
+                      "tag": "h2",
                       "isComponent": false,
                       "attributes": {
-                        "value": {
+                        "class": {
                           "type": "literal",
-                          "expression": " We’re delighted you’re here! Explore our range of products, grab great deals, and enjoy a wonderful shopping experience. "
+                          "expression": "text-3xl font-semibold mb-4"
                         }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": "dd6a98c0-983d-435d-b7e7-92658e50a869",
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": "Join Our Community"
+                              }
+                            }
+                          }
+                        ]
                       }
-                    }
-                  ],
-                  "hasSlot": false
-                },
-                {
-                  "id": "3fb897a9-567e-4eee-a12a-fef7e009f9e1",
-                  "tag": "button",
-                  "isComponent": false,
-                  "attributes": {
-                    "class": {
-                      "type": "literal",
-                      "expression": "bg-blue-500 hover:bg-blue-600 text-gray-50 font-semibold py-2 px-6 rounded-md shadow-md transform hover:translate-y-[-2px] transition-all"
-                    }
-                  },
-                  "children": [
+                    },
                     {
-                      "id": "acb15c7a-0f45-48bc-ab9f-c34881bd095f",
-                      "tag": "#text",
+                      "id": "6ef1fdb0-f61a-4909-9728-a102f759b9e8",
+                      "tag": "p",
                       "isComponent": false,
                       "attributes": {
-                        "value": {
+                        "class": {
                           "type": "literal",
-                          "expression": " Shop Now "
+                          "expression": "text-gray-500 mb-6"
                         }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": "04f5b4b8-4243-4f76-bc4f-b9b0ceb0fb3b",
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": " Become a member today and enjoy exclusive offers and promotions. "
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "afcb7ec7-e3df-473b-b970-3a75105145b7",
+                      "tag": "button",
+                      "isComponent": false,
+                      "attributes": {
+                        "class": {
+                          "type": "literal",
+                          "expression": "bg-green-500 hover:bg-green-600 text-gray-50 font-semibold py-2 px-6 rounded-md shadow-md transform hover:translate-y-[-2px] transition-all"
+                        }
+                      },
+                      "slots": {
+                        "default": [
+                          {
+                            "id": "e804cbfb-6b4f-4c50-93bc-30b2962fa3b3",
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": " Signup Now "
+                              }
+                            }
+                          }
+                        ]
                       }
                     }
-                  ],
-                  "hasSlot": false
+                  ]
                 }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "a507d1de-0cbb-46b9-b3b5-6a9b2680a3a3",
-              "tag": "section",
-              "isComponent": false,
-              "attributes": {
-                "class": {
-                  "type": "literal",
-                  "expression": "text-center mt-16"
-                }
-              },
-              "children": [
-                {
-                  "id": "0f4bc17a-9ac4-4850-accf-e8154ffd8cb6",
-                  "tag": "h2",
-                  "isComponent": false,
-                  "attributes": {
-                    "class": {
-                      "type": "literal",
-                      "expression": "text-3xl font-semibold mb-4"
-                    }
-                  },
-                  "children": [
-                    {
-                      "id": "fc1c6ba8-3494-434f-9e5e-f411f41c91f0",
-                      "tag": "#text",
-                      "isComponent": false,
-                      "attributes": {
-                        "value": {
-                          "type": "literal",
-                          "expression": "Join Our Community"
-                        }
-                      }
-                    }
-                  ],
-                  "hasSlot": false
-                },
-                {
-                  "id": "aa8246e5-e5b9-40e5-bbb2-f5c8b4433f4f",
-                  "tag": "p",
-                  "isComponent": false,
-                  "attributes": {
-                    "class": {
-                      "type": "literal",
-                      "expression": "text-gray-500 mb-6"
-                    }
-                  },
-                  "children": [
-                    {
-                      "id": "7375ba4b-7dff-4a52-9801-2fddb41d2f91",
-                      "tag": "#text",
-                      "isComponent": false,
-                      "attributes": {
-                        "value": {
-                          "type": "literal",
-                          "expression": " Become a member today and enjoy exclusive offers and promotions. "
-                        }
-                      }
-                    }
-                  ],
-                  "hasSlot": false
-                },
-                {
-                  "id": "5b08f138-9853-4520-a8a5-2207b1def360",
-                  "tag": "button",
-                  "isComponent": false,
-                  "attributes": {
-                    "class": {
-                      "type": "literal",
-                      "expression": "bg-green-500 hover:bg-green-600 text-gray-50 font-semibold py-2 px-6 rounded-md shadow-md transform hover:translate-y-[-2px] transition-all"
-                    }
-                  },
-                  "children": [
-                    {
-                      "id": "3cae6dea-2a37-420d-bfe3-2464ee726746",
-                      "tag": "#text",
-                      "isComponent": false,
-                      "attributes": {
-                        "value": {
-                          "type": "literal",
-                          "expression": " Signup Now "
-                        }
-                      }
-                    }
-                  ],
-                  "hasSlot": false
-                }
-              ],
-              "hasSlot": false
-            }
-          ],
-          "hasSlot": false
+              }
+            ]
+          }
         }
       ]
     }
@@ -744,7 +749,7 @@
     "template": {
       "elements": [
         {
-          "id": "664a35b6-45af-40bd-9ab5-286de97447cc",
+          "id": "054d4fb2-785c-473b-a043-49f2936e5579",
           "tag": "img",
           "isComponent": false,
           "attributes": {
@@ -760,8 +765,7 @@
               "type": "prop",
               "expression": "not supported"
             }
-          },
-          "hasSlot": false
+          }
         }
       ]
     }
@@ -789,17 +793,13 @@
       }
     },
     "slots": {
-      "default": {
-        "parentId": "a049b36a-3758-4044-ac33-5b53374a4de1"
-      },
-      "footer": {
-        "parentId": "b149bcad-472d-4ea2-afd5-45a2a1007622"
-      }
+      "default": {},
+      "footer": {}
     },
     "template": {
       "elements": [
         {
-          "id": "a049b36a-3758-4044-ac33-5b53374a4de1",
+          "id": "af9fba06-afcd-492b-8817-a24eb6b7fda6",
           "tag": "section",
           "isComponent": false,
           "attributes": {
@@ -812,58 +812,87 @@
               "expression": "not supported"
             }
           },
-          "children": [
-            {
-              "id": "9a50cc77-c9de-4f24-bad4-35982f96b730",
-              "tag": "component",
-              "isComponent": false,
-              "attributes": {
-                "bind:is": {
-                  "type": "prop",
-                  "expression": "level"
-                },
-                "class": {
-                  "type": "literal",
-                  "expression": "text-2xl font-semibold text-gray-800"
-                }
-              },
-              "hasSlot": false
-            },
-            {
-              "id": "8115a327-e946-49f3-8175-035652106c6c",
-              "tag": "slot",
-              "isComponent": false,
-              "attributes": {},
-              "hasSlot": false
-            },
-            {
-              "id": "b149bcad-472d-4ea2-afd5-45a2a1007622",
-              "tag": "footer",
-              "isComponent": false,
-              "attributes": {
-                "class": {
-                  "type": "literal",
-                  "expression": "mt-4 border-t pt-4 text-gray-600"
-                }
-              },
-              "children": [
-                {
-                  "id": "753ea0ef-51e6-4936-90ab-fa3d59737266",
-                  "tag": "slot",
-                  "isComponent": false,
-                  "attributes": {
-                    "name": {
-                      "type": "literal",
-                      "expression": "footer"
-                    }
+          "slots": {
+            "default": [
+              {
+                "id": "d4a6d79a-a06d-466b-8497-91545eaf26aa",
+                "tag": "component",
+                "isComponent": false,
+                "attributes": {
+                  "bind:is": {
+                    "type": "prop",
+                    "expression": "level"
                   },
-                  "hasSlot": false
+                  "class": {
+                    "type": "literal",
+                    "expression": "text-2xl font-semibold text-gray-800"
+                  }
                 }
-              ],
-              "hasSlot": true
-            }
-          ],
-          "hasSlot": true
+              },
+              {
+                "id": "caa2e1df-21d3-4f6e-9136-8a58d4fc11af",
+                "tag": "slot",
+                "isComponent": false,
+                "attributes": {}
+              },
+              {
+                "id": "2e5558f9-1165-4f8b-b2f4-9a3a61b427a2",
+                "tag": "footer",
+                "isComponent": false,
+                "attributes": {
+                  "class": {
+                    "type": "literal",
+                    "expression": "mt-4 border-t pt-4 text-gray-600"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "c0f18432-4f4e-4e69-a857-9760f88c99d4",
+                      "tag": "slot",
+                      "isComponent": false,
+                      "attributes": {
+                        "name": {
+                          "type": "literal",
+                          "expression": "footer"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "Test": {
+    "tag": "Test",
+    "path": "/Users/dorianmoulart/Documents/code/study/bridge/packages/editor/src/samples/Test.vue",
+    "props": {},
+    "template": {
+      "elements": [
+        {
+          "id": "58bad3b5-e961-4ab6-8ac6-77bc9ed53deb",
+          "tag": "div",
+          "isComponent": false,
+          "attributes": {},
+          "slots": {
+            "default": [
+              {
+                "id": "c5efd071-a12c-4441-a18b-77fd855c739e",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": "Test"
+                  }
+                }
+              }
+            ]
+          }
         }
       ]
     }
@@ -889,7 +918,7 @@
     "template": {
       "elements": [
         {
-          "id": "70007389-9719-4ad7-910e-a50868e25e0a",
+          "id": "8204e1ac-90d6-4471-b36f-31b882afc5cc",
           "tag": "component",
           "isComponent": false,
           "attributes": {
@@ -905,8 +934,7 @@
               "type": "prop",
               "expression": "className"
             }
-          },
-          "hasSlot": false
+          }
         }
       ]
     }
@@ -918,1149 +946,1047 @@
     "template": {
       "elements": [
         {
-          "id": "56a8a7df-cdca-4526-a616-09810543e747",
+          "id": "1c18b8a1-e9d7-40ea-ae15-a3181588fdfa",
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
-          "children": [
-            {
-              "id": "e3aea637-3428-47e1-b361-e80e0e0ae1c5",
-              "tag": "template",
-              "isComponent": false,
-              "attributes": {
-                "v-slot": {
-                  "type": "literal",
-                  "expression": "icon"
-                }
-              },
-              "children": [
-                {
-                  "id": "19466e28-1f3d-46ac-a3f7-a9eb769fe7d1",
-                  "tag": "DocumentationIcon",
-                  "isComponent": true,
-                  "attributes": {},
-                  "hasSlot": false
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "e57a0ff3-7781-4589-bc95-1cf950c75b1a",
-              "tag": "template",
-              "isComponent": false,
-              "attributes": {
-                "v-slot": {
-                  "type": "literal",
-                  "expression": "heading"
-                }
-              },
-              "children": [
-                {
-                  "id": "99551639-1a97-4818-b09f-6a07d873801a",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Documentation"
-                    }
+          "slots": {
+            "icon": [
+              {
+                "id": "39f106f9-6d1c-44a4-a1e3-43b797413372",
+                "tag": "DocumentationIcon",
+                "isComponent": true,
+                "attributes": {}
+              }
+            ],
+            "heading": [
+              {
+                "id": "0eb64c53-323a-46a1-9adf-5e9b068249dc",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": "Documentation"
                   }
                 }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "03388249-1f3e-4e8c-8436-886371af7ca7",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": " Vue’s "
-                }
               }
-            },
-            {
-              "id": "32722826-2b7a-4613-87a9-9d494e372725",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://vuejs.org/"
-                },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
-                }
-              },
-              "children": [
-                {
-                  "id": "7efde5c2-e732-4558-b896-bbd1c96c7063",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "official documentation"
-                    }
+            ],
+            "default": [
+              {
+                "id": "1c62789d-2064-4eac-a63e-c27047c33dad",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " Vue’s "
                   }
                 }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "40b41d14-6372-4ce0-b264-5ae7a8dbd178",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": " provides you with all information you need to get started. "
-                }
-              }
-            }
-          ],
-          "hasSlot": false
-        },
-        {
-          "id": "562f4664-5c0c-45a5-82d0-20a6cc5856f6",
-          "tag": "WelcomeItem",
-          "isComponent": true,
-          "attributes": {},
-          "children": [
-            {
-              "id": "a84478ce-76e0-4a04-b8db-35c3652774d4",
-              "tag": "template",
-              "isComponent": false,
-              "attributes": {
-                "v-slot": {
-                  "type": "literal",
-                  "expression": "icon"
-                }
               },
-              "children": [
-                {
-                  "id": "24f1932e-1d53-4102-9d87-642b250a65a8",
-                  "tag": "ToolingIcon",
-                  "isComponent": true,
-                  "attributes": {},
-                  "hasSlot": false
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "edef174d-54bc-41ba-99fd-882eb0e09a31",
-              "tag": "template",
-              "isComponent": false,
-              "attributes": {
-                "v-slot": {
-                  "type": "literal",
-                  "expression": "heading"
-                }
-              },
-              "children": [
-                {
-                  "id": "78fee046-3d8a-4c45-ba76-d40435a12fcf",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Tooling"
-                    }
+              {
+                "id": "5baf4045-9c97-4f2e-b355-89079913bd06",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://vuejs.org/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
                   }
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "a2935b55-4626-44dc-b4ea-5823ca5b19e0",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": " This project is served and bundled with "
-                }
-              }
-            },
-            {
-              "id": "fe163302-eacb-4247-a93b-183c7339fdfc",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://vite.dev/guide/features.html"
                 },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
-                }
-              },
-              "children": [
-                {
-                  "id": "382fc606-b2f0-4fdf-8a2c-00a0a84c01ab",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Vite"
-                    }
-                  }
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "839a8b28-6a50-4f6b-b03a-0e8a842c9b69",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": ". The recommended IDE setup is "
-                }
-              }
-            },
-            {
-              "id": "ffdf368a-907c-48b9-8ea0-5cfc66e3a4cd",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://code.visualstudio.com/"
-                },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
-                }
-              },
-              "children": [
-                {
-                  "id": "a0ec4bf1-4230-47be-b9e7-55f1a20c9983",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "VSCode"
-                    }
-                  }
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "36e1446b-776f-4f7c-a565-d606ec409823",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": " + "
-                }
-              }
-            },
-            {
-              "id": "c4f0547f-4556-4f7f-905a-d2afec572a43",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://github.com/vuejs/language-tools"
-                },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
-                }
-              },
-              "children": [
-                {
-                  "id": "6a59529e-11ae-4ee0-a6cb-b72aef9b4ff4",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Vue - Official"
-                    }
-                  }
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "0bc527d2-8b5d-4c83-9881-3cbb96880af7",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": ". If you need to test your components and web pages, check out "
-                }
-              }
-            },
-            {
-              "id": "ec79aba7-ee67-434a-b21c-782baae51bfe",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://vitest.dev/"
-                },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
-                }
-              },
-              "children": [
-                {
-                  "id": "a5d32172-8d30-46b6-813f-1cf2ef7c1385",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Vitest"
-                    }
-                  }
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "6abd761c-191b-46b3-922b-052cec44ace8",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": " and "
-                }
-              }
-            },
-            {
-              "id": "459444ab-57a9-4598-a343-2f5c1fd42af0",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://www.cypress.io/"
-                },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
-                }
-              },
-              "children": [
-                {
-                  "id": "0486d429-c51d-4236-aec9-058816f93d9c",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Cypress"
-                    }
-                  }
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "d64fd06e-5de5-42c7-82cd-1298d43e2eb6",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": " / "
-                }
-              }
-            },
-            {
-              "id": "a446c171-2d52-4508-8093-e77bdc6efc87",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://playwright.dev/"
-                },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
-                }
-              },
-              "children": [
-                {
-                  "id": "5aebd7a6-6c84-4f14-802e-331f2f7809b2",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Playwright"
-                    }
-                  }
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "03dbeb0d-8317-4e7b-b00f-73f0dee02ad3",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": ". "
-                }
-              }
-            },
-            {
-              "id": "c8538727-4576-4150-b6cf-c2b8247c7c85",
-              "tag": "br",
-              "isComponent": false,
-              "attributes": {},
-              "hasSlot": false
-            },
-            {
-              "id": "3d41f6de-7d3d-4bdc-87a2-61fc33e9a9cb",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": " More instructions are available in "
-                }
-              }
-            },
-            {
-              "id": "0ea83a0d-e2dd-4315-b98b-2384a2e263ec",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "javascript:void(0)"
-                },
-                "on:click": {
-                  "type": "prop",
-                  "expression": "not supported"
-                }
-              },
-              "children": [
-                {
-                  "id": "3a7a65b4-0f54-4464-a3ae-93a85ac1d6fa",
-                  "tag": "code",
-                  "isComponent": false,
-                  "attributes": {},
-                  "children": [
+                "slots": {
+                  "default": [
                     {
-                      "id": "86efd0b9-2015-4454-b63b-526a800d2214",
+                      "id": "98b9c59a-93eb-4d2d-946b-54d3e34d676b",
                       "tag": "#text",
                       "isComponent": false,
                       "attributes": {
                         "value": {
                           "type": "literal",
-                          "expression": "README.md"
+                          "expression": "official documentation"
                         }
                       }
                     }
-                  ],
-                  "hasSlot": false
+                  ]
                 }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "6f5a59be-2562-4c7d-bbfc-192c4337536d",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": ". "
+              },
+              {
+                "id": "ab1990ec-3f22-407e-b11f-b5b815eca1f2",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " provides you with all information you need to get started. "
+                  }
                 }
               }
-            }
-          ],
-          "hasSlot": false
+            ]
+          }
         },
         {
-          "id": "78bd6d4a-f95f-42ae-8a9b-54ccdb541848",
+          "id": "f475cbb6-f2f1-4eb2-b745-1b8fd8201021",
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
-          "children": [
-            {
-              "id": "84090abc-5f6d-443a-81d8-8a93163b6931",
-              "tag": "template",
-              "isComponent": false,
-              "attributes": {
-                "v-slot": {
-                  "type": "literal",
-                  "expression": "icon"
-                }
-              },
-              "children": [
-                {
-                  "id": "c506d76a-12f1-45a6-8adb-02f71a1325a1",
-                  "tag": "EcosystemIcon",
-                  "isComponent": true,
-                  "attributes": {},
-                  "hasSlot": false
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "65b1735b-ae86-4d12-941c-6d58a1b84d94",
-              "tag": "template",
-              "isComponent": false,
-              "attributes": {
-                "v-slot": {
-                  "type": "literal",
-                  "expression": "heading"
-                }
-              },
-              "children": [
-                {
-                  "id": "6be04f8a-7827-4bb1-adaa-f1ce3e5e0d6a",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Ecosystem"
-                    }
+          "slots": {
+            "icon": [
+              {
+                "id": "92ce4b12-ac7c-4e27-8dc2-47ec1468419e",
+                "tag": "ToolingIcon",
+                "isComponent": true,
+                "attributes": {}
+              }
+            ],
+            "heading": [
+              {
+                "id": "b1673ea7-b4d9-464f-bebb-893430d14815",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": "Tooling"
                   }
                 }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "80fbd2ae-3aa9-4b7b-9206-54fea279233f",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": " Get official tools and libraries for your project: "
-                }
               }
-            },
-            {
-              "id": "b06495b3-1cfd-43f2-aeb3-684c13569527",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://pinia.vuejs.org/"
-                },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
-                }
-              },
-              "children": [
-                {
-                  "id": "d49561cb-972a-4fe6-a8b2-f6fb66cf33e4",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Pinia"
-                    }
+            ],
+            "default": [
+              {
+                "id": "0290c28c-8893-4e13-a44b-bc1777535839",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " This project is served and bundled with "
                   }
                 }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "dbfe8159-2179-4a8d-a4d6-5cbfb06f89b0",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": ", "
-                }
-              }
-            },
-            {
-              "id": "01e96323-a989-4d5c-be17-f38263b281f2",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://router.vuejs.org/"
+              },
+              {
+                "id": "20f0c003-3544-4531-8b2d-056521d17104",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://vite.dev/guide/features.html"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
                 },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
+                "slots": {
+                  "default": [
+                    {
+                      "id": "6b0862dc-ec7d-438b-95cd-3e56a0c931b7",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Vite"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
-              "children": [
-                {
-                  "id": "e3f922b6-f5fe-4059-afa9-5a7b9b206e65",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Vue Router"
-                    }
+              {
+                "id": "08a2fa3a-c121-45a3-94e8-79d144ad8ef5",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ". The recommended IDE setup is "
                   }
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "7268c810-085b-496c-a8a5-1cc5e7626ddd",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": ", "
-                }
-              }
-            },
-            {
-              "id": "0eaebca0-a2c4-4dd8-a3e5-de235c2d7e8c",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://test-utils.vuejs.org/"
-                },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
                 }
               },
-              "children": [
-                {
-                  "id": "06e93301-9b9f-47e1-9507-efacdfc7c296",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Vue Test Utils"
-                    }
+              {
+                "id": "115b0398-00d1-4ecf-908b-6705c7da2c61",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://code.visualstudio.com/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
                   }
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "1778254f-cb34-435d-977c-855c41d4836f",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": ", and "
-                }
-              }
-            },
-            {
-              "id": "f46f7915-9fae-438c-b51c-1565e5e1fd7b",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://github.com/vuejs/devtools"
                 },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
+                "slots": {
+                  "default": [
+                    {
+                      "id": "693f635c-158d-439e-beb5-d5e94982277b",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "VSCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
-              "children": [
-                {
-                  "id": "67fe22db-432a-4054-abab-ed877e946039",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Vue Dev Tools"
-                    }
+              {
+                "id": "d41e9dd2-bde1-458c-a63d-d06e62daacb5",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " + "
                   }
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "324f1836-01bf-4ab0-b54e-34472f22ed9c",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": ". If you need more resources, we suggest paying "
-                }
-              }
-            },
-            {
-              "id": "0d22821d-4212-4f05-9ea3-43a2d3e467ed",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://github.com/vuejs/awesome-vue"
-                },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
                 }
               },
-              "children": [
-                {
-                  "id": "dd112c4a-b3db-43bd-936a-1fcbfcde7d82",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Awesome Vue"
+              {
+                "id": "c7e4dd07-25d6-45af-afcd-7c74088be7eb",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://github.com/vuejs/language-tools"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "03c9a056-8ba4-4490-9cab-9bf0847014f8",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Vue - Official"
+                        }
+                      }
                     }
+                  ]
+                }
+              },
+              {
+                "id": "b35c7fd7-b221-4d73-a66e-e482b6b81388",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ". If you need to test your components and web pages, check out "
                   }
                 }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "4e81caa3-81fe-4021-b758-cb023b5cf7b8",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": " a visit. "
+              },
+              {
+                "id": "4d663f80-7424-4d88-bc2c-ecd0bc6011a2",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://vitest.dev/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "529fc091-4094-4aa3-8e9b-a3c4ee72c5cd",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Vitest"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "ef293a89-1654-459e-92f5-990c654b7132",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " and "
+                  }
+                }
+              },
+              {
+                "id": "f0570690-b904-4493-b71a-d05bc10bde2e",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://www.cypress.io/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "345596d5-a37f-4ebf-8732-36814e246244",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Cypress"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "fba184a4-e9e1-438c-a34b-73b0a00e7ef0",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " / "
+                  }
+                }
+              },
+              {
+                "id": "25ab03c2-9d42-4f98-986a-b50c7b7b6ced",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://playwright.dev/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "de8f515f-c2b4-45cf-8b08-d3459cef5b05",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Playwright"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "4a08b384-4c54-4d7d-9571-3a0207ffc76b",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ". "
+                  }
+                }
+              },
+              {
+                "id": "a89897a0-aa0c-4aaf-9947-0b68bd9ffc25",
+                "tag": "br",
+                "isComponent": false,
+                "attributes": {}
+              },
+              {
+                "id": "b56a34e5-0e13-40fd-87a5-e69aad599894",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " More instructions are available in "
+                  }
+                }
+              },
+              {
+                "id": "c53af8b6-3220-4ae2-8753-d7f5d1a44edd",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "javascript:void(0)"
+                  },
+                  "on:click": {
+                    "type": "prop",
+                    "expression": "not supported"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "c06812be-6d47-43b1-a8ed-838213250f70",
+                      "tag": "code",
+                      "isComponent": false,
+                      "attributes": {},
+                      "slots": {
+                        "default": [
+                          {
+                            "id": "411e1aa7-1b25-41c0-ac46-75af377bab6d",
+                            "tag": "#text",
+                            "isComponent": false,
+                            "attributes": {
+                              "value": {
+                                "type": "literal",
+                                "expression": "README.md"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "ab24b0b2-a35e-4c4d-9f05-1429c6e78487",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ". "
+                  }
                 }
               }
-            }
-          ],
-          "hasSlot": false
+            ]
+          }
         },
         {
-          "id": "6ec3fbfb-e4d0-4a25-9aaa-aeb1babbbd96",
+          "id": "8b718145-8e77-4b22-b91c-0a3ea21f4443",
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
-          "children": [
-            {
-              "id": "ec9e4190-7680-4d59-8f31-c8c018fd06a2",
-              "tag": "template",
-              "isComponent": false,
-              "attributes": {
-                "v-slot": {
-                  "type": "literal",
-                  "expression": "icon"
-                }
-              },
-              "children": [
-                {
-                  "id": "90174aba-d260-4da4-96cc-902a359cc0c3",
-                  "tag": "CommunityIcon",
-                  "isComponent": true,
-                  "attributes": {},
-                  "hasSlot": false
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "e511902b-f080-403d-83dd-b0a260cd222a",
-              "tag": "template",
-              "isComponent": false,
-              "attributes": {
-                "v-slot": {
-                  "type": "literal",
-                  "expression": "heading"
-                }
-              },
-              "children": [
-                {
-                  "id": "ba4f921c-9bf8-4dca-9c7a-a2aa7f4409f2",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Community"
-                    }
+          "slots": {
+            "icon": [
+              {
+                "id": "975369c4-6100-4031-914f-a9dccd05ec13",
+                "tag": "EcosystemIcon",
+                "isComponent": true,
+                "attributes": {}
+              }
+            ],
+            "heading": [
+              {
+                "id": "af1bd961-0e93-49ea-9fd0-9c186b170639",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": "Ecosystem"
                   }
                 }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "3569395b-53f2-406f-acad-3a65a11d9f39",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": " Got stuck? Ask your question on "
-                }
               }
-            },
-            {
-              "id": "4887eb5e-1928-492e-b1a7-250847cc469c",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://chat.vuejs.org"
-                },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
-                }
-              },
-              "children": [
-                {
-                  "id": "8814c11b-abed-4f60-8159-91f921b9a535",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Vue Land"
-                    }
+            ],
+            "default": [
+              {
+                "id": "7ddae08b-3774-4b82-8dd3-1bc5ec0acc09",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " Get official tools and libraries for your project: "
                   }
                 }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "804ca4a7-3f81-4628-b05e-2d9dbf396f05",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": " (our official Discord server), or "
-                }
-              }
-            },
-            {
-              "id": "30a12cc4-c324-4758-94b9-9ce94c3ab001",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://stackoverflow.com/questions/tagged/vue.js"
+              },
+              {
+                "id": "47e819a6-6880-4962-bea5-fd1cdec01989",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://pinia.vuejs.org/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
                 },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
+                "slots": {
+                  "default": [
+                    {
+                      "id": "8a9ed010-7937-4505-8da8-91209a09a968",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Pinia"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
-              "children": [
-                {
-                  "id": "b436c5bd-40c9-4b17-864f-23dcfc5ba8ef",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "StackOverflow"
-                    }
+              {
+                "id": "64ed1490-7ff1-4258-91ef-25bcbef4a712",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ", "
                   }
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "fdb44b8f-4dfc-4849-b827-9d8333ac6b74",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": ". You should also follow the official "
-                }
-              }
-            },
-            {
-              "id": "a6e97163-4ece-4b9d-b128-9441876fbf6a",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://bsky.app/profile/vuejs.org"
-                },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
                 }
               },
-              "children": [
-                {
-                  "id": "078f8208-50b3-45a8-a934-f0b6dad380e9",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "@vuejs.org"
-                    }
+              {
+                "id": "82446857-6d5c-4e81-ba04-7490432b9f1a",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://router.vuejs.org/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
                   }
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "c6e32359-260b-423e-92bd-0587cb069d98",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": " Bluesky account or the "
-                }
-              }
-            },
-            {
-              "id": "8c9afeaf-d18f-452b-9156-20460f07552b",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://x.com/vuejs"
                 },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
+                "slots": {
+                  "default": [
+                    {
+                      "id": "862a4367-1a64-458f-ae5b-7a446acb1bd1",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Vue Router"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
-              "children": [
-                {
-                  "id": "336bb52d-306d-49eb-89d5-af46cc36772e",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "@vuejs"
-                    }
+              {
+                "id": "a65c4d2a-07f7-4b0a-b0b6-bfc0f8c659fc",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ", "
                   }
                 }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "47f7cbbf-1591-4e2d-867f-b25d7cd9c773",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": " X account for latest news in the Vue world. "
+              },
+              {
+                "id": "18585470-8389-450d-9aa4-eb3ce5074acf",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://test-utils.vuejs.org/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "bec8eacd-7ee0-4249-bb34-bd7d196cc9c0",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Vue Test Utils"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "50df933a-53cc-4ac9-b702-2ffd4552d64a",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ", and "
+                  }
+                }
+              },
+              {
+                "id": "2b904ffe-914e-4f03-a6a9-c5ab854663de",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://github.com/vuejs/devtools"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "8263fbae-9fdf-4370-8890-a08833042355",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Vue Dev Tools"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "f914196f-eb62-4058-a67c-6cadc77da6bb",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ". If you need more resources, we suggest paying "
+                  }
+                }
+              },
+              {
+                "id": "8ebbad9a-d4d7-4f2a-b781-2f7ac61e3e04",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://github.com/vuejs/awesome-vue"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "3275abf9-2b4a-4c00-9a17-6ff0f6d5be37",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Awesome Vue"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "a1fa4474-ca3a-43de-9da4-6c9509455ee2",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " a visit. "
+                  }
                 }
               }
-            }
-          ],
-          "hasSlot": false
+            ]
+          }
         },
         {
-          "id": "667af0e8-485d-41c6-aa0c-a0cde23e551a",
+          "id": "951d13b0-fea4-4ff5-87df-28dba7cfafa4",
           "tag": "WelcomeItem",
           "isComponent": true,
           "attributes": {},
-          "children": [
-            {
-              "id": "7ac7afc6-2e40-4f2c-a122-bc07c4bdac3a",
-              "tag": "template",
-              "isComponent": false,
-              "attributes": {
-                "v-slot": {
-                  "type": "literal",
-                  "expression": "icon"
-                }
-              },
-              "children": [
-                {
-                  "id": "52d2b3e5-9822-4f75-abae-2e0d2b3fc3be",
-                  "tag": "SupportIcon",
-                  "isComponent": true,
-                  "attributes": {},
-                  "hasSlot": false
-                }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "19b5f98f-d5a9-4318-ab19-62b6ee8278aa",
-              "tag": "template",
-              "isComponent": false,
-              "attributes": {
-                "v-slot": {
-                  "type": "literal",
-                  "expression": "heading"
-                }
-              },
-              "children": [
-                {
-                  "id": "5fee5c92-c1d1-491f-9552-7b234b69729f",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "Support Vue"
-                    }
+          "slots": {
+            "icon": [
+              {
+                "id": "c558c645-8580-42ef-856c-3e5e659b3494",
+                "tag": "CommunityIcon",
+                "isComponent": true,
+                "attributes": {}
+              }
+            ],
+            "heading": [
+              {
+                "id": "b96c4ba7-26a5-4a11-aab9-2662f3d2d1f4",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": "Community"
                   }
                 }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "3d6d517c-45a0-4428-b62f-11154de681aa",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": " As an independent project, Vue relies on community backing for its sustainability. You can help us by "
-                }
               }
-            },
-            {
-              "id": "34a9e676-b16e-4e31-8e46-fb1dc119cf22",
-              "tag": "a",
-              "isComponent": false,
-              "attributes": {
-                "href": {
-                  "type": "literal",
-                  "expression": "https://vuejs.org/sponsor/"
-                },
-                "target": {
-                  "type": "literal",
-                  "expression": "_blank"
-                },
-                "rel": {
-                  "type": "literal",
-                  "expression": "noopener"
-                }
-              },
-              "children": [
-                {
-                  "id": "b95362cd-9c68-4eb2-813a-a27f3322d671",
-                  "tag": "#text",
-                  "isComponent": false,
-                  "attributes": {
-                    "value": {
-                      "type": "literal",
-                      "expression": "becoming a sponsor"
-                    }
+            ],
+            "default": [
+              {
+                "id": "16a26089-0490-4cc3-ae55-0f5203b95a94",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " Got stuck? Ask your question on "
                   }
                 }
-              ],
-              "hasSlot": false
-            },
-            {
-              "id": "ca4324f8-a2f3-4873-87f3-de49375bf430",
-              "tag": "#text",
-              "isComponent": false,
-              "attributes": {
-                "value": {
-                  "type": "literal",
-                  "expression": ". "
+              },
+              {
+                "id": "8fe2c6b9-c0a3-4d01-8218-78b56041eb68",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://chat.vuejs.org"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "47320de1-a905-4cf8-a293-2ee7fc457b85",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "Vue Land"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "b1cea854-6c0e-41b5-94cf-4880fd929d3a",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " (our official Discord server), or "
+                  }
+                }
+              },
+              {
+                "id": "d760ba59-e7f0-4eaa-8247-58cd25d8ee8e",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://stackoverflow.com/questions/tagged/vue.js"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "6b8717ae-2d61-4493-bb94-c1fbeecc3b61",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "StackOverflow"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "6e0b8f0b-bb45-4ec0-8e9a-a5c2c728a59c",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ". You should also follow the official "
+                  }
+                }
+              },
+              {
+                "id": "e336e14a-8f0e-41fe-9b81-bf832cc5aa91",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://bsky.app/profile/vuejs.org"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "3f1abe3e-3312-4454-93e5-49d351dbe774",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "@vuejs.org"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "76190471-9d1d-4691-a58b-b6bc95207bca",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " Bluesky account or the "
+                  }
+                }
+              },
+              {
+                "id": "10494782-b324-497e-86b8-d79ecfe86b50",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://x.com/vuejs"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "1ee3e859-06a0-4ca1-bbbc-fadf3d6ae3d4",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "@vuejs"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "58644fe1-2d19-471d-a142-29bb86e0901d",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " X account for latest news in the Vue world. "
+                  }
                 }
               }
-            }
-          ],
-          "hasSlot": false
+            ]
+          }
+        },
+        {
+          "id": "4c874d31-a5db-42db-b7bc-ac2e19257c79",
+          "tag": "WelcomeItem",
+          "isComponent": true,
+          "attributes": {},
+          "slots": {
+            "icon": [
+              {
+                "id": "db9a9e17-638c-47a0-b4b5-8e10a1dffb64",
+                "tag": "SupportIcon",
+                "isComponent": true,
+                "attributes": {}
+              }
+            ],
+            "heading": [
+              {
+                "id": "88b53ec4-fe29-4820-8d3f-b0900f312c24",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": "Support Vue"
+                  }
+                }
+              }
+            ],
+            "default": [
+              {
+                "id": "47fb10a7-fd50-4ef0-8aaf-0607abf56e7e",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": " As an independent project, Vue relies on community backing for its sustainability. You can help us by "
+                  }
+                }
+              },
+              {
+                "id": "440f949a-ff4b-4eb9-892e-9c00d9e489e0",
+                "tag": "a",
+                "isComponent": false,
+                "attributes": {
+                  "href": {
+                    "type": "literal",
+                    "expression": "https://vuejs.org/sponsor/"
+                  },
+                  "target": {
+                    "type": "literal",
+                    "expression": "_blank"
+                  },
+                  "rel": {
+                    "type": "literal",
+                    "expression": "noopener"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "4555a8a4-ad49-45b1-bb42-c8c8328e0f2d",
+                      "tag": "#text",
+                      "isComponent": false,
+                      "attributes": {
+                        "value": {
+                          "type": "literal",
+                          "expression": "becoming a sponsor"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "cdf747b9-fb86-43a9-959f-775af5a3e07e",
+                "tag": "#text",
+                "isComponent": false,
+                "attributes": {
+                  "value": {
+                    "type": "literal",
+                    "expression": ". "
+                  }
+                }
+              }
+            ]
+          }
         }
       ]
     }
@@ -2077,7 +2003,7 @@
     "template": {
       "elements": [
         {
-          "id": "c00b83fa-06e1-42c2-9c6b-f3462e26a6bc",
+          "id": "8bb330f7-bce2-4cf1-8696-c1297885a2ea",
           "tag": "#text",
           "isComponent": false,
           "attributes": {
@@ -2095,20 +2021,14 @@
     "path": "/Users/dorianmoulart/Documents/code/study/bridge/packages/editor/src/samples/WelcomeItem.vue",
     "props": {},
     "slots": {
-      "icon": {
-        "parentId": "d31477d8-15ef-497f-af4a-4e37eb37059e"
-      },
-      "heading": {
-        "parentId": "f740c9a9-6e26-445a-8772-a0ce4c3013b7"
-      },
-      "default": {
-        "parentId": "8c34581d-ae16-4eea-a8f6-13a80d27bf7d"
-      }
+      "icon": {},
+      "heading": {},
+      "default": {}
     },
     "template": {
       "elements": [
         {
-          "id": "8eeb82ae-628a-4526-a14c-6580c9dac58e",
+          "id": "edfb340f-f05f-4628-891e-517fee4afc3b",
           "tag": "div",
           "isComponent": false,
           "attributes": {
@@ -2117,72 +2037,73 @@
               "expression": "item"
             }
           },
-          "children": [
-            {
-              "id": "d31477d8-15ef-497f-af4a-4e37eb37059e",
-              "tag": "i",
-              "isComponent": false,
-              "attributes": {},
-              "children": [
-                {
-                  "id": "7e3a74de-2f3a-4f34-b2f0-057b109a58f5",
-                  "tag": "slot",
-                  "isComponent": false,
-                  "attributes": {
-                    "name": {
-                      "type": "literal",
-                      "expression": "icon"
-                    }
-                  },
-                  "hasSlot": false
-                }
-              ],
-              "hasSlot": true
-            },
-            {
-              "id": "8c34581d-ae16-4eea-a8f6-13a80d27bf7d",
-              "tag": "div",
-              "isComponent": false,
-              "attributes": {
-                "class": {
-                  "type": "literal",
-                  "expression": "details"
-                }
-              },
-              "children": [
-                {
-                  "id": "f740c9a9-6e26-445a-8772-a0ce4c3013b7",
-                  "tag": "h3",
-                  "isComponent": false,
-                  "attributes": {},
-                  "children": [
+          "slots": {
+            "default": [
+              {
+                "id": "90cf7c4f-5950-4d69-bdd5-1eeb6119d2ea",
+                "tag": "i",
+                "isComponent": false,
+                "attributes": {},
+                "slots": {
+                  "default": [
                     {
-                      "id": "92750cec-fb6b-4b02-a7c6-25c5ef0c5343",
+                      "id": "4d7c8f38-3aa1-4cf1-aa82-47f2407b2e17",
                       "tag": "slot",
                       "isComponent": false,
                       "attributes": {
                         "name": {
                           "type": "literal",
-                          "expression": "heading"
+                          "expression": "icon"
                         }
-                      },
-                      "hasSlot": false
+                      }
                     }
-                  ],
-                  "hasSlot": true
-                },
-                {
-                  "id": "be3cbc28-f766-42b4-b938-6045b5af9679",
-                  "tag": "slot",
-                  "isComponent": false,
-                  "attributes": {},
-                  "hasSlot": false
+                  ]
                 }
-              ],
-              "hasSlot": true
-            }
-          ],
-          "hasSlot": false
+              },
+              {
+                "id": "861b80fa-adbd-4100-b54c-5596dda930c7",
+                "tag": "div",
+                "isComponent": false,
+                "attributes": {
+                  "class": {
+                    "type": "literal",
+                    "expression": "details"
+                  }
+                },
+                "slots": {
+                  "default": [
+                    {
+                      "id": "ced1684a-57b2-405d-800e-24463c1520ed",
+                      "tag": "h3",
+                      "isComponent": false,
+                      "attributes": {},
+                      "slots": {
+                        "default": [
+                          {
+                            "id": "6ec44a09-99d6-46b2-92dd-1a6c2d638357",
+                            "tag": "slot",
+                            "isComponent": false,
+                            "attributes": {
+                              "name": {
+                                "type": "literal",
+                                "expression": "heading"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "ec7b895c-ec72-4c5d-8856-f720f7ac463e",
+                      "tag": "slot",
+                      "isComponent": false,
+                      "attributes": {}
+                    }
+                  ]
+                }
+              }
+            ]
+          }
         }
       ]
     }
@@ -2194,7 +2115,7 @@
     "template": {
       "elements": [
         {
-          "id": "b05eaa25-11ab-485b-aaf8-59855bed080d",
+          "id": "81a9e622-de15-4106-8594-4cd69305e9c0",
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2215,21 +2136,21 @@
               "expression": "currentColor"
             }
           },
-          "children": [
-            {
-              "id": "6b4ac1e6-8268-4a6b-b32e-3263d2d3a61c",
-              "tag": "path",
-              "isComponent": false,
-              "attributes": {
-                "d": {
-                  "type": "literal",
-                  "expression": "M15 4a1 1 0 1 0 0 2V4zm0 11v-1a1 1 0 0 0-1 1h1zm0 4l-.707.707A1 1 0 0 0 16 19h-1zm-4-4l.707-.707A1 1 0 0 0 11 14v1zm-4.707-1.293a1 1 0 0 0-1.414 1.414l1.414-1.414zm-.707.707l-.707-.707.707.707zM9 11v-1a1 1 0 0 0-.707.293L9 11zm-4 0h1a1 1 0 0 0-1-1v1zm0 4H4a1 1 0 0 0 1.707.707L5 15zm10-9h2V4h-2v2zm2 0a1 1 0 0 1 1 1h2a3 3 0 0 0-3-3v2zm1 1v6h2V7h-2zm0 6a1 1 0 0 1-1 1v2a3 3 0 0 0 3-3h-2zm-1 1h-2v2h2v-2zm-3 1v4h2v-4h-2zm1.707 3.293l-4-4-1.414 1.414 4 4 1.414-1.414zM11 14H7v2h4v-2zm-4 0c-.276 0-.525-.111-.707-.293l-1.414 1.414C5.42 15.663 6.172 16 7 16v-2zm-.707 1.121l3.414-3.414-1.414-1.414-3.414 3.414 1.414 1.414zM9 12h4v-2H9v2zm4 0a3 3 0 0 0 3-3h-2a1 1 0 0 1-1 1v2zm3-3V3h-2v6h2zm0-6a3 3 0 0 0-3-3v2a1 1 0 0 1 1 1h2zm-3-3H3v2h10V0zM3 0a3 3 0 0 0-3 3h2a1 1 0 0 1 1-1V0zM0 3v6h2V3H0zm0 6a3 3 0 0 0 3 3v-2a1 1 0 0 1-1-1H0zm3 3h2v-2H3v2zm1-1v4h2v-4H4zm1.707 4.707l.586-.586-1.414-1.414-.586.586 1.414 1.414z"
+          "slots": {
+            "default": [
+              {
+                "id": "027af5cd-86c5-4f71-bf14-d00907b6712a",
+                "tag": "path",
+                "isComponent": false,
+                "attributes": {
+                  "d": {
+                    "type": "literal",
+                    "expression": "M15 4a1 1 0 1 0 0 2V4zm0 11v-1a1 1 0 0 0-1 1h1zm0 4l-.707.707A1 1 0 0 0 16 19h-1zm-4-4l.707-.707A1 1 0 0 0 11 14v1zm-4.707-1.293a1 1 0 0 0-1.414 1.414l1.414-1.414zm-.707.707l-.707-.707.707.707zM9 11v-1a1 1 0 0 0-.707.293L9 11zm-4 0h1a1 1 0 0 0-1-1v1zm0 4H4a1 1 0 0 0 1.707.707L5 15zm10-9h2V4h-2v2zm2 0a1 1 0 0 1 1 1h2a3 3 0 0 0-3-3v2zm1 1v6h2V7h-2zm0 6a1 1 0 0 1-1 1v2a3 3 0 0 0 3-3h-2zm-1 1h-2v2h2v-2zm-3 1v4h2v-4h-2zm1.707 3.293l-4-4-1.414 1.414 4 4 1.414-1.414zM11 14H7v2h4v-2zm-4 0c-.276 0-.525-.111-.707-.293l-1.414 1.414C5.42 15.663 6.172 16 7 16v-2zm-.707 1.121l3.414-3.414-1.414-1.414-3.414 3.414 1.414 1.414zM9 12h4v-2H9v2zm4 0a3 3 0 0 0 3-3h-2a1 1 0 0 1-1 1v2zm3-3V3h-2v6h2zm0-6a3 3 0 0 0-3-3v2a1 1 0 0 1 1 1h2zm-3-3H3v2h10V0zM3 0a3 3 0 0 0-3 3h2a1 1 0 0 1 1-1V0zM0 3v6h2V3H0zm0 6a3 3 0 0 0 3 3v-2a1 1 0 0 1-1-1H0zm3 3h2v-2H3v2zm1-1v4h2v-4H4zm1.707 4.707l.586-.586-1.414-1.414-.586.586 1.414 1.414z"
+                  }
                 }
-              },
-              "hasSlot": false
-            }
-          ],
-          "hasSlot": false
+              }
+            ]
+          }
         }
       ]
     }
@@ -2241,7 +2162,7 @@
     "template": {
       "elements": [
         {
-          "id": "cb9e5fa0-e7fa-45a6-97d3-9ea53bbb9fd5",
+          "id": "b418431c-4422-4b36-9dc1-c7db360fac37",
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2262,21 +2183,21 @@
               "expression": "currentColor"
             }
           },
-          "children": [
-            {
-              "id": "31dea41e-dd72-445a-979d-5f69d704f471",
-              "tag": "path",
-              "isComponent": false,
-              "attributes": {
-                "d": {
-                  "type": "literal",
-                  "expression": "M11 2.253a1 1 0 1 0-2 0h2zm-2 13a1 1 0 1 0 2 0H9zm.447-12.167a1 1 0 1 0 1.107-1.666L9.447 3.086zM1 2.253L.447 1.42A1 1 0 0 0 0 2.253h1zm0 13H0a1 1 0 0 0 1.553.833L1 15.253zm8.447.833a1 1 0 1 0 1.107-1.666l-1.107 1.666zm0-14.666a1 1 0 1 0 1.107 1.666L9.447 1.42zM19 2.253h1a1 1 0 0 0-.447-.833L19 2.253zm0 13l-.553.833A1 1 0 0 0 20 15.253h-1zm-9.553-.833a1 1 0 1 0 1.107 1.666L9.447 14.42zM9 2.253v13h2v-13H9zm1.553-.833C9.203.523 7.42 0 5.5 0v2c1.572 0 2.961.431 3.947 1.086l1.107-1.666zM5.5 0C3.58 0 1.797.523.447 1.42l1.107 1.666C2.539 2.431 3.928 2 5.5 2V0zM0 2.253v13h2v-13H0zm1.553 13.833C2.539 15.431 3.928 15 5.5 15v-2c-1.92 0-3.703.523-5.053 1.42l1.107 1.666zM5.5 15c1.572 0 2.961.431 3.947 1.086l1.107-1.666C9.203 13.523 7.42 13 5.5 13v2zm5.053-11.914C11.539 2.431 12.928 2 14.5 2V0c-1.92 0-3.703.523-5.053 1.42l1.107 1.666zM14.5 2c1.573 0 2.961.431 3.947 1.086l1.107-1.666C18.203.523 16.421 0 14.5 0v2zm3.5.253v13h2v-13h-2zm1.553 12.167C18.203 13.523 16.421 13 14.5 13v2c1.573 0 2.961.431 3.947 1.086l1.107-1.666zM14.5 13c-1.92 0-3.703.523-5.053 1.42l1.107 1.666C11.539 15.431 12.928 15 14.5 15v-2z"
+          "slots": {
+            "default": [
+              {
+                "id": "3217ba44-a268-4829-8c67-78b593d9101a",
+                "tag": "path",
+                "isComponent": false,
+                "attributes": {
+                  "d": {
+                    "type": "literal",
+                    "expression": "M11 2.253a1 1 0 1 0-2 0h2zm-2 13a1 1 0 1 0 2 0H9zm.447-12.167a1 1 0 1 0 1.107-1.666L9.447 3.086zM1 2.253L.447 1.42A1 1 0 0 0 0 2.253h1zm0 13H0a1 1 0 0 0 1.553.833L1 15.253zm8.447.833a1 1 0 1 0 1.107-1.666l-1.107 1.666zm0-14.666a1 1 0 1 0 1.107 1.666L9.447 1.42zM19 2.253h1a1 1 0 0 0-.447-.833L19 2.253zm0 13l-.553.833A1 1 0 0 0 20 15.253h-1zm-9.553-.833a1 1 0 1 0 1.107 1.666L9.447 14.42zM9 2.253v13h2v-13H9zm1.553-.833C9.203.523 7.42 0 5.5 0v2c1.572 0 2.961.431 3.947 1.086l1.107-1.666zM5.5 0C3.58 0 1.797.523.447 1.42l1.107 1.666C2.539 2.431 3.928 2 5.5 2V0zM0 2.253v13h2v-13H0zm1.553 13.833C2.539 15.431 3.928 15 5.5 15v-2c-1.92 0-3.703.523-5.053 1.42l1.107 1.666zM5.5 15c1.572 0 2.961.431 3.947 1.086l1.107-1.666C9.203 13.523 7.42 13 5.5 13v2zm5.053-11.914C11.539 2.431 12.928 2 14.5 2V0c-1.92 0-3.703.523-5.053 1.42l1.107 1.666zM14.5 2c1.573 0 2.961.431 3.947 1.086l1.107-1.666C18.203.523 16.421 0 14.5 0v2zm3.5.253v13h2v-13h-2zm1.553 12.167C18.203 13.523 16.421 13 14.5 13v2c1.573 0 2.961.431 3.947 1.086l1.107-1.666zM14.5 13c-1.92 0-3.703.523-5.053 1.42l1.107 1.666C11.539 15.431 12.928 15 14.5 15v-2z"
+                  }
                 }
-              },
-              "hasSlot": false
-            }
-          ],
-          "hasSlot": false
+              }
+            ]
+          }
         }
       ]
     }
@@ -2288,7 +2209,7 @@
     "template": {
       "elements": [
         {
-          "id": "65ccb66c-1eb7-44a7-834f-f6c71769ec82",
+          "id": "2dcb63c1-f2c7-42ee-b496-6a9066f2d29d",
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2309,21 +2230,21 @@
               "expression": "currentColor"
             }
           },
-          "children": [
-            {
-              "id": "3082ade3-df70-4786-8ef2-7af0373a7581",
-              "tag": "path",
-              "isComponent": false,
-              "attributes": {
-                "d": {
-                  "type": "literal",
-                  "expression": "M11.447 8.894a1 1 0 1 0-.894-1.789l.894 1.789zm-2.894-.789a1 1 0 1 0 .894 1.789l-.894-1.789zm0 1.789a1 1 0 1 0 .894-1.789l-.894 1.789zM7.447 7.106a1 1 0 1 0-.894 1.789l.894-1.789zM10 9a1 1 0 1 0-2 0h2zm-2 2.5a1 1 0 1 0 2 0H8zm9.447-5.606a1 1 0 1 0-.894-1.789l.894 1.789zm-2.894-.789a1 1 0 1 0 .894 1.789l-.894-1.789zm2 .789a1 1 0 1 0 .894-1.789l-.894 1.789zm-1.106-2.789a1 1 0 1 0-.894 1.789l.894-1.789zM18 5a1 1 0 1 0-2 0h2zm-2 2.5a1 1 0 1 0 2 0h-2zm-5.447-4.606a1 1 0 1 0 .894-1.789l-.894 1.789zM9 1l.447-.894a1 1 0 0 0-.894 0L9 1zm-2.447.106a1 1 0 1 0 .894 1.789l-.894-1.789zm-6 3a1 1 0 1 0 .894 1.789L.553 4.106zm2.894.789a1 1 0 1 0-.894-1.789l.894 1.789zm-2-.789a1 1 0 1 0-.894 1.789l.894-1.789zm1.106 2.789a1 1 0 1 0 .894-1.789l-.894 1.789zM2 5a1 1 0 1 0-2 0h2zM0 7.5a1 1 0 1 0 2 0H0zm8.553 12.394a1 1 0 1 0 .894-1.789l-.894 1.789zm-1.106-2.789a1 1 0 1 0-.894 1.789l.894-1.789zm1.106 1a1 1 0 1 0 .894 1.789l-.894-1.789zm2.894.789a1 1 0 1 0-.894-1.789l.894 1.789zM8 19a1 1 0 1 0 2 0H8zm2-2.5a1 1 0 1 0-2 0h2zm-7.447.394a1 1 0 1 0 .894-1.789l-.894 1.789zM1 15H0a1 1 0 0 0 .553.894L1 15zm1-2.5a1 1 0 1 0-2 0h2zm12.553 2.606a1 1 0 1 0 .894 1.789l-.894-1.789zM17 15l.447.894A1 1 0 0 0 18 15h-1zm1-2.5a1 1 0 1 0-2 0h2zm-7.447-5.394l-2 1 .894 1.789 2-1-.894-1.789zm-1.106 1l-2-1-.894 1.789 2 1 .894-1.789zM8 9v2.5h2V9H8zm8.553-4.894l-2 1 .894 1.789 2-1-.894-1.789zm.894 0l-2-1-.894 1.789 2 1 .894-1.789zM16 5v2.5h2V5h-2zm-4.553-3.894l-2-1-.894 1.789 2 1 .894-1.789zm-2.894-1l-2 1 .894 1.789 2-1L8.553.106zM1.447 5.894l2-1-.894-1.789-2 1 .894 1.789zm-.894 0l2 1 .894-1.789-2-1-.894 1.789zM0 5v2.5h2V5H0zm9.447 13.106l-2-1-.894 1.789 2 1 .894-1.789zm0 1.789l2-1-.894-1.789-2 1 .894 1.789zM10 19v-2.5H8V19h2zm-6.553-3.894l-2-1-.894 1.789 2 1 .894-1.789zM2 15v-2.5H0V15h2zm13.447 1.894l2-1-.894-1.789-2 1 .894 1.789zM18 15v-2.5h-2V15h2z"
+          "slots": {
+            "default": [
+              {
+                "id": "67b4ddef-25d0-456c-b4bf-18eeb42fc86e",
+                "tag": "path",
+                "isComponent": false,
+                "attributes": {
+                  "d": {
+                    "type": "literal",
+                    "expression": "M11.447 8.894a1 1 0 1 0-.894-1.789l.894 1.789zm-2.894-.789a1 1 0 1 0 .894 1.789l-.894-1.789zm0 1.789a1 1 0 1 0 .894-1.789l-.894 1.789zM7.447 7.106a1 1 0 1 0-.894 1.789l.894-1.789zM10 9a1 1 0 1 0-2 0h2zm-2 2.5a1 1 0 1 0 2 0H8zm9.447-5.606a1 1 0 1 0-.894-1.789l.894 1.789zm-2.894-.789a1 1 0 1 0 .894 1.789l-.894-1.789zm2 .789a1 1 0 1 0 .894-1.789l-.894 1.789zm-1.106-2.789a1 1 0 1 0-.894 1.789l.894-1.789zM18 5a1 1 0 1 0-2 0h2zm-2 2.5a1 1 0 1 0 2 0h-2zm-5.447-4.606a1 1 0 1 0 .894-1.789l-.894 1.789zM9 1l.447-.894a1 1 0 0 0-.894 0L9 1zm-2.447.106a1 1 0 1 0 .894 1.789l-.894-1.789zm-6 3a1 1 0 1 0 .894 1.789L.553 4.106zm2.894.789a1 1 0 1 0-.894-1.789l.894 1.789zm-2-.789a1 1 0 1 0-.894 1.789l.894-1.789zm1.106 2.789a1 1 0 1 0 .894-1.789l-.894 1.789zM2 5a1 1 0 1 0-2 0h2zM0 7.5a1 1 0 1 0 2 0H0zm8.553 12.394a1 1 0 1 0 .894-1.789l-.894 1.789zm-1.106-2.789a1 1 0 1 0-.894 1.789l.894-1.789zm1.106 1a1 1 0 1 0 .894 1.789l-.894-1.789zm2.894.789a1 1 0 1 0-.894-1.789l.894 1.789zM8 19a1 1 0 1 0 2 0H8zm2-2.5a1 1 0 1 0-2 0h2zm-7.447.394a1 1 0 1 0 .894-1.789l-.894 1.789zM1 15H0a1 1 0 0 0 .553.894L1 15zm1-2.5a1 1 0 1 0-2 0h2zm12.553 2.606a1 1 0 1 0 .894 1.789l-.894-1.789zM17 15l.447.894A1 1 0 0 0 18 15h-1zm1-2.5a1 1 0 1 0-2 0h2zm-7.447-5.394l-2 1 .894 1.789 2-1-.894-1.789zm-1.106 1l-2-1-.894 1.789 2 1 .894-1.789zM8 9v2.5h2V9H8zm8.553-4.894l-2 1 .894 1.789 2-1-.894-1.789zm.894 0l-2-1-.894 1.789 2 1 .894-1.789zM16 5v2.5h2V5h-2zm-4.553-3.894l-2-1-.894 1.789 2 1 .894-1.789zm-2.894-1l-2 1 .894 1.789 2-1L8.553.106zM1.447 5.894l2-1-.894-1.789-2 1 .894 1.789zm-.894 0l2 1 .894-1.789-2-1-.894 1.789zM0 5v2.5h2V5H0zm9.447 13.106l-2-1-.894 1.789 2 1 .894-1.789zm0 1.789l2-1-.894-1.789-2 1 .894 1.789zM10 19v-2.5H8V19h2zm-6.553-3.894l-2-1-.894 1.789 2 1 .894-1.789zM2 15v-2.5H0V15h2zm13.447 1.894l2-1-.894-1.789-2 1 .894 1.789zM18 15v-2.5h-2V15h2z"
+                  }
                 }
-              },
-              "hasSlot": false
-            }
-          ],
-          "hasSlot": false
+              }
+            ]
+          }
         }
       ]
     }
@@ -2335,7 +2256,7 @@
     "template": {
       "elements": [
         {
-          "id": "a516d874-fe2f-478d-a256-c7a97b2b3adc",
+          "id": "6946c6d3-737d-46e6-88bf-ab4edfeca83c",
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2356,21 +2277,21 @@
               "expression": "currentColor"
             }
           },
-          "children": [
-            {
-              "id": "f428aa19-e8cf-412b-b346-c6e03a2c87db",
-              "tag": "path",
-              "isComponent": false,
-              "attributes": {
-                "d": {
-                  "type": "literal",
-                  "expression": "M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.666.105 5.5 5.5 0 0 0-.114 7.665L10 18.78l8.39-8.4a5.5 5.5 0 0 0-.114-7.665 5.5 5.5 0 0 0-7.666-.105l-.61.61z"
+          "slots": {
+            "default": [
+              {
+                "id": "2a8d8c1b-4ff5-4030-b1ac-c20b45f68daa",
+                "tag": "path",
+                "isComponent": false,
+                "attributes": {
+                  "d": {
+                    "type": "literal",
+                    "expression": "M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.666.105 5.5 5.5 0 0 0-.114 7.665L10 18.78l8.39-8.4a5.5 5.5 0 0 0-.114-7.665 5.5 5.5 0 0 0-7.666-.105l-.61.61z"
+                  }
                 }
-              },
-              "hasSlot": false
-            }
-          ],
-          "hasSlot": false
+              }
+            ]
+          }
         }
       ]
     }
@@ -2382,7 +2303,7 @@
     "template": {
       "elements": [
         {
-          "id": "2a777651-fec5-4e12-a77b-5c2f343edbc8",
+          "id": "1659b0ea-558c-4426-bd29-1831b5cb7b36",
           "tag": "svg",
           "isComponent": false,
           "attributes": {
@@ -2423,25 +2344,25 @@
               "expression": "0 0 24 24"
             }
           },
-          "children": [
-            {
-              "id": "fbfe787d-625f-44db-9456-b68de2c79e79",
-              "tag": "path",
-              "isComponent": false,
-              "attributes": {
-                "d": {
-                  "type": "literal",
-                  "expression": "M20 18v-4h-3v1h-2v-1H9v1H7v-1H4v4h16M6.33 8l-1.74 4H7v-1h2v1h6v-1h2v1h2.41l-1.74-4H6.33M9 5v1h6V5H9m12.84 7.61c.1.22.16.48.16.8V18c0 .53-.21 1-.6 1.41c-.4.4-.85.59-1.4.59H4c-.55 0-1-.19-1.4-.59C2.21 19 2 18.53 2 18v-4.59c0-.32.06-.58.16-.8L4.5 7.22C4.84 6.41 5.45 6 6.33 6H7V5c0-.55.18-1 .57-1.41C7.96 3.2 8.44 3 9 3h6c.56 0 1.04.2 1.43.59c.39.41.57.86.57 1.41v1h.67c.88 0 1.49.41 1.83 1.22l2.34 5.39z"
-                },
-                "fill": {
-                  "type": "literal",
-                  "expression": "currentColor"
+          "slots": {
+            "default": [
+              {
+                "id": "ef76aa16-427a-47cf-8678-7113a95426cc",
+                "tag": "path",
+                "isComponent": false,
+                "attributes": {
+                  "d": {
+                    "type": "literal",
+                    "expression": "M20 18v-4h-3v1h-2v-1H9v1H7v-1H4v4h16M6.33 8l-1.74 4H7v-1h2v1h6v-1h2v1h2.41l-1.74-4H6.33M9 5v1h6V5H9m12.84 7.61c.1.22.16.48.16.8V18c0 .53-.21 1-.6 1.41c-.4.4-.85.59-1.4.59H4c-.55 0-1-.19-1.4-.59C2.21 19 2 18.53 2 18v-4.59c0-.32.06-.58.16-.8L4.5 7.22C4.84 6.41 5.45 6 6.33 6H7V5c0-.55.18-1 .57-1.41C7.96 3.2 8.44 3 9 3h6c.56 0 1.04.2 1.43.59c.39.41.57.86.57 1.41v1h.67c.88 0 1.49.41 1.83 1.22l2.34 5.39z"
+                  },
+                  "fill": {
+                    "type": "literal",
+                    "expression": "currentColor"
+                  }
                 }
-              },
-              "hasSlot": false
-            }
-          ],
-          "hasSlot": false
+              }
+            ]
+          }
         }
       ]
     }

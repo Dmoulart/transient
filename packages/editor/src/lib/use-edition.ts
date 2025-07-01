@@ -1,4 +1,5 @@
 import { useEventListener } from '@vueuse/core'
+import { DiffDOM } from 'diff-dom'
 import { getTransientID, htmlNodeToTransientElement } from 'transient/src/analyzers/html/html'
 import type { TransientElement } from 'transient/src/transient/definition'
 import { computed, readonly, ref, watch, type App } from 'vue'
@@ -7,11 +8,10 @@ const editedNode = ref<HTMLElement | undefined>()
 
 export function isElementEditable(element: TransientElement) {
   return true
-  // return !!element.children //hasTextChildren(element)
 }
 
 export function isNodeEditable(node: HTMLElement) {
-  return node.dataset.transientId
+  return node.dataset.transientId || node.dataset.transientSlot
 }
 
 export function detectElementEdition(e: Event) {
@@ -80,20 +80,9 @@ export function useEditedTransientElement() {
   return editedTransientElement
 }
 
-// export function useLastEditedTransientElement() {
-//   const lastEditedTransientElement = ref<TransientElement | undefined>(editedTransientElement.value)
-
-//   watch(editedTransientElement, (newElement, oldElement) => {
-//     if (newElement) {
-//       lastEditedTransientElement.value = editedTransientElement.value
-//       console.log('lastEditedTransientElement updated', newElement)
-//     }
-//   })
-
-//   return lastEditedTransientElement.value
-// }
-
 type OnEditCallback = (element: TransientElement, node: Node) => void
+
+const dd = new DiffDOM()
 
 export function useEdition() {
   const cbs = {
@@ -101,18 +90,31 @@ export function useEdition() {
     onEditEnd: [] as OnEditCallback[],
   }
 
+  let nodeBeforeEdition: HTMLElement | undefined = undefined
+
   watch(editedNode, (newNode, oldNode) => {
     if (newNode !== undefined) {
-      const newElement = htmlNodeToTransientElement(newNode, getTransientID(newNode)!)
+      const newElement = htmlNodeToTransientElement(
+        newNode,
+        getTransientID(newNode) ?? crypto.randomUUID(),
+      )
       cbs.onEditStart.forEach((cb) => cb(newElement, newNode))
+      // nodeBeforeEdition = newNode.cloneNode(true) as HTMLElement
     }
 
     if (oldNode !== undefined) {
-      const newElement = htmlNodeToTransientElement(oldNode, getTransientID(oldNode)!)
+      const newElement = htmlNodeToTransientElement(
+        oldNode,
+        getTransientID(oldNode) ?? crypto.randomUUID(),
+      )
       cbs.onEditEnd.forEach((cb) => cb(newElement, oldNode))
+      // if (nodeBeforeEdition) {
+      //   const diff = dd.diff(nodeBeforeEdition, oldNode)
+      //   console.log({ diff }, { oldNode })
+      // }
+      // nodeBeforeEdition = undefined
     }
   })
-
   return {
     onEditStart(cb: OnEditCallback) {
       cbs.onEditStart.push(cb)
