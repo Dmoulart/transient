@@ -42,7 +42,7 @@ import { useDictionnary } from '@/lib/use-dictionnary'
 // @ts-expect-error : oups no types
 import { JsonViewer } from 'vue3-json-viewer'
 import 'vue3-json-viewer/dist/index.css'
-import TransientBuilder from './TransientBuilder.vue'
+import TransientBuilder from './TransientBuilder'
 import Button from '@/samples/Button.vue'
 import { usePage } from '@/lib/use-page'
 import {
