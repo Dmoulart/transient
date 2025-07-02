@@ -10,6 +10,7 @@ import { useDictionnary } from '@/lib/use-dictionnary'
 import { getComponentDefaultPropsValues } from 'transient/src/transient/ast'
 import type { TransientComponentSchema } from 'transient/src/transient/definition'
 import { computed, defineAsyncComponent } from 'vue'
+
 const props = withDefaults(
   defineProps<{
     path: string
@@ -21,7 +22,9 @@ const props = withDefaults(
   },
 )
 
-const emit = defineEmits<{ (e: 'select', data: typeof props): void }>()
+const emit = defineEmits<{
+  (e: 'select', data: { path: string; schema: TransientComponentSchema }): void
+}>()
 const styles = {
   item: {
     cursor: 'pointer',

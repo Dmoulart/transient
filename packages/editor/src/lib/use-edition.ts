@@ -14,18 +14,18 @@ export function isNodeEditable(node: HTMLElement) {
   return node.dataset.transientId || node.dataset.transientSlot
 }
 
-export function detectElementEdition(e: Event) {
-  const element = e.target
-  if (element instanceof HTMLElement) {
-    if (isNodeEditable(element)) {
-      editedNode.value = element
-      // const tid = element.closest(`[contenteditable="true"`)
-      // console.log({ tid })
-    }
-  }
-}
+// export function detectElementEdition(e: Event) {
+//   const element = e.target
+//   if (element instanceof HTMLElement) {
+//     if (isNodeEditable(element)) {
+//       editedNode.value = element
+//       // const tid = element.closest(`[contenteditable="true"`)
+//       // console.log({ tid })
+//     }
+//   }
+// }
 
-useEventListener(document, 'focusin', detectElementEdition)
+// useEventListener(document, 'focusin', detectElementEdition)
 
 // useEventListener(document, 'click', (e) => {
 //   const element = e.target

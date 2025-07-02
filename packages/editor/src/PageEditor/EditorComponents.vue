@@ -8,7 +8,7 @@
           :path="schema.path as string"
           :schema="schema"
           v-on="$attrs"
-          @select="(data) => $emit('select', data)"
+          @select="(data) => emit('select', data)"
         />
       </div>
     </div>
@@ -18,8 +18,12 @@
 <script setup lang="ts">
 import { useDictionnary } from '@/lib/use-dictionnary'
 import EditorComponent from './EditorComponent.vue'
+import type { TransientComponentSchema } from 'transient/src/transient/definition'
 
 const registry = useDictionnary()
+const emit = defineEmits<{
+  (e: 'select', data: { path: string; schema: TransientComponentSchema }): void
+}>()
 </script>
 
 <style scoped>

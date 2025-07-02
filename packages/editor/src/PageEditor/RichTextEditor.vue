@@ -2,14 +2,15 @@
 import { useSelection } from '@/lib/use-selection'
 import { assert, assertIsDefined } from 'transient/src/core/assert'
 import { computed, ref, type ComputedRef, type Ref } from 'vue'
-import ComponentPanel from './ComponentPanel.vue'
 import { useComponentPanel, useEditedNode } from '@/lib/use-edition'
 import { getTransientID } from 'transient/src/analyzers/html/html'
-import { usePage } from '@/lib/use-page'
+import type { DeleteElementEdition } from '@/editor/edition'
 
 const selection = useSelection()
 
-const emit = defineEmits(['remove'])
+const emit = defineEmits<{
+  delete: [deletion: DeleteElementEdition]
+}>()
 
 function wrap(tag: string, node: Node) {
   assertIsDefined(selection.value, 'Selection must have a range')
@@ -371,7 +372,7 @@ const toolbarItems: ToolbarItem[] = [
       assertIsDefined(editedNode.value)
       const transientID = getTransientID(editedNode.value)
       assertIsDefined(transientID)
-      emit('remove', transientID)
+      emit('delete', { type: 'delete-element', transientId: transientID })
       // TODO: implement logic
     },
   },
