@@ -19,7 +19,12 @@
   />
 
   <Suspense>
-    <TransientBuilder v-if="contents" :dictionnary="dictionnary" :template="contents" />
+    <!-- <TransientBuilder v-if="contents" :dictionnary="dictionnary" :template="contents" /> -->
+    <TransientBuilder2
+      v-for="element in contents.elements"
+      :dictionnary="dictionnary"
+      :element="element"
+    />
   </Suspense>
 
   <JsonViewer
@@ -67,6 +72,7 @@ import {
   assertIsDefined,
   someHTMLElement,
 } from 'transient/src/core/assert'
+import TransientBuilder2 from './TransientBuilder2.vue'
 const dictionnary = useDictionnary()
 
 const component = dictionnary.get('HomePage')
