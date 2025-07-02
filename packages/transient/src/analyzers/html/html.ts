@@ -38,7 +38,7 @@ export function htmlNodeToTransientElement(
 
   const children: TransientElement[] = [];
   const childNodes = Array.from(element.childNodes);
-
+  console.log({ ...childNodes });
   for (let i = 0; i < childNodes.length; i++) {
     const child = childNodes[i]!;
 
@@ -77,6 +77,12 @@ export function htmlNodeToTransientElement(
     }
 
     if (child.nodeType === Node.ELEMENT_NODE) {
+      if (child instanceof HTMLElement) {
+        if ("transientPlaceholder" in child.dataset) {
+          console.log("transient placeholder detected !");
+          continue;
+        }
+      }
       children.push(htmlNodeToTransientElement(child as Element, id));
     }
   }

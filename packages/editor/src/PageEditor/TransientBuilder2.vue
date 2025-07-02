@@ -3,7 +3,7 @@ import { onMounted, shallowRef, computed } from 'vue'
 import type { TransientElement } from 'transient/src/transient/definition'
 import { ComponentDictionnary, loadAllComponents } from '@/lib/use-dictionnary'
 import { hasTextChildren } from 'transient/src/transient/ast'
-import Comment from './Comment.vue'
+import SlotSpy from './SlotSpy.vue'
 
 const props = defineProps<{
   element: TransientElement
@@ -39,7 +39,6 @@ const attributes = computed(() => {
 </script>
 <template>
   <template v-if="element.tag === '#text'">
-    <!-- #text data-transient-id=${element.id} -->
     {{ element.attributes?.value?.expression }}
   </template>
   <component
@@ -48,7 +47,7 @@ const attributes = computed(() => {
     v-bind="attributes"
   >
     <template v-if="slotNames" v-for="slotName in slotNames">
-      <Comment :content="`transient-slot:${slotName}:${element.id}`" />
+      <SlotSpy v-if="element.isComponent" :slot-name="slotName" :owner-id="element.id" />
       <TransientBuilder2
         v-if="element?.slots?.[slotName]"
         v-for="element in element.slots[slotName]"
@@ -56,12 +55,7 @@ const attributes = computed(() => {
         :element="element"
         :slot-location="{ slotName, ownerId: element.id }"
       />
-      <div
-        v-else
-        data-transient-placeholder
-        :data-transient-slot="`${slotName}:${element.id}`"
-        contenteditable="true"
-      >
+      <div v-else data-transient-placeholder>
         {{ slotName }}
       </div>
     </template>
