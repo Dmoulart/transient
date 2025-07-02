@@ -64,7 +64,11 @@ import ComponentPanel from './ComponentPanel.vue'
 import type { TransientComponentSchema } from 'transient/src/transient'
 import type { TransientElement } from 'transient/src/transient/definition'
 import { findElementById, insertAfterElement } from 'transient/src/transient/ast'
-import { getTransientID } from 'transient/src/analyzers/html/html'
+import {
+  getTransientID,
+  htmlChildrenToTransientElements,
+  htmlNodeToTransientElement,
+} from 'transient/src/analyzers/html/html'
 import {
   assert,
   assertIs,
@@ -93,23 +97,21 @@ const editedNode = useEditedNode()
 const editedNodeBoundingBox = useEditedNodeBoundingBox()
 const windowSize = useWindowSize()
 
-onEditEnd((element, node) => {
+onEditEnd((node) => {
   assertIs(someHTMLElement, node)
-  if (node.dataset.transientSlot) {
+  debugger
+  if (node.dataset.transientId) {
+    replace(htmlNodeToTransientElement(node, node.dataset.transientId))
+  } else if (node.dataset.transientSlot) {
     const [slot, ownerId] = node.dataset.transientSlot.split(':')
-    const contents = element.slots![slot]!
+    const contents = htmlChildrenToTransientElements(node)
     replaceSlot(contents, slot, ownerId)
-    console.log('replace slots', { contents: pageCOntents })
-    // replace(element)
-  } else if (node.dataset.transientId) {
-    replace(element)
   }
 })
 
 const componentPanel = useComponentPanel()
 
 const addComponent = ({ path, schema }: { path: string; schema: TransientComponentSchema }) => {
-  console.log('Adding component:', path, schema)
   const componentSchema = dictionnary.get(schema.tag)
 
   if (!componentSchema) {
@@ -130,8 +132,6 @@ const addComponent = ({ path, schema }: { path: string; schema: TransientCompone
     attributes: {},
     id: crypto.randomUUID(),
   }
-
-  console.log('New component to insert:', newComponent)
 
   insertAfter(componentPanel.targetNodeID.value, newComponent)
 

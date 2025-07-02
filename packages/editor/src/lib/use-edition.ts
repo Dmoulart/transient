@@ -63,7 +63,7 @@ export function useEditedNodeBoundingBox() {
   })
 }
 
-type OnEditCallback = (element: TransientElement, node: Node) => void
+type OnEditCallback = (node: Node) => void
 
 const dd = new DiffDOM()
 
@@ -73,31 +73,13 @@ export function useEdition() {
     onEditEnd: [] as OnEditCallback[],
   }
 
-  let nodeBeforeEdition: HTMLElement | undefined = undefined
-
   watch(editedNode, (newNode, oldNode) => {
     if (newNode !== undefined) {
-      const newElement = htmlNodeToTransientElement(
-        newNode,
-        getTransientID(newNode) ?? crypto.randomUUID(),
-      )
-      console.log({ newElement })
-      cbs.onEditStart.forEach((cb) => cb(newElement, newNode))
-      // nodeBeforeEdition = newNode.cloneNode(true) as HTMLElement
+      cbs.onEditStart.forEach((cb) => cb(newNode))
     }
 
     if (oldNode !== undefined) {
-      const newElement = htmlNodeToTransientElement(
-        oldNode,
-        getTransientID(oldNode) ?? crypto.randomUUID(),
-      )
-      console.log({ newElement })
-      cbs.onEditEnd.forEach((cb) => cb(newElement, oldNode))
-      // if (nodeBeforeEdition) {
-      //   const diff = dd.diff(nodeBeforeEdition, oldNode)
-      //   console.log({ diff }, { oldNode })
-      // }
-      // nodeBeforeEdition = undefined
+      cbs.onEditEnd.forEach((cb) => cb(oldNode))
     }
   })
   return {

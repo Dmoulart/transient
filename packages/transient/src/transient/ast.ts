@@ -90,7 +90,6 @@ export function replaceElementSlot(
   if (!owner) {
     throw new Error("Unknown slot parent");
   }
-  console.log({ owner });
   owner.slots ??= {};
   owner.slots[slot] = newSlotContent;
 }

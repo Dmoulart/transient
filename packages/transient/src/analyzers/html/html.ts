@@ -1,5 +1,19 @@
 import type { TransientElement, BindingInfo } from "../../transient/definition";
 
+export function htmlChildrenToTransientElements(node: Element) {
+  const elements: TransientElement[] = [];
+  for (const child of Array.from(node.children)) {
+    elements.push(
+      htmlNodeToTransientElement(
+        child,
+        getTransientID(child) ?? crypto.randomUUID()
+      )
+    );
+  }
+
+  return elements;
+}
+
 export function htmlNodeToTransientElement(
   node: Element | Text | Node,
   id: string
@@ -38,7 +52,7 @@ export function htmlNodeToTransientElement(
 
   const children: TransientElement[] = [];
   const childNodes = Array.from(element.childNodes);
-  console.log({ ...childNodes });
+
   for (let i = 0; i < childNodes.length; i++) {
     const child = childNodes[i]!;
 

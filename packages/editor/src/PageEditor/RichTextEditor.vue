@@ -56,7 +56,6 @@ function wrapSelection(tag: string, sel: Selection): HTMLElement {
 
 function unwrapSelection(tag: string, sel: Selection) {
   assert(sel.rangeCount > 0, 'Selection must have a range')
-  console.log('unwrap', tag)
   const range = sel.getRangeAt(0)
 
   const editedTextAncestor = range.commonAncestorContainer
@@ -359,7 +358,6 @@ const toolbarItems: ToolbarItem[] = [
       const editedNode = useEditedNode()
       assertIsDefined(editedNode.value, 'Edited node must be defined to open component panel')
       panel.targetNodeID.value = getTransientID(editedNode.value)
-      console.log('Opening component panel for node:', panel.targetNodeID.value)
       panel.open()
     },
   },
@@ -374,7 +372,6 @@ const toolbarItems: ToolbarItem[] = [
       const transientID = getTransientID(editedNode.value)
       assertIsDefined(transientID)
       emit('remove', transientID)
-      console.log('Remove button clicked')
       // TODO: implement logic
     },
   },
