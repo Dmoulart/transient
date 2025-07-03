@@ -1,6 +1,6 @@
 import { useEventListener } from '@vueuse/core'
 import { DiffDOM } from 'diff-dom'
-import { getTransientID, htmlNodeToTransientElement } from 'transient/src/analyzers/html/html'
+import { getTransientID, htmlElementToTransientElement } from 'transient/src/analyzers/html/html'
 import type { TransientElement } from 'transient/src/transient/definition'
 import { computed, readonly, ref, watch, type App } from 'vue'
 

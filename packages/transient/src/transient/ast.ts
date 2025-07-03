@@ -92,6 +92,7 @@ export function replaceElementSlot(
   }
   owner.slots ??= {};
   owner.slots[slot] = newSlotContent;
+  console.log("owner slots", owner.slots);
 }
 
 export function appendElement(

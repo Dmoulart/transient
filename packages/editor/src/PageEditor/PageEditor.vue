@@ -27,7 +27,7 @@
   />
 
   <Suspense>
-    <TransientBuilder2
+    <TransientBuilder
       v-for="element in contents.elements"
       :dictionnary="dictionnary"
       :element="element"
@@ -65,8 +65,9 @@ import { useComponentPanel, useEditedNode, useEditedNodeBoundingBox } from '@/li
 import RichTextEditor from './RichTextEditor.vue'
 import { useWindowSize } from '@vueuse/core'
 import ComponentPanel from './ComponentPanel.vue'
-import TransientBuilder2 from './TransientBuilder2.vue'
+import TransientBuilder2 from './TransientBuilder.vue'
 import { applyEdition } from '@/editor/edition'
+import TransientBuilder from './TransientBuilder.vue'
 
 const dictionnary = useDictionnary()
 

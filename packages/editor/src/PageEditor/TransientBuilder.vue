@@ -6,13 +6,20 @@ import { hasTextChildren } from 'transient/src/transient/ast'
 import SlotSpy from './SlotSpy.vue'
 import type { ComponentSlotEditionInput, Edition, ElementEditionInput } from '@/editor/edition'
 import { useEditedNode } from '@/lib/use-edition'
-import { assertIs, someHTMLElement } from 'transient/src/core/assert'
+import { assertIs, assertIsDefined, someHTMLElement } from 'transient/src/core/assert'
+import Comment from './Comment.vue'
 
+/**
+ *
+ *
+ *
+ */
 const props = defineProps<{
   element: TransientElement
   dictionnary: ComponentDictionnary
   slotLocation?: { slotName: string; ownerId: string }
 }>()
+
 const components = shallowRef<Record<string, any>>({})
 
 const slotNames = computed(() => {
@@ -35,10 +42,10 @@ const attributes = computed(() => {
     contenteditable: hasTextChildren(props.element) ? true : null,
     'data-transient-id': props.element.id,
   }
-  if (props.slotLocation) {
-    attributes['data-transient-slot'] =
-      `${props.slotLocation.slotName}:${props.slotLocation.ownerId}`
-  }
+  // if (props.slotLocation) {
+  //   attributes['data-transient-slot'] =
+  //     `${props.slotLocation.slotName}:${props.slotLocation.ownerId}`
+  // }
   return attributes
 })
 
@@ -48,53 +55,57 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
       event.stopPropagation()
       assertIs(someHTMLElement, event.target)
       useEditedNode().value = event.target
-      // emit('edit', binding.value)
     })
 
     el.addEventListener('focusout', (event) => {
       event.stopPropagation()
-      assertIs(someHTMLElement, event.target)
-      if (event.target.dataset.transientSlot) {
-        const [slotName, ownerId] = event.target.dataset.transientSlot.split(':')
 
-        emit('edit', {
-          type: 'component-slot',
-          slotName: slotName,
-          ownerId: ownerId,
-          node: event.target,
-        })
-      } else {
-        emit('edit', {
-          type: 'element',
-          transientId: props.element.id,
-          node: event.target,
-        })
+      assertIs(someHTMLElement, event.target)
+
+      let transientSlot = undefined
+      for (const node of event.target.childNodes) {
+        if (
+          node.nodeType === Node.COMMENT_NODE &&
+          node.textContent?.startsWith('transient-slot=')
+        ) {
+          transientSlot = node.textContent?.substring('transient-slot='.length)
+          break
+        }
       }
-      console.log('focusout', event)
-      // emit('edit', { ...binding.value, node: event.target })
+
+      assertIsDefined(transientSlot)
+
+      const [slotName, ownerId] = transientSlot.split(':')
+
+      emit('edit', {
+        type: 'edit-component-slot',
+        slotName: slotName,
+        ownerId: ownerId,
+        node: event.target,
+      })
+
       useEditedNode().value = undefined
     })
   },
 }
+// <!-- <SlotSpy :slot-name="slotName" :owner-id="element.id" /> -->
 </script>
 <template>
-  <template v-if="element.tag === '#text'">
-    {{ element.attributes?.value?.expression }}
-  </template>
   <component
-    v-else
+    v-if="element.tag !== '#text'"
     :is="element.isComponent ? components[element.tag] : element.tag"
     v-bind="attributes"
     v-edit
   >
     <template v-if="slotNames" v-for="slotName in slotNames">
       <SlotSpy v-if="element.isComponent" :slot-name="slotName" :owner-id="element.id" />
-      <TransientBuilder2
+      <Comment :content="`transient-slot=${slotName}:${element.id}`" />
+      <TransientBuilder
         v-if="element?.slots?.[slotName]"
         v-for="child in element.slots[slotName]"
         :dictionnary="dictionnary"
         :element="child"
-        :slot-location="element.isComponent ? { slotName, ownerId: element.id } : undefined"
+        :slot-location="{ slotName, ownerId: element.id }"
         @edit="(event) => emit('edit', event)"
       />
       <div v-else data-transient-placeholder>
@@ -102,4 +113,9 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
       </div>
     </template>
   </component>
+  <template v-else>
+    <Comment :content="`#text data-transient-id=${element.id}`" />{{
+      element.attributes?.value?.expression
+    }}
+  </template>
 </template>

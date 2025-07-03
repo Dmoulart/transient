@@ -1,7 +1,7 @@
 import type { TransientComponentSchema } from 'transient/src/transient/definition'
 import {
   htmlChildrenToTransientElements,
-  htmlNodeToTransientElement,
+  htmlElementToTransientElement,
 } from 'transient/src/analyzers/html/html'
 import {
   insertAfterElement,
@@ -20,7 +20,7 @@ export type Edition =
   | DeleteElementEdition
 
 export type ComponentSlotEdition = {
-  type: 'component-slot'
+  type: 'edit-component-slot'
   ownerId: string
   slotName: string
   node: HTMLElement
@@ -55,18 +55,16 @@ export type EditionInput =
 
 export function applyEdition(edition: Edition, elements: TransientElement[]) {
   console.log({ edition })
+  debugger
   switch (edition.type) {
-    case 'component-slot': {
-      replaceElementSlot(
-        htmlChildrenToTransientElements(edition.node),
-        edition.slotName,
-        edition.ownerId,
-        elements,
-      )
+    case 'edit-component-slot': {
+      const children = htmlChildrenToTransientElements(edition.node)
+      console.log({ children })
+      replaceElementSlot(children, edition.slotName, edition.ownerId, elements)
       break
     }
     case 'element': {
-      replaceElement(htmlNodeToTransientElement(edition.node, edition.transientId), elements)
+      replaceElement(htmlElementToTransientElement(edition.node, edition.transientId), elements)
       break
     }
 

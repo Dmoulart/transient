@@ -2,9 +2,16 @@ import type { TransientElement, BindingInfo } from "../../transient/definition";
 
 export function htmlChildrenToTransientElements(node: Element) {
   const elements: TransientElement[] = [];
-  for (const child of Array.from(node.children)) {
+  for (const child of Array.from(node.childNodes)) {
+    if (
+      child.nodeType === Node.COMMENT_NODE ||
+      (child.nodeType === Node.TEXT_NODE && child.textContent === "")
+    ) {
+      continue;
+    }
+
     elements.push(
-      htmlNodeToTransientElement(
+      htmlElementToTransientElement(
         child,
         getTransientID(child) ?? crypto.randomUUID()
       )
@@ -14,7 +21,7 @@ export function htmlChildrenToTransientElements(node: Element) {
   return elements;
 }
 
-export function htmlNodeToTransientElement(
+export function htmlElementToTransientElement(
   node: Element | Text | Node,
   id: string
 ): TransientElement {
@@ -97,7 +104,7 @@ export function htmlNodeToTransientElement(
           continue;
         }
       }
-      children.push(htmlNodeToTransientElement(child as Element, id));
+      children.push(htmlElementToTransientElement(child as Element, id));
     }
   }
 
