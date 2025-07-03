@@ -81,7 +81,10 @@ const windowSize = useWindowSize()
 const componentPanel = useComponentPanel()
 </script>
 
-<style scoped>
+<style>
+body {
+  padding: 40px;
+}
 .text-editor {
   position: fixed;
   bottom: var(--richtext-editor-bottom);

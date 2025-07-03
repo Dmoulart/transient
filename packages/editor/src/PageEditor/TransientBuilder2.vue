@@ -54,7 +54,24 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
     el.addEventListener('focusout', (event) => {
       event.stopPropagation()
       assertIs(someHTMLElement, event.target)
-      emit('edit', { ...binding.value, node: event.target })
+      if (event.target.dataset.transientSlot) {
+        const [slotName, ownerId] = event.target.dataset.transientSlot.split(':')
+
+        emit('edit', {
+          type: 'component-slot',
+          slotName: slotName,
+          ownerId: ownerId,
+          node: event.target,
+        })
+      } else {
+        emit('edit', {
+          type: 'element',
+          transientId: props.element.id,
+          node: event.target,
+        })
+      }
+      console.log('focusout', event)
+      // emit('edit', { ...binding.value, node: event.target })
       useEditedNode().value = undefined
     })
   },
@@ -68,26 +85,15 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
     v-else
     :is="element.isComponent ? components[element.tag] : element.tag"
     v-bind="attributes"
-    v-edit="
-      slotLocation
-        ? {
-            type: 'component-slot',
-            ownerId: slotLocation.ownerId,
-            slotName: slotLocation.slotName,
-          }
-        : {
-            type: 'element',
-            transientId: element.id,
-          }
-    "
+    v-edit
   >
     <template v-if="slotNames" v-for="slotName in slotNames">
       <SlotSpy v-if="element.isComponent" :slot-name="slotName" :owner-id="element.id" />
       <TransientBuilder2
         v-if="element?.slots?.[slotName]"
-        v-for="element in element.slots[slotName]"
+        v-for="child in element.slots[slotName]"
         :dictionnary="dictionnary"
-        :element="element"
+        :element="child"
         :slot-location="element.isComponent ? { slotName, ownerId: element.id } : undefined"
         @edit="(event) => emit('edit', event)"
       />

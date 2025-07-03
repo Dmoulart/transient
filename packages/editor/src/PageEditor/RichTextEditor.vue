@@ -240,7 +240,7 @@ type ToolbarSeparator = {
   type: 'separator'
 }
 
-type ToolbarItem = ToolbarButton | ToolbarSeparator
+type ToolbarItem = ({ condition?: () => boolean } & ToolbarButton) | ToolbarSeparator
 
 const panelIsOpen = ref(false)
 
@@ -367,6 +367,10 @@ const toolbarItems: ToolbarItem[] = [
     title: 'Remove',
     svg: '<path d="M6 20a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zm13-13h-3.5l-1-1h-5l-1 1H5v2h14z"/>',
     selected: ref(false),
+    condition() {
+      const editedNode = useEditedNode()
+      return Boolean(editedNode.value && getTransientID(editedNode.value))
+    },
     toggle: () => {
       const editedNode = useEditedNode()
       assertIsDefined(editedNode.value)
@@ -383,7 +387,7 @@ const toolbarItems: ToolbarItem[] = [
   <div class="toolbar">
     <template v-for="(item, index) in toolbarItems" :key="index">
       <button
-        v-if="item.type === 'item'"
+        v-if="item.type === 'item' && (item.condition ? item.condition() : true)"
         :title="item.title"
         :class="{ active: item.selected.value }"
         @mousedown.prevent="item.toggle(item.selected.value)"

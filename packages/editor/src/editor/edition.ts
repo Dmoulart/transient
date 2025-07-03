@@ -54,6 +54,7 @@ export type EditionInput =
   | DeleteElementEdition
 
 export function applyEdition(edition: Edition, elements: TransientElement[]) {
+  console.log({ edition })
   switch (edition.type) {
     case 'component-slot': {
       replaceElementSlot(
@@ -87,10 +88,12 @@ export function applyEdition(edition: Edition, elements: TransientElement[]) {
 
     case 'delete-element': {
       removeElement(edition.transientId, elements)
+
+      break
     }
 
     default: {
-      throw new Error('unexpected edition')
+      throw new Error(`unexpected edition ${JSON.stringify(edition)}`)
     }
   }
 }
