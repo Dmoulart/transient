@@ -63,39 +63,39 @@ export function htmlElementToTransientElement(
   for (let i = 0; i < childNodes.length; i++) {
     const child = childNodes[i]!;
 
-    if (
-      child.nodeType === Node.TEXT_NODE &&
-      child.textContent !== null &&
-      child.textContent.length > 0
-    ) {
-      let textContent = child.textContent ?? "";
-      let textId = getTransientID(child) ?? id;
+    // if (
+    //   child.nodeType === Node.TEXT_NODE &&
+    //   child.textContent !== null &&
+    //   child.textContent.length > 0
+    // ) {
+    //   let textContent = child.textContent ?? "";
+    //   let textId = getTransientID(child) ?? id;
 
-      // Merge consecutive text nodes
-      while (
-        i + 1 < childNodes.length &&
-        childNodes[i + 1]!.nodeType === Node.TEXT_NODE &&
-        childNodes[i + 1]!.textContent !== null &&
-        childNodes[i + 1]!.textContent!.length > 0
-      ) {
-        i++;
-        textContent += childNodes[i]!.textContent ?? "";
-      }
+    //   // Merge consecutive text nodes
+    //   while (
+    //     i + 1 < childNodes.length &&
+    //     childNodes[i + 1]!.nodeType === Node.TEXT_NODE &&
+    //     childNodes[i + 1]!.textContent !== null &&
+    //     childNodes[i + 1]!.textContent!.length > 0
+    //   ) {
+    //     i++;
+    //     textContent += childNodes[i]!.textContent ?? "";
+    //   }
 
-      children.push({
-        id: textId,
-        tag: "#text",
-        isComponent: false,
-        attributes: {
-          value: {
-            type: "literal",
-            expression: textContent,
-          },
-        },
-      });
+    //   children.push({
+    //     id: textId,
+    //     tag: "#text",
+    //     isComponent: false,
+    //     attributes: {
+    //       value: {
+    //         type: "literal",
+    //         expression: textContent,
+    //       },
+    //     },
+    //   });
 
-      continue;
-    }
+    //   continue;
+    // }
 
     if (child.nodeType === Node.ELEMENT_NODE) {
       if (child instanceof HTMLElement) {
@@ -104,8 +104,14 @@ export function htmlElementToTransientElement(
           continue;
         }
       }
-      children.push(htmlElementToTransientElement(child as Element, id));
     }
+
+    children.push(
+      htmlElementToTransientElement(
+        child as Element,
+        getTransientID(child) ?? crypto.randomUUID()
+      )
+    );
   }
 
   const slots: Record<string, TransientElement[]> = {
@@ -146,6 +152,7 @@ export function getTextNodeTransientID(textNode: Node) {
   const prev = textNode.previousSibling;
 
   if (prev && prev.nodeType === Node.COMMENT_NODE) {
+    console.log("text node", getCommentNodeTransientID(prev));
     return getCommentNodeTransientID(prev);
   }
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, shallowRef, computed, type Directive } from 'vue'
+import { onMounted, shallowRef, computed, type Directive, watch, ref, onUpdated } from 'vue'
 import type { TransientElement } from 'transient/src/transient/definition'
 import { ComponentDictionnary, loadAllComponents } from '@/lib/use-dictionnary'
 import { hasTextChildren } from 'transient/src/transient/ast'
@@ -9,19 +9,12 @@ import { useEditedNode } from '@/lib/use-edition'
 import { assertIs, assertIsDefined, someHTMLElement } from 'transient/src/core/assert'
 import Comment from './Comment.vue'
 
-/**
- *
- *
- *
- */
 const props = defineProps<{
   element: TransientElement
   dictionnary: ComponentDictionnary
   slotLocation?: { slotName: string; ownerId: string }
 }>()
-
 const components = shallowRef<Record<string, any>>({})
-
 const slotNames = computed(() => {
   const slots = props.dictionnary.get(props.element.tag)?.slots
   return slots ? Object.keys(slots) : ['default']
@@ -48,6 +41,15 @@ const attributes = computed(() => {
   // }
   return attributes
 })
+
+// onUpdated(() => {
+//   console.log(props.element.tag, 'updated', props.element)
+// })
+
+// watch(props.element, (newEl, oldEl) => {
+//   console.log('changes', { newEl, oldEl })
+//   // counter.value++
+// })
 
 const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionInput> = {
   mounted: (el: HTMLElement, binding) => {
@@ -83,12 +85,10 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
         ownerId: ownerId,
         node: event.target,
       })
-
       useEditedNode().value = undefined
     })
   },
 }
-// <!-- <SlotSpy :slot-name="slotName" :owner-id="element.id" /> -->
 </script>
 <template>
   <component
@@ -96,6 +96,11 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
     :is="element.isComponent ? components[element.tag] : element.tag"
     v-bind="attributes"
     v-edit
+    @click.stop="
+      () => {
+        console.log({ element })
+      }
+    "
   >
     <template v-if="slotNames" v-for="slotName in slotNames">
       <SlotSpy v-if="element.isComponent" :slot-name="slotName" :owner-id="element.id" />
@@ -114,8 +119,7 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
     </template>
   </component>
   <template v-else>
-    <Comment :content="`#text data-transient-id=${element.id}`" />{{
-      element.attributes?.value?.expression
-    }}
+    <Comment :content="`#text data-transient-id=${element.id}`" />
+    {{ element.attributes?.value?.expression }}
   </template>
 </template>

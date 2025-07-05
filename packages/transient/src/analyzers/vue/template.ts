@@ -97,10 +97,6 @@ function parseElement(
   const isComponent = /^[A-Z]/.test(tag);
   const attributes = parseElementAttributes(node.props, props);
 
-  if (tag === "template") {
-    debugger;
-  }
-
   const slots: Record<string, TransientElement[]> = {};
 
   const children = node.children
