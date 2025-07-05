@@ -10,6 +10,15 @@ export function htmlChildrenToTransientElements(node: Element) {
       continue;
     }
 
+    if (child.nodeType === Node.ELEMENT_NODE) {
+      if (child instanceof HTMLElement) {
+        if ("transientPlaceholder" in child.dataset) {
+          console.log("transient placeholder detected !");
+          continue;
+        }
+      }
+    }
+
     elements.push(
       htmlElementToTransientElement(
         child,
@@ -40,7 +49,7 @@ export function htmlElementToTransientElement(
   }
 
   const element = node as Element;
-
+  console.log({ element });
   const attributes: Record<string, BindingInfo> = {};
 
   for (const attr of Array.from(element.attributes)) {
@@ -57,65 +66,8 @@ export function htmlElementToTransientElement(
     };
   }
 
-  const children: TransientElement[] = [];
-  const childNodes = Array.from(element.childNodes);
-
-  for (let i = 0; i < childNodes.length; i++) {
-    const child = childNodes[i]!;
-
-    // if (
-    //   child.nodeType === Node.TEXT_NODE &&
-    //   child.textContent !== null &&
-    //   child.textContent.length > 0
-    // ) {
-    //   let textContent = child.textContent ?? "";
-    //   let textId = getTransientID(child) ?? id;
-
-    //   // Merge consecutive text nodes
-    //   while (
-    //     i + 1 < childNodes.length &&
-    //     childNodes[i + 1]!.nodeType === Node.TEXT_NODE &&
-    //     childNodes[i + 1]!.textContent !== null &&
-    //     childNodes[i + 1]!.textContent!.length > 0
-    //   ) {
-    //     i++;
-    //     textContent += childNodes[i]!.textContent ?? "";
-    //   }
-
-    //   children.push({
-    //     id: textId,
-    //     tag: "#text",
-    //     isComponent: false,
-    //     attributes: {
-    //       value: {
-    //         type: "literal",
-    //         expression: textContent,
-    //       },
-    //     },
-    //   });
-
-    //   continue;
-    // }
-
-    if (child.nodeType === Node.ELEMENT_NODE) {
-      if (child instanceof HTMLElement) {
-        if ("transientPlaceholder" in child.dataset) {
-          console.log("transient placeholder detected !");
-          continue;
-        }
-      }
-    }
-
-    children.push(
-      htmlElementToTransientElement(
-        child as Element,
-        getTransientID(child) ?? crypto.randomUUID()
-      )
-    );
-  }
-
   const slots: Record<string, TransientElement[]> = {
-    default: children,
+    default: htmlChildrenToTransientElements(element),
   };
 
   return {

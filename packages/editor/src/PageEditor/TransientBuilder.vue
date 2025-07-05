@@ -50,7 +50,6 @@ const attributes = computed(() => {
 //   console.log('changes', { newEl, oldEl })
 //   // counter.value++
 // })
-
 const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionInput> = {
   mounted: (el: HTMLElement, binding) => {
     el.addEventListener('focusin', (event) => {
@@ -78,7 +77,6 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
       assertIsDefined(transientSlot)
 
       const [slotName, ownerId] = transientSlot.split(':')
-
       emit('edit', {
         type: 'edit-component-slot',
         slotName: slotName,
@@ -109,6 +107,7 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
         v-if="element?.slots?.[slotName]"
         v-for="child in element.slots[slotName]"
         :dictionnary="dictionnary"
+        :key="JSON.stringify(child)"
         :element="child"
         :slot-location="{ slotName, ownerId: element.id }"
         @edit="(event) => emit('edit', event)"
