@@ -29,7 +29,11 @@ export function getComponentDefaultPropsValues(props: TransientProps) {
 }
 
 export function hasTextChildren(element: TransientElement): boolean {
-  return (element.slots?.default ?? []).some((child) => child.tag === "#text");
+  if (!element.slots?.default) {
+    return false;
+  }
+
+  return element.slots.default.some((child) => child.tag === "#text");
 }
 
 export function hasSlots(element: TransientElement): boolean {

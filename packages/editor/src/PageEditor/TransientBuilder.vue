@@ -32,7 +32,6 @@ const attributes = computed(() => {
       Object.entries(props.element.attributes || {}).map(([k, v]) => [k, v.expression]),
     ),
     tabIndex: props.element.isComponent ? 0 : undefined,
-    contenteditable: hasTextChildren(props.element) ? true : null,
     'data-transient-id': props.element.id,
   }
   // if (props.slotLocation) {
@@ -63,17 +62,7 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
       debugger
       try {
         assertIs(someHTMLElement, event.target)
-
-        let transientSlot = undefined
-        for (const node of event.target.childNodes) {
-          if (
-            node.nodeType === Node.COMMENT_NODE &&
-            node.textContent?.startsWith('transient-slot=')
-          ) {
-            transientSlot = node.textContent?.substring('transient-slot='.length)
-            break
-          }
-        }
+        const transientSlot = event.target.dataset.transientSlot
 
         if (!transientSlot) {
           useEditedNode().value = undefined
@@ -117,18 +106,33 @@ const withoutKeys = <T extends Record<string, any>>(object: T, keysToRemove: (ke
     v-edit
   >
     <template v-if="slotNames" v-for="slotName in slotNames">
-      <SlotSpy v-if="element.isComponent" :slot-name="slotName" :owner-id="element.id" />
-      <Comment :content="`transient-slot=${slotName}:${element.id}`" />
+      <SlotSpy
+        v-if="
+          hasTextChildren(element) ||
+          !element.slots?.[slotName] ||
+          element.slots?.[slotName]?.length === 0
+        "
+        :slot-name="slotName"
+        :owner-id="element.id"
+        :editable="
+          hasTextChildren(element) ||
+          !element.slots?.[slotName] ||
+          element.slots?.[slotName]?.length === 0
+        "
+      />
       <TransientBuilder
         v-if="element?.slots?.[slotName]"
         v-for="child in element.slots[slotName]"
         :dictionnary="dictionnary"
         :element="child"
-        :key="JSON.stringify(withoutKeys(child, ['slots']))"
+        :key="JSON.stringify(child)"
         :slot-location="{ slotName, ownerId: element.id }"
         @edit="(event) => emit('edit', event)"
       />
-      <div v-else data-transient-placeholder>
+      <div
+        v-if="!element?.slots?.[slotName] || element.slots[slotName].length === 0"
+        data-transient-placeholder
+      >
         {{ slotName }}
       </div>
     </template>

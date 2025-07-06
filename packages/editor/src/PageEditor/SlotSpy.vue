@@ -1,10 +1,12 @@
 <script lang="ts">
-import { createCommentVNode } from 'vue'
+import type { TransientElement } from 'transient/src/transient/definition'
+import { createCommentVNode, type PropType } from 'vue'
 export default {
   name: 'SlotSpy',
   props: {
     ownerId: String,
     slotName: String,
+    editable: Boolean
   },
   setup(props) {
     return () => createCommentVNode('transient-slot-spy')
@@ -16,7 +18,10 @@ export default {
       throw new Error('Slot spy expects a parent element')
     }
 
-    spy.parentElement.contentEditable = 'true'
+    if (this.editable) {
+      spy.parentElement.contentEditable = 'true'
+    }
+
     spy.parentElement.dataset.transientSlot = `${this.slotName}:${this.ownerId}`
   },
 }
