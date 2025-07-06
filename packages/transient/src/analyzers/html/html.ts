@@ -13,7 +13,7 @@ export function htmlChildrenToTransientElements(node: Element) {
     if (child.nodeType === Node.ELEMENT_NODE) {
       if (child instanceof HTMLElement) {
         if ("transientPlaceholder" in child.dataset) {
-          console.log("transient placeholder detected !");
+          elements.push(...htmlChildrenToTransientElements(child));
           continue;
         }
       }

@@ -60,32 +60,53 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
 
     el.addEventListener('focusout', (event) => {
       event.stopPropagation()
+      debugger
+      try {
+        assertIs(someHTMLElement, event.target)
 
-      assertIs(someHTMLElement, event.target)
-
-      let transientSlot = undefined
-      for (const node of event.target.childNodes) {
-        if (
-          node.nodeType === Node.COMMENT_NODE &&
-          node.textContent?.startsWith('transient-slot=')
-        ) {
-          transientSlot = node.textContent?.substring('transient-slot='.length)
-          break
+        let transientSlot = undefined
+        for (const node of event.target.childNodes) {
+          if (
+            node.nodeType === Node.COMMENT_NODE &&
+            node.textContent?.startsWith('transient-slot=')
+          ) {
+            transientSlot = node.textContent?.substring('transient-slot='.length)
+            break
+          }
         }
+
+        if (!transientSlot) {
+          useEditedNode().value = undefined
+          // not a edition zone
+          return
+        }
+
+        assertIsDefined(transientSlot)
+
+        const [slotName, ownerId] = transientSlot.split(':')
+
+        emit('edit', {
+          type: 'edit-component-slot',
+          slotName: slotName,
+          ownerId: ownerId,
+          node: event.target,
+        })
+
+        useEditedNode().value = undefined
+      } catch (e) {
+        debugger
       }
-
-      assertIsDefined(transientSlot)
-
-      const [slotName, ownerId] = transientSlot.split(':')
-      emit('edit', {
-        type: 'edit-component-slot',
-        slotName: slotName,
-        ownerId: ownerId,
-        node: event.target,
-      })
-      useEditedNode().value = undefined
     })
   },
+}
+
+const withoutKeys = <T extends Record<string, any>>(object: T, keysToRemove: (keyof T)[]) => {
+  const filteredObject = { ...object }
+  for (const key of keysToRemove) {
+    delete filteredObject[key]
+  }
+
+  return filteredObject
 }
 </script>
 <template>
@@ -94,11 +115,6 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
     :is="element.isComponent ? components[element.tag] : element.tag"
     v-bind="attributes"
     v-edit
-    @click.stop="
-      () => {
-        console.log({ element })
-      }
-    "
   >
     <template v-if="slotNames" v-for="slotName in slotNames">
       <SlotSpy v-if="element.isComponent" :slot-name="slotName" :owner-id="element.id" />
@@ -107,8 +123,8 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
         v-if="element?.slots?.[slotName]"
         v-for="child in element.slots[slotName]"
         :dictionnary="dictionnary"
-        :key="JSON.stringify(child)"
         :element="child"
+        :key="JSON.stringify(withoutKeys(child, ['slots']))"
         :slot-location="{ slotName, ownerId: element.id }"
         @edit="(event) => emit('edit', event)"
       />
