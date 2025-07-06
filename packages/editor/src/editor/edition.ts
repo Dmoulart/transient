@@ -4,6 +4,7 @@ import {
   htmlElementToTransientElement,
 } from 'transient/src/analyzers/html/html'
 import {
+  appendElement,
   insertAfterElement,
   insertBeforeElement,
   removeElement,
@@ -11,23 +12,23 @@ import {
   replaceElementSlot,
 } from 'transient/src/transient/ast'
 import type { TransientElement } from 'transient/src/transient/definition'
-import { assertIsDefined } from 'transient/src/core/assert'
 
 export type Edition =
-  | ComponentSlotEdition
+  | SlotEdition
   | ElementEdition
   | AddComponentEdition
+  | AppendComponentEdition
   | DeleteElementEdition
 
-export type ComponentSlotEdition = {
-  type: 'edit-component-slot'
+export type SlotEdition = {
+  type: 'edit-slot'
   ownerId: string
   slotName: string
   node: HTMLElement
 }
 
 export type ElementEdition = {
-  type: 'element'
+  type: 'edit-element'
   transientId: string
   node: HTMLElement
 }
@@ -39,12 +40,18 @@ export type AddComponentEdition = {
   schema: TransientComponentSchema
 }
 
+export type AppendComponentEdition = {
+  type: 'append-component'
+  targetId: string
+  schema: TransientComponentSchema
+}
+
 export type DeleteElementEdition = {
   type: 'delete-element'
   transientId: string
 }
 
-export type ComponentSlotEditionInput = Omit<ComponentSlotEdition, 'node'>
+export type ComponentSlotEditionInput = Omit<SlotEdition, 'node'>
 export type ElementEditionInput = Omit<ElementEdition, 'node'>
 
 export type EditionInput =
@@ -52,18 +59,18 @@ export type EditionInput =
   | ElementEditionInput
   | AddComponentEdition
   | DeleteElementEdition
+  | AppendComponentEdition
 
 export function applyEdition(edition: Edition, elements: TransientElement[]) {
   console.log({ edition })
 
   switch (edition.type) {
-    case 'edit-component-slot': {
+    case 'edit-slot': {
       const children = htmlChildrenToTransientElements(edition.node)
-      console.log({ children })
       replaceElementSlot(children, edition.slotName, edition.ownerId, elements)
       break
     }
-    case 'element': {
+    case 'edit-element': {
       replaceElement(htmlElementToTransientElement(edition.node, edition.transientId), elements)
       break
     }
@@ -81,6 +88,19 @@ export function applyEdition(edition: Edition, elements: TransientElement[]) {
       } else {
         insertBeforeElement(component, edition.targetId, elements)
       }
+      break
+    }
+
+    case 'append-component': {
+      const component: TransientElement = {
+        tag: edition.schema.tag,
+        isComponent: true,
+        attributes: {},
+        id: crypto.randomUUID(),
+      }
+
+      appendElement(component, edition.targetId, elements)
+
       break
     }
 

@@ -4,7 +4,13 @@
       <EditorComponents
         @select="
           (data) =>
-            emit('add-component', {
+            // emit('add-component', {
+            //   ...data,
+            //   type: 'add-component',
+            //   position: 'after',
+            //   targetId: panel.targetNodeID.value!,
+            // })
+            emit('edit', {
               ...data,
               type: 'add-component',
               position: 'after',
@@ -16,12 +22,12 @@
   </UDrawer>
 </template>
 <script setup lang="ts">
-import type { AddComponentEdition } from '@/editor/edition'
+import type { AddComponentEdition, Edition } from '@/editor/edition'
 import EditorComponents from './EditorComponents.vue'
 import { useComponentPanel } from '@/lib/use-edition'
 
 const emit = defineEmits<{
-  (e: 'add-component', data: AddComponentEdition): void
+  (e: 'edit', data: Edition): void
 }>()
 
 const panel = useComponentPanel()

@@ -8,6 +8,7 @@ import type { ComponentSlotEditionInput, Edition, ElementEditionInput } from '@/
 import { useEditedNode } from '@/lib/use-edition'
 import { assertIs, assertIsDefined, someHTMLElement } from 'transient/src/core/assert'
 import Comment from './Comment.vue'
+import { getTransientID } from 'transient/src/analyzers/html/html'
 
 const props = defineProps<{
   element: TransientElement
@@ -33,6 +34,7 @@ const attributes = computed(() => {
     ),
     tabIndex: props.element.isComponent ? 0 : undefined,
     'data-transient-id': props.element.id,
+    'data-transient-editable': true,
   }
   // if (props.slotLocation) {
   //   attributes['data-transient-slot'] =
@@ -59,9 +61,21 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
 
     el.addEventListener('focusout', (event) => {
       event.stopPropagation()
-      debugger
       try {
         assertIs(someHTMLElement, event.target)
+
+        if (event.target.dataset.transientEditable === 'true') {
+          const transientID = getTransientID(event.target)
+          assertIsDefined(transientID)
+          emit('edit', {
+            type: 'edit-element',
+            node: event.target,
+            transientId: transientID,
+          })
+          useEditedNode().value = undefined
+          return
+        }
+
         const transientSlot = event.target.dataset.transientSlot
 
         if (!transientSlot) {
@@ -75,7 +89,7 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
         const [slotName, ownerId] = transientSlot.split(':')
 
         emit('edit', {
-          type: 'edit-component-slot',
+          type: 'edit-slot',
           slotName: slotName,
           ownerId: ownerId,
           node: event.target,

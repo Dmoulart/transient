@@ -1,7 +1,7 @@
 <template>
   <ComponentPanel
     :open="componentPanel.isOpen.value"
-    @add-component="
+    @edit="
       (edition) => {
         applyEdition(edition, contents.elements)
         componentPanel.close()
