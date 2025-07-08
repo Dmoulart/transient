@@ -75,16 +75,16 @@ export function htmlElementToTransientElement(
     );
 
     for (const child of Array.from(children)) {
-      const data = child.dataset.transientSlot;
+      const slot = child.dataset.transientSlot;
 
-      if (!data) continue;
+      if (!slot) continue;
 
-      const [slotName, ownerID] = data.split(":");
+      const [slotName, ownerID] = slot.split(":");
 
       assertIsDefined(slotName);
       assertIsDefined(ownerID);
 
-      if (ownerID !== element.id) continue;
+      if (ownerID !== getTransientID(element)) continue;
 
       slots[slotName] ??= [];
 
