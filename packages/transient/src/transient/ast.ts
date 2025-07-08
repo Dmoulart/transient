@@ -28,12 +28,40 @@ export function getComponentDefaultPropsValues(props: TransientProps) {
   return data;
 }
 
-export function hasTextChildren(element: TransientElement): boolean {
-  if (!element.slots?.default) {
+export function hasTextChildren(
+  element: TransientElement,
+  slotName = "default"
+): boolean {
+  return slotContainsSome(element, (child) => child.tag === "#text", slotName);
+}
+
+export function slotContainsSome(
+  element: TransientElement,
+  cb: (
+    value: TransientElement,
+    index: number,
+    array: TransientElement[]
+  ) => boolean,
+  slotName = "default"
+): boolean {
+  if (!element.slots?.[slotName]) {
     return false;
   }
 
-  return element.slots.default.some((child) => child.tag === "#text");
+  return element.slots[slotName].some(cb);
+}
+
+export function isTextZone(
+  element: TransientElement,
+  slotName = "default"
+): boolean {
+  return (
+    !element.slots?.[slotName] ||
+    hasTextChildren(element, slotName) ||
+    (slotContainsSome(element, (child) => child.tag === "br", slotName) &&
+      element.slots?.[slotName]?.length === 1) ||
+    element.slots?.[slotName]?.length === 0
+  );
 }
 
 export function hasSlots(element: TransientElement): boolean {

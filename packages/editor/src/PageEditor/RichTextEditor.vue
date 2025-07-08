@@ -37,6 +37,8 @@ function wrapSelection(tag: string, sel: Selection): HTMLElement {
   const contents = range.extractContents()
 
   const wrapper = document.createElement(tag)
+  // allow to detect we used the rich text editor to add this motherfucker
+  wrapper.dataset.textAddition = 'true'
 
   if (contents.parentNode?.nodeName === tag) {
     // If the contents are already wrapped in the same tag, just return it

@@ -2,7 +2,7 @@
 import { onMounted, shallowRef, computed, type Directive, watch, ref, onUpdated } from 'vue'
 import type { TransientElement } from 'transient/src/transient/definition'
 import { ComponentDictionnary, loadAllComponents } from '@/lib/use-dictionnary'
-import { hasTextChildren } from 'transient/src/transient/ast'
+import { isTextZone } from 'transient/src/transient/ast'
 import SlotSpy from './SlotSpy.vue'
 import type { ComponentSlotEditionInput, Edition, ElementEditionInput } from '@/editor/edition'
 import { useEditedNode } from '@/lib/use-edition'
@@ -35,22 +35,12 @@ const attributes = computed(() => {
     tabIndex: props.element.isComponent ? 0 : undefined,
     'data-transient-id': props.element.id,
     'data-transient-editable': true,
+    'data-transient-component': props.element.isComponent ? props.element.tag : undefined,
   }
-  // if (props.slotLocation) {
-  //   attributes['data-transient-slot'] =
-  //     `${props.slotLocation.slotName}:${props.slotLocation.ownerId}`
-  // }
+
   return attributes
 })
 
-// onUpdated(() => {
-//   console.log(props.element.tag, 'updated', props.element)
-// })
-
-// watch(props.element, (newEl, oldEl) => {
-//   console.log('changes', { newEl, oldEl })
-//   // counter.value++
-// })
 const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionInput> = {
   mounted: (el: HTMLElement, binding) => {
     el.addEventListener('focusin', (event) => {
@@ -64,36 +54,48 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
       try {
         assertIs(someHTMLElement, event.target)
 
-        if (event.target.dataset.transientEditable === 'true') {
-          const transientID = getTransientID(event.target)
-          assertIsDefined(transientID)
+        const target = event.target
+
+        const transientSlot = target.dataset.transientSlot
+
+        // Clean up visual "emptiness" in slot zones
+        if (transientSlot) {
+          // Remove redundant <br> and empty text nodes
+          const onlyGarbage = Array.from(target.childNodes).every((node) => {
+            return (
+              (node.nodeType === Node.ELEMENT_NODE && node.nodeName === 'BR') ||
+              (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() === '')
+            )
+          })
+
+          if (onlyGarbage) {
+            target.innerHTML = ''
+            target.dataset.textAddition = 'true'
+          }
+
+          const [slotName, ownerId] = transientSlot.split(':')
           emit('edit', {
-            type: 'edit-element',
-            node: event.target,
-            transientId: transientID,
+            type: 'edit-slot',
+            slotName,
+            ownerId,
+            node: target,
           })
           useEditedNode().value = undefined
           return
         }
 
-        const transientSlot = event.target.dataset.transientSlot
-
-        if (!transientSlot) {
+        // Standard editable element case
+        if (target.dataset.transientEditable === 'true') {
+          const transientID = getTransientID(target)
+          assertIsDefined(transientID)
+          emit('edit', {
+            type: 'edit-element',
+            node: target,
+            transientId: transientID,
+          })
           useEditedNode().value = undefined
-          // not a edition zone
           return
         }
-
-        assertIsDefined(transientSlot)
-
-        const [slotName, ownerId] = transientSlot.split(':')
-
-        emit('edit', {
-          type: 'edit-slot',
-          slotName: slotName,
-          ownerId: ownerId,
-          node: event.target,
-        })
 
         useEditedNode().value = undefined
       } catch (e) {
@@ -121,18 +123,10 @@ const withoutKeys = <T extends Record<string, any>>(object: T, keysToRemove: (ke
   >
     <template v-if="slotNames" v-for="slotName in slotNames">
       <SlotSpy
-        v-if="
-          hasTextChildren(element) ||
-          !element.slots?.[slotName] ||
-          element.slots?.[slotName]?.length === 0
-        "
+        v-if="isTextZone(element, slotName)"
         :slot-name="slotName"
         :owner-id="element.id"
-        :editable="
-          hasTextChildren(element) ||
-          !element.slots?.[slotName] ||
-          element.slots?.[slotName]?.length === 0
-        "
+        :editable="!attributes['data-text-addition']"
       />
       <TransientBuilder
         v-if="element?.slots?.[slotName]"
@@ -143,12 +137,6 @@ const withoutKeys = <T extends Record<string, any>>(object: T, keysToRemove: (ke
         :slot-location="{ slotName, ownerId: element.id }"
         @edit="(event) => emit('edit', event)"
       />
-      <div
-        v-if="!element?.slots?.[slotName] || element.slots[slotName].length === 0"
-        data-transient-placeholder
-      >
-        {{ slotName }}
-      </div>
     </template>
   </component>
   <template v-else>
@@ -156,3 +144,20 @@ const withoutKeys = <T extends Record<string, any>>(object: T, keysToRemove: (ke
     {{ element.attributes?.value?.expression }}
   </template>
 </template>
+<style>
+[data-transient-slot]:empty::before {
+  content: attr(data-transient-slot); /* or a fixed label like "Click to edit" */
+  color: #aaa;
+  font-style: italic;
+  pointer-events: none;
+  display: inline-block;
+}
+[data-transient-slot]:focus::before {
+  content: none;
+}
+[data-transient-slot] {
+  min-height: 1.2em; /* ensures visibility even when empty */
+  position: relative;
+  cursor: text;
+}
+</style>
