@@ -1,3 +1,4 @@
+import { assertIsDefined } from "../../core/assert";
 import type { TransientElement, BindingInfo } from "../../transient/definition";
 
 export function htmlChildrenToTransientElements(node: Element) {
@@ -48,8 +49,8 @@ export function htmlElementToTransientElement(
     };
   }
 
-  const element = node as Element;
-  console.log({ element });
+  const element = node as HTMLElement;
+
   const attributes: Record<string, BindingInfo> = {};
 
   for (const attr of Array.from(element.attributes)) {
@@ -63,6 +64,39 @@ export function htmlElementToTransientElement(
     attributes[attr.name] = {
       type: "literal",
       expression: attr.value,
+    };
+  }
+
+  if (element.dataset.transientComponent) {
+    const slots: Record<string, TransientElement[]> = {};
+
+    const children = element.querySelectorAll<HTMLElement>(
+      "[data-transient-slot]"
+    );
+
+    for (const child of Array.from(children)) {
+      const data = child.dataset.transientSlot;
+
+      if (!data) continue;
+
+      const [slotName, ownerID] = data.split(":");
+
+      assertIsDefined(slotName);
+      assertIsDefined(ownerID);
+
+      if (ownerID !== element.id) continue;
+
+      slots[slotName] ??= [];
+
+      slots[slotName]!.push(...htmlChildrenToTransientElements(child));
+    }
+
+    return {
+      id,
+      tag: element.dataset.transientComponent,
+      isComponent: true,
+      attributes,
+      slots: Object.keys(slots).length ? slots : undefined,
     };
   }
 
