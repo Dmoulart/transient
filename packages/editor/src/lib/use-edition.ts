@@ -1,7 +1,8 @@
 import { useEventListener } from '@vueuse/core'
 import { DiffDOM } from 'diff-dom'
 import { getTransientID, htmlElementToTransientElement } from 'transient/src/analyzers/html/html'
-import type { TransientElement } from 'transient/src/transient/definition'
+import { assertIsDefined } from 'transient/src/core/assert'
+import type { TransientComponentSchema, TransientElement } from 'transient/src/transient/definition'
 import { computed, readonly, ref, watch, type App } from 'vue'
 
 const editedNode = ref<HTMLElement | undefined>()
@@ -93,20 +94,27 @@ export function useEdition() {
 }
 
 const componentPanelIsOpen = ref(false)
-const targetNodeID = ref<string | undefined>(undefined)
+
+type OnCloseCb = (componentSchema: TransientComponentSchema) => void
 
 export function useComponentPanel() {
+  const onSelect = ref<OnCloseCb>()
   return {
-    targetNodeID: targetNodeID,
     isOpen: readonly(componentPanelIsOpen),
+    onSelect,
+    close() {
+      componentPanelIsOpen.value = false
+    },
     toggle() {
       componentPanelIsOpen.value = !componentPanelIsOpen.value
     },
-    open() {
+    open(onSelectCb: OnCloseCb) {
+      onSelect.value = onSelectCb
       componentPanelIsOpen.value = true
     },
-    close() {
-      componentPanelIsOpen.value = false
+    select(componentSchema: TransientComponentSchema) {
+      assertIsDefined(onSelect.value)
+      onSelect.value(componentSchema)
     },
   }
 }

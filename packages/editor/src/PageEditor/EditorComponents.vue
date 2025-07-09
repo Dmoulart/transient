@@ -22,7 +22,7 @@ import type { TransientComponentSchema } from 'transient/src/transient/definitio
 
 const registry = useDictionnary()
 const emit = defineEmits<{
-  (e: 'select', data: { path: string; schema: TransientComponentSchema }): void
+  (e: 'select', data: { schema: TransientComponentSchema }): void
 }>()
 </script>
 

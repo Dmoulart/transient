@@ -1,9 +1,9 @@
 <template>
   <ComponentPanel
     :open="componentPanel.isOpen.value"
-    @edit="
-      (edition) => {
-        applyEdition(edition, contents.elements)
+    @select="
+      (selected) => {
+        componentPanel.select(selected.schema)
         componentPanel.close()
       }
     "
@@ -22,6 +22,21 @@
     @delete="
       (edition) => {
         applyEdition(edition, contents.elements)
+      }
+    "
+    @insert-component="
+      ({ targetNodeID }) => {
+        // panel.targetNodeID.value = getTransientID(editedNode.value)
+        componentPanel.open((schema) => {
+          applyEdition(
+            {
+              type: 'append-component',
+              targetId: targetNodeID!,
+              schema,
+            },
+            contents.elements,
+          )
+        })
       }
     "
   />

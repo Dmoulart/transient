@@ -145,7 +145,7 @@ const withoutKeys = <T extends Record<string, any>>(object: T, keysToRemove: (ke
   </template>
 </template>
 <style>
-[data-transient-slot]:empty::before {
+[data-transient-slot]:not([data-text-addition]):empty::before {
   content: attr(data-transient-slot); /* or a fixed label like "Click to edit" */
   color: #aaa;
   font-style: italic;

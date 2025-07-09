@@ -1,34 +1,21 @@
 <template>
   <UDrawer ref="drawer" v-bind="$attrs" class="max-w-125" direction="right" :overlay="false">
     <template #content>
-      <EditorComponents
-        @select="
-          (data) =>
-            // emit('add-component', {
-            //   ...data,
-            //   type: 'add-component',
-            //   position: 'after',
-            //   targetId: panel.targetNodeID.value!,
-            // })
-            emit('edit', {
-              ...data,
-              type: 'add-component',
-              position: 'after',
-              targetId: panel.targetNodeID.value!,
-            })
-        "
-      />
+      <EditorComponents @select="(data) => emit('select', data)" />
     </template>
   </UDrawer>
 </template>
 <script setup lang="ts">
-import type { AddComponentEdition, Edition } from '@/editor/edition'
 import EditorComponents from './EditorComponents.vue'
 import { useComponentPanel } from '@/lib/use-edition'
+import type { TransientComponentSchema } from 'transient/src/transient/definition'
 
 const emit = defineEmits<{
-  (e: 'edit', data: Edition): void
+  (
+    e: 'select',
+    data: {
+      schema: TransientComponentSchema
+    },
+  ): void
 }>()
-
-const panel = useComponentPanel()
 </script>

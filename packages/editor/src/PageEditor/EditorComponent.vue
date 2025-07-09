@@ -13,7 +13,6 @@ import { computed, defineAsyncComponent } from 'vue'
 
 const props = withDefaults(
   defineProps<{
-    path: string
     schema: TransientComponentSchema
     item?: boolean
   }>(),
@@ -23,30 +22,32 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  (e: 'select', data: { path: string; schema: TransientComponentSchema }): void
+  (e: 'select', data: { schema: TransientComponentSchema }): void
 }>()
+import type { CSSProperties } from 'vue'
+
 const styles = {
   item: {
     cursor: 'pointer',
     width: '7.5rem',
     height: '7.5rem',
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column' as CSSProperties['flexDirection'],
     gap: '0.25rem',
     border: '1px solid #e5e7eb',
     borderRadius: '0.375rem',
     padding: '0.5rem',
     overflow: 'hidden',
-  },
+  } as CSSProperties,
 }
 const dictionnary = useDictionnary()
 
 const defaultProps = getComponentDefaultPropsValues(dictionnary.get(props.schema.tag).props)
 
 const component = computed(() => {
-  props.path // don't remove this haaha
+  props.schema.path // don't remove this haaha
   return defineAsyncComponent({
-    loader: () => import(/* @vite-ignore */ props.path),
+    loader: () => import(/* @vite-ignore */ props.schema.path),
   })
 })
 </script>

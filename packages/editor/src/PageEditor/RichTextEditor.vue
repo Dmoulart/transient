@@ -4,12 +4,13 @@ import { assert, assertIsDefined } from 'transient/src/core/assert'
 import { computed, ref, type ComputedRef, type Ref } from 'vue'
 import { useComponentPanel, useEditedNode } from '@/lib/use-edition'
 import { getTransientID } from 'transient/src/analyzers/html/html'
-import type { DeleteElementEdition } from '@/editor/edition'
+import { applyEdition, type DeleteElementEdition } from '@/editor/edition'
 
 const selection = useSelection()
 
 const emit = defineEmits<{
   delete: [deletion: DeleteElementEdition]
+  'insert-component': [data: { targetNodeID: string }]
 }>()
 
 function wrap(tag: string, node: Node) {
@@ -357,11 +358,20 @@ const toolbarItems: ToolbarItem[] = [
     svg: ' <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" />',
     selected: useComponentPanel().isOpen,
     toggle: () => {
-      const panel = useComponentPanel()
       const editedNode = useEditedNode()
       assertIsDefined(editedNode.value, 'Edited node must be defined to open component panel')
-      panel.targetNodeID.value = getTransientID(editedNode.value)
-      panel.open()
+      const targetNodeID = getTransientID(editedNode.value)
+      assertIsDefined(targetNodeID)
+      emit('insert-component', { targetNodeID })
+      // panel.targetNodeID.value = getTransientID(editedNode.value)
+      // panel.open((targetNodeID, componentPath, componentSchema) => {
+      //   // emit('edit', {
+      //   //   ...data,
+      //   //   type: 'add-component',
+      //   //   position: 'after',
+      //   //   targetId: panel.targetNodeID.value!,
+      //   // })
+      // })
     },
   },
   {
