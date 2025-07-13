@@ -22,6 +22,7 @@
     @delete="
       (edition) => {
         applyEdition(edition, contents.elements)
+        editedNode = undefined
       }
     "
     @insert-component="

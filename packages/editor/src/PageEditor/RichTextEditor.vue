@@ -354,7 +354,7 @@ const toolbarItems: ToolbarItem[] = [
   // },
   {
     type: 'item',
-    title: 'Add component',
+    title: 'Insert component',
     svg: ' <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" />',
     selected: useComponentPanel().isOpen,
     toggle: () => {

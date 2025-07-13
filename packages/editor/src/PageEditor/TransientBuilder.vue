@@ -53,10 +53,22 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
       event.stopPropagation()
       try {
         assertIs(someHTMLElement, event.target)
-
         const target = event.target
 
         const transientSlot = target.dataset.transientSlot
+
+        // Standard editable element case
+        if (target.dataset.transientEditable === 'true') {
+          const transientID = getTransientID(target)
+          assertIsDefined(transientID)
+          emit('edit', {
+            type: 'edit-element',
+            node: target,
+            transientId: transientID,
+          })
+          useEditedNode().value = undefined
+          return
+        }
 
         // Clean up visual "emptiness" in slot zones
         if (transientSlot) {
@@ -79,19 +91,6 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
             slotName,
             ownerId,
             node: target,
-          })
-          useEditedNode().value = undefined
-          return
-        }
-
-        // Standard editable element case
-        if (target.dataset.transientEditable === 'true') {
-          const transientID = getTransientID(target)
-          assertIsDefined(transientID)
-          emit('edit', {
-            type: 'edit-element',
-            node: target,
-            transientId: transientID,
           })
           useEditedNode().value = undefined
           return
