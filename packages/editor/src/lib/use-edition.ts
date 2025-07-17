@@ -4,6 +4,8 @@ import { getTransientID, htmlElementToTransientElement } from 'transient/src/ana
 import { assertIsDefined } from 'transient/src/core/assert'
 import type { TransientComponentSchema, TransientElement } from 'transient/src/transient/definition'
 import { computed, readonly, ref, watch, type App } from 'vue'
+import { useDictionnary } from './use-dictionnary'
+import { findElementById, getComponentDefaultPropsValues } from 'transient/src/transient/ast'
 
 const editedNode = ref<HTMLElement | undefined>()
 
@@ -39,12 +41,77 @@ export function isNodeEditable(node: HTMLElement) {
 //   }
 // })
 
-useEventListener(document, 'focusout', (e) => {
-  editedNode.value = undefined
-})
+// useEventListener(document, 'focusout', (e) => {
+//   editedNode.value = undefined
+// })
 
 export function useEditedNode() {
   return editedNode
+}
+
+export function useEditedNodeSchema() {
+  return computed(() => {
+    if (editedNode.value) {
+      console.log({ editedNode })
+      if (editedNode.value.dataset.transientComponent) {
+        return useDictionnary().get(editedNode.value.dataset.transientComponent)
+      }
+    }
+  })
+}
+
+export function useEditedNodeElement(elements: TransientElement[]) {
+  const node = useEditedNode()
+  return computed(() => {
+    if (node.value) {
+      if (node.value.dataset.transientId) {
+        const transientId = getTransientID(node.value)
+        if (transientId) {
+          return findElementById(elements, transientId)
+        }
+      }
+    }
+  })
+}
+
+export function useEditedNodeElementProps(elements: TransientElement[]) {
+  const element = useEditedNodeElement(elements)
+  const schema = useEditedNodeSchema()
+  return computed({
+    get() {
+      if (element.value && schema.value) {
+        return {
+          ...getComponentDefaultPropsValues(schema.value.props),
+          ...(element.value?.attributes || {}),
+        }
+      }
+      return {}
+    },
+    set(value: Record<string, any>) {
+      const wrapped: Record<string, any> = {}
+
+      for (const [key, val] of Object.entries(value)) {
+        if (
+          typeof val === 'object' &&
+          val !== null &&
+          'type' in val &&
+          val.type === 'literal' &&
+          'expression' in val
+        ) {
+          wrapped[key] = val // already wrapped
+        } else {
+          wrapped[key] = { type: 'literal', expression: val }
+        }
+      }
+
+      console.log({ value: wrapped })
+
+      if (element.value) {
+        element.value.attributes ??= {}
+        element.value.attributes = wrapped
+      }
+    },
+  })
 }
 
 export function useEditedNodeBoundingBox() {

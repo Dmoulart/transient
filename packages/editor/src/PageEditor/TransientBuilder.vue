@@ -51,55 +51,55 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
 
     el.addEventListener('focusout', (event) => {
       event.stopPropagation()
-      try {
-        assertIs(someHTMLElement, event.target)
-        const target = event.target
+      assertIs(someHTMLElement, event.target)
+      const target = event.target
 
-        const transientSlot = target.dataset.transientSlot
+      const transientSlot = target.dataset.transientSlot
 
-        // Standard editable element case
-        if (target.dataset.transientEditable === 'true') {
-          const transientID = getTransientID(target)
-          assertIsDefined(transientID)
-          emit('edit', {
-            type: 'edit-element',
-            node: target,
-            transientId: transientID,
-          })
-          useEditedNode().value = undefined
-          return
-        }
-
+      // Standard editable element case
+      if (target.dataset.transientEditable === 'true') {
+        const transientID = getTransientID(target)
+        assertIsDefined(transientID)
+        emit('edit', {
+          type: 'edit-element',
+          node: target,
+          transientId: transientID,
+        })
+      } else if (transientSlot) {
         // Clean up visual "emptiness" in slot zones
-        if (transientSlot) {
-          // Remove redundant <br> and empty text nodes
-          const onlyGarbage = Array.from(target.childNodes).every((node) => {
-            return (
-              (node.nodeType === Node.ELEMENT_NODE && node.nodeName === 'BR') ||
-              (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() === '')
-            )
-          })
+        // Remove redundant <br> and empty text nodes
+        const onlyGarbage = Array.from(target.childNodes).every((node) => {
+          return (
+            (node.nodeType === Node.ELEMENT_NODE && node.nodeName === 'BR') ||
+            (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() === '')
+          )
+        })
 
-          if (onlyGarbage) {
-            target.innerHTML = ''
-            target.dataset.textAddition = 'true'
-          }
-
-          const [slotName, ownerId] = transientSlot.split(':')
-          emit('edit', {
-            type: 'edit-slot',
-            slotName,
-            ownerId,
-            node: target,
-          })
-          useEditedNode().value = undefined
-          return
+        if (onlyGarbage) {
+          target.innerHTML = ''
+          target.dataset.textAddition = 'true'
         }
 
-        useEditedNode().value = undefined
-      } catch (e) {
-        debugger
+        const [slotName, ownerId] = transientSlot.split(':')
+        emit('edit', {
+          type: 'edit-slot',
+          slotName,
+          ownerId,
+          node: target,
+        })
       }
+
+      if (event.relatedTarget instanceof HTMLElement) {
+        debugger
+        const sidebar = document.getElementById('sidebar')
+        if (sidebar) {
+          if (sidebar.contains(event.relatedTarget)) {
+            return
+          }
+        }
+      }
+
+      useEditedNode().value = undefined
     })
   },
 }

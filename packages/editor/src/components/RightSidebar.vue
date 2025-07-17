@@ -75,11 +75,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { ref } from 'vue'
 import ComponentProps from './ComponentProps.vue'
 import type { TransientProps } from 'transient'
-import { useSelectedPrototype, useSchema } from '@/lib/use-prototype'
-
+import { useSchema } from '@/lib/use-prototype'
 // @ts-expect-error : oups no types
 import { JsonViewer } from 'vue3-json-viewer'
 import 'vue3-json-viewer/dist/index.css'
