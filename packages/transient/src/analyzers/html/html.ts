@@ -138,7 +138,6 @@ export function getTextNodeTransientID(textNode: Node) {
   const prev = textNode.previousSibling;
 
   if (prev && prev.nodeType === Node.COMMENT_NODE) {
-    console.log("text node", getCommentNodeTransientID(prev));
     return getCommentNodeTransientID(prev);
   }
 }

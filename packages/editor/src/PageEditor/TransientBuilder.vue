@@ -90,7 +90,6 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
       }
 
       if (event.relatedTarget instanceof HTMLElement) {
-        debugger
         const sidebar = document.getElementById('sidebar')
         if (sidebar) {
           if (sidebar.contains(event.relatedTarget)) {

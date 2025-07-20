@@ -1,7 +1,8 @@
-import { assert } from "../core/assert";
+import { assert, assertIsDefined } from "../core/assert";
 import {
   type TransientComponentSchema,
   type TransientElement,
+  type TransientElementAttributes,
   type TransientProps,
   type TransientType,
   type TransientTypeName,
@@ -20,8 +21,24 @@ export function getComponentDefaultPropsValues(props: TransientProps) {
   for (const prop in props) {
     const defaultValue = props[prop]?.default;
 
-    if (defaultValue) {
+    if (defaultValue !== undefined) {
       data[prop] = defaultValue;
+    }
+  }
+
+  return data;
+}
+
+export function getElementDefaultPropsValues(
+  props: TransientProps
+): TransientElementAttributes {
+  const data: Record<string, any> = {};
+
+  for (const prop in props) {
+    const defaultValue = props[prop]?.default;
+
+    if (defaultValue !== undefined) {
+      data[prop] = { expression: defaultValue, type: "literal" };
     }
   }
 
@@ -211,6 +228,30 @@ export function insertBeforeElement(
     }
   }
   return false;
+}
+
+export function updateElementProp(
+  propName: string,
+  value: any,
+  id: string,
+  elements: TransientElement[]
+): void {
+  const element = findElementById(elements, id);
+
+  assertIsDefined(element, `Element with id ${id} not found`);
+  // only literals are supported for now
+  element.attributes[propName] ??= { type: "literal", expression: "" };
+  element.attributes[propName].expression = value;
+}
+
+export function getElementProps(
+  schema: TransientComponentSchema,
+  element: TransientElement
+): TransientElementAttributes {
+  return {
+    ...getElementDefaultPropsValues(schema.props),
+    ...element.attributes,
+  };
 }
 
 export function createTextElement(text: string): TransientElement {

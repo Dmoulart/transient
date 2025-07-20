@@ -1,4 +1,4 @@
-import type { TransientComponentSchema } from 'transient/src/transient/definition'
+import type { TransientComponentSchema, TransientProp } from 'transient/src/transient/definition'
 import {
   htmlChildrenToTransientElements,
   htmlElementToTransientElement,
@@ -10,6 +10,7 @@ import {
   removeElement,
   replaceElement,
   replaceElementSlot,
+  updateElementProp,
 } from 'transient/src/transient/ast'
 import type { TransientElement } from 'transient/src/transient/definition'
 
@@ -19,6 +20,7 @@ export type Edition =
   | AddComponentEdition
   | AppendComponentEdition
   | DeleteElementEdition
+  | UpdateElementPropEdition
 
 export type SlotEdition = {
   type: 'edit-slot'
@@ -51,6 +53,14 @@ export type DeleteElementEdition = {
   transientId: string
 }
 
+export type UpdateElementPropEdition = {
+  type: 'update-prop'
+  prop: TransientProp
+  propName: string
+  value: any
+  transientId: string
+}
+
 export type ComponentSlotEditionInput = Omit<SlotEdition, 'node'>
 export type ElementEditionInput = Omit<ElementEdition, 'node'>
 
@@ -60,6 +70,7 @@ export type EditionInput =
   | AddComponentEdition
   | DeleteElementEdition
   | AppendComponentEdition
+  | UpdateElementPropEdition
 
 export function applyEdition(edition: Edition, elements: TransientElement[]) {
   console.log({ edition })
@@ -105,6 +116,12 @@ export function applyEdition(edition: Edition, elements: TransientElement[]) {
 
     case 'delete-element': {
       removeElement(edition.transientId, elements)
+
+      break
+    }
+
+    case 'update-prop': {
+      updateElementProp(edition.propName, edition.value, edition.transientId, elements)
 
       break
     }

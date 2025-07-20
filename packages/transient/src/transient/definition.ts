@@ -2,11 +2,13 @@ export type TransientComponentDictionnary = {
   [tag: string]: TransientComponentSchema;
 };
 
+export type TransientElementAttributes = Record<string, TransientAttribute>;
+export type TransientAttribute = BindingInfo;
 export type TransientElement = {
   id: string;
   tag: string;
   isComponent: boolean;
-  attributes: Record<string, BindingInfo>;
+  attributes: TransientElementAttributes;
   slots?: Record<string, TransientElement[]>;
 };
 

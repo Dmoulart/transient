@@ -17,34 +17,6 @@ export function isNodeEditable(node: HTMLElement) {
   return node.dataset.transientId || node.dataset.transientSlot
 }
 
-// export function detectElementEdition(e: Event) {
-//   const element = e.target
-//   if (element instanceof HTMLElement) {
-//     if (isNodeEditable(element)) {
-//       editedNode.value = element
-//       // const tid = element.closest(`[contenteditable="true"`)
-//       // console.log({ tid })
-//     }
-//   }
-// }
-
-// useEventListener(document, 'focusin', detectElementEdition)
-
-// useEventListener(document, 'click', (e) => {
-//   const element = e.target
-//   if (element instanceof HTMLElement) {
-//     // element.tabIndex = 0
-//     // element.focus()
-//     // if (isNodeEditable(element)) {
-//     //   editedNode.value = element
-//     // }
-//   }
-// })
-
-// useEventListener(document, 'focusout', (e) => {
-//   editedNode.value = undefined
-// })
-
 export function useEditedNode() {
   return editedNode
 }
@@ -52,7 +24,6 @@ export function useEditedNode() {
 export function useEditedNodeSchema() {
   return computed(() => {
     if (editedNode.value) {
-      console.log({ editedNode })
       if (editedNode.value.dataset.transientComponent) {
         return useDictionnary().get(editedNode.value.dataset.transientComponent)
       }
@@ -77,6 +48,7 @@ export function useEditedNodeElement(elements: TransientElement[]) {
 export function useEditedNodeElementProps(elements: TransientElement[]) {
   const element = useEditedNodeElement(elements)
   const schema = useEditedNodeSchema()
+
   return computed({
     get() {
       if (element.value && schema.value) {
@@ -85,6 +57,7 @@ export function useEditedNodeElementProps(elements: TransientElement[]) {
           ...(element.value?.attributes || {}),
         }
       }
+
       return {}
     },
     set(value: Record<string, any>) {
@@ -103,8 +76,6 @@ export function useEditedNodeElementProps(elements: TransientElement[]) {
           wrapped[key] = { type: 'literal', expression: val }
         }
       }
-
-      console.log({ value: wrapped })
 
       if (element.value) {
         element.value.attributes ??= {}

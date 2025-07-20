@@ -71,8 +71,23 @@
   <Button @click="loadFromLocalStorage">Load</Button>
   <div id="sidebar">
     <ElementProps
-      :component-props="editedNodeSchema?.props ?? dictionnary.get('Button').props"
-      v-model="editedElementProps"
+      v-if="editedNodeSchema && editedElement"
+      :component-props="editedNodeSchema.props"
+      :values="getElementProps(editedNodeSchema, editedElement)"
+      @update="
+        ({ prop, value, propName }) => {
+          applyEdition(
+            {
+              type: 'update-prop',
+              propName,
+              prop,
+              value,
+              transientId: editedElement!.id,
+            },
+            contents.elements,
+          )
+        }
+      "
     />
   </div>
   <Sidebar @click.prevent id="sidebar"> </Sidebar>
@@ -90,19 +105,17 @@ import {
   useEditedNode,
   useEditedNodeBoundingBox,
   useEditedNodeElement,
-  useEditedNodeElementProps,
   useEditedNodeSchema,
 } from '@/lib/use-edition'
 import RichTextEditor from './RichTextEditor.vue'
 import { useWindowSize } from '@vueuse/core'
 import ComponentPanel from './ComponentPanel.vue'
-import TransientBuilder2 from './TransientBuilder.vue'
 import { applyEdition } from '@/editor/edition'
 import TransientBuilder from './TransientBuilder.vue'
-import RightSidebar from '@/components/RightSidebar.vue'
 import Sidebar from './Sidebar.vue'
-import ComponentProps from '@/components/ComponentProps.vue'
 import ElementProps from './ElementProps.vue'
+import { watch } from 'vue'
+import { getElementProps } from 'transient/src/transient/ast'
 
 const dictionnary = useDictionnary()
 
@@ -113,7 +126,7 @@ const editedNode = useEditedNode()
 const editedElement = useEditedNodeElement(contents.value.elements)
 const editedNodeSchema = useEditedNodeSchema()
 const editedNodeBoundingBox = useEditedNodeBoundingBox()
-const editedElementProps = useEditedNodeElementProps(contents.value.elements)
+
 const windowSize = useWindowSize()
 
 const componentPanel = useComponentPanel()

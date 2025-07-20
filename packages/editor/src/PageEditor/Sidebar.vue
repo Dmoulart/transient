@@ -9,16 +9,11 @@
   </aside>
 </template>
 
-<script setup>
-import { ref, defineProps, defineEmits } from 'vue'
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-vue-next'
-
-const props = defineProps()
+<script setup lang="ts">
+import { ref } from 'vue'
+defineProps<{}>()
 
 const isCollapsed = ref(false)
-const toggleCollapse = () => {
-  isCollapsed.value = !isCollapsed.value
-}
 </script>
 
 <style>
