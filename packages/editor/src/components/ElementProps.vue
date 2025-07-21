@@ -12,8 +12,8 @@
 <script setup lang="ts">
 import type { TransientProps } from 'transient'
 import ElementProp from './ElementProp.vue'
-import type { TransientProp } from 'transient/src/transient'
-import type { TransientElementAttributes } from 'transient/src/transient/definition'
+import type { TransientProp } from 'transient'
+import type { TransientElementAttributes } from 'transient'
 
 const props = defineProps<{ componentProps: TransientProps; values: TransientElementAttributes }>()
 const emit = defineEmits<{

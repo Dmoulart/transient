@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { useDictionnary } from '@/lib/use-dictionnary'
 import EditorComponent from './EditorComponent.vue'
-import type { TransientComponentSchema } from 'transient/src/transient/definition'
+import type { TransientComponentSchema } from 'transient'
 
 const registry = useDictionnary()
 const emit = defineEmits<{

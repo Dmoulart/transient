@@ -7,8 +7,8 @@
 </template>
 <script setup lang="ts">
 import { useDictionnary } from '@/lib/use-dictionnary'
-import { getComponentDefaultPropsValues } from 'transient/src/transient/ast'
-import type { TransientComponentSchema } from 'transient/src/transient/definition'
+import { getComponentDefaultPropsValues } from 'transient'
+import type { TransientComponentSchema } from 'transient'
 import { computed, defineAsyncComponent } from 'vue'
 
 const props = withDefaults(

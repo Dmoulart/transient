@@ -1,12 +1,11 @@
 <script lang="ts">
-import type { TransientElement } from 'transient/src/transient/definition'
-import { createCommentVNode, type PropType } from 'vue'
+import { createCommentVNode } from 'vue'
 export default {
   name: 'SlotSpy',
   props: {
     ownerId: String,
     slotName: String,
-    editable: Boolean
+    editable: Boolean,
   },
   setup(props) {
     return () => createCommentVNode('transient-slot-spy')

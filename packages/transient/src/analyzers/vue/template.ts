@@ -16,8 +16,7 @@ import type {
   TransientElement,
 } from "../../transient/definition";
 import crypto from "crypto";
-import { assertIs, someString } from "../../core/assert";
-let id = 0;
+import { assertIs, someString } from "../../core/index.js";
 
 export function analyzeTemplateElements(
   componentPath: string,

@@ -1,7 +1,2 @@
-export {
-  type TranslationConfig,
-  type TranslatorConfig,
-  defineTranslator,
-} from "./translator.js";
-
-export { defineStrapiTranslator } from "./strapi/strapi.js";
+export * from "./translator.js";
+export * from "./strapi/strapi.js";

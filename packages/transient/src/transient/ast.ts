@@ -1,4 +1,4 @@
-import { assert, assertIsDefined } from "../core/assert";
+import { assert, assertIsDefined } from "../core/assert.js";
 import {
   type TransientComponentSchema,
   type TransientElement,
@@ -6,7 +6,7 @@ import {
   type TransientProps,
   type TransientType,
   type TransientTypeName,
-} from "./definition";
+} from "./definition.js";
 export function getTypeKind(type: TransientType): TransientTypeName {
   return typeof type === "string" ? type : type.kind;
 }

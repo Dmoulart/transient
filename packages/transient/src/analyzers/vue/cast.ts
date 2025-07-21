@@ -1,5 +1,9 @@
 import { type PropertyMeta, type PropertyMetaSchema } from "vue-component-meta";
+import type { TransientProp, TransientType } from "../../transient/index.js";
 import {
+  isEscapedString,
+  isNumeric,
+  unescapeString,
   assert,
   assertIs,
   assertIsArrayOf,
@@ -7,11 +11,9 @@ import {
   somePropertyMetaSchema,
   someRecord,
   someString,
-} from "../../core/assert";
-import type { TransientProp, TransientType } from "../../transient/definition";
-import { isEscapedString, isNumeric, unescapeString } from "../../core/string";
-import { logger } from "../../log/logger";
-import { getTypeKind } from "../../transient";
+} from "../../core/index.js";
+import { logger } from "../../log/index.js";
+import { getTypeKind } from "../../transient/index.js";
 
 export type TypeAnalysis = {
   type: TransientType;

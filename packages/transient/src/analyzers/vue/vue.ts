@@ -1,16 +1,14 @@
 import { createChecker, type ComponentMeta } from "vue-component-meta";
-import { castDefaultValue, castPropType } from "./cast";
-import { defineAnalyzer, type AnalyzerConfig } from "../analyzer";
+import { castDefaultValue, castPropType } from "./cast.js";
+import { defineAnalyzer, type AnalyzerConfig } from "../analyzer.js";
 import { resolve } from "path";
 import type {
   TransientComponentSchema,
-  TransientElement,
   TransientProps,
   TransientSlots,
-} from "../../transient/definition";
-import { logger } from "../../log/logger";
-import { analyzeTemplateElements } from "./template";
-import { assertIs, someString } from "../../core/assert";
+} from "../../transient/definition.js";
+import { logger } from "../../log/logger.js";
+import { analyzeTemplateElements } from "./template.js";
 export type VueAnalyzerOptions = Pick<
   AnalyzerConfig,
   "tsConfigPath" | "dest" | "glob"
@@ -72,29 +70,6 @@ function describeComponent(
   }
 
   const template = analyzeTemplateElements(src, props);
-
-  // if (slots && template) {
-  //   function assignSlotParents(elements: TransientElement[]) {
-  //     for (const el of elements) {
-  //       if (el.children) {
-  //         for (const child of el.children) {
-  //           if (child.tag === "slot") {
-  //             const name = child.attributes?.name?.expression ?? "default";
-
-  //             assertIs(someString, name);
-
-  //             if (slots![name]) {
-  //               slots![name].parentId = el.id;
-  //             }
-  //           }
-  //         }
-  //         assignSlotParents(el.children);
-  //       }
-  //     }
-  //   }
-
-  //   assignSlotParents(template.elements);
-  // }
 
   return {
     tag,

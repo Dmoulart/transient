@@ -113,10 +113,8 @@ import { useWindowSize } from '@vueuse/core'
 import ComponentPanel from './ComponentPanel.vue'
 import { applyEdition } from '@/editor/edition'
 import TransientBuilder from './TransientBuilder.vue'
-import Sidebar from './Sidebar.vue'
 import ElementProps from './ElementProps.vue'
-import { watch } from 'vue'
-import { getElementProps } from 'transient/src/transient/ast'
+import { getElementProps } from 'transient'
 
 const dictionnary = useDictionnary()
 

@@ -7,8 +7,7 @@
 </template>
 <script setup lang="ts">
 import EditorComponents from './EditorComponents.vue'
-import { useComponentPanel } from '@/lib/use-edition'
-import type { TransientComponentSchema } from 'transient/src/transient/definition'
+import type { TransientComponentSchema } from 'transient'
 
 const emit = defineEmits<{
   (

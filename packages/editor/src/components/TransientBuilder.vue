@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { onMounted, shallowRef, computed, type Directive, watch, ref, onUpdated } from 'vue'
-import type { TransientElement } from 'transient/src/transient/definition'
+import { onMounted, shallowRef, computed, type Directive } from 'vue'
+import type { TransientElement } from 'transient'
 import { ComponentDictionnary, loadAllComponents } from '@/lib/use-dictionnary'
-import { isTextZone } from 'transient/src/transient/ast'
+import { isTextZone } from 'transient'
 import SlotSpy from './SlotSpy.vue'
 import type { ComponentSlotEditionInput, Edition, ElementEditionInput } from '@/editor/edition'
 import { useEditedNode } from '@/lib/use-edition'
-import { assertIs, assertIsDefined, someHTMLElement } from 'transient/src/core/assert'
+import { assertIs, assertIsDefined, someHTMLElement } from 'transient'
 import Comment from './Comment.vue'
-import { getTransientID } from 'transient/src/analyzers/html/html'
+import { getTransientID } from 'transient'
 
 const props = defineProps<{
   element: TransientElement

@@ -1,7 +1,5 @@
-// import { ref, readonly, onMounted, onUnmounted } from 'vue'
-
 import { useEventListener } from '@vueuse/core'
-import { ref, triggerRef, type Ref } from 'vue'
+import { ref, triggerRef } from 'vue'
 
 export function useSelection() {
   const selection = ref<Selection | null>(null)

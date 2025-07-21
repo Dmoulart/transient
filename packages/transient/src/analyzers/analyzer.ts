@@ -1,12 +1,12 @@
-import { join, parse, resolve } from "path";
+import { resolve } from "path";
 import fastGlob from "fast-glob";
 import type { Pattern } from "fast-glob";
-import { existsSync, mkdirSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import type {
   TransientComponentDictionnary,
   TransientComponentSchema,
 } from "../transient/definition";
-import { logger } from "../log/logger";
+import { logger } from "../log/logger.js";
 
 const { sync } = fastGlob;
 

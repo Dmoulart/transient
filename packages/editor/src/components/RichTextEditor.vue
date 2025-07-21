@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useSelection } from '@/lib/use-selection'
-import { assert, assertIsDefined } from 'transient/src/core/assert'
+import { assert, assertIsDefined } from 'transient'
 import { computed, ref, type ComputedRef, type Ref } from 'vue'
 import { useComponentPanel, useEditedNode } from '@/lib/use-edition'
-import { getTransientID } from 'transient/src/analyzers/html/html'
-import { applyEdition, type DeleteElementEdition } from '@/editor/edition'
+import { getTransientID } from 'transient'
+import { type DeleteElementEdition } from '@/editor/edition'
 
 const selection = useSelection()
 

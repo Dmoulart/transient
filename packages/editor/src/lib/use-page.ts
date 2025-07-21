@@ -1,4 +1,4 @@
-import type { TransientTemplate } from 'transient/src/transient/definition'
+import type { TransientTemplate } from 'transient'
 import { ref } from 'vue'
 
 const STORAGE_KEY = 'page-schema'

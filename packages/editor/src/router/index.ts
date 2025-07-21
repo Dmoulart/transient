@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Editor from '../views/Editor.vue'
-import PageEditor from '@/PageEditor/PageEditor.vue'
-import { Edit } from 'lucide-vue-next'
+import PageEditor from '@/components/PageEditor.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,11 +8,6 @@ const router = createRouter({
       path: '/',
       name: 'page-editor',
       component: PageEditor,
-    },
-    {
-      path: '/component-editor',
-      name: 'component-editor',
-      component: Edit,
     },
   ],
 })

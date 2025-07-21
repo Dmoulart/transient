@@ -1,15 +1,10 @@
 import { join, parse, resolve } from "path";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
-import type { TransientProp, TransientProps } from "../../transient/definition";
-import { getTypeKind } from "../../transient/ast";
-import {
-  assert,
-  assertIs,
-  assertIsDefined,
-  someRecord,
-} from "../../core/assert";
-import { logger } from "../../log/logger";
-import { defineTranslator, type TranslatorConfig } from "../translator";
+import type { TransientProp, TransientProps } from "../../transient/index.js";
+import { getTypeKind } from "../../transient/index.js";
+import { assertIs, assertIsDefined, someRecord } from "../../core/index.js";
+import { logger } from "../../log/index.js";
+import { defineTranslator, type TranslatorConfig } from "../translator.js";
 
 type StrapiComponent = {
   collectionName: string;

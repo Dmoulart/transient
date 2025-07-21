@@ -1,8 +1,4 @@
-import type {
-  TransientComponentDictionnary,
-  TransientComponentSchema,
-} from 'transient/src/transient'
-import { ref, shallowRef } from 'vue'
+import type { TransientComponentDictionnary, TransientComponentSchema } from 'transient'
 import schemas from '@/assets/schemas/__schemas__.json'
 
 export class ComponentDictionnary {

@@ -1,8 +1,5 @@
-import type { TransientComponentSchema, TransientProp } from 'transient/src/transient/definition'
-import {
-  htmlChildrenToTransientElements,
-  htmlElementToTransientElement,
-} from 'transient/src/analyzers/html/html'
+import type { TransientComponentSchema, TransientProp } from 'transient'
+import { htmlChildrenToTransientElements, htmlElementToTransientElement } from 'transient'
 import {
   appendElement,
   insertAfterElement,
@@ -11,8 +8,8 @@ import {
   replaceElement,
   replaceElementSlot,
   updateElementProp,
-} from 'transient/src/transient/ast'
-import type { TransientElement } from 'transient/src/transient/definition'
+} from 'transient'
+import type { TransientElement } from 'transient'
 
 export type Edition =
   | SlotEdition

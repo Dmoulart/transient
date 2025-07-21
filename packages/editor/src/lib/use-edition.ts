@@ -1,13 +1,7 @@
-import { getTransientID } from 'transient/src/analyzers/html/html'
-import { assertIsDefined } from 'transient/src/core/assert'
-import type {
-  TransientComponentSchema,
-  TransientElement,
-  TransientTemplate,
-} from 'transient/src/transient/definition'
-import { computed, readonly, ref, watch, type App, type Ref } from 'vue'
+import type { TransientComponentSchema, TransientElement, TransientTemplate } from 'transient'
+import { computed, readonly, ref, watch, type Ref } from 'vue'
 import { useDictionnary } from './use-dictionnary'
-import { findElementById } from 'transient/src/transient/ast'
+import { assertIsDefined, findElementById, getTransientID } from 'transient'
 
 const editedNode = ref<HTMLElement | undefined>()
 

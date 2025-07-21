@@ -1,5 +1,5 @@
-import { assertIsDefined } from "../../core/assert";
-import type { TransientElement, BindingInfo } from "../../transient/definition";
+import { assertIsDefined } from "../../core/index.js";
+import type { TransientElement, BindingInfo } from "../../transient/index.js";
 
 export function htmlChildrenToTransientElements(node: Element) {
   const elements: TransientElement[] = [];
