@@ -1,7 +1,7 @@
 import { createChecker, type ComponentMeta } from "vue-component-meta";
 import { castDefaultValue, castPropType } from "./cast.js";
 import { defineAnalyzer, type AnalyzerConfig } from "../analyzer.js";
-import { resolve } from "path";
+import { dirname, resolve } from "path";
 import type {
   TransientComponentSchema,
   TransientProps,
@@ -9,10 +9,15 @@ import type {
 } from "../../transient/definition.js";
 import { logger } from "../../log/logger.js";
 import { analyzeTemplateElements } from "./template.js";
+import { fileURLToPath } from "url";
+
 export type VueAnalyzerOptions = Pick<
   AnalyzerConfig,
   "tsConfigPath" | "dest" | "glob"
 >;
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 export function defineVueAnalyzer(options: VueAnalyzerOptions) {
   const checker = createChecker(options.tsConfigPath, {
     forceUseTs: true,

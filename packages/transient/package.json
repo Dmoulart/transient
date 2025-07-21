@@ -18,5 +18,9 @@
   "scripts": {
     "build": "tsc --outDir dist",
     "build:watch": "tsc --watch index.ts --outDir dist --declaration"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./server": "./dist/server.js"
   }
 }

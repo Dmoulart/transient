@@ -1,8 +1,6 @@
 import { Plugin } from 'vite'
 import { resolve } from 'path'
-import { defineVueAnalyzer } from 'transient'
-import { writeFileSync } from 'fs'
-import { VueAnalyzerOptions } from 'transient'
+import { defineVueAnalyzer, type VueAnalyzerOptions } from 'transient/server'
 
 function generateSchemas(options: VueAnalyzerOptions) {
   console.log('Génération des schémas des components Vue…')

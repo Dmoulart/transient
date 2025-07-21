@@ -26,6 +26,7 @@ declare module 'vue' {
     UFormField: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/FormField.vue')['default']
     UInput: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/Input.vue')['default']
     UInputNumber: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/InputNumber.vue')['default']
+    ULinkBase: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/LinkBase.vue')['default']
     USelectMenu: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/SelectMenu.vue')['default']
     USwitch: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/Switch.vue')['default']
   }
