@@ -56,17 +56,6 @@
     />
   </Suspense>
 
-  <JsonViewer
-    v-if="contents"
-    :value="contents"
-    copyable
-    boxed
-    sort
-    expanded
-    :expanded-depth="5"
-    theme="dark"
-  />
-
   <Button @click="saveToLocalStorage">Save</Button>
   <Button @click="loadFromLocalStorage">Load</Button>
   <div id="sidebar">
@@ -96,9 +85,6 @@
 
 <script setup lang="ts">
 import { useDictionnary } from '@/lib/use-dictionnary'
-// @ts-expect-error : oups no types
-import { JsonViewer } from 'vue3-json-viewer'
-import 'vue3-json-viewer/dist/index.css'
 import Button from '@/samples/Button.vue'
 import { usePage } from '@/lib/use-page'
 import {
