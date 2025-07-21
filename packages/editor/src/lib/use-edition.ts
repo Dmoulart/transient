@@ -1,11 +1,13 @@
-import { useEventListener } from '@vueuse/core'
-import { DiffDOM } from 'diff-dom'
-import { getTransientID, htmlElementToTransientElement } from 'transient/src/analyzers/html/html'
+import { getTransientID } from 'transient/src/analyzers/html/html'
 import { assertIsDefined } from 'transient/src/core/assert'
-import type { TransientComponentSchema, TransientElement } from 'transient/src/transient/definition'
-import { computed, readonly, ref, watch, type App } from 'vue'
+import type {
+  TransientComponentSchema,
+  TransientElement,
+  TransientTemplate,
+} from 'transient/src/transient/definition'
+import { computed, readonly, ref, watch, type App, type Ref } from 'vue'
 import { useDictionnary } from './use-dictionnary'
-import { findElementById, getComponentDefaultPropsValues } from 'transient/src/transient/ast'
+import { findElementById } from 'transient/src/transient/ast'
 
 const editedNode = ref<HTMLElement | undefined>()
 
@@ -31,57 +33,19 @@ export function useEditedNodeSchema() {
   })
 }
 
-export function useEditedNodeElement(elements: TransientElement[]) {
+export function useEditedNodeElement(template: Ref<TransientTemplate>) {
   const node = useEditedNode()
   return computed(() => {
     if (node.value) {
       if (node.value.dataset.transientId) {
         const transientId = getTransientID(node.value)
+
         if (transientId) {
-          return findElementById(elements, transientId)
+          return findElementById(template.value.elements, transientId)
         }
       }
     }
-  })
-}
-
-export function useEditedNodeElementProps(elements: TransientElement[]) {
-  const element = useEditedNodeElement(elements)
-  const schema = useEditedNodeSchema()
-
-  return computed({
-    get() {
-      if (element.value && schema.value) {
-        return {
-          ...getComponentDefaultPropsValues(schema.value.props),
-          ...(element.value?.attributes || {}),
-        }
-      }
-
-      return {}
-    },
-    set(value: Record<string, any>) {
-      const wrapped: Record<string, any> = {}
-
-      for (const [key, val] of Object.entries(value)) {
-        if (
-          typeof val === 'object' &&
-          val !== null &&
-          'type' in val &&
-          val.type === 'literal' &&
-          'expression' in val
-        ) {
-          wrapped[key] = val // already wrapped
-        } else {
-          wrapped[key] = { type: 'literal', expression: val }
-        }
-      }
-
-      if (element.value) {
-        element.value.attributes ??= {}
-        element.value.attributes = wrapped
-      }
-    },
+    return undefined
   })
 }
 
@@ -103,8 +67,6 @@ export function useEditedNodeBoundingBox() {
 }
 
 type OnEditCallback = (node: Node) => void
-
-const dd = new DiffDOM()
 
 export function useEdition() {
   const cbs = {

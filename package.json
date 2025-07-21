@@ -6,6 +6,10 @@
     "playground"
   ],
   "scripts": {
+    "dev": "bun run --cwd packages/editor dev",
+    "build": "bun run build:transient && bun run build:editor",
+    "build:transient": "bun run --cwd packages/transient build",
+    "build:editor": "bun run --cwd packages/editor build",
     "test": "bun test"
   }
 }

@@ -12,10 +12,10 @@ export function usePage(template: TransientTemplate) {
   }
 
   function loadFromLocalStorage() {
-    const item = localStorage.getItem(STORAGE_KEY)
-    if (item) {
-      contents.value = JSON.parse(item)
-      console.log('Chargé depuis le localStorage.')
+    const savedContents = localStorage.getItem(STORAGE_KEY)
+    if (savedContents) {
+      contents.value = JSON.parse(savedContents)
+      console.log('Chargé depuis le localStorage.', contents.value)
     } else {
       console.log('Aucun élément dans le localStorage.')
     }

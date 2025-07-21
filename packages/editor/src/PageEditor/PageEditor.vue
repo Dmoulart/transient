@@ -70,6 +70,7 @@
   <Button @click="saveToLocalStorage">Save</Button>
   <Button @click="loadFromLocalStorage">Load</Button>
   <div id="sidebar">
+    {{ editedElement ?? editedNode?.dataset.transientId }}
     <ElementProps
       v-if="editedNodeSchema && editedElement"
       :component-props="editedNodeSchema.props"
@@ -90,7 +91,7 @@
       "
     />
   </div>
-  <Sidebar @click.prevent id="sidebar"> </Sidebar>
+  <!-- <Sidebar @click.prevent id="sidebar"> </Sidebar> -->
 </template>
 
 <script setup lang="ts">
@@ -120,10 +121,11 @@ import { getElementProps } from 'transient/src/transient/ast'
 const dictionnary = useDictionnary()
 
 const component = dictionnary.get('HomePage')
+
 const { contents, saveToLocalStorage, loadFromLocalStorage } = usePage(component.template!)
 
 const editedNode = useEditedNode()
-const editedElement = useEditedNodeElement(contents.value.elements)
+const editedElement = useEditedNodeElement(contents)
 const editedNodeSchema = useEditedNodeSchema()
 const editedNodeBoundingBox = useEditedNodeBoundingBox()
 

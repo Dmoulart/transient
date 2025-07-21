@@ -37,9 +37,7 @@ export function getElementDefaultPropsValues(
   for (const prop in props) {
     const defaultValue = props[prop]?.default;
 
-    if (defaultValue !== undefined) {
-      data[prop] = { expression: defaultValue, type: "literal" };
-    }
+    data[prop] = { expression: defaultValue, type: "literal" };
   }
 
   return data;
