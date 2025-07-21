@@ -5,8 +5,9 @@ import { defineVueAnalyzer, type VueAnalyzerOptions } from 'transient/server'
 function generateSchemas(options: VueAnalyzerOptions) {
   console.log('Génération des schémas des components Vue…')
 
-  const analyzer = defineVueAnalyzer(options)
-  const schemas = analyzer({
+  const analyze = defineVueAnalyzer(options)
+
+  analyze({
     dir: resolve(process.cwd(), '.'),
   })
 
