@@ -102,15 +102,6 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
     })
   },
 }
-
-const withoutKeys = <T extends Record<string, any>>(object: T, keysToRemove: (keyof T)[]) => {
-  const filteredObject = { ...object }
-  for (const key of keysToRemove) {
-    delete filteredObject[key]
-  }
-
-  return filteredObject
-}
 </script>
 <template>
   <component
