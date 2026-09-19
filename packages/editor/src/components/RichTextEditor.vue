@@ -2,7 +2,7 @@
 import { useSelection } from '@/lib/use-selection'
 import { assert, assertIsDefined } from 'transient'
 import { computed, ref, type ComputedRef, type Ref } from 'vue'
-import { useComponentPanel, useEditedNode } from '@/lib/use-edition'
+import { useComponentPanel } from '@/lib/use-edition'
 import { getTransientID } from 'transient'
 import { type DeleteElementEdition } from '@/editor/edition'
 
@@ -10,6 +10,7 @@ const selection = useSelection()
 
 type Styles = Record<string, string>
 
+const props = defineProps<{ node: HTMLElement }>()
 const emit = defineEmits<{
   delete: [deletion: DeleteElementEdition]
   'insert-component': [data: { targetNodeID: string }]
@@ -358,9 +359,7 @@ const toolbarItems: ToolbarItem[] = [
     svg: ' <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" />',
     selected: useComponentPanel().isOpen,
     toggle: () => {
-      const editedNode = useEditedNode()
-      assertIsDefined(editedNode.value, 'Edited node must be defined to open component panel')
-      const targetNodeID = getTransientID(editedNode.value)
+      const targetNodeID = getTransientID(props.node)
       assertIsDefined(targetNodeID)
       emit('insert-component', { targetNodeID })
       // panel.targetNodeID.value = getTransientID(editedNode.value)
@@ -380,13 +379,10 @@ const toolbarItems: ToolbarItem[] = [
     svg: '<path d="M6 20a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zm13-13h-3.5l-1-1h-5l-1 1H5v2h14z"/>',
     selected: ref(false),
     condition() {
-      const editedNode = useEditedNode()
-      return Boolean(editedNode.value && getTransientID(editedNode.value))
+      return Boolean(getTransientID(props.node))
     },
     toggle: () => {
-      const editedNode = useEditedNode()
-      assertIsDefined(editedNode.value)
-      const transientID = getTransientID(editedNode.value)
+      const transientID = getTransientID(props.node)
       assertIsDefined(transientID)
       emit('delete', { type: 'delete-element', transientId: transientID })
       // TODO: implement logic

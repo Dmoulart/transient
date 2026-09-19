@@ -1,53 +1,25 @@
-import type { TransientComponentSchema, TransientElement, TransientTemplate } from 'transient'
-import { computed, readonly, ref, watch, type Ref } from 'vue'
-import { useDictionnary } from './use-dictionnary'
+import type { TransientComponentSchema, TransientTemplate } from 'transient'
+import { computed, readonly, ref, shallowRef, type Ref } from 'vue'
+import { ComponentDictionnary } from './use-dictionnary'
 import { assertIsDefined, findElementById, getTransientID } from 'transient'
 
-const editedNode = ref<HTMLElement | undefined>()
+export function useNode(template: Ref<TransientTemplate>, dictionnary: ComponentDictionnary) {
+  const node = shallowRef<HTMLElement | null>(null)
 
-export function isElementEditable(element: TransientElement) {
-  return true
-}
+  const editable = computed(() => {
+    return node.value && (node.value.dataset.transientId || node.value.dataset.transientSlot)
+  })
 
-export function isNodeEditable(node: HTMLElement) {
-  return node.dataset.transientId || node.dataset.transientSlot
-}
-
-export function useEditedNode() {
-  return editedNode
-}
-
-export function useEditedNodeSchema() {
-  return computed(() => {
-    if (editedNode.value) {
-      if (editedNode.value.dataset.transientComponent) {
-        return useDictionnary().get(editedNode.value.dataset.transientComponent)
-      }
+  const schema = computed(() => {
+    if (node.value?.dataset?.transientComponent) {
+      return dictionnary.get(node.value.dataset.transientComponent)
     }
     return null
   })
-}
 
-export function useEditedNodeElement(template: Ref<TransientTemplate>) {
-  const node = useEditedNode()
-  return computed(() => {
+  const bbox = computed(() => {
     if (node.value) {
-      if (node.value.dataset.transientId) {
-        const transientId = getTransientID(node.value)
-
-        if (transientId) {
-          return findElementById(template.value.elements, transientId)
-        }
-      }
-    }
-    return undefined
-  })
-}
-
-export function useEditedNodeBoundingBox() {
-  return computed(() => {
-    if (editedNode.value) {
-      const rect = editedNode.value.getBoundingClientRect()
+      const rect = node.value.getBoundingClientRect()
       return {
         top: rect.top,
         left: rect.left,
@@ -57,35 +29,22 @@ export function useEditedNodeBoundingBox() {
         height: rect.height,
       }
     }
-    return undefined
+    return null
   })
-}
 
-type OnEditCallback = (node: Node) => void
+  const element = computed(() => {
+    if (node.value?.dataset?.transientId) {
+      const transientId = getTransientID(node.value)
 
-export function useEdition() {
-  const cbs = {
-    onEditStart: [] as OnEditCallback[],
-    onEditEnd: [] as OnEditCallback[],
-  }
-
-  watch(editedNode, (newNode, oldNode) => {
-    if (newNode !== undefined) {
-      cbs.onEditStart.forEach((cb) => cb(newNode))
+      if (transientId) {
+        return findElementById(template.value.elements, transientId)
+      }
     }
 
-    if (oldNode !== undefined) {
-      cbs.onEditEnd.forEach((cb) => cb(oldNode))
-    }
+    return null
   })
-  return {
-    onEditStart(cb: OnEditCallback) {
-      cbs.onEditStart.push(cb)
-    },
-    onEditEnd(cb: OnEditCallback) {
-      cbs.onEditEnd.push(cb)
-    },
-  }
+
+  return { node, element, editable, schema, bbox }
 }
 
 const componentPanelIsOpen = ref(false)
@@ -112,8 +71,4 @@ export function useComponentPanel() {
       onSelect.value(componentSchema)
     },
   }
-}
-
-export function isSidebarOpen() {
-  return computed(() => useEditedNodeSchema().value)
 }

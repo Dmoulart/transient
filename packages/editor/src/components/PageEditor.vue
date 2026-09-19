@@ -9,20 +9,21 @@
     "
   />
   <RichTextEditor
-    v-if="editedNode"
+    v-if="editedNode.node.value"
+    :node="editedNode.node.value"
     :style="{
-      '--richtext-editor-bottom': editedNodeBoundingBox
-        ? `${windowSize.height.value - editedNodeBoundingBox.top}px`
+      '--richtext-editor-bottom': editedNode.bbox.value
+        ? `${windowSize.height.value - editedNode.bbox.value.top}px`
         : undefined,
-      '--richtext-editor-left': editedNodeBoundingBox
-        ? `${editedNodeBoundingBox?.left ?? 0}px`
+      '--richtext-editor-left': editedNode.bbox.value
+        ? `${editedNode.bbox.value.left ?? 0}px`
         : undefined,
     }"
     class="text-editor"
     @delete="
       (edition) => {
         applyEdition(edition, contents.elements)
-        editedNode = undefined
+        editedNode.node.value = null
       }
     "
     @insert-component="
@@ -49,6 +50,11 @@
       :dictionnary="dictionnary"
       :key="element.id"
       :element="element"
+      @select="
+        (selectedNode) => {
+          editedNode.node.value = selectedNode
+        }
+      "
       @edit="
         (edition) => {
           applyEdition(edition, contents.elements)
@@ -59,12 +65,12 @@
 
   <Button @click="saveToLocalStorage">Save</Button>
   <Button @click="loadFromLocalStorage">Load</Button>
-  {{ editedElement }}
+  {{ editedNode.element.value }}
   <TSidebar :open="sidebarIsOpen" id="sidebar">
     <ElementProps
-      v-if="sidebarIsOpen"
-      :component-props="editedNodeSchema!.props"
-      :values="getElementProps(editedNodeSchema!, editedElement!)"
+      v-if="editedNode.schema.value && sidebarIsOpen"
+      :component-props="editedNode.schema.value?.props"
+      :values="getElementProps(editedNode.schema.value, editedNode.element.value!)"
       @update="
         ({ prop, value, propName }) => {
           applyEdition(
@@ -73,7 +79,7 @@
               propName,
               prop,
               value,
-              transientId: editedElement!.id,
+              transientId: editedNode.element.value!.id,
             },
             contents.elements,
           )
@@ -87,14 +93,7 @@
 import { useDictionnary } from '@/lib/use-dictionnary'
 import Button from '@/samples/Button.vue'
 import { usePage } from '@/lib/use-page'
-import {
-  isSidebarOpen,
-  useComponentPanel,
-  useEditedNode,
-  useEditedNodeBoundingBox,
-  useEditedNodeElement,
-  useEditedNodeSchema,
-} from '@/lib/use-edition'
+import { useComponentPanel, useNode } from '@/lib/use-edition'
 import RichTextEditor from './RichTextEditor.vue'
 import { useWindowSize } from '@vueuse/core'
 import ComponentPanel from './ComponentPanel.vue'
@@ -103,6 +102,7 @@ import TransientBuilder from './TransientBuilder.vue'
 import ElementProps from './ElementProps.vue'
 import { getElementProps } from 'transient'
 import TSidebar from './TSidebar.vue'
+import { ref } from 'vue'
 
 const dictionnary = useDictionnary()
 
@@ -110,16 +110,13 @@ const component = dictionnary.get('HomePage')
 
 const { contents, saveToLocalStorage, loadFromLocalStorage } = usePage(component.template!)
 
-const editedNode = useEditedNode()
-const editedElement = useEditedNodeElement(contents)
-const editedNodeSchema = useEditedNodeSchema()
-const editedNodeBoundingBox = useEditedNodeBoundingBox()
+const editedNode = useNode(contents, dictionnary)
 
 const windowSize = useWindowSize()
 
 const componentPanel = useComponentPanel()
 
-const sidebarIsOpen = isSidebarOpen()
+const sidebarIsOpen = ref(false)
 </script>
 
 <style>

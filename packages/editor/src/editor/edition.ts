@@ -70,7 +70,6 @@ export type EditionInput =
   | UpdateElementPropEdition
 
 export function applyEdition(edition: Edition, elements: TransientElement[]) {
-  console.log({ edition })
   switch (edition.type) {
     case 'edit-slot': {
       const children = htmlChildrenToTransientElements(edition.node)

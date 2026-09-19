@@ -5,7 +5,6 @@ import { ComponentDictionnary, loadAllComponents } from '@/lib/use-dictionnary'
 import { isTextZone } from 'transient'
 import SlotSpy from './SlotSpy.vue'
 import type { ComponentSlotEditionInput, Edition, ElementEditionInput } from '@/editor/edition'
-import { isSidebarOpen, useEditedNode } from '@/lib/use-edition'
 import { assertIs, assertIsDefined, someHTMLElement } from 'transient'
 import TComment from './TComment.vue'
 import { getTransientID } from 'transient'
@@ -21,7 +20,7 @@ const slotNames = computed(() => {
   return slots ? Object.keys(slots) : ['default']
 })
 
-const emit = defineEmits<{ edit: [edition: Edition] }>()
+const emit = defineEmits<{ select: [node: HTMLElement | null]; edit: [edition: Edition] }>()
 
 onMounted(async () => {
   components.value = await loadAllComponents()
@@ -44,13 +43,9 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
     el.addEventListener('focusin', (event) => {
       event.stopPropagation()
       assertIs(someHTMLElement, event.target)
-      useEditedNode().value = event.target
+      emit('select', event.target)
     })
-
     el.addEventListener('focusout', (event) => {
-      if (isSidebarOpen().value) {
-        return
-      }
       event.stopPropagation()
       assertIs(someHTMLElement, event.target)
       const target = event.target
@@ -90,7 +85,7 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
         })
       }
 
-      useEditedNode().value = undefined
+      emit('select', null)
     })
   },
 }
@@ -118,6 +113,7 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
           :key="JSON.stringify(child)"
           :slot-location="{ slotName, ownerId: element.id }"
           @edit="(event) => emit('edit', event)"
+          @select="(event) => emit('select', event)"
         />
       </template>
     </template>
