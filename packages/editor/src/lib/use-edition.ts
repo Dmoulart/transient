@@ -112,3 +112,7 @@ export function useComponentPanel() {
     },
   }
 }
+
+export function isSidebarOpen() {
+  return computed(() => useEditedNodeSchema().value)
+}

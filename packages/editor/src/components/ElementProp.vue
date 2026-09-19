@@ -17,10 +17,10 @@ import { computed } from 'vue'
 
 const props = defineProps<{
   prop: TransientProp
-  modelValue: TransientAttribute // Explicitly define the v-model prop as modelValue
+  modelValue: TransientAttribute
 }>()
 
-const emit = defineEmits<{ update: [data: { prop: TransientProp; value: TransientAttribute }] }>() // Explicitly define the v-model event
+const emit = defineEmits<{ update: [data: { prop: TransientProp; value: TransientAttribute }] }>()
 
 const kind = computed(() => getTypeKind(props.prop.type))
 

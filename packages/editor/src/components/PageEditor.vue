@@ -47,6 +47,7 @@
     <TransientBuilder
       v-for="element in contents.elements"
       :dictionnary="dictionnary"
+      :key="element.id"
       :element="element"
       @edit="
         (edition) => {
@@ -58,12 +59,12 @@
 
   <Button @click="saveToLocalStorage">Save</Button>
   <Button @click="loadFromLocalStorage">Load</Button>
-  <div id="sidebar">
-    {{ editedElement ?? editedNode?.dataset.transientId }}
+  {{ editedElement }}
+  <Sidebar :open="sidebarIsOpen" id="sidebar">
     <ElementProps
-      v-if="editedNodeSchema && editedElement"
-      :component-props="editedNodeSchema.props"
-      :values="getElementProps(editedNodeSchema, editedElement)"
+      v-if="sidebarIsOpen"
+      :component-props="editedNodeSchema!.props"
+      :values="getElementProps(editedNodeSchema!, editedElement!)"
       @update="
         ({ prop, value, propName }) => {
           applyEdition(
@@ -79,8 +80,7 @@
         }
       "
     />
-  </div>
-  <!-- <Sidebar @click.prevent id="sidebar"> </Sidebar> -->
+  </Sidebar>
 </template>
 
 <script setup lang="ts">
@@ -88,6 +88,7 @@ import { useDictionnary } from '@/lib/use-dictionnary'
 import Button from '@/samples/Button.vue'
 import { usePage } from '@/lib/use-page'
 import {
+  isSidebarOpen,
   useComponentPanel,
   useEditedNode,
   useEditedNodeBoundingBox,
@@ -101,6 +102,7 @@ import { applyEdition } from '@/editor/edition'
 import TransientBuilder from './TransientBuilder.vue'
 import ElementProps from './ElementProps.vue'
 import { getElementProps } from 'transient'
+import Sidebar from './Sidebar.vue'
 
 const dictionnary = useDictionnary()
 
@@ -116,6 +118,8 @@ const editedNodeBoundingBox = useEditedNodeBoundingBox()
 const windowSize = useWindowSize()
 
 const componentPanel = useComponentPanel()
+
+const sidebarIsOpen = isSidebarOpen()
 </script>
 
 <style>

@@ -5,7 +5,7 @@ import { ComponentDictionnary, loadAllComponents } from '@/lib/use-dictionnary'
 import { isTextZone } from 'transient'
 import SlotSpy from './SlotSpy.vue'
 import type { ComponentSlotEditionInput, Edition, ElementEditionInput } from '@/editor/edition'
-import { useEditedNode } from '@/lib/use-edition'
+import { isSidebarOpen, useEditedNode } from '@/lib/use-edition'
 import { assertIs, assertIsDefined, someHTMLElement } from 'transient'
 import Comment from './Comment.vue'
 import { getTransientID } from 'transient'
@@ -50,6 +50,9 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
     })
 
     el.addEventListener('focusout', (event) => {
+      if (isSidebarOpen().value) {
+        return
+      }
       event.stopPropagation()
       assertIs(someHTMLElement, event.target)
       const target = event.target
@@ -87,15 +90,6 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
           ownerId,
           node: target,
         })
-      }
-
-      if (event.relatedTarget instanceof HTMLElement) {
-        const sidebar = document.getElementById('sidebar')
-        if (sidebar) {
-          if (sidebar.contains(event.relatedTarget)) {
-            return
-          }
-        }
       }
 
       useEditedNode().value = undefined
