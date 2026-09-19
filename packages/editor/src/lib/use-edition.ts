@@ -44,6 +44,10 @@ export function useNode(template: Ref<TransientTemplate>, dictionnary: Component
     return null
   })
 
+  const textEditable = computed(() => {
+    return element.value && !element.value?.isComponent
+  })
+
   const props = computed(() => {
     if (!schema.value || !element.value) {
       return null
@@ -51,7 +55,7 @@ export function useNode(template: Ref<TransientTemplate>, dictionnary: Component
     return getElementProps(schema.value, element.value)
   })
 
-  return { node, element, editable, schema, bbox, props }
+  return { node, element, editable, textEditable, schema, bbox, props }
 }
 
 const componentPanelIsOpen = ref(false)

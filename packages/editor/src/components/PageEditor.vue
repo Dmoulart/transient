@@ -7,10 +7,19 @@
         componentPanel.close()
       }
     "
+    @update:open="
+      (open: boolean) => {
+        if (!open) {
+          // drawer has a crazy api should do somethign about it. Maybe wrap it.
+          componentPanel.close()
+        }
+      }
+    "
+    @close="componentPanel.close"
   />
   <RichTextEditor
-    v-if="editedNode.node.value"
-    :node="editedNode.node.value"
+    v-if="editedNode.textEditable.value"
+    :node="editedNode.node.value!"
     :style="{
       '--richtext-editor-bottom': editedNode.bbox.value
         ? `${windowSize.height.value - editedNode.bbox.value.top}px`
@@ -28,7 +37,6 @@
     "
     @insert-component="
       ({ targetNodeID }) => {
-        // panel.targetNodeID.value = getTransientID(editedNode.value)
         componentPanel.open((schema) => {
           applyEdition(
             {
@@ -101,6 +109,8 @@
       "
     />
   </TSidebar>
+
+  <!-- <BoundingBox v-if="editedNode.bbox.value" v-bind="editedNode.bbox.value" /> -->
 </template>
 
 <script setup lang="ts">
@@ -146,10 +156,6 @@ function onSidebarClose() {
 </script>
 
 <style>
-body {
-  padding: 40px;
-}
-
 .sidebar {
   position: absolute;
   right: 0;

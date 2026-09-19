@@ -52,8 +52,9 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
 
       const transientSlot = target.dataset.transientSlot
 
-      // Standard editable element case
-      if (target.dataset.transientEditable === 'true') {
+      // Standard editable element case that is not a component. Texts, text in slot whatever.. Not sure about the scope of the on focus edit.
+      // If we do this on a component we're snapshotting it and we betray its internal state.
+      if (target.dataset.transientEditable === 'true' && !target.dataset.transientComponent) {
         const transientID = getTransientID(target)
         assertIsDefined(transientID)
         emit('edit', {
@@ -62,19 +63,19 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
           transientId: transientID,
         })
       } else if (transientSlot) {
-        // Clean up visual "emptiness" in slot zones
-        // Remove redundant <br> and empty text nodes
-        const onlyGarbage = Array.from(target.childNodes).every((node) => {
-          return (
-            (node.nodeType === Node.ELEMENT_NODE && node.nodeName === 'BR') ||
-            (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() === '')
-          )
-        })
+        // // Clean up visual "emptiness" in slot zones
+        // // Remove redundant <br> and empty text nodes
+        // const onlyGarbage = Array.from(target.childNodes).every((node) => {
+        //   return (
+        //     (node.nodeType === Node.ELEMENT_NODE && node.nodeName === 'BR') ||
+        //     (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() === '')
+        //   )
+        // })
 
-        if (onlyGarbage) {
-          target.innerHTML = ''
-          target.dataset.textAddition = 'true'
-        }
+        // if (onlyGarbage) {
+        //   target.innerHTML = ''
+        //   target.dataset.textAddition = 'true'
+        // }
 
         const [slotName, ownerId] = transientSlot.split(':')
         emit('edit', {

@@ -1,6 +1,9 @@
 <template>
   <Suspense>
     <div :style="item ? styles.item : undefined" @click="emit('select', props)">
+      <div>
+        {{ schema.tag }}
+      </div>
       <component v-if="component" :is="component" v-bind="defaultProps" />
     </div>
   </Suspense>
