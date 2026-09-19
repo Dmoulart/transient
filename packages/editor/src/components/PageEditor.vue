@@ -75,11 +75,11 @@
     @update:open="
       (open: boolean) => {
         if (!open) {
-          sidebarIsOpen = false
-          editedNode.node.value = null
+          onSidebarClose()
         }
       }
     "
+    @close="onSidebarClose"
   >
     <ElementProps
       v-if="editedNode.schema.value"
@@ -138,6 +138,11 @@ const shouldOpenSidebar = computed(() => {
 watch(shouldOpenSidebar, () => {
   sidebarIsOpen.value = true
 })
+
+function onSidebarClose() {
+  sidebarIsOpen.value = false
+  editedNode.node.value = null
+}
 </script>
 
 <style>
