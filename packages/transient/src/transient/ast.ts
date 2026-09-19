@@ -30,7 +30,7 @@ export function getComponentDefaultPropsValues(props: TransientProps) {
 }
 
 export function getElementDefaultPropsValues(
-  props: TransientProps
+  props: TransientProps,
 ): TransientElementAttributes {
   const data: Record<string, any> = {};
 
@@ -45,7 +45,7 @@ export function getElementDefaultPropsValues(
 
 export function hasTextChildren(
   element: TransientElement,
-  slotName = "default"
+  slotName = "default",
 ): boolean {
   return slotContainsSome(element, (child) => child.tag === "#text", slotName);
 }
@@ -55,9 +55,9 @@ export function slotContainsSome(
   cb: (
     value: TransientElement,
     index: number,
-    array: TransientElement[]
+    array: TransientElement[],
   ) => boolean,
-  slotName = "default"
+  slotName = "default",
 ): boolean {
   if (!element.slots?.[slotName]) {
     return false;
@@ -68,7 +68,7 @@ export function slotContainsSome(
 
 export function isTextZone(
   element: TransientElement,
-  slotName = "default"
+  slotName = "default",
 ): boolean {
   return (
     !element.slots?.[slotName] ||
@@ -85,7 +85,7 @@ export function hasSlots(element: TransientElement): boolean {
 
 export function findElementById(
   elements: TransientElement[],
-  id: string
+  id: string,
 ): TransientElement | undefined {
   for (const element of elements) {
     if (element.id === id) return element;
@@ -100,9 +100,83 @@ export function findElementById(
   return undefined;
 }
 
+export function getPathOfElementById(
+  elements: TransientElement[],
+  id: string,
+  depth = 0,
+  path: Array<string | number> = [],
+): Array<string | number> | undefined {
+  for (let i = 0; i < elements.length; i++) {
+    path[depth] = i;
+
+    const element = elements[i]!;
+
+    if (element.id === id) {
+      return path;
+    }
+
+    const slotsChildren =
+      element.slots && Object.keys(element.slots)?.length > 0
+        ? Object.entries(element.slots)
+        : null;
+
+    if (slotsChildren) {
+      for (const [slotName, slotElements] of slotsChildren) {
+        const newPath = [...path, "slots", slotName];
+
+        const found = getPathOfElementById(
+          slotElements,
+          id,
+          newPath.length,
+          newPath,
+        );
+
+        if (found) {
+          return found;
+        }
+      }
+    }
+  }
+
+  return undefined;
+}
+
+export function findNearestElement(
+  elements: TransientElement[],
+  id: string,
+  cb: (element: TransientElement) => boolean,
+): TransientElement | undefined {
+  let path = getPathOfElementById(elements, id);
+  if (!path) {
+    return undefined;
+  }
+  let len = path.length;
+  // pop current array, slotName, slots key every step to avoid matching a brother or an uncle..
+  const up = () => {
+    // wasteful, path should maybe not be a literal object path
+    len -= 3;
+    if (len <= 0) return undefined;
+    return path!.slice(0, len);
+  };
+  while ((path = up()) !== undefined) {
+    //@ts-expect-error
+    const candidate: TransientElement = path.reduce(
+      //@ts-expect-error
+      (newPath, key) => newPath[key],
+      elements,
+    );
+
+    if (cb(candidate as TransientElement)) {
+      return candidate as TransientElement;
+    }
+  }
+
+  return undefined;
+}
+
 export function replaceElement(
   newElement: TransientElement,
-  elements: TransientElement[]
+  elements: TransientElement[],
 ): TransientElement | undefined {
   for (let i = 0; i < elements.length; i++) {
     if (elements[i]!.id === newElement.id) {
@@ -131,7 +205,7 @@ export function replaceElementSlot(
   newSlotContent: TransientElement[],
   slot: string,
   ownerId: string,
-  elements: TransientElement[] // assumed root or current branch
+  elements: TransientElement[], // assumed root or current branch
 ) {
   const owner = findElementById(elements, ownerId);
   if (!owner) {
@@ -144,7 +218,7 @@ export function replaceElementSlot(
 export function appendElement(
   element: TransientElement,
   parentId: string,
-  elements: TransientElement[]
+  elements: TransientElement[],
 ) {
   const parent = findElementById(elements, parentId);
   if (!parent) {
@@ -161,7 +235,7 @@ export function appendElement(
 
 export function removeElement(
   idToRemove: string,
-  elements: TransientElement[]
+  elements: TransientElement[],
 ): boolean {
   for (let i = 0; i < elements.length; i++) {
     if (elements[i]!.id === idToRemove) {
@@ -183,7 +257,7 @@ export function removeElement(
 export function insertAfterElement(
   newElement: TransientElement,
   id: string,
-  elements: TransientElement[]
+  elements: TransientElement[],
 ): boolean {
   for (let i = 0; i < elements.length; i++) {
     if (elements[i]!.id === id) {
@@ -207,7 +281,7 @@ export function insertAfterElement(
 export function insertBeforeElement(
   newElement: TransientElement,
   id: string,
-  elements: TransientElement[]
+  elements: TransientElement[],
 ): boolean {
   for (let i = 0; i < elements.length; i++) {
     if (elements[i]!.id === id) {
@@ -232,7 +306,7 @@ export function updateElementProp(
   propName: string,
   value: any,
   id: string,
-  elements: TransientElement[]
+  elements: TransientElement[],
 ): void {
   const element = findElementById(elements, id);
 
@@ -244,7 +318,7 @@ export function updateElementProp(
 
 export function getElementProps(
   schema: TransientComponentSchema,
-  element: TransientElement
+  element: TransientElement,
 ): TransientElementAttributes {
   return {
     ...getElementDefaultPropsValues(schema.props),
