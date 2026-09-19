@@ -24,6 +24,7 @@ export function useEditedNodeSchema() {
         return useDictionnary().get(editedNode.value.dataset.transientComponent)
       }
     }
+    return null
   })
 }
 

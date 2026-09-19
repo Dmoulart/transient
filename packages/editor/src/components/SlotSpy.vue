@@ -7,7 +7,7 @@ export default {
     slotName: String,
     editable: Boolean,
   },
-  setup(props) {
+  setup() {
     return () => createCommentVNode('transient-slot-spy')
   },
   mounted() {

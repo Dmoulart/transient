@@ -3,7 +3,3 @@
     <template #content><slot></slot> </template>
   </UDrawer>
 </template>
-
-<script setup lang="ts">
-defineProps<{}>()
-</script>

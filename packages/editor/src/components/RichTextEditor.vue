@@ -8,28 +8,30 @@ import { type DeleteElementEdition } from '@/editor/edition'
 
 const selection = useSelection()
 
+type Styles = Record<string, string>
+
 const emit = defineEmits<{
   delete: [deletion: DeleteElementEdition]
   'insert-component': [data: { targetNodeID: string }]
 }>()
 
-function wrap(tag: string, node: Node) {
-  assertIsDefined(selection.value, 'Selection must have a range')
+// function wrap(tag: string, node: Node) {
+//   assertIsDefined(selection.value, 'Selection must have a range')
 
-  const wrapper = document.createElement(tag)
-  wrapper.appendChild(node.cloneNode(true))
+//   const wrapper = document.createElement(tag)
+//   wrapper.appendChild(node.cloneNode(true))
 
-  const parent = node.parentNode
-  if (parent) {
-    parent.replaceChild(wrapper, node)
-  }
-  selection.value.removeAllRanges()
-  const newRange = document.createRange()
-  newRange.selectNodeContents(wrapper)
-  selection.value.addRange(newRange)
+//   const parent = node.parentNode
+//   if (parent) {
+//     parent.replaceChild(wrapper, node)
+//   }
+//   selection.value.removeAllRanges()
+//   const newRange = document.createRange()
+//   newRange.selectNodeContents(wrapper)
+//   selection.value.addRange(newRange)
 
-  return wrapper
-}
+//   return wrapper
+// }
 
 function wrapSelection(tag: string, sel: Selection): HTMLElement {
   assert(sel.rangeCount > 0, 'Selection must have a range')
@@ -113,7 +115,7 @@ function nodeIn(tagNames: string[], selection: Selection) {
   return tagNames.some((tag) => el!.closest(tag))
 }
 
-function blockAncestorStyle(styles: Record<string, any>, selection: Selection) {
+function blockAncestorStyle(styles: Styles, selection: Selection) {
   const block = getBlockContainer(selection)
 
   if (!(block instanceof HTMLElement)) return false
@@ -127,7 +129,7 @@ function blockAncestorStyle(styles: Record<string, any>, selection: Selection) {
   return true
 }
 
-function setBlockAncestorStyle(styles: Record<string, any>, selection: Selection) {
+function setBlockAncestorStyle(styles: Styles, selection: Selection) {
   const block = getBlockContainer(selection)
 
   if (!(block instanceof HTMLElement)) return
@@ -137,7 +139,7 @@ function setBlockAncestorStyle(styles: Record<string, any>, selection: Selection
   }
 }
 
-function unsetBlockAncestorStyle(styles: Record<string, any>, selection: Selection) {
+function unsetBlockAncestorStyle(styles: Styles, selection: Selection) {
   const block = getBlockContainer(selection)
 
   if (!(block instanceof HTMLElement)) return
@@ -244,8 +246,6 @@ type ToolbarSeparator = {
 }
 
 type ToolbarItem = ({ condition?: () => boolean } & ToolbarButton) | ToolbarSeparator
-
-const panelIsOpen = ref(false)
 
 const toolbarItems: ToolbarItem[] = [
   {

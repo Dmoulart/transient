@@ -7,7 +7,7 @@ import SlotSpy from './SlotSpy.vue'
 import type { ComponentSlotEditionInput, Edition, ElementEditionInput } from '@/editor/edition'
 import { isSidebarOpen, useEditedNode } from '@/lib/use-edition'
 import { assertIs, assertIsDefined, someHTMLElement } from 'transient'
-import Comment from './Comment.vue'
+import TComment from './TComment.vue'
 import { getTransientID } from 'transient'
 
 const props = defineProps<{
@@ -15,7 +15,7 @@ const props = defineProps<{
   dictionnary: ComponentDictionnary
   slotLocation?: { slotName: string; ownerId: string }
 }>()
-const components = shallowRef<Record<string, any>>({})
+const components = shallowRef<Record<string, unknown>>({})
 const slotNames = computed(() => {
   const slots = props.dictionnary.get(props.element.tag)?.slots
   return slots ? Object.keys(slots) : ['default']
@@ -27,8 +27,8 @@ onMounted(async () => {
   components.value = await loadAllComponents()
 })
 
-const attributes = computed(() => {
-  const attributes: Record<string, any> = {
+const attributes = computed<Record<string, unknown>>(() => {
+  return {
     ...Object.fromEntries(
       Object.entries(props.element.attributes || {}).map(([k, v]) => [k, v.expression]),
     ),
@@ -37,12 +37,10 @@ const attributes = computed(() => {
     'data-transient-editable': true,
     'data-transient-component': props.element.isComponent ? props.element.tag : undefined,
   }
-
-  return attributes
 })
 
 const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionInput> = {
-  mounted: (el: HTMLElement, binding) => {
+  mounted: (el: HTMLElement) => {
     el.addEventListener('focusin', (event) => {
       event.stopPropagation()
       assertIs(someHTMLElement, event.target)
@@ -104,26 +102,28 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
     v-bind="attributes"
     v-edit
   >
-    <template v-if="slotNames" v-for="slotName in slotNames">
+    <template v-for="slotName in slotNames">
       <SlotSpy
         v-if="isTextZone(element, slotName)"
         :slot-name="slotName"
         :owner-id="element.id"
+        :key="slotName"
         :editable="!attributes['data-text-addition']"
       />
-      <TransientBuilder
-        v-if="element?.slots?.[slotName]"
-        v-for="child in element.slots[slotName]"
-        :dictionnary="dictionnary"
-        :element="child"
-        :key="JSON.stringify(child)"
-        :slot-location="{ slotName, ownerId: element.id }"
-        @edit="(event) => emit('edit', event)"
-      />
+      <template v-if="element.slots">
+        <TransientBuilder
+          v-for="child in element.slots[slotName]"
+          :dictionnary="dictionnary"
+          :element="child"
+          :key="JSON.stringify(child)"
+          :slot-location="{ slotName, ownerId: element.id }"
+          @edit="(event) => emit('edit', event)"
+        />
+      </template>
     </template>
   </component>
   <template v-else>
-    <Comment :content="`#text data-transient-id=${element.id}`" />
+    <TComment :content="`#text data-transient-id=${element.id}`" />
     {{ element.attributes?.value?.expression }}
   </template>
 </template>

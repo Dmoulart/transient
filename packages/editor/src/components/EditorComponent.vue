@@ -9,7 +9,8 @@
 import { useDictionnary } from '@/lib/use-dictionnary'
 import { getComponentDefaultPropsValues } from 'transient'
 import type { TransientComponentSchema } from 'transient'
-import { computed, defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, shallowRef, watch } from 'vue'
+import type { CSSProperties } from 'vue'
 
 const props = withDefaults(
   defineProps<{
@@ -24,7 +25,6 @@ const props = withDefaults(
 const emit = defineEmits<{
   (e: 'select', data: { schema: TransientComponentSchema }): void
 }>()
-import type { CSSProperties } from 'vue'
 
 const styles = {
   item: {
@@ -42,12 +42,17 @@ const styles = {
 }
 const dictionnary = useDictionnary()
 
-const defaultProps = getComponentDefaultPropsValues(dictionnary.get(props.schema.tag).props)
+const component = shallowRef<unknown>(null)
+const defaultProps = shallowRef<Record<string, unknown>>({})
 
-const component = computed(() => {
-  props.schema.path // don't remove this haaha
-  return defineAsyncComponent({
-    loader: () => import(/* @vite-ignore */ props.schema.path),
-  })
-})
+watch(
+  () => props.schema.path,
+  () => {
+    component.value = defineAsyncComponent({
+      loader: () => import(/* @vite-ignore */ props.schema.path),
+    })
+    defaultProps.value = getComponentDefaultPropsValues(dictionnary.get(props.schema.tag).props)
+  },
+  { immediate: true },
+)
 </script>

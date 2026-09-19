@@ -32,7 +32,7 @@ function getTypeKind(type: TransientType) {
   return typeof type === 'string' ? type : type.kind
 }
 
-function updateValue(newValue: any) {
+function updateValue(newValue: TransientAttribute) {
   emit('update', { prop: props.prop, value: newValue })
 }
 </script>

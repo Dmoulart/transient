@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent class="flex flex-col gap-4">
-    <UFormField v-for="(prop, field) of componentProps" :label="field">
+    <UFormField :key="field" v-for="(prop, field) of componentProps" :label="field">
       <ElementProp
         :prop="prop"
         @update="(data) => emit('update', { ...data, propName: field })"
@@ -15,8 +15,8 @@ import ElementProp from './ElementProp.vue'
 import type { TransientProp } from 'transient'
 import type { TransientElementAttributes } from 'transient'
 
-const props = defineProps<{ componentProps: TransientProps; values: TransientElementAttributes }>()
+defineProps<{ componentProps: TransientProps; values: TransientElementAttributes }>()
 const emit = defineEmits<{
-  update: [data: { prop: TransientProp; propName: string; value: any }]
+  update: [data: { prop: TransientProp; propName: string; value: unknown }]
 }>() // Explicitly define the v-model event
 </script>

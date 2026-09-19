@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-const props = withDefaults(
+withDefaults(
   defineProps<{
     direction?: 'row' | 'column' | 'row-wrap'
     gap?: 'none' | 'sm' | 'md' | 'lg' | 'xl'

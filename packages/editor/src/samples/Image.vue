@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-const props = withDefaults(
+withDefaults(
   defineProps<{
     src?: string
     alt: string

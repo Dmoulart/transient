@@ -3,9 +3,8 @@
     <div class="full-width">
       <div class="component-container">
         <EditorComponent
-          v-for="(schema, name) in registry.all()"
+          v-for="schema in registry.all()"
           :key="schema.path"
-          :path="schema.path as string"
           :schema="schema"
           v-on="$attrs"
           @select="(data) => emit('select', data)"

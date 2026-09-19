@@ -15,7 +15,7 @@
         ? `${windowSize.height.value - editedNodeBoundingBox.top}px`
         : undefined,
       '--richtext-editor-left': editedNodeBoundingBox
-        ? editedNodeBoundingBox?.left + 'px'
+        ? `${editedNodeBoundingBox?.left ?? 0}px`
         : undefined,
     }"
     class="text-editor"
@@ -60,7 +60,7 @@
   <Button @click="saveToLocalStorage">Save</Button>
   <Button @click="loadFromLocalStorage">Load</Button>
   {{ editedElement }}
-  <Sidebar :open="sidebarIsOpen" id="sidebar">
+  <TSidebar :open="sidebarIsOpen" id="sidebar">
     <ElementProps
       v-if="sidebarIsOpen"
       :component-props="editedNodeSchema!.props"
@@ -80,7 +80,7 @@
         }
       "
     />
-  </Sidebar>
+  </TSidebar>
 </template>
 
 <script setup lang="ts">
@@ -102,7 +102,7 @@ import { applyEdition } from '@/editor/edition'
 import TransientBuilder from './TransientBuilder.vue'
 import ElementProps from './ElementProps.vue'
 import { getElementProps } from 'transient'
-import Sidebar from './Sidebar.vue'
+import TSidebar from './TSidebar.vue'
 
 const dictionnary = useDictionnary()
 
