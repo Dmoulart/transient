@@ -1,7 +1,7 @@
 import type { TransientComponentSchema, TransientTemplate } from 'transient'
 import { computed, readonly, ref, shallowRef, type Ref } from 'vue'
 import { ComponentDictionnary } from './use-dictionnary'
-import { assertIsDefined, findElementById, getTransientID } from 'transient'
+import { assertIsDefined, findElementById, getElementProps, getTransientID } from 'transient'
 
 export function useNode(template: Ref<TransientTemplate>, dictionnary: ComponentDictionnary) {
   const node = shallowRef<HTMLElement | null>(null)
@@ -44,7 +44,14 @@ export function useNode(template: Ref<TransientTemplate>, dictionnary: Component
     return null
   })
 
-  return { node, element, editable, schema, bbox }
+  const props = computed(() => {
+    if (!schema.value || !element.value) {
+      return null
+    }
+    return getElementProps(schema.value, element.value)
+  })
+
+  return { node, element, editable, schema, bbox, props }
 }
 
 const componentPanelIsOpen = ref(false)

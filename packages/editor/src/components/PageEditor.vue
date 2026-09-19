@@ -22,7 +22,7 @@
     class="text-editor"
     @delete="
       (edition) => {
-        applyEdition(edition, contents.elements)
+        applyEdition(edition, page.contents.value.elements)
         editedNode.node.value = null
       }
     "
@@ -37,7 +37,7 @@
               position: 'after',
               schema,
             },
-            contents.elements,
+            page.contents.value.elements,
           )
         })
       }
@@ -46,31 +46,45 @@
 
   <Suspense>
     <TransientBuilder
-      v-for="element in contents.elements"
+      v-for="element in page.contents.value.elements"
       :dictionnary="dictionnary"
       :key="element.id"
       :element="element"
       @select="
         (selectedNode) => {
+          if (!selectedNode && shouldOpenSidebar) {
+            return
+          }
           editedNode.node.value = selectedNode
         }
       "
       @edit="
         (edition) => {
-          applyEdition(edition, contents.elements)
+          applyEdition(edition, page.contents.value.elements)
         }
       "
     />
   </Suspense>
 
-  <Button @click="saveToLocalStorage">Save</Button>
-  <Button @click="loadFromLocalStorage">Load</Button>
-  {{ editedNode.element.value }}
-  <TSidebar :open="sidebarIsOpen" id="sidebar">
+  <Button @click="page.saveToLocalStorage">Save</Button>
+  <Button @click="page.loadFromLocalStorage">Load</Button>
+
+  <TSidebar
+    :open="sidebarIsOpen"
+    id="sidebar"
+    @update:open="
+      (open: boolean) => {
+        if (!open) {
+          sidebarIsOpen = false
+          editedNode.node.value = null
+        }
+      }
+    "
+  >
     <ElementProps
-      v-if="editedNode.schema.value && sidebarIsOpen"
-      :component-props="editedNode.schema.value?.props"
-      :values="getElementProps(editedNode.schema.value, editedNode.element.value!)"
+      v-if="editedNode.schema.value"
+      :props-schema="editedNode.schema.value?.props"
+      :values="editedNode.props.value ?? {}"
       @update="
         ({ prop, value, propName }) => {
           applyEdition(
@@ -81,7 +95,7 @@
               value,
               transientId: editedNode.element.value!.id,
             },
-            contents.elements,
+            page.contents.value.elements,
           )
         }
       "
@@ -100,29 +114,37 @@ import ComponentPanel from './ComponentPanel.vue'
 import { applyEdition } from '@/editor/edition'
 import TransientBuilder from './TransientBuilder.vue'
 import ElementProps from './ElementProps.vue'
-import { getElementProps } from 'transient'
 import TSidebar from './TSidebar.vue'
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const dictionnary = useDictionnary()
 
 const component = dictionnary.get('HomePage')
 
-const { contents, saveToLocalStorage, loadFromLocalStorage } = usePage(component.template!)
+const page = usePage(component.template!)
 
-const editedNode = useNode(contents, dictionnary)
+const editedNode = useNode(page.contents, dictionnary)
 
 const windowSize = useWindowSize()
 
 const componentPanel = useComponentPanel()
 
 const sidebarIsOpen = ref(false)
+
+const shouldOpenSidebar = computed(() => {
+  return Boolean(editedNode.editable.value && editedNode.schema.value?.props)
+})
+
+watch(shouldOpenSidebar, () => {
+  sidebarIsOpen.value = true
+})
 </script>
 
 <style>
 body {
   padding: 40px;
 }
+
 .sidebar {
   position: absolute;
   right: 0;

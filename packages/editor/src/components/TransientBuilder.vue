@@ -89,6 +89,7 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
     })
   },
 }
+// it's very important that there is no parasite space between elements in the template !
 </script>
 <template>
   <component
@@ -96,16 +97,13 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
     :is="element.isComponent ? components[element.tag] : element.tag"
     v-bind="attributes"
     v-edit
-  >
-    <template v-for="slotName in slotNames">
-      <SlotSpy
+    ><template v-for="slotName in slotNames"
+      ><SlotSpy
         v-if="isTextZone(element, slotName)"
         :slot-name="slotName"
         :owner-id="element.id"
         :key="slotName"
-        :editable="!attributes['data-text-addition']"
-      />
-      <template v-if="element.slots">
+        :editable="!attributes['data-text-addition']" /><template v-if="element.slots">
         <TransientBuilder
           v-for="child in element.slots[slotName]"
           :dictionnary="dictionnary"
@@ -113,15 +111,12 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
           :key="JSON.stringify(child)"
           :slot-location="{ slotName, ownerId: element.id }"
           @edit="(event) => emit('edit', event)"
-          @select="(event) => emit('select', event)"
-        />
-      </template>
-    </template>
-  </component>
-  <template v-else>
-    <TComment :content="`#text data-transient-id=${element.id}`" />
-    {{ element.attributes?.value?.expression }}
-  </template>
+          @select="(event) => emit('select', event)" /></template></template></component
+  ><template v-else
+    ><TComment :content="`#text data-transient-id=${element.id}`" />{{
+      element.attributes?.value?.expression
+    }}</template
+  >
 </template>
 <style>
 [data-transient-slot]:not([data-text-addition]):empty::before {

@@ -1,5 +1,9 @@
 import type { TransientComponentSchema, TransientProp } from 'transient'
-import { htmlChildrenToTransientElements, htmlElementToTransientElement } from 'transient'
+import {
+  findElementById,
+  htmlChildrenToTransientElements,
+  htmlElementToTransientElement,
+} from 'transient'
 import {
   appendElement,
   insertAfterElement,
@@ -77,6 +81,13 @@ export function applyEdition(edition: Edition, elements: TransientElement[]) {
       break
     }
     case 'edit-element': {
+      // todo put the smart comparison in replaceElement or a lower level function maybe.
+      const preexistingElement = findElementById(elements, edition.transientId)
+      const newElement = htmlElementToTransientElement(edition.node, edition.transientId)
+      if (JSON.stringify(preexistingElement) === JSON.stringify(newElement)) {
+        return
+      }
+
       replaceElement(htmlElementToTransientElement(edition.node, edition.transientId), elements)
       break
     }
