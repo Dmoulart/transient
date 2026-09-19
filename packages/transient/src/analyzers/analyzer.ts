@@ -17,7 +17,7 @@ export type AnalyzeOptions = {
   dir?: string;
 };
 export type Analyze = (
-  options: AnalyzeOptions
+  options: AnalyzeOptions,
 ) => TransientComponentDictionnary;
 
 export type Analyzer = {
@@ -50,29 +50,9 @@ const BASE_ANALYZER: Partial<Analyzer> = {
     return files;
   },
   write(results, dest) {
-    // for (const [path, api] of Object.entries(results)) {
-    //   const { name: componentName, dir: componentDir } = parse(path);
-    //   const metaComponentDirPath = resolve(dest, componentDir);
-
-    //   // if meta dir doesn't exist create
-    //   if (!existsSync(metaComponentDirPath)) {
-    //     mkdirSync(metaComponentDirPath, {
-    //       recursive: true,
-    //     });
-    //   }
-
-    //   const metaJsonFilePath = join(
-    //     metaComponentDirPath,
-    //     `${componentName}.json`
-    //   );
-
-    //   writeFileSync(metaJsonFilePath, JSON.stringify(api, null, 2));
-    // }
-
-    // write all
     writeFileSync(
       resolve(dest, "__schemas__.json"),
-      JSON.stringify(results, null, 2)
+      JSON.stringify(results, null, 2),
     );
   },
 };

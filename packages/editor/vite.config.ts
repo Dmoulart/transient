@@ -18,8 +18,6 @@ export default defineConfig({
   ],
   server: {
     watch: {
-      // Cette option garantit que Vite va détecter toutes les modifications
-      // de tes .vue files et lancer handleHotUpdate
       ignored: ['!src/samples/**/*.vue'],
     },
   },
