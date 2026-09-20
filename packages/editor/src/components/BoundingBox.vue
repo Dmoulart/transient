@@ -1,20 +1,19 @@
 <template>
   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    class="absolute stroke-teal-700 fill-transparent"
-    :style="{
-      top,
-      left,
-    }"
+    class="pointer-events-none fixed overflow-visible stroke-teal-700 fill-transparent"
+    :style="{ top: `${top}px`, left: `${left}px` }"
+    :width="width"
+    :height="height"
   >
     <rect
-      x="0"
-      y="0"
-      :width="width"
-      :height="height"
+      class="ants"
+      :x="strokeWidth / 2"
+      :y="strokeWidth / 2"
+      :width="width - strokeWidth"
+      :height="height - strokeWidth"
       :rx="borderRadius"
-      :ry="borderRadius"
       :stroke-width="strokeWidth"
+      stroke-dasharray="4 2"
     />
   </svg>
 </template>
@@ -28,6 +27,16 @@ withDefaults(
     borderRadius?: number
     strokeWidth?: number
   }>(),
-  { borderRadius: 0, strokeWidth: 4 },
+  { borderRadius: 0, strokeWidth: 3 },
 )
 </script>
+<style scoped>
+.ants {
+  animation: ants 0.5s linear infinite;
+}
+@keyframes ants {
+  to {
+    stroke-dashoffset: -6; /* = dash + gap */
+  }
+}
+</style>

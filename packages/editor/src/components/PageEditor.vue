@@ -69,9 +69,10 @@
   <Button @click="page.saveToLocalStorage">Save</Button>
   <Button @click="page.loadFromLocalStorage">Load</Button>
 
+  <BoundingBox v-if="selection.selected.bbox.value" v-bind="selection.selected.bbox.value" />
+
   <TDrawer
     id="props-panel"
-    class="sidebar"
     :open="!!selection.component.node.value"
     @close="
       () => {
@@ -103,8 +104,6 @@
       />
     </div>
   </TDrawer>
-  <div>selected.component : {{ selection.component.element.value?.tag }}</div>
-  <!-- <BoundingBox v-if="editedNode.bbox.value" v-bind="editedNode.bbox.value" /> -->
 </template>
 
 <script setup lang="ts">
@@ -122,6 +121,7 @@ import TDrawer from './TDrawer.vue'
 import { shallowRef } from 'vue'
 import { useSelection } from '@/lib/use-selection.js'
 import { someHTMLElement } from 'transient'
+import BoundingBox from './BoundingBox.vue'
 
 const dictionnary = useDictionnary()
 
