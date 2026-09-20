@@ -1,41 +1,34 @@
-import { useEventListener } from '@vueuse/core'
-import { ref, triggerRef } from 'vue'
+import { type TransientTemplate } from 'transient'
+import { computed, type Ref } from 'vue'
+import { ComponentDictionnary } from './use-dictionnary'
+import { useNode, useParentComponent } from './use-node'
 
-export function useSelection() {
-  const selection = ref<Selection | null>(null)
-  let observer: MutationObserver | null = null
+export function useSelection(
+  selectedNode: Ref<HTMLElement | null>,
+  template: Ref<TransientTemplate>,
+  dictionnary: ComponentDictionnary,
+) {
+  const selected = useNode(selectedNode, template, dictionnary)
 
-  function updateSelection() {
-    const sel = window.getSelection()
+  const component = useParentComponent(
+    computed(() => {
+      return selected.node.value
+    }),
+    template,
+    dictionnary,
+  )
 
-    if (!sel) {
-      selection.value = null
-      return
-    }
+  const slot = useNode(
+    computed(() => (selected.isSlot ? selected.node.value : null)),
+    template,
+    dictionnary,
+  )
 
-    // Disconnect previous observer
-    if (observer) {
-      observer.disconnect()
-      observer = null
-    }
+  const text = useNode(
+    computed(() => (selected.isEditableText ? selected.node.value : null)),
+    template,
+    dictionnary,
+  )
 
-    selection.value = sel
-
-    triggerRef(selection)
-
-    observer = new MutationObserver(() => {
-      triggerRef(selection)
-    })
-
-    observer.observe(document, {
-      characterData: true,
-      childList: true,
-      subtree: true,
-      attributes: true,
-    })
-  }
-
-  useEventListener(document, 'selectionchange', updateSelection)
-
-  return selection
+  return { selected, component, slot, text }
 }

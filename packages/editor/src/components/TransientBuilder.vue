@@ -45,6 +45,10 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
       assertIs(someHTMLElement, event.target)
       emit('select', event.target)
     })
+    el.addEventListener('click', (event) => {
+      assertIs(someHTMLElement, event.target)
+      emit('select', event.target)
+    })
     el.addEventListener('focusout', (event) => {
       event.stopPropagation()
       assertIs(someHTMLElement, event.target)

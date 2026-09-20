@@ -9,7 +9,11 @@ export function useNode(
   dictionnary: ComponentDictionnary,
 ) {
   const editable = computed(() => {
-    return node.value && (node.value.dataset.transientId || node.value.dataset.transientSlot)
+    return (
+      node.value &&
+      (node.value.dataset.transientId || node.value.dataset.transientSlot) &&
+      node.value.dataset.transientEditable === 'true'
+    )
   })
 
   const schema = computed(() => {
@@ -41,8 +45,12 @@ export function useNode(
     return getElementFromNode(node.value, template.value.elements)
   })
 
-  const textEditable = computed(() => {
-    return element.value && !element.value?.isComponent
+  const isSlot = computed(() => {
+    return node.value && node.value.dataset.transientSlot
+  })
+
+  const isEditableText = computed(() => {
+    return node.value && node.value.contentEditable === 'true'
   })
 
   const props = computed(() => {
@@ -52,7 +60,7 @@ export function useNode(
     return getElementProps(schema.value, element.value)
   })
 
-  return { node, element, editable, textEditable, schema, bbox, props }
+  return { node, element, editable, isSlot, isEditableText, schema, bbox, props }
 }
 
 export function useParentComponent(
@@ -60,20 +68,9 @@ export function useParentComponent(
   template: Ref<TransientTemplate>,
   dictionnary: ComponentDictionnary,
 ) {
-  const parentComponent = computed(() => {
-    if (node.value) {
-      let parent = node.value.parentElement
-
-      while (parent) {
-        if (isNodeComponent(parent) && isNodeEditable(parent)) {
-          return parent
-        }
-        parent = parent.parentElement
-      }
-    }
-
-    return null
-  })
+  const parentComponent = computed<HTMLElement | null>(
+    () => node.value?.closest('[data-transient-component]') ?? null,
+  )
 
   return useNode(parentComponent, template, dictionnary)
 }

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useSelection } from '@/lib/use-selection'
+import { useTextSelection } from '@/lib/use-text-selection'
 import { assert, assertIsDefined } from 'transient'
 import { computed, ref, type ComputedRef, type Ref } from 'vue'
-import { useComponentPanel } from '@/lib/use-edition'
+import { useComponentPanel } from '@/lib/use-node'
 import { getTransientID } from 'transient'
 import { type DeleteElementEdition } from '@/editor/edition'
 
-const selection = useSelection()
+const selection = useTextSelection()
 
 type Styles = Record<string, string>
 
