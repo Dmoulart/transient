@@ -58,14 +58,6 @@
       :dictionnary="dictionnary"
       :key="element.id"
       :element="element"
-      @select="
-        (selectedNode) => {
-          if (!selectedNode && shouldOpenSidebar) {
-            return
-          }
-          selection.selected.node.value = selectedNode
-        }
-      "
       @edit="
         (edition) => {
           applyEdition(edition, page.contents.value.elements)
@@ -77,7 +69,17 @@
   <Button @click="page.saveToLocalStorage">Save</Button>
   <Button @click="page.loadFromLocalStorage">Load</Button>
 
-  <TDrawer class="sidebar" :open="sidebarIsOpen" @close="onSidebarClose">
+  <TDrawer
+    id="props-panel"
+    class="sidebar"
+    :open="!!selection.component.node.value"
+    @close="
+      () => {
+        selection.selected.node.value = null
+      }
+    "
+    @click.stop
+  >
     <div v-if="selection.component.schema.value" class="flex flex-col gap-4">
       <h2>{{ selection.component.schema.value?.tag }}</h2>
       <ElementProps
@@ -109,16 +111,17 @@
 import { useDictionnary } from '@/lib/use-dictionnary'
 import Button from '@/samples/Button.vue'
 import { usePage } from '@/lib/use-page'
-import { useComponentPanel } from '@/lib/use-node.js'
+import { isNodeEditable, useComponentPanel } from '@/lib/use-node.js'
 import RichTextEditor from './RichTextEditor.vue'
-import { useWindowSize, whenever } from '@vueuse/core'
+import { useEventListener, useWindowSize } from '@vueuse/core'
 import ComponentPanel from './ComponentPanel.vue'
 import { applyEdition } from '@/editor/edition'
 import TransientBuilder from './TransientBuilder.vue'
 import ElementProps from './ElementProps.vue'
 import TDrawer from './TDrawer.vue'
-import { computed, ref, shallowRef } from 'vue'
+import { shallowRef } from 'vue'
 import { useSelection } from '@/lib/use-selection.js'
+import { someHTMLElement } from 'transient'
 
 const dictionnary = useDictionnary()
 
@@ -132,20 +135,13 @@ const windowSize = useWindowSize()
 
 const componentPanel = useComponentPanel()
 
-const sidebarIsOpen = ref(false)
-
-const shouldOpenSidebar = computed(() => {
-  return Boolean(selection.component.editable.value && selection.component.schema.value?.props)
+useEventListener('click', (ev: MouseEvent) => {
+  if (!ev.target || !someHTMLElement(ev.target) || !isNodeEditable(ev.target)) {
+    selection.selected.node.value = null
+    return
+  }
+  selection.selected.node.value = ev.target
 })
-
-whenever(shouldOpenSidebar, () => {
-  sidebarIsOpen.value = true
-})
-
-function onSidebarClose() {
-  sidebarIsOpen.value = false
-  selection.selected.node.value = null
-}
 </script>
 
 <style>

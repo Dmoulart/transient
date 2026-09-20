@@ -6,7 +6,6 @@
     leave-to-class="translate-x-full"
   >
     <aside
-      ref="drawer"
       v-if="open"
       class="fixed inset-y-0 right-0 w-full max-w-125 overflow-y-auto border-l border-default bg-(--ui-bg) p-4 shadow-lg"
     >
@@ -17,13 +16,10 @@
 </template>
 
 <script setup lang="ts">
-import { onClickOutside, onKeyStroke } from '@vueuse/core'
-import { useTemplateRef } from 'vue'
+import { onKeyStroke } from '@vueuse/core'
 
 const props = withDefaults(defineProps<{ open: boolean }>(), { open: false })
 const emit = defineEmits<{ close: [] }>()
-
-const drawer = useTemplateRef('drawer')
 
 function close() {
   if (props.open) {
@@ -31,8 +27,5 @@ function close() {
   }
 }
 
-onClickOutside(drawer, close, {
-  ignore: ['[data-reka-popper-content-wrapper]'],
-})
 onKeyStroke('Escape', close)
 </script>

@@ -20,7 +20,7 @@ const slotNames = computed(() => {
   return slots ? Object.keys(slots) : ['default']
 })
 
-const emit = defineEmits<{ select: [node: HTMLElement | null]; edit: [edition: Edition] }>()
+const emit = defineEmits<{ edit: [edition: Edition] }>()
 
 onMounted(async () => {
   components.value = await loadAllComponents()
@@ -40,15 +40,6 @@ const attributes = computed<Record<string, unknown>>(() => {
 
 const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionInput> = {
   mounted: (el: HTMLElement) => {
-    el.addEventListener('focusin', (event) => {
-      event.stopPropagation()
-      assertIs(someHTMLElement, event.target)
-      emit('select', event.target)
-    })
-    el.addEventListener('click', (event) => {
-      assertIs(someHTMLElement, event.target)
-      emit('select', event.target)
-    })
     el.addEventListener('focusout', (event) => {
       event.stopPropagation()
       assertIs(someHTMLElement, event.target)
@@ -90,7 +81,7 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
         })
       }
 
-      emit('select', null)
+      // emit('select', null)
     })
   },
 }
@@ -115,8 +106,7 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
           :element="child"
           :key="JSON.stringify(child)"
           :slot-location="{ slotName, ownerId: element.id }"
-          @edit="(event) => emit('edit', event)"
-          @select="(event) => emit('select', event)" /></template></template></component
+          @edit="(event) => emit('edit', event)" /></template></template></component
   ><template v-else
     ><TComment :content="`#text data-transient-id=${element.id}`" />{{
       element.attributes?.value?.expression

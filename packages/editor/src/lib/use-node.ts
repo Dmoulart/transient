@@ -9,11 +9,7 @@ export function useNode(
   dictionnary: ComponentDictionnary,
 ) {
   const editable = computed(() => {
-    return (
-      node.value &&
-      (node.value.dataset.transientId || node.value.dataset.transientSlot) &&
-      node.value.dataset.transientEditable === 'true'
-    )
+    return node.value && (node.value.dataset.transientId || node.value.dataset.transientSlot)
   })
 
   const schema = computed(() => {
@@ -79,9 +75,13 @@ function isNodeComponent(node: HTMLElement) {
   return Boolean(node.dataset.transientComponent)
 }
 
-function isNodeEditable(node: HTMLElement) {
-  return Boolean(node.dataset.transientEditable === 'true')
+export function isNodeEditable(node: HTMLElement) {
+  return Boolean(node.dataset.transientId || node.dataset.transientSlot)
 }
+
+// function isNodeEditable(node: HTMLElement) {
+//   return Boolean(node.dataset.transientEditable === 'true')
+// }
 
 export function getNodeId(node: HTMLElement) {
   return node.dataset.transientId
