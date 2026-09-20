@@ -1,11 +1,13 @@
-import type { TransientComponentSchema, TransientTemplate } from 'transient'
-import { computed, readonly, ref, shallowRef, type Ref } from 'vue'
+import type { TransientComponentSchema, TransientElement, TransientTemplate } from 'transient'
+import { computed, readonly, ref, type ComputedRef, type Ref } from 'vue'
 import { ComponentDictionnary } from './use-dictionnary'
 import { assertIsDefined, findElementById, getElementProps, getTransientID } from 'transient'
 
-export function useNode(template: Ref<TransientTemplate>, dictionnary: ComponentDictionnary) {
-  const node = shallowRef<HTMLElement | null>(null)
-
+export function useNode(
+  node: Ref<HTMLElement | null>,
+  template: Ref<TransientTemplate>,
+  dictionnary: ComponentDictionnary,
+) {
   const editable = computed(() => {
     return node.value && (node.value.dataset.transientId || node.value.dataset.transientSlot)
   })
@@ -33,15 +35,10 @@ export function useNode(template: Ref<TransientTemplate>, dictionnary: Component
   })
 
   const element = computed(() => {
-    if (node.value?.dataset?.transientId) {
-      const transientId = getTransientID(node.value)
-
-      if (transientId) {
-        return findElementById(template.value.elements, transientId)
-      }
+    if (!node.value) {
+      return null
     }
-
-    return null
+    return getElementFromNode(node.value, template.value.elements)
   })
 
   const textEditable = computed(() => {
@@ -56,6 +53,53 @@ export function useNode(template: Ref<TransientTemplate>, dictionnary: Component
   })
 
   return { node, element, editable, textEditable, schema, bbox, props }
+}
+
+export function useParentComponent(
+  node: ComputedRef<HTMLElement | null>,
+  template: Ref<TransientTemplate>,
+  dictionnary: ComponentDictionnary,
+) {
+  const parentComponent = computed(() => {
+    if (node.value) {
+      let parent = node.value.parentElement
+
+      while (parent) {
+        if (isNodeComponent(parent) && isNodeEditable(parent)) {
+          return parent
+        }
+        parent = parent.parentElement
+      }
+    }
+
+    return null
+  })
+
+  return useNode(parentComponent, template, dictionnary)
+}
+
+function isNodeComponent(node: HTMLElement) {
+  return Boolean(node.dataset.transientComponent)
+}
+
+function isNodeEditable(node: HTMLElement) {
+  return Boolean(node.dataset.transientEditable === 'true')
+}
+
+export function getNodeId(node: HTMLElement) {
+  return node.dataset.transientId
+}
+
+export function getElementFromNode(node: HTMLElement, elements: TransientElement[]) {
+  if (getNodeId(node)) {
+    const transientId = getTransientID(node)
+
+    if (transientId) {
+      return findElementById(elements, transientId)
+    }
+  }
+
+  return null
 }
 
 const componentPanelIsOpen = ref(false)

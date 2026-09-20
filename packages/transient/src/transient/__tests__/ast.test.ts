@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { findNearestElement, getPathOfElementById } from "../ast";
+import { findNearestAncestor, getPathOfElementById } from "../ast";
 import type { TransientElement } from "../definition";
 
 describe("ast", () => {
@@ -55,7 +55,7 @@ describe("ast", () => {
   });
 
   test("getPathOfElementById", () => {
-    const nested = findNearestElement(
+    const nested = findNearestAncestor(
       elements,
       "5",
       (element) => element.isComponent,
@@ -63,7 +63,7 @@ describe("ast", () => {
     expect(nested).toBeDefined();
     expect(nested!.id).toEqual("1");
 
-    const direct = findNearestElement(
+    const direct = findNearestAncestor(
       elements,
       "2",
       (element) => element.isComponent,
@@ -71,7 +71,7 @@ describe("ast", () => {
     expect(direct).toBeDefined();
     expect(direct!.id).toEqual("1");
 
-    const none = findNearestElement(
+    const none = findNearestAncestor(
       elements,
       "1",
       (element) => element.isComponent,

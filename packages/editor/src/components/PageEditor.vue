@@ -77,38 +77,30 @@
   <Button @click="page.saveToLocalStorage">Save</Button>
   <Button @click="page.loadFromLocalStorage">Load</Button>
 
-  <TSidebar
-    :open="sidebarIsOpen"
-    id="sidebar"
-    @update:open="
-      (open: boolean) => {
-        if (!open) {
-          onSidebarClose()
-        }
-      }
-    "
-    @close="onSidebarClose"
-  >
-    <ElementProps
-      v-if="editedNode.schema.value"
-      :props-schema="editedNode.schema.value?.props"
-      :values="editedNode.props.value ?? {}"
-      @update="
-        ({ prop, value, propName }) => {
-          applyEdition(
-            {
-              type: 'update-prop',
-              propName,
-              prop,
-              value,
-              transientId: editedNode.element.value!.id,
-            },
-            page.contents.value.elements,
-          )
-        }
-      "
-    />
-  </TSidebar>
+  <TDrawer class="sidebar" :open="sidebarIsOpen" @close="onSidebarClose">
+    <div v-if="editedComponent.schema.value" class="flex flex-col gap-4">
+      <h2>{{ editedComponent.element.value?.tag }}</h2>
+      <ElementProps
+        :props-schema="editedComponent.schema.value?.props"
+        :values="editedComponent.props.value ?? {}"
+        @update="
+          ({ prop, value, propName }) => {
+            console.log('update prop')
+            applyEdition(
+              {
+                type: 'update-prop',
+                propName,
+                prop,
+                value,
+                transientId: editedComponent.element.value!.id,
+              },
+              page.contents.value.elements,
+            )
+          }
+        "
+      />
+    </div>
+  </TDrawer>
 
   <!-- <BoundingBox v-if="editedNode.bbox.value" v-bind="editedNode.bbox.value" /> -->
 </template>
@@ -117,15 +109,15 @@
 import { useDictionnary } from '@/lib/use-dictionnary'
 import Button from '@/samples/Button.vue'
 import { usePage } from '@/lib/use-page'
-import { useComponentPanel, useNode } from '@/lib/use-edition'
+import { useComponentPanel, useNode, useParentComponent } from '@/lib/use-edition'
 import RichTextEditor from './RichTextEditor.vue'
-import { useWindowSize } from '@vueuse/core'
+import { useWindowSize, whenever } from '@vueuse/core'
 import ComponentPanel from './ComponentPanel.vue'
 import { applyEdition } from '@/editor/edition'
 import TransientBuilder from './TransientBuilder.vue'
 import ElementProps from './ElementProps.vue'
-import TSidebar from './TSidebar.vue'
-import { computed, ref, watch } from 'vue'
+import TDrawer from './TDrawer.vue'
+import { computed, ref, shallowRef } from 'vue'
 
 const dictionnary = useDictionnary()
 
@@ -133,8 +125,13 @@ const component = dictionnary.get('HomePage')
 
 const page = usePage(component.template!)
 
-const editedNode = useNode(page.contents, dictionnary)
+const editedNode = useNode(shallowRef(null), page.contents, dictionnary)
 
+const editedComponent = useParentComponent(
+  computed(() => editedNode.node.value),
+  page.contents,
+  dictionnary,
+)
 const windowSize = useWindowSize()
 
 const componentPanel = useComponentPanel()
@@ -142,10 +139,10 @@ const componentPanel = useComponentPanel()
 const sidebarIsOpen = ref(false)
 
 const shouldOpenSidebar = computed(() => {
-  return Boolean(editedNode.editable.value && editedNode.schema.value?.props)
+  return Boolean(editedComponent.editable.value && editedComponent.schema.value?.props)
 })
 
-watch(shouldOpenSidebar, () => {
+whenever(shouldOpenSidebar, () => {
   sidebarIsOpen.value = true
 })
 
@@ -156,13 +153,6 @@ function onSidebarClose() {
 </script>
 
 <style>
-.sidebar {
-  position: absolute;
-  right: 0;
-  top: 0;
-  isolation: isolate;
-  z-index: 99;
-}
 .text-editor {
   position: fixed;
   bottom: var(--richtext-editor-bottom);

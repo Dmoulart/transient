@@ -141,7 +141,7 @@ export function getPathOfElementById(
   return undefined;
 }
 
-export function findNearestElement(
+export function findNearestAncestor(
   elements: TransientElement[],
   id: string,
   cb: (element: TransientElement) => boolean,
