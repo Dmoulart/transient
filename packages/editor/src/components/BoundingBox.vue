@@ -26,7 +26,7 @@
   </svg>
 </template>
 <script setup lang="ts">
-import { useElementBounding } from '@vueuse/core'
+import { useBoundingBox } from '@/lib/use-bounding-box'
 import { computed } from 'vue'
 
 const props = withDefaults(
@@ -38,17 +38,9 @@ const props = withDefaults(
   { borderRadius: 0, strokeWidth: 2 },
 )
 
-const node = computed(() => {
-  return props.node
-})
-
 const handle = 8
 
-const bbox = useElementBounding(node, {
-  windowResize: true,
-  immediate: true,
-  windowScroll: true,
-})
+const bbox = useBoundingBox(() => props.node)
 
 const frame = computed(() => ({
   x: props.strokeWidth / 2,

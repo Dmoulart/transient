@@ -18,7 +18,6 @@
     @close="componentPanel.close"
   />
   <UseBoundingBox
-    :key="`richtext-bbox-${canvasChanges}`"
     v-if="selection.text.node.value"
     :node="selection.text.node.value"
     v-slot="{ bbox }"
@@ -73,11 +72,7 @@
   <Button @click="page.loadFromLocalStorage">Load</Button>
   selected: {{ selection.selected.node.value && selection.selected.node.value.tagName }} text:
   {{ selection.text.node.value && selection.text.node.value.tagName }}
-  <BoundingBox
-    :key="`selected-bbox-${canvasChanges}`"
-    v-if="selection.selected.node.value"
-    :node="selection.selected.node.value"
-  />
+  <BoundingBox v-if="selection.selected.node.value" :node="selection.selected.node.value" />
 
   <TDrawer
     id="props-panel"
@@ -117,37 +112,21 @@
 import { useDictionnary } from '@/lib/use-dictionnary'
 import Button from '@/samples/Button.vue'
 import { usePage } from '@/lib/use-page'
-import { isNodeEditable, useComponentPanel } from '@/lib/use-node.js'
+import { useComponentPanel } from '@/lib/use-node.js'
 import RichTextEditor from './RichTextEditor.vue'
-import { useEventListener, useMutationObserver } from '@vueuse/core'
+import { useEventListener } from '@vueuse/core'
 import ComponentPanel from './ComponentPanel.vue'
 import { applyEdition } from '@/editor/edition'
 import TransientBuilder from './TransientBuilder.vue'
 import ElementProps from './ElementProps.vue'
 import TDrawer from './TDrawer.vue'
-import { ref, shallowRef, useTemplateRef } from 'vue'
+import { shallowRef, useTemplateRef } from 'vue'
 import { useSelection } from '@/lib/use-selection.js'
 import { someHTMLElement } from 'transient'
 import BoundingBox from './BoundingBox.vue'
 import UseBoundingBox from './UseBoundingBox.vue'
 
 const canvas = useTemplateRef('canvas')
-
-// brute force change detection to update bbox
-// @todo find a more efficient method. Maybe a custom useElementBounding wrapper
-const canvasChanges = ref(0)
-useMutationObserver(
-  canvas,
-  () => {
-    canvasChanges.value += 1
-  },
-  {
-    childList: true,
-    subtree: true,
-    characterData: true,
-    attributes: true,
-  },
-)
 
 const dictionnary = useDictionnary()
 
@@ -160,11 +139,10 @@ const selection = useSelection(shallowRef(null), page.contents, dictionnary)
 const componentPanel = useComponentPanel()
 
 useEventListener(canvas, 'click', (ev: MouseEvent) => {
-  if (!ev.target || !someHTMLElement(ev.target) || !isNodeEditable(ev.target)) {
-    selection.selected.node.value = null
-    return
-  }
-  selection.selected.node.value = ev.target
+  // a click lands on the innermost element (a <strong> inside an editable <p>): resolve to the editable container
+  selection.selected.node.value = someHTMLElement(ev.target)
+    ? ev.target.closest<HTMLElement>('[data-transient-id], [data-transient-slot]')
+    : null
 })
 </script>
 

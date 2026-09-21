@@ -19,13 +19,13 @@ export function useSelection(
   )
 
   const slot = useNode(
-    computed(() => (selected.isSlot ? selected.node.value : null)),
+    computed(() => (selected.isSlot.value ? selected.node.value : null)),
     template,
     dictionnary,
   )
 
   const text = useNode(
-    computed(() => (selected.isEditableText ? selected.node.value : null)),
+    computed(() => (selected.isEditableText.value ? selected.node.value : null)),
     template,
     dictionnary,
   )
