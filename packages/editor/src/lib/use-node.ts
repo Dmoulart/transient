@@ -20,8 +20,6 @@ export function useNode(
     return null
   })
 
-  const bbox = useElementBounding(node.value)
-
   const element = computed(() => {
     if (!node.value) {
       return null
@@ -44,7 +42,7 @@ export function useNode(
     return getElementProps(schema.value, element.value)
   })
 
-  return { node, element, editable, isSlot, isEditableText, schema, bbox, props }
+  return { node, element, editable, isSlot, isEditableText, schema, props }
 }
 
 export function useParentComponent(

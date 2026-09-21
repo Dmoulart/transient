@@ -17,40 +17,42 @@
     "
     @close="componentPanel.close"
   />
-  <RichTextEditor
+  <UseBoundingBox
+    :key="`richtext-bbox-${canvasChanges}`"
     v-if="selection.text.node.value"
     :node="selection.text.node.value"
-    :style="{
-      '--richtext-editor-bottom': selection.text.bbox
-        ? `${windowSize.height.value - selection.text.bbox.top.value}px`
-        : undefined,
-      '--richtext-editor-left': selection.text.bbox
-        ? `${selection.text.bbox.left.value ?? 0}px`
-        : undefined,
-    }"
-    class="text-editor"
-    @delete="
-      (edition) => {
-        applyEdition(edition, page.contents.value.elements)
-        selection.selected.node.value = null
-      }
-    "
-    @insert-component="
-      ({ targetNodeID }) => {
-        componentPanel.open((schema) => {
-          applyEdition(
-            {
-              type: 'add-component',
-              targetId: targetNodeID!,
-              position: 'after',
-              schema,
-            },
-            page.contents.value.elements,
-          )
-        })
-      }
-    "
-  />
+    v-slot="{ bbox }"
+  >
+    <RichTextEditor
+      :node="selection.text.node.value"
+      :style="{
+        bottom: `calc(100vh - ${bbox.top.value}px)`,
+        left: `${bbox.left.value}px`,
+      }"
+      class="text-editor"
+      @delete="
+        (edition) => {
+          applyEdition(edition, page.contents.value.elements)
+          selection.selected.node.value = null
+        }
+      "
+      @insert-component="
+        ({ targetNodeID }) => {
+          componentPanel.open((schema) => {
+            applyEdition(
+              {
+                type: 'add-component',
+                targetId: targetNodeID!,
+                position: 'after',
+                schema,
+              },
+              page.contents.value.elements,
+            )
+          })
+        }
+      "
+    />
+  </UseBoundingBox>
   <Suspense>
     <main id="canvas" ref="canvas">
       <TransientBuilder
@@ -69,9 +71,10 @@
 
   <Button @click="page.saveToLocalStorage">Save</Button>
   <Button @click="page.loadFromLocalStorage">Load</Button>
-  selected: {{ selection.selected.node.value && selection.selected.node.value.tagName }}
+  selected: {{ selection.selected.node.value && selection.selected.node.value.tagName }} text:
+  {{ selection.text.node.value && selection.text.node.value.tagName }}
   <BoundingBox
-    :key="canvasChanges"
+    :key="`selected-bbox-${canvasChanges}`"
     v-if="selection.selected.node.value"
     :node="selection.selected.node.value"
   />
@@ -93,7 +96,6 @@
         :values="selection.component.props.value ?? {}"
         @update="
           ({ prop, value, propName }) => {
-            console.log('update prop')
             applyEdition(
               {
                 type: 'update-prop',
@@ -117,7 +119,7 @@ import Button from '@/samples/Button.vue'
 import { usePage } from '@/lib/use-page'
 import { isNodeEditable, useComponentPanel } from '@/lib/use-node.js'
 import RichTextEditor from './RichTextEditor.vue'
-import { useEventListener, useMutationObserver, useWindowSize } from '@vueuse/core'
+import { useEventListener, useMutationObserver } from '@vueuse/core'
 import ComponentPanel from './ComponentPanel.vue'
 import { applyEdition } from '@/editor/edition'
 import TransientBuilder from './TransientBuilder.vue'
@@ -127,6 +129,7 @@ import { ref, shallowRef, useTemplateRef } from 'vue'
 import { useSelection } from '@/lib/use-selection.js'
 import { someHTMLElement } from 'transient'
 import BoundingBox from './BoundingBox.vue'
+import UseBoundingBox from './UseBoundingBox.vue'
 
 const canvas = useTemplateRef('canvas')
 
@@ -154,8 +157,6 @@ const page = usePage(component.template!)
 
 const selection = useSelection(shallowRef(null), page.contents, dictionnary)
 
-const windowSize = useWindowSize()
-
 const componentPanel = useComponentPanel()
 
 useEventListener(canvas, 'click', (ev: MouseEvent) => {
@@ -170,8 +171,6 @@ useEventListener(canvas, 'click', (ev: MouseEvent) => {
 <style>
 .text-editor {
   position: fixed;
-  bottom: var(--richtext-editor-bottom);
-  left: var(--richtext-editor-left);
   z-index: 1000;
 }
 </style>

@@ -11,6 +11,7 @@ declare module 'vue' {
     BoundingBox: typeof import('./src/components/BoundingBox.vue')['default']
     Comment: typeof import('./src/components/Comment.vue')['default']
     ComponentPanel: typeof import('./src/components/ComponentPanel.vue')['default']
+    copy: typeof import('./src/components/BoundingBox copy.vue')['default']
     EditorComponent: typeof import('./src/components/EditorComponent.vue')['default']
     EditorComponents: typeof import('./src/components/EditorComponents.vue')['default']
     ElementProp: typeof import('./src/components/ElementProp.vue')['default']
@@ -32,6 +33,7 @@ declare module 'vue' {
     UInput: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/Input.vue')['default']
     UInputNumber: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/InputNumber.vue')['default']
     ULinkBase: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/LinkBase.vue')['default']
+    UseBoundingBox: typeof import('./src/components/useBoundingBox.vue')['default']
     USelectMenu: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/SelectMenu.vue')['default']
     USwitch: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/Switch.vue')['default']
   }
