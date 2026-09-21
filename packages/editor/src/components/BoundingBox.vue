@@ -1,29 +1,35 @@
 <template>
-  <svg
+  <div
     class="pointer-events-none fixed overflow-visible"
     :style="{
       top: `${bbox.top.value}px`,
       left: `${bbox.left.value}px`,
-      filter: 'drop-shadow(0 1px 3px rgb(0 0 0 / 0.35))',
     }"
-    :width="bbox.width.value"
-    :height="bbox.height.value"
   >
-    <!-- halo: keeps the outline readable on dark / busy backgrounds -->
-    <rect v-bind="frame" class="fill-transparent stroke-white" :stroke-width="strokeWidth + 2" />
-    <rect v-bind="frame" class="fill-transparent stroke-teal-500" :stroke-width="strokeWidth" />
-    <rect
-      v-for="([x, y], i) in corners"
-      :key="i"
-      :x="x - handle / 2"
-      :y="y - handle / 2"
-      :width="handle"
-      :height="handle"
-      rx="1.5"
-      class="fill-white stroke-teal-500"
-      stroke-width="1.5"
-    />
-  </svg>
+    <slot />
+    <svg
+      :style="{
+        filter: 'drop-shadow(0 1px 3px rgb(0 0 0 / 0.35))',
+      }"
+      :width="bbox.width.value"
+      :height="bbox.height.value"
+    >
+      <!-- halo: keeps the outline readable on dark / busy backgrounds -->
+      <rect v-bind="frame" class="fill-transparent stroke-white" :stroke-width="strokeWidth + 2" />
+      <rect v-bind="frame" class="fill-transparent stroke-teal-500" :stroke-width="strokeWidth" />
+      <rect
+        v-for="([x, y], i) in corners"
+        :key="i"
+        :x="x - handle / 2"
+        :y="y - handle / 2"
+        :width="handle"
+        :height="handle"
+        rx="1.5"
+        class="fill-white stroke-teal-500"
+        stroke-width="1.5"
+      />
+    </svg>
+  </div>
 </template>
 <script setup lang="ts">
 import { useBoundingBox } from '@/lib/use-bounding-box'
@@ -31,7 +37,7 @@ import { computed } from 'vue'
 
 const props = withDefaults(
   defineProps<{
-    node: HTMLElement
+    bbox: ReturnType<typeof useBoundingBox>
     borderRadius?: number
     strokeWidth?: number
   }>(),
@@ -40,13 +46,11 @@ const props = withDefaults(
 
 const handle = 8
 
-const bbox = useBoundingBox(() => props.node)
-
 const frame = computed(() => ({
   x: props.strokeWidth / 2,
   y: props.strokeWidth / 2,
-  width: Math.max(0, bbox.width.value - props.strokeWidth),
-  height: Math.max(0, bbox.height.value - props.strokeWidth),
+  width: Math.max(0, props.bbox.width.value - props.strokeWidth),
+  height: Math.max(0, props.bbox.height.value - props.strokeWidth),
   rx: props.borderRadius,
 }))
 

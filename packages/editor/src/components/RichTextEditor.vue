@@ -1,20 +1,17 @@
 <script setup lang="ts">
 import { useTextSelection } from '@/lib/use-text-selection'
-import { assert, assertIsDefined } from 'transient'
+import { assert } from 'transient'
 import { computed, ref, type ComputedRef, type Ref } from 'vue'
 import { useComponentPanel } from '@/lib/use-node'
 import { getTransientID } from 'transient'
-import { type DeleteElementEdition } from '@/editor/edition'
 
 const selection = useTextSelection()
 
 type Styles = Record<string, string>
 
 const props = defineProps<{ node: HTMLElement }>()
-const emit = defineEmits<{
-  delete: [deletion: DeleteElementEdition]
-  'insert-component': [data: { targetNodeID: string }]
-}>()
+// dumb widget: says what the user asked, TSelection turns it into editions
+const emit = defineEmits<{ delete: []; 'insert-component': [] }>()
 
 // function wrap(tag: string, node: Node) {
 //   assertIsDefined(selection.value, 'Selection must have a range')
@@ -44,14 +41,10 @@ function wrapSelection(tag: string, sel: Selection): HTMLElement {
   // allow to detect we used the rich text editor to add this motherfucker
   wrapper.dataset.textAddition = 'true'
 
-  if (contents.parentNode?.nodeName === tag) {
-    // If the contents are already wrapped in the same tag, just return it
-    return contents.parentNode as HTMLElement
-  }
-
   wrapper.appendChild(contents)
 
   range.insertNode(wrapper)
+  removeEmptyInlines()
 
   sel.removeAllRanges()
   const newRange = document.createRange()
@@ -59,6 +52,11 @@ function wrapSelection(tag: string, sel: Selection): HTMLElement {
   sel.addRange(newRange)
 
   return wrapper
+}
+
+// extractContents() leaves empty shells behind when the range partially covers an inline (<em></em>)
+function removeEmptyInlines() {
+  props.node.querySelectorAll('strong:empty, em:empty, u:empty').forEach((el) => el.remove())
 }
 
 function unwrapSelection(tag: string, sel: Selection) {
@@ -88,6 +86,7 @@ function unwrapSelection(tag: string, sel: Selection) {
   }
 
   parentOfWrappingTag.removeChild(wrappingTag)
+  removeEmptyInlines()
 
   sel.removeAllRanges()
 
@@ -113,63 +112,68 @@ function nodeIn(tagNames: string[], selection: Selection) {
   }
   if (!(el instanceof HTMLElement)) return false
 
-  return tagNames.some((tag) => el!.closest(tag))
+  // closest() can escape the editable zone (a <strong> wrapping the whole page must not light up Bold)
+  return tagNames.some((tag) => {
+    const match = el.closest(tag)
+    return match && props.node.contains(match)
+  })
 }
 
+// Inline style only: it's what we set, and computed 'start' would never match 'left'
 function blockAncestorStyle(styles: Styles, selection: Selection) {
   const block = getBlockContainer(selection)
+  if (!block) return false
 
-  if (!(block instanceof HTMLElement)) return false
-
-  for (const style in styles) {
-    if (block.computedStyleMap().get(style)?.toString() !== styles[style]) {
-      return false
-    }
-  }
-
-  return true
+  return Object.entries(styles).every(
+    ([prop, value]) => block.style.getPropertyValue(prop) === value,
+  )
 }
 
 function setBlockAncestorStyle(styles: Styles, selection: Selection) {
   const block = getBlockContainer(selection)
-
-  if (!(block instanceof HTMLElement)) return
+  if (!block) return
 
   for (const style in styles) {
-    block.attributeStyleMap.set(style, styles[style])
+    block.style.setProperty(style, styles[style])
   }
 }
 
 function unsetBlockAncestorStyle(styles: Styles, selection: Selection) {
   const block = getBlockContainer(selection)
-
-  if (!(block instanceof HTMLElement)) return
+  if (!block) return
 
   for (const style in styles) {
-    block.attributeStyleMap.delete(style)
+    block.style.removeProperty(style)
   }
 }
 
-function defineTextState(
-  isSelected: (selectionValue: typeof selection) => boolean,
-): ComputedRef<boolean> {
+function inEditedNode(sel: Selection) {
+  return Boolean(sel.anchorNode && props.node.contains(sel.anchorNode))
+}
+
+function defineTextState(isSelected: (sel: Selection) => boolean): ComputedRef<boolean> {
   return computed(() => {
-    if (!selection.value?.focusNode) return false
-    return isSelected(selection)
+    const sel = selection.value
+    if (!sel?.focusNode || !inEditedNode(sel)) return false
+    return isSelected(sel)
   })
 }
 
 function defineActionToggle(
   onEnable: (selectionValue: Selection) => void,
   onDisable: (selectionValue: Selection) => void,
+  { allowCollapsed = false } = {},
 ) {
   return function (selected: boolean) {
-    if (selection.value === null) return
+    const sel = selection.value
+    if (!sel || !inEditedNode(sel)) return
+    // wrapping a caret creates an empty <strong> the browser won't reliably type into
+    if (sel.isCollapsed && !allowCollapsed) return
 
     if (!selected) {
-      onEnable(selection.value)
+      onEnable(sel)
     } else {
-      onDisable(selection.value)
+      onDisable(sel)
     }
   }
 }
@@ -224,10 +228,13 @@ function getBlockContainer(selection: Selection): HTMLElement | null {
 
   if (!(node instanceof HTMLElement)) return null
 
-  // Traverse up until a block-level element is found (simplified)
-  let el: HTMLElement | null = node as HTMLElement
-
-  while (el && window.getComputedStyle(el).display !== 'block' && el.parentElement) {
+  // Climb past inline elements, never above the edited node (anything above isn't serialized)
+  let el: HTMLElement = node
+  while (
+    el !== props.node &&
+    el.parentElement &&
+    getComputedStyle(el).display.startsWith('inline')
+  ) {
     el = el.parentElement
   }
 
@@ -253,17 +260,17 @@ const toolbarItems: ToolbarItem[] = [
     type: 'item',
     title: 'Bold',
     svg: '<path d="M6 4h8a4 4 0 0 1 0 8H6zm0 8h9a4 4 0 1 1 0 8H6z" />',
-    selected: defineTextState((sel) => nodeIn(['strong', 'b'], sel.value as Selection)),
+    selected: defineTextState((sel) => nodeIn(['strong', 'b'], sel)),
     toggle: defineActionToggle(
-      (sel) => wrapSelection('strong', sel!),
-      (sel) => unwrapSelection('strong', sel!),
+      (sel) => wrapSelection('strong', sel),
+      (sel) => unwrapSelection('strong', sel),
     ),
   },
   {
     type: 'item',
     title: 'Italic',
     svg: '<path d="M10 4v3h2.21l-3.42 10H6v3h8v-3h-2.21l3.42-10H18V4z" />',
-    selected: defineTextState((sel) => nodeIn(['i', 'em'], sel.value as Selection)),
+    selected: defineTextState((sel) => nodeIn(['i', 'em'], sel)),
     toggle: defineActionToggle(
       (sel) => wrapSelection('em', sel),
       (sel) => unwrapSelection('em', sel),
@@ -273,7 +280,7 @@ const toolbarItems: ToolbarItem[] = [
     type: 'item',
     title: 'Underline',
     svg: '<path d="M12 17a5 5 0 0 0 5-5V4h-2v8a3 3 0 0 1-6 0V4H7v8a5 5 0 0 0 5 5zm-7 2v2h14v-2z" />',
-    selected: defineTextState((sel) => nodeIn(['u'], sel.value as Selection)),
+    selected: defineTextState((sel) => nodeIn(['u'], sel)),
     toggle: defineActionToggle(
       (sel) => wrapSelection('u', sel),
       (sel) => unwrapSelection('u', sel),
@@ -284,42 +291,39 @@ const toolbarItems: ToolbarItem[] = [
     type: 'item',
     title: 'Justify Left',
     svg: '<path d="M4 6h16v2H4zm0 4h10v2H4zm0 4h16v2H4zm0 4h10v2H4z" />',
-    selected: defineTextState((sel) =>
-      blockAncestorStyle({ 'text-align': 'left' }, sel.value as Selection),
-    ),
+    selected: defineTextState((sel) => blockAncestorStyle({ 'text-align': 'left' }, sel)),
     toggle: defineActionToggle(
       (sel) => {
-        setBlockAncestorStyle({ 'text-align': 'left' }, sel!)
+        setBlockAncestorStyle({ 'text-align': 'left' }, sel)
       },
-      (sel) => unsetBlockAncestorStyle({ 'text-align': 'left' }, sel!),
+      (sel) => unsetBlockAncestorStyle({ 'text-align': 'left' }, sel),
+      { allowCollapsed: true },
     ),
   },
   {
     type: 'item',
     title: 'Justify Center',
     svg: '<path d="M4 6h16v2H4zm3 4h10v2H7zm-3 4h16v2H4zm3 4h10v2H7z" />',
-    selected: defineTextState((sel) =>
-      blockAncestorStyle({ 'text-align': 'center' }, sel.value as Selection),
-    ),
+    selected: defineTextState((sel) => blockAncestorStyle({ 'text-align': 'center' }, sel)),
     toggle: defineActionToggle(
       (sel) => {
-        setBlockAncestorStyle({ 'text-align': 'center' }, sel!)
+        setBlockAncestorStyle({ 'text-align': 'center' }, sel)
       },
-      (sel) => unsetBlockAncestorStyle({ 'text-align': 'center' }, sel!),
+      (sel) => unsetBlockAncestorStyle({ 'text-align': 'center' }, sel),
+      { allowCollapsed: true },
     ),
   },
   {
     type: 'item',
     title: 'Justify Right',
     svg: '<path d="M4 6h16v2H4zm6 4h10v2H10zm-6 4h16v2H4zm6 4h10v2H10z" />',
-    selected: defineTextState((sel) =>
-      blockAncestorStyle({ 'text-align': 'right' }, sel.value as Selection),
-    ),
+    selected: defineTextState((sel) => blockAncestorStyle({ 'text-align': 'right' }, sel)),
     toggle: defineActionToggle(
       (sel) => {
-        setBlockAncestorStyle({ 'text-align': 'right' }, sel!)
+        setBlockAncestorStyle({ 'text-align': 'right' }, sel)
       },
-      (sel) => unsetBlockAncestorStyle({ 'text-align': 'right' }, sel!),
+      (sel) => unsetBlockAncestorStyle({ 'text-align': 'right' }, sel),
+      { allowCollapsed: true },
     ),
   },
   { type: 'separator' },
@@ -327,7 +331,7 @@ const toolbarItems: ToolbarItem[] = [
   //   type: 'item',
   //   title: 'Ordered List',
   //   svg: '<path d="M8 6h13v2H8zM8 11h13v2H8zM8 16h13v2H8zM3 6h2v2H3zM3 11h2v2H3zM3 16h2v2H3z" />',
-  //   selected: defineTextState((sel) => nodeIn(['ol'], sel.value as Selection)),
+  //   selected: defineTextState((sel) => nodeIn(['ol'], sel)),
   //   toggle: defineActionToggle(
   //     (sel) => {
   //       wrap('ol', wrapSelection('li', sel))
@@ -342,7 +346,7 @@ const toolbarItems: ToolbarItem[] = [
   //   type: 'item',
   //   title: 'Unordered List',
   //   svg: '<path d="M8 6h13v2H8zM8 11h13v2H8zM8 16h13v2H8zM3 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />',
-  //   selected: defineTextState((sel) => nodeIn(['ul'], sel.value as Selection)),
+  //   selected: defineTextState((sel) => nodeIn(['ul'], sel)),
   //   toggle: defineActionToggle(
   //     (sel) => {
   //       wrap('ul', wrapSelection('li', sel))
@@ -358,20 +362,7 @@ const toolbarItems: ToolbarItem[] = [
     title: 'Insert component',
     svg: ' <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z" />',
     selected: useComponentPanel().isOpen,
-    toggle: () => {
-      const targetNodeID = getTransientID(props.node)
-      assertIsDefined(targetNodeID)
-      emit('insert-component', { targetNodeID })
-      // panel.targetNodeID.value = getTransientID(editedNode.value)
-      // panel.open((targetNodeID, componentPath, componentSchema) => {
-      //   // emit('edit', {
-      //   //   ...data,
-      //   //   type: 'add-component',
-      //   //   position: 'after',
-      //   //   targetId: panel.targetNodeID.value!,
-      //   // })
-      // })
-    },
+    toggle: () => emit('insert-component'),
   },
   {
     type: 'item',
@@ -381,12 +372,7 @@ const toolbarItems: ToolbarItem[] = [
     condition() {
       return Boolean(getTransientID(props.node))
     },
-    toggle: () => {
-      const transientID = getTransientID(props.node)
-      assertIsDefined(transientID)
-      emit('delete', { type: 'delete-element', transientId: transientID })
-      // TODO: implement logic
-    },
+    toggle: () => emit('delete'),
   },
 ]
 </script>

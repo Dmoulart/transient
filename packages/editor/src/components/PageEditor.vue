@@ -17,41 +17,7 @@
     "
     @close="componentPanel.close"
   />
-  <UseBoundingBox
-    v-if="selection.text.node.value"
-    :node="selection.text.node.value"
-    v-slot="{ bbox }"
-  >
-    <RichTextEditor
-      :node="selection.text.node.value"
-      :style="{
-        bottom: `calc(100vh - ${bbox.top.value}px)`,
-        left: `${bbox.left.value}px`,
-      }"
-      class="text-editor"
-      @delete="
-        (edition) => {
-          applyEdition(edition, page.contents.value.elements)
-          selection.selected.node.value = null
-        }
-      "
-      @insert-component="
-        ({ targetNodeID }) => {
-          componentPanel.open((schema) => {
-            applyEdition(
-              {
-                type: 'add-component',
-                targetId: targetNodeID!,
-                position: 'after',
-                schema,
-              },
-              page.contents.value.elements,
-            )
-          })
-        }
-      "
-    />
-  </UseBoundingBox>
+
   <Suspense>
     <main id="canvas" ref="canvas">
       <TransientBuilder
@@ -59,11 +25,7 @@
         :dictionnary="dictionnary"
         :key="element.id"
         :element="element"
-        @edit="
-          (edition) => {
-            applyEdition(edition, page.contents.value.elements)
-          }
-        "
+        @edit="apply"
       />
     </main>
   </Suspense>
@@ -72,7 +34,19 @@
   <Button @click="page.loadFromLocalStorage">Load</Button>
   selected: {{ selection.selected.node.value && selection.selected.node.value.tagName }} text:
   {{ selection.text.node.value && selection.text.node.value.tagName }}
-  <BoundingBox v-if="selection.selected.node.value" :node="selection.selected.node.value" />
+  <TSelection
+    v-if="selection.selected.node.value"
+    :node="selection.selected.node.value"
+    :text="selection.text.node.value"
+    @edit="apply"
+    @insert-component="
+      ({ targetNodeID }) => {
+        componentPanel.open((schema) => {
+          apply({ type: 'add-component', targetId: targetNodeID, position: 'after', schema })
+        })
+      }
+    "
+  />
 
   <TDrawer
     id="props-panel"
@@ -91,16 +65,13 @@
         :values="selection.component.props.value ?? {}"
         @update="
           ({ prop, value, propName }) => {
-            applyEdition(
-              {
-                type: 'update-prop',
-                propName,
-                prop,
-                value,
-                transientId: selection.component.element.value!.id,
-              },
-              page.contents.value.elements,
-            )
+            apply({
+              type: 'update-prop',
+              propName,
+              prop,
+              value,
+              transientId: selection.component.element.value!.id,
+            })
           }
         "
       />
@@ -113,18 +84,16 @@ import { useDictionnary } from '@/lib/use-dictionnary'
 import Button from '@/samples/Button.vue'
 import { usePage } from '@/lib/use-page'
 import { useComponentPanel } from '@/lib/use-node.js'
-import RichTextEditor from './RichTextEditor.vue'
 import { useEventListener } from '@vueuse/core'
 import ComponentPanel from './ComponentPanel.vue'
-import { applyEdition } from '@/editor/edition'
+import { applyEdition, type Edition } from '@/editor/edition'
 import TransientBuilder from './TransientBuilder.vue'
 import ElementProps from './ElementProps.vue'
 import TDrawer from './TDrawer.vue'
-import { shallowRef, useTemplateRef } from 'vue'
+import { nextTick, shallowRef, useTemplateRef } from 'vue'
 import { useSelection } from '@/lib/use-selection.js'
 import { someHTMLElement } from 'transient'
-import BoundingBox from './BoundingBox.vue'
-import UseBoundingBox from './UseBoundingBox.vue'
+import TSelection from './TSelection.vue'
 
 const canvas = useTemplateRef('canvas')
 
@@ -138,6 +107,14 @@ const selection = useSelection(shallowRef(null), page.contents, dictionnary)
 
 const componentPanel = useComponentPanel()
 
+function apply(edition: Edition) {
+  applyEdition(edition, page.contents.value.elements)
+  // a deleted node leaves the DOM: drop the stale selection
+  nextTick(() => {
+    if (selection.selected.node.value?.isConnected === false) selection.selected.node.value = null
+  })
+}
+
 useEventListener(canvas, 'click', (ev: MouseEvent) => {
   // a click lands on the innermost element (a <strong> inside an editable <p>): resolve to the editable container
   selection.selected.node.value = someHTMLElement(ev.target)
@@ -146,9 +123,4 @@ useEventListener(canvas, 'click', (ev: MouseEvent) => {
 })
 </script>
 
-<style>
-.text-editor {
-  position: fixed;
-  z-index: 1000;
-}
-</style>
+<style></style>

@@ -25,6 +25,7 @@ declare module 'vue' {
     TComment: typeof import('./src/components/TComment.vue')['default']
     TDrawer: typeof import('./src/components/TDrawer.vue')['default']
     TransientBuilder: typeof import('./src/components/TransientBuilder.vue')['default']
+    TSelection: typeof import('./src/components/TSelection.vue')['default']
     TSidebar: typeof import('./src/components/TSidebar.vue')['default']
     UApp: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/App.vue')['default']
     UButton: typeof import('./../../node_modules/@nuxt/ui/dist/runtime/components/Button.vue')['default']
