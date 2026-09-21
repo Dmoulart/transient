@@ -2,6 +2,7 @@ import type { TransientComponentSchema, TransientElement, TransientTemplate } fr
 import { computed, readonly, ref, type ComputedRef, type Ref } from 'vue'
 import { ComponentDictionnary } from './use-dictionnary'
 import { assertIsDefined, findElementById, getElementProps, getTransientID } from 'transient'
+import { useElementBounding, useMutationObserver } from '@vueuse/core'
 
 export function useNode(
   node: Ref<HTMLElement | null>,
@@ -19,20 +20,7 @@ export function useNode(
     return null
   })
 
-  const bbox = computed(() => {
-    if (node.value) {
-      const rect = node.value.getBoundingClientRect()
-      return {
-        top: rect.top,
-        left: rect.left,
-        bottom: rect.bottom,
-        right: rect.right,
-        width: rect.width,
-        height: rect.height,
-      }
-    }
-    return null
-  })
+  const bbox = useElementBounding(node.value)
 
   const element = computed(() => {
     if (!node.value) {

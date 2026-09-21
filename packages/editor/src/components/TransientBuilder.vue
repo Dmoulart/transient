@@ -104,7 +104,7 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
           v-for="child in element.slots[slotName]"
           :dictionnary="dictionnary"
           :element="child"
-          :key="JSON.stringify(child)"
+          :key="child.id"
           :slot-location="{ slotName, ownerId: element.id }"
           @edit="(event) => emit('edit', event)" /></template></template></component
   ><template v-else

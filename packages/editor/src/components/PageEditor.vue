@@ -21,11 +21,11 @@
     v-if="selection.text.node.value"
     :node="selection.text.node.value"
     :style="{
-      '--richtext-editor-bottom': selection.text.bbox.value
-        ? `${windowSize.height.value - selection.text.bbox.value.top}px`
+      '--richtext-editor-bottom': selection.text.bbox
+        ? `${windowSize.height.value - selection.text.bbox.top.value}px`
         : undefined,
-      '--richtext-editor-left': selection.text.bbox.value
-        ? `${selection.text.bbox.value.left ?? 0}px`
+      '--richtext-editor-left': selection.text.bbox
+        ? `${selection.text.bbox.left.value ?? 0}px`
         : undefined,
     }"
     class="text-editor"
@@ -51,25 +51,30 @@
       }
     "
   />
-
   <Suspense>
-    <TransientBuilder
-      v-for="element in page.contents.value.elements"
-      :dictionnary="dictionnary"
-      :key="element.id"
-      :element="element"
-      @edit="
-        (edition) => {
-          applyEdition(edition, page.contents.value.elements)
-        }
-      "
-    />
+    <main id="canvas" ref="canvas">
+      <TransientBuilder
+        v-for="element in page.contents.value.elements"
+        :dictionnary="dictionnary"
+        :key="element.id"
+        :element="element"
+        @edit="
+          (edition) => {
+            applyEdition(edition, page.contents.value.elements)
+          }
+        "
+      />
+    </main>
   </Suspense>
 
   <Button @click="page.saveToLocalStorage">Save</Button>
   <Button @click="page.loadFromLocalStorage">Load</Button>
-
-  <BoundingBox v-if="selection.selected.bbox.value" v-bind="selection.selected.bbox.value" />
+  selected: {{ selection.selected.node.value && selection.selected.node.value.tagName }}
+  <BoundingBox
+    :key="canvasChanges"
+    v-if="selection.selected.node.value"
+    :node="selection.selected.node.value"
+  />
 
   <TDrawer
     id="props-panel"
@@ -112,16 +117,34 @@ import Button from '@/samples/Button.vue'
 import { usePage } from '@/lib/use-page'
 import { isNodeEditable, useComponentPanel } from '@/lib/use-node.js'
 import RichTextEditor from './RichTextEditor.vue'
-import { useEventListener, useWindowSize } from '@vueuse/core'
+import { useEventListener, useMutationObserver, useWindowSize } from '@vueuse/core'
 import ComponentPanel from './ComponentPanel.vue'
 import { applyEdition } from '@/editor/edition'
 import TransientBuilder from './TransientBuilder.vue'
 import ElementProps from './ElementProps.vue'
 import TDrawer from './TDrawer.vue'
-import { shallowRef } from 'vue'
+import { ref, shallowRef, useTemplateRef } from 'vue'
 import { useSelection } from '@/lib/use-selection.js'
 import { someHTMLElement } from 'transient'
 import BoundingBox from './BoundingBox.vue'
+
+const canvas = useTemplateRef('canvas')
+
+// brute force change detection to update bbox
+// @todo find a more efficient method. Maybe a custom useElementBounding wrapper
+const canvasChanges = ref(0)
+useMutationObserver(
+  canvas,
+  () => {
+    canvasChanges.value += 1
+  },
+  {
+    childList: true,
+    subtree: true,
+    characterData: true,
+    attributes: true,
+  },
+)
 
 const dictionnary = useDictionnary()
 
@@ -135,7 +158,7 @@ const windowSize = useWindowSize()
 
 const componentPanel = useComponentPanel()
 
-useEventListener('click', (ev: MouseEvent) => {
+useEventListener(canvas, 'click', (ev: MouseEvent) => {
   if (!ev.target || !someHTMLElement(ev.target) || !isNodeEditable(ev.target)) {
     selection.selected.node.value = null
     return
