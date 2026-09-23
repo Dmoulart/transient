@@ -35,6 +35,22 @@ export function useNode(
     return node.value && node.value.contentEditable === 'true'
   })
 
+  const slotsNodes = computed(() => {
+    if (!node.value) {
+      return null
+    }
+    debugger
+    const id = getNodeId(node.value)
+    if (!id) {
+      return null
+    }
+
+    // if node is it's own slot
+    if (isNodeASlotOf(id, node.value)) return [node.value]
+
+    return node.value.querySelectorAll<HTMLElement>(`[data-transient-slot$='${id}']`)
+  })
+
   const props = computed(() => {
     if (!schema.value || !element.value) {
       return null
@@ -42,7 +58,7 @@ export function useNode(
     return getElementProps(schema.value, element.value)
   })
 
-  return { node, element, editable, isSlot, isEditableText, schema, props }
+  return { node, element, editable, isSlot, isEditableText, schema, props, slotsNodes }
 }
 
 export function useParentComponent(
@@ -57,21 +73,44 @@ export function useParentComponent(
   return useNode(parentComponent, template, dictionnary)
 }
 
+export function getNodeId(node: HTMLElement) {
+  return node.dataset.transientId
+}
+
+export function getNodeComponentTagName(node: HTMLElement) {
+  return node.dataset.transientComponent
+}
+
+export function getSlotId(node: HTMLElement) {
+  return node.dataset.transientSlot
+}
+
 function isNodeComponent(node: HTMLElement) {
-  return Boolean(node.dataset.transientComponent)
+  return Boolean(getNodeComponentTagName(node))
 }
 
 export function isNodeEditable(node: HTMLElement) {
   return Boolean(node.dataset.transientId || node.dataset.transientSlot)
 }
 
+export function getSlotOwnerId(node: HTMLElement) {
+  const slotId = getSlotId(node)
+  if (!slotId) {
+    return null
+  }
+  const [_, ownerId] = slotId.split(':') as [string, string]
+  return ownerId
+}
+
+export function isNodeASlotOf(ownerTransientId: string, node: HTMLElement) {
+  const slotOwnerId = getSlotOwnerId(node)
+  if (!slotOwnerId) return false
+  return slotOwnerId === ownerTransientId
+}
+
 // function isNodeEditable(node: HTMLElement) {
 //   return Boolean(node.dataset.transientEditable === 'true')
 // }
-
-export function getNodeId(node: HTMLElement) {
-  return node.dataset.transientId
-}
 
 export function getElementFromNode(node: HTMLElement, elements: TransientElement[]) {
   if (getNodeId(node)) {

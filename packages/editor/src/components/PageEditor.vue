@@ -34,10 +34,9 @@
   <Button @click="page.loadFromLocalStorage">Load</Button>
   selected: {{ selection.selected.node.value && selection.selected.node.value.tagName }} text:
   {{ selection.text.node.value && selection.text.node.value.tagName }}
-  <TSelection
-    v-if="selection.selected.node.value"
-    :node="selection.selected.node.value"
-    :text="selection.text.node.value"
+  <ComponentSelection
+    v-if="selection.component.node.value"
+    :node="selection.component.node.value"
     @edit="apply"
     @insert-component="
       ({ targetNodeID }) => {
@@ -47,7 +46,20 @@
       }
     "
   />
-
+  <template v-if="selection.component.slotsNodes.value">
+    <SlotHighlight
+      v-for="slot in selection.component.slotsNodes.value"
+      :key="getNodeId(slot)!"
+      :node="slot"
+      @insert-component="
+        ({ targetNodeID }) => {
+          componentPanel.open((schema) => {
+            apply({ type: 'add-component', targetId: targetNodeID, position: 'after', schema })
+          })
+        }
+      "
+    />
+  </template>
   <TDrawer
     id="props-panel"
     :open="!!selection.component.node.value"
@@ -83,7 +95,7 @@
 import { useDictionnary } from '@/lib/use-dictionnary'
 import Button from '@/samples/Button.vue'
 import { usePage } from '@/lib/use-page'
-import { useComponentPanel } from '@/lib/use-node.js'
+import { getNodeId, useComponentPanel } from '@/lib/use-node.js'
 import { useEventListener } from '@vueuse/core'
 import ComponentPanel from './ComponentPanel.vue'
 import { applyEdition, type Edition } from '@/editor/edition'
@@ -93,7 +105,8 @@ import TDrawer from './TDrawer.vue'
 import { nextTick, shallowRef, useTemplateRef } from 'vue'
 import { useSelection } from '@/lib/use-selection.js'
 import { someHTMLElement } from 'transient'
-import TSelection from './TSelection.vue'
+import ComponentSelection from './ComponentSelection.vue'
+import SlotHighlight from './SlotHighlight.vue'
 
 const canvas = useTemplateRef('canvas')
 
