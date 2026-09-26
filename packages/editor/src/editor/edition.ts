@@ -19,7 +19,6 @@ export type Edition =
   | SlotEdition
   | ElementEdition
   | AddComponentEdition
-  | AppendComponentEdition
   | DeleteElementEdition
   | UpdateElementPropEdition
 
@@ -38,13 +37,7 @@ export type ElementEdition = {
 
 export type AddComponentEdition = {
   type: 'add-component'
-  position: 'after' | 'before'
-  targetId: string
-  schema: TransientComponentSchema
-}
-
-export type AppendComponentEdition = {
-  type: 'append-component'
+  position: 'after' | 'before' | 'append'
   targetId: string
   schema: TransientComponentSchema
 }
@@ -70,7 +63,6 @@ export type EditionInput =
   | ElementEditionInput
   | AddComponentEdition
   | DeleteElementEdition
-  | AppendComponentEdition
   | UpdateElementPropEdition
 
 export function applyEdition(edition: Edition, elements: TransientElement[]) {
@@ -100,23 +92,23 @@ export function applyEdition(edition: Edition, elements: TransientElement[]) {
         id: crypto.randomUUID(),
       }
 
-      if (edition.position === 'after') {
-        insertAfterElement(component, edition.targetId, elements)
-      } else {
-        insertBeforeElement(component, edition.targetId, elements)
+      switch (edition.position) {
+        case 'after': {
+          insertAfterElement(component, edition.targetId, elements)
+          break
+        }
+        case 'before': {
+          insertBeforeElement(component, edition.targetId, elements)
+          break
+        }
+        case 'append': {
+          appendElement(component, edition.targetId, elements)
+          break
+        }
+        default: {
+          console.error('unknown add-component position')
+        }
       }
-      break
-    }
-
-    case 'append-component': {
-      const component: TransientElement = {
-        tag: edition.schema.tag,
-        isComponent: true,
-        attributes: {},
-        id: crypto.randomUUID(),
-      }
-
-      appendElement(component, edition.targetId, elements)
 
       break
     }

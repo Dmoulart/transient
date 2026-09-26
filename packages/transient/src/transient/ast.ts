@@ -226,10 +226,14 @@ export function appendElement(
     return false;
   }
 
-  parent.slots = parent.slots ?? {};
-  parent.slots.default = parent.slots.default ?? [];
+  parent.slots ??= {};
 
-  parent.slots.default.push(element);
+  if (parent.slots.default) {
+    parent.slots.default.push(element);
+  } else {
+    parent.slots.default = [element];
+  }
+
   return true;
 }
 

@@ -6,13 +6,13 @@
       >
         {{ label }}
       </span>
-      <!-- <RichTextEditor
+      <RichTextEditor
         v-if="text"
         class="pointer-events-auto absolute bottom-full left-0 z-10 mb-4"
         :node="text"
         @delete="emit('edit', { type: 'delete-element', transientId: id() })"
         @insert-component="emit('insert-component', { targetNodeID: id() })"
-      /> -->
+      />
       <button
         title="Insert after"
         class="pointer-events-auto absolute top-full left-1/2 z-10 flex size-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-teal-500 text-white shadow-md ring-2 ring-white transition hover:scale-110 hover:bg-teal-400"
@@ -31,7 +31,7 @@ import BoundingBox from './BoundingBox.vue'
 import UseBoundingBox from './UseBoundingBox.vue'
 import type { EditorEvents } from '@/editor/events'
 
-const props = defineProps<{ node: HTMLElement }>()
+const props = defineProps<{ node: HTMLElement; text: HTMLElement | null }>()
 const emit = defineEmits<EditorEvents>()
 
 // component name > slot name > tag

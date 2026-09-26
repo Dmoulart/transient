@@ -37,6 +37,7 @@
   <ComponentSelection
     v-if="selection.component.node.value"
     :node="selection.component.node.value"
+    :text="selection.text.node.value"
     @edit="apply"
     @insert-component="
       ({ targetNodeID }) => {
@@ -54,7 +55,7 @@
       @insert-component="
         ({ targetNodeID }) => {
           componentPanel.open((schema) => {
-            apply({ type: 'add-component', targetId: targetNodeID, position: 'after', schema })
+            apply({ type: 'add-component', targetId: targetNodeID, position: 'append', schema })
           })
         }
       "

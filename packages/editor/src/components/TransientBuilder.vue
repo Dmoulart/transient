@@ -58,27 +58,14 @@ const vEdit: Directive<HTMLElement, ComponentSlotEditionInput | ElementEditionIn
           transientId: transientID,
         })
       } else if (transientSlot) {
-        // // Clean up visual "emptiness" in slot zones
-        // // Remove redundant <br> and empty text nodes
-        // const onlyGarbage = Array.from(target.childNodes).every((node) => {
-        //   return (
-        //     (node.nodeType === Node.ELEMENT_NODE && node.nodeName === 'BR') ||
-        //     (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() === '')
-        //   )
+      
+        // const [slotName, ownerId] = transientSlot.split(':')
+        // emit('edit', {
+        //   type: 'edit-slot',
+        //   slotName,
+        //   ownerId,
+        //   node: target,
         // })
-
-        // if (onlyGarbage) {
-        //   target.innerHTML = ''
-        //   target.dataset.textAddition = 'true'
-        // }
-
-        const [slotName, ownerId] = transientSlot.split(':')
-        emit('edit', {
-          type: 'edit-slot',
-          slotName,
-          ownerId,
-          node: target,
-        })
       }
 
       // emit('select', null)

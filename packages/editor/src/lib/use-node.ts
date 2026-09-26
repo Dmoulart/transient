@@ -39,7 +39,6 @@ export function useNode(
     if (!node.value) {
       return null
     }
-    debugger
     const id = getNodeId(node.value)
     if (!id) {
       return null
