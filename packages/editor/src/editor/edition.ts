@@ -51,7 +51,7 @@ export type UpdateElementPropEdition = {
   type: 'update-prop'
   prop: TransientProp
   propName: string
-  value: any
+  value: unknown
   transientId: string
 }
 

@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 const STORAGE_KEY = 'page-schema'
 
-export function usePage(template: TransientTemplate) {
+export function useTemplate(template: TransientTemplate) {
   const contents = ref<TransientTemplate>(template)
 
   function saveToLocalStorage() {

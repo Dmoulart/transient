@@ -13,7 +13,7 @@ export class ComponentDictionnary {
   }
 }
 
-const dictionnary = new ComponentDictionnary(schemas as any)
+const dictionnary = new ComponentDictionnary(schemas as TransientComponentDictionnary)
 
 export function useDictionnary() {
   return dictionnary
@@ -21,13 +21,14 @@ export function useDictionnary() {
 
 const componentModules = import.meta.glob('@/samples/**/*.vue')
 
-export async function loadAllComponents(): Promise<Record<string, any>> {
-  const result: Record<string, any> = {}
+export async function loadAllComponents(): Promise<Record<string, unknown>> {
+  const result: Record<string, unknown> = {}
 
   for (const path in componentModules) {
     const name = path.split('/').pop()?.replace('.vue', '')
     if (name) {
-      const mod: any = await componentModules[path]()
+      const mod = await componentModules[path]()
+      // @ts-expect-error : check if it is possible to type
       result[name] = mod.default
       // schemasByName.value[name] = getTransientComponentSchemaByTag(name)
     }

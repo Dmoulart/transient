@@ -16,7 +16,8 @@ import type { TransientProp } from 'transient'
 import type { TransientElementAttributes } from 'transient'
 
 defineProps<{ propsSchema: TransientProps; values: TransientElementAttributes }>()
+
 const emit = defineEmits<{
   update: [data: { prop: TransientProp; propName: string; value: unknown }]
-}>() // Explicitly define the v-model event
+}>()
 </script>

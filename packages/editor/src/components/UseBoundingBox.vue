@@ -2,9 +2,14 @@
   <slot :bbox="bbox"></slot>
 </template>
 <script setup lang="ts">
-import { useBoundingBox } from '@/lib/use-bounding-box'
+import { useElementsBounding, type MaybeNode } from '@/lib/use-bounding-box'
+import { watch } from 'vue'
 
-const props = defineProps<{ node: HTMLElement }>()
+const props = defineProps<{ targets: MaybeNode[] }>()
 
-const bbox = useBoundingBox(() => props.node)
+const bbox = useElementsBounding(() => props.targets)
+watch(
+  () => bbox,
+  () => console.log('bbox changes ? '),
+)
 </script>

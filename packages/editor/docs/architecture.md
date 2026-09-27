@@ -1,63 +1,59 @@
 # Architecture
 
-## IR
+## DOM IR
 
-| attribute                   | type                  | purpose 
-| dataset-transient-id        | uuid                  | identify a unique element of a template.
-| dataset-transient-component | string                | identify the transient component which the element is an instance of, it is only placed on the root element of the component.
-| dataset-transient-slot      | {slotName}:{id}       | identify the parent element of a slot.  
+Every IR node is rendered between two comments
+
+- open: `<!--tst:{type}:{key}[:{name}]-->`
+- close: `<!--/tst:{key}-->`
+
+| type        | key                    | name                 |
+| ----------- | ---------------------- | -------------------- |
+| `element`   | element id             | tag (`div`)          |
+| `component` | instance id            | component (`Button`) |
+| `slot`      | `{ownerId}:{slotName}` | —                    |
+
+Invariants:
+
+- markers are well nested
+- a key is unique in the page, so a close marker always matches exactly one open marker
+
+```html
+<!--tst:element:3c2e:h1-->
+<h1>Bienvenue</h1>
+<!--/tst:3c2e-->
+<!--tst:component:a91c:Button-->
+<button>
+  <!--tst:slot:a91c:default-->
+  <!--tst:element:7d10:strong-->
+  <strong>Envoyer</strong>
+  <!--/tst:7d10-->
+  maintenant
+  <!--/tst:a91c:default-->
+</button>
+<!--/tst:a91c-->
+```
 
 ## Selection
 
-### State
+Only IR nodes can be selected.
+A pointerdown or focus on DOM that belongs to no IR node resolves to the nearest enclosing IR node.
 
-`selected: HTMLElement | null`
+That resolved node is the state; the three targets are derived from it and can coexist.
 
-### Derived
+| target      | derived as                             | action                                                       |
+| ----------- | -------------------------------------- | ------------------------------------------------------------ |
+| `element`   | the resolved node, if an element       | open richtext editor if text only                            |
+| `slot`      | nearest enclosing slot (or itself)     | highlight, add button when empty, open richtext if text only |
+| `component` | nearest enclosing instance (or itself) | highlight, open props panel                                  |
 
-`selectedComponent: selected.closest(component) if editable`
-`selectedSlot: selected && selected === transient-slot if editable`
-`selectedText: selected && selected.isContentEditable`
+## Richtext edition
 
-### Transitions
+When richtext edition mode is active a few rules apply.
+A new html element is created. The "edition container".
+Its goal si to secure the browser text edition by isolating the zone ownership from Vue.
 
-`editable.onClik = selected = editable`
-`nonEditable.onClick | escape | panel.onClose = selected = null`
-`selectedText.onBlur = applyEdition`
+1. A parent element is created. data-tst-ghost is used to avoid capture of the container.
+2. Every created Vue component in the zone (already present or added) is marked with "contentEditable=false"
 
-### Text edition
-
-`editing: transientId | null` — un seul nœud éditable à la fois.
-
-#### Promote — `pointerdown` sur un nœud text-éditable
-
-1. `editing = id` → le nœud rend son HTML en une fois (`v-html`), plus de `v-for` : aucun fragment, aucune ancre à l'intérieur
-   les composants enfants deviennent `<span data-transient-island contenteditable="false">` (instantané figé)
-2. `await nextTick()` — le DOM doit être remplacé avant de poser le caret
-3. `node.contentEditable = 'true'` puis `node.focus()`
-4. caret via `caretPositionFromPoint(ev.clientX, ev.clientY)`
-   sans ça le clic est perdu : le nœud n'était pas éditable au moment du `mousedown`
-
-#### Demote — `focusout` (hors toolbar)
-
-1. parse `node.innerHTML` → `edit-element` / `edit-slot` — **avant** de démonter
-   `data-transient-island` se re-parse en « élément inchangé », on ne lit jamais le DOM interne d'un composant
-2. `node.removeAttribute('contenteditable')`
-3. `editing = null` → Vue reprend le rendu des enfants
-
-#### Invariants
-
-- au repos, aucun `contenteditable` dans le canvas
-- pendant l'édition, Vue ne rend rien à l'intérieur du nœud édité
-- toolbar en `@mousedown.prevent`, sinon le clic provoque un `focusout` → demote
-- `escape` = blur = commit
-
-### Rules
-
-| Nœud                          | Marqueur                   | Sélectionnable        | Text-éditable                      |
-| ----------------------------- | -------------------------- | --------------------- | ---------------------------------- |
-| HTML du template (`h1`, `p`)  | `data-transient-id`        | oui                   | oui, si contenu = texte seulement  |
-| Instance de composant         | `data-transient-component` | oui (props)           | non                                |
-| DOM interne d'un composant    | aucun                      | non (remonte au parent) | non                              |
-| Zone de slot                  | `data-transient-slot`      | oui                   | oui, si vide ou texte nu           |
-| Îlot pendant l'édition        | `data-transient-island`    | —                     | non, atomique                      |
+On focusout an edit event is dispatched and the edition container is removed, its descendants are preserved.

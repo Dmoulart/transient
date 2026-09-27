@@ -1,22 +1,36 @@
 import type { TransientComponentSchema, TransientElement, TransientTemplate } from 'transient'
 import { computed, readonly, ref, type ComputedRef, type Ref } from 'vue'
 import { ComponentDictionnary } from './use-dictionnary'
-import { assertIsDefined, findElementById, getElementProps, getTransientID } from 'transient'
-import { useElementBounding, useMutationObserver } from '@vueuse/core'
+import { assert, assertIsDefined, findElementById, getElementProps } from 'transient'
+import {
+  findAncestorIrTag,
+  getElementId,
+  getElementIr,
+  getIrTagChildrenElements,
+  parseOpenIrTag,
+  traverseIrTree,
+  type IrOpen,
+} from './dom-ir'
 
 export function useNode(
   node: Ref<HTMLElement | null>,
   template: Ref<TransientTemplate>,
   dictionnary: ComponentDictionnary,
 ) {
+  const ir = computed(() => {
+    return node.value && getElementIr(node.value)
+  })
+
   const editable = computed(() => {
     return node.value && (node.value.dataset.transientId || node.value.dataset.transientSlot)
   })
 
   const schema = computed(() => {
-    if (node.value?.dataset?.transientComponent) {
-      return dictionnary.get(node.value.dataset.transientComponent)
+    if (ir.value?.type === 'component') {
+      assertIsDefined(ir.value.name)
+      return dictionnary.get(ir.value.name)
     }
+
     return null
   })
 
@@ -28,26 +42,65 @@ export function useNode(
   })
 
   const isSlot = computed(() => {
-    return node.value && node.value.dataset.transientSlot
+    return ir.value?.type === 'slot'
   })
 
   const isEditableText = computed(() => {
     return node.value && node.value.contentEditable === 'true'
   })
 
-  const slotsNodes = computed(() => {
-    if (!node.value) {
+  // const slotsNodes = computed(() => {
+  //   if (!node.value) {
+  //     return null
+  //   }
+  //   const id = getNodeId(node.value)
+  //   if (!id) {
+  //     return null
+  //   }
+
+  //   // if node is it's own slot
+  //   if (isNodeASlotOf(id, node.value)) return [node.value]
+
+  //   return node.value.querySelectorAll<HTMLElement>(`[data-transient-slot$='${id}']`)
+  // })
+
+  const props = computed(() => {
+    if (!schema.value || !element.value) {
       return null
     }
-    const id = getNodeId(node.value)
-    if (!id) {
-      return null
+    return getElementProps(schema.value, element.value)
+  })
+
+  return { node, element, editable, isSlot, isEditableText, schema, props }
+}
+
+export function useIrTag(
+  tag: Ref<Node | null>,
+  template: Ref<TransientTemplate>,
+  dictionnary: ComponentDictionnary,
+) {
+  const ir = computed(() => {
+    return tag.value && parseOpenIrTag(tag.value)
+  })
+
+  const id = computed(() => {
+    return ir.value?.key
+  })
+
+  const schema = computed(() => {
+    if (ir.value?.type === 'component') {
+      assertIsDefined(ir.value.name)
+      return dictionnary.get(ir.value.name)
     }
 
-    // if node is it's own slot
-    if (isNodeASlotOf(id, node.value)) return [node.value]
+    return null
+  })
 
-    return node.value.querySelectorAll<HTMLElement>(`[data-transient-slot$='${id}']`)
+  const element = computed(() => {
+    if (!ir.value) {
+      return null
+    }
+    return findElementById(template.value.elements, ir.value.key)
   })
 
   const props = computed(() => {
@@ -57,7 +110,31 @@ export function useNode(
     return getElementProps(schema.value, element.value)
   })
 
-  return { node, element, editable, isSlot, isEditableText, schema, props, slotsNodes }
+  const root = computed<HTMLElement[] | null>(() => {
+    if (tag.value && ir.value?.type === 'component') {
+      return getIrTagChildrenElements(tag.value)
+    }
+    return null
+  })
+
+  const slots = computed<Record<string, Node[]> | null>(() => {
+    if (tag.value && ir.value?.type === 'component') {
+      const slots: Record<string, Node[]> = {}
+
+      traverseIrTree(tag.value, (ir, elements) => {
+        if (ir.type === 'slot' && ir.key === id.value) {
+          const slotName = getSlotName(ir)
+          slots[slotName] = elements
+        }
+      })
+
+      return Object.keys(slots).length > 0 ? slots : null
+    }
+
+    return null
+  })
+
+  return { id, ir, tag, element, schema, props, root, slots }
 }
 
 export function useParentComponent(
@@ -65,11 +142,9 @@ export function useParentComponent(
   template: Ref<TransientTemplate>,
   dictionnary: ComponentDictionnary,
 ) {
-  const parentComponent = computed<HTMLElement | null>(
-    () => node.value?.closest('[data-transient-component]') ?? null,
-  )
+  const componentTag = computed<Node | null>(() => node.value && findAncestorIrTag(node.value))
 
-  return useNode(parentComponent, template, dictionnary)
+  return useIrTag(componentTag, template, dictionnary)
 }
 
 export function getNodeId(node: HTMLElement) {
@@ -80,10 +155,6 @@ export function getNodeComponentTagName(node: HTMLElement) {
   return node.dataset.transientComponent
 }
 
-export function getSlotId(node: HTMLElement) {
-  return node.dataset.transientSlot
-}
-
 function isNodeComponent(node: HTMLElement) {
   return Boolean(getNodeComponentTagName(node))
 }
@@ -92,59 +163,28 @@ export function isNodeEditable(node: HTMLElement) {
   return Boolean(node.dataset.transientId || node.dataset.transientSlot)
 }
 
-export function getSlotOwnerId(node: HTMLElement) {
-  const slotId = getSlotId(node)
-  if (!slotId) {
-    return null
-  }
-  const [_, ownerId] = slotId.split(':') as [string, string]
-  return ownerId
+export function getSlotName(ir: IrOpen) {
+  assert(ir.type === 'slot')
+  return ir.name!
 }
 
-export function isNodeASlotOf(ownerTransientId: string, node: HTMLElement) {
-  const slotOwnerId = getSlotOwnerId(node)
-  if (!slotOwnerId) return false
-  return slotOwnerId === ownerTransientId
+export function getSlotOwnerId(ir: IrOpen) {
+  assert(ir.type === 'slot')
+  return ir.key
 }
 
-// function isNodeEditable(node: HTMLElement) {
-//   return Boolean(node.dataset.transientEditable === 'true')
+// export function isNodeASlotOf(ownerTransientId: string, node: HTMLElement) {
+//   const slotOwnerId = getSlotOwnerId(node)
+//   if (!slotOwnerId) return false
+//   return slotOwnerId === ownerTransientId
 // }
 
 export function getElementFromNode(node: HTMLElement, elements: TransientElement[]) {
-  if (getNodeId(node)) {
-    const transientId = getTransientID(node)
+  const id = getElementId(node)
 
-    if (transientId) {
-      return findElementById(elements, transientId)
-    }
+  if (id) {
+    return findElementById(elements, id)
   }
 
   return null
-}
-
-const componentPanelIsOpen = ref(false)
-
-type OnCloseCb = (componentSchema: TransientComponentSchema) => void
-
-export function useComponentPanel() {
-  const onSelect = ref<OnCloseCb>()
-  return {
-    isOpen: readonly(componentPanelIsOpen),
-    onSelect,
-    close() {
-      componentPanelIsOpen.value = false
-    },
-    toggle() {
-      componentPanelIsOpen.value = !componentPanelIsOpen.value
-    },
-    open(onSelectCb: OnCloseCb) {
-      onSelect.value = onSelectCb
-      componentPanelIsOpen.value = true
-    },
-    select(componentSchema: TransientComponentSchema) {
-      assertIsDefined(onSelect.value)
-      onSelect.value(componentSchema)
-    },
-  }
 }

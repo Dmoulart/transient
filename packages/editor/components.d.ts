@@ -9,13 +9,18 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BoundingBox: typeof import('./src/components/BoundingBox.vue')['default']
+    ComponentBuilder: typeof import('./src/components/ComponentBuilder.vue')['default']
+    ComponentEditor: typeof import('./src/components/ComponentEditor.vue')['default']
     ComponentPanel: typeof import('./src/components/ComponentPanel.vue')['default']
     ComponentSelection: typeof import('./src/components/ComponentSelection.vue')['default']
+    copy: typeof import('./src/components/PageEditor copy.vue')['default']
     EditorComponent: typeof import('./src/components/EditorComponent.vue')['default']
     EditorComponents: typeof import('./src/components/EditorComponents.vue')['default']
     ElementProp: typeof import('./src/components/ElementProp.vue')['default']
     ElementProps: typeof import('./src/components/ElementProps.vue')['default']
     PageEditor: typeof import('./src/components/PageEditor.vue')['default']
+    PageEditor2: typeof import('./src/components/PageEditor2.vue')['default']
+    PropsPanel: typeof import('./src/components/PropsPanel.vue')['default']
     RichTextEditor: typeof import('./src/components/RichTextEditor.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

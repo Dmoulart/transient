@@ -45,7 +45,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useBoundingBox } from '@/lib/use-bounding-box'
+import { useElementsBounding } from '@/lib/use-bounding-box'
 import { computed } from 'vue'
 
 // a slot box is drawn inside the component box: with equal geometry (a component that is
@@ -73,7 +73,7 @@ const variants = {
 
 const props = withDefaults(
   defineProps<{
-    bbox: ReturnType<typeof useBoundingBox>
+    bbox: ReturnType<typeof useElementsBounding>
     variant?: keyof typeof variants
     borderRadius?: number
   }>(),

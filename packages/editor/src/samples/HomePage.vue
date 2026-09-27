@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import Container from './Container.vue'
+import Fragment from './Fragment.vue'
+
 const cards = [
   {
     id: 1,
@@ -30,6 +33,8 @@ const cards = [
       We’re delighted you’re here! Explore our range of products, grab great deals, and enjoy a
       wonderful shopping experience.
     </p>
+    <Container> Container ! </Container>
+    <Fragment> Fragment ! Woooh ! Unbelievable <button>test</button> </Fragment>
 
     <!-- </section> -->
 
