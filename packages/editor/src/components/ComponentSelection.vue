@@ -29,7 +29,7 @@ import { computed } from 'vue'
 import BoundingBox from './BoundingBox.vue'
 import UseBoundingBox from './UseBoundingBox.vue'
 import type { EditorEvents } from '@/editor/events'
-import type { IrOpen } from '@/lib/dom-ir.ts'
+import type { IrOpen } from '@/lib/ir/dom.ts'
 
 const props = defineProps<{ root: HTMLElement[]; ir: IrOpen }>()
 const emit = defineEmits<EditorEvents>()

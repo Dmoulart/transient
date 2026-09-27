@@ -77,19 +77,19 @@
 </template>
 
 <script setup lang="ts">
-import { loadAllComponents, useDictionnary } from '@/lib/use-dictionnary'
+import { loadAllComponents, useDictionnary } from '@/lib/composables/use-dictionnary.ts'
 import Button from '@/samples/Button.vue'
-import { useTemplate } from '@/lib/use-template.ts'
+import { useTemplate } from '@/lib/composables/use-template.ts'
 import { computedAsync, useEventListener } from '@vueuse/core'
 import { applyEdition, type Edition } from '@/editor/edition'
 import { shallowRef, useTemplateRef } from 'vue'
-import { useSelection } from '@/lib/use-selection.js'
+import { useSelection } from '@/lib/composables/use-selection.js'
 import { someHTMLElement } from 'transient'
 import ComponentBuilder from './ComponentBuilder.vue'
 import PropsPanel from './PropsPanel.vue'
-import { findClosestAncestorComponentElement, getSiblingElementWithIr } from '@/lib/dom-ir.ts'
+import { findClosestAncestorComponentElement, getSiblingElementWithIr } from '@/lib/ir/dom.ts'
 import ComponentSelection from './ComponentSelection.vue'
-import { useComponentPanel } from '@/lib/use-components-panel.ts'
+import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
 import ComponentPanel from './ComponentPanel.vue'
 import SlotHighlight from './SlotHighlight.vue'
 
@@ -110,7 +110,7 @@ function apply(edition: Edition) {
   applyEdition(edition, template.contents.value.elements)
 }
 
-useEventListener(canvas, 'click', (ev: MouseEvent) => {
+useEventListener(canvas, ['click', 'focusin'], (ev: MouseEvent) => {
   selection.selected.node.value = someHTMLElement(ev.target)
     ? (getSiblingElementWithIr(ev.target) ?? findClosestAncestorComponentElement(ev.target))
     : null

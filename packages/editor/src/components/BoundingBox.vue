@@ -45,7 +45,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useElementsBounding } from '@/lib/use-bounding-box'
+import { useElementsBounding } from '@/lib/composables/use-bounding-box'
 import { computed } from 'vue'
 
 // a slot box is drawn inside the component box: with equal geometry (a component that is

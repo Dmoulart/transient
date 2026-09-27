@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useTextSelection } from '@/lib/use-text-selection'
+import { useTextSelection } from '@/lib/composables/use-text-selection'
 import { assert } from 'transient'
 import { computed, ref, type ComputedRef, type Ref } from 'vue'
-import { useComponentPanel } from '@/lib/use-node'
+import { useComponentPanel } from '@/lib/composables/use-node'
 import { getTransientID } from 'transient'
 
 const selection = useTextSelection()

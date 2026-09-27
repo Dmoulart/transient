@@ -9,7 +9,7 @@
   </Suspense>
 </template>
 <script setup lang="ts">
-import { useDictionnary } from '@/lib/use-dictionnary'
+import { useDictionnary } from '@/lib/composables/use-dictionnary'
 import { getComponentDefaultPropsValues } from 'transient'
 import type { TransientComponentSchema } from 'transient'
 import { defineAsyncComponent, shallowRef, watch } from 'vue'

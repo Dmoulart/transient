@@ -1,4 +1,4 @@
-import { assert, assertIs, someHTMLElement } from 'transient'
+import { assert, someHTMLElement } from 'transient'
 
 export type IrOpen = {
   type: string

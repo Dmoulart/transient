@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type ComponentDictionnary } from '@/lib/use-dictionnary'
+import { type ComponentDictionnary } from '@/lib/composables/use-dictionnary'
 import { assert, assertIsDefined, type TransientElement, type TransientTemplate } from 'transient'
 import { h, Text, Comment, type VNode } from 'vue'
 
