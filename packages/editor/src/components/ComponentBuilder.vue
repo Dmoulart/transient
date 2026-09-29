@@ -37,21 +37,25 @@ function renderComponent(element: TransientElement): VNode[] {
 
   assertIsDefined(component)
 
-  const slots = {
-    ...Object.fromEntries(
-      Object.entries(element.slots ?? {}).map(([slotName, children]) => {
-        return [slotName, () => renderSlot(element, slotName, children)]
-      }),
-    ),
-  }
+  // declared slots too, so empty ones still get their markers
+  const slotNames = new Set([
+    ...Object.keys(props.dictionnary.get(element.tag)?.slots ?? {}),
+    ...Object.keys(element.slots ?? {}),
+  ])
+  const slots = Object.fromEntries(
+    [...slotNames].map((slotName) => [
+      slotName,
+      () => renderSlot(element, slotName, element.slots?.[slotName] ?? []),
+    ]),
+  )
 
   const attributes = parseElementAttributes(element)
 
-  return [
-    hOpenIr('component', element.id, element.tag),
-    h(component, attributes, slots),
-    hCloseIr(element.id),
-  ]
+  const componentVnode = h(component, attributes, slots)
+  // map.set(element.id, componentVnode)
+  // freeze
+  // componentVnode.shapeFlag = 1 << 3
+  return [hOpenIr('component', element.id, element.tag), componentVnode, hCloseIr(element.id)]
 }
 
 function renderSlot(parent: TransientElement, slotName: string, children: TransientElement[]) {

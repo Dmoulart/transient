@@ -34,7 +34,7 @@ const cards = [
       wonderful shopping experience.
     </p>
     <Container> Container ! </Container>
-    <Fragment> Fragment ! Woooh ! Unbelievable <button>test</button> </Fragment>
+    <Fragment />
 
     <!-- </section> -->
 
