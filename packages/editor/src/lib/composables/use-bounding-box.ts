@@ -89,7 +89,7 @@ export function useElementsBounding(
 
       if (node instanceof Element) {
         rect = node.getBoundingClientRect()
-      } else if (node.nodeType === document.TEXT_NODE) {
+      } else if (node.nodeType === document.TEXT_NODE && node.textContent !== '') {
         const range = document.createRange()
         range.selectNodeContents(node)
         rect = range.getBoundingClientRect()

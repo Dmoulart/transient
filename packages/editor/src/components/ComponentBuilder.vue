@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { type ComponentDictionnary } from '@/lib/composables/use-dictionnary'
+import { type Index, useIndex } from '@/lib/composables/use-index'
 import { assert, assertIsDefined, type TransientElement, type TransientTemplate } from 'transient'
-import { h, Text, Comment, type VNode } from 'vue'
+import { h, Text, type VNode } from 'vue'
 
 const props = defineProps<{
   template: TransientTemplate
@@ -10,7 +11,11 @@ const props = defineProps<{
   components: Record<string, unknown>
 }>()
 
+const index = defineModel<Index>({ default: () => useIndex() })
+
 const renderTemplate = () => {
+  index.value.elements.clear()
+  index.value.slots.clear()
   const vnodes: VNode[] = []
 
   vnodes.push(...render(props.template.elements))
@@ -52,21 +57,24 @@ function renderComponent(element: TransientElement): VNode[] {
   const attributes = parseElementAttributes(element)
 
   const componentVnode = h(component, attributes, slots)
-  // map.set(element.id, componentVnode)
+  index.value.elements.set(element.id, componentVnode)
   // freeze
   // componentVnode.shapeFlag = 1 << 3
-  return [hOpenIr('component', element.id, element.tag), componentVnode, hCloseIr(element.id)]
+  return [componentVnode]
 }
 
 function renderSlot(parent: TransientElement, slotName: string, children: TransientElement[]) {
-  return [hOpenIr('slot', parent.id, slotName), ...render(children), hCloseIr(parent.id, slotName)]
+  const childrenVnodes = render(children)
+  index.value.slots.set(`${parent.id}:${slotName}`, childrenVnodes)
+  return childrenVnodes
 }
 
 function renderElement(element: TransientElement) {
   assert(!element.isComponent)
 
   if (element.tag === '#text') {
-    return [renderText(element)]
+    const text = renderText(element)
+    return [text]
   }
 
   const attributes = {
@@ -80,17 +88,17 @@ function renderElement(element: TransientElement) {
     children.push(...render(element.slots.default))
   }
 
-  return [
-    hOpenIr('element', element.id, element.tag),
-    h(element.tag, attributes, children),
-    hCloseIr(element.id),
-  ]
+  const elVnode = h(element.tag, attributes, children)
+  index.value.elements.set(element.id, elVnode)
+  return [elVnode]
 }
 
 function renderText(element: TransientElement) {
   assert(element.tag === '#text')
   const text = element?.attributes?.value?.expression ?? ''
-  return h(Text, text)
+  const textVnode = h(Text, text)
+  index.value.elements.set(element.id, textVnode)
+  return textVnode
 }
 
 function parseElementAttributes(element: TransientElement) {
@@ -99,34 +107,6 @@ function parseElementAttributes(element: TransientElement) {
       Object.entries(element.attributes || {}).map(([key, value]) => [key, value.expression]),
     ),
   }
-}
-
-function hOpenIr(type: string, key: string, name?: string) {
-  return h(Comment, openIrTag(type, key, name))
-}
-
-function hCloseIr(key: string, name?: string) {
-  return h(Comment, closeIrTag(key, name))
-}
-
-function openIrTag(type: string, key: string, name?: string) {
-  let tag = `tst:${type}:${key}`
-
-  if (name) {
-    tag += `:${name}`
-  }
-
-  return tag
-}
-
-function closeIrTag(key: string, name?: string) {
-  let tag = `/tst:${key}`
-
-  if (name) {
-    tag += `:${name}`
-  }
-
-  return tag
 }
 </script>
 

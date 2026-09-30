@@ -16,7 +16,7 @@
       <button
         title="Insert after"
         class="pointer-events-auto absolute top-full left-1/2 z-10 flex size-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-teal-500 text-white shadow-md ring-2 ring-white transition hover:scale-110 hover:bg-teal-400"
-        @click="emit('insert-component', { targetID: ir.key })"
+        @click="emit('insert-component', { targetID: element.id })"
       >
         <Plus class="size-4" :stroke-width="2.5" />
       </button>
@@ -29,15 +29,13 @@ import { computed } from 'vue'
 import BoundingBox from './BoundingBox.vue'
 import UseBoundingBox from './UseBoundingBox.vue'
 import type { EditorEvents } from '@/editor/events'
-import type { IrOpen } from '@/lib/ir/dom.ts'
+import type { TransientElement } from 'transient'
 
-const props = defineProps<{ root: HTMLElement[]; ir: IrOpen }>()
+const props = defineProps<{ root: HTMLElement[]; element: TransientElement }>()
 const emit = defineEmits<EditorEvents>()
 
 // component name > slot name > tag
 const label = computed(() => {
-  return props.ir.name
-  // const { transientComponent, transientSlot } = props.node.dataset
-  // return transientComponent ?? transientSlot?.split(':')[0] ?? props.node.tagName.toLowerCase()
+  return props.element.tag
 })
 </script>

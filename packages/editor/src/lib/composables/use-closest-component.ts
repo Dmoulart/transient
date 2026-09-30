@@ -1,15 +1,16 @@
 import type { TransientTemplate } from 'transient'
 import { type ComputedRef, type Ref, computed } from 'vue'
-import { findAncestorIrTag } from '../ir/dom'
 import type { ComponentDictionnary } from './use-dictionnary'
-import { useIrTag } from './use-ir-tag'
+import { useId } from './use-id'
+import type { Index } from './use-index'
 
 export function useClosestComponent(
   node: ComputedRef<HTMLElement | null>,
   template: Ref<TransientTemplate>,
   dictionnary: ComponentDictionnary,
+  index: Index,
 ) {
-  const componentTag = computed<Node | null>(() => node.value && findAncestorIrTag(node.value))
+  const id = computed(() => node.value && index.closestAncestorId(node.value))
 
-  return useIrTag(componentTag, template, dictionnary)
+  return useId(id, template, dictionnary, index)
 }

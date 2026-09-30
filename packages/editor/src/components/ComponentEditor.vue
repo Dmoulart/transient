@@ -1,6 +1,7 @@
 <template>
   <main ref="canvas" v-if="components">
     <ComponentBuilder
+      v-model="index"
       :dictionnary="dictionnary"
       :template="template.contents.value"
       :components="components"
@@ -9,9 +10,9 @@
   </main>
 
   <ComponentSelection
-    v-if="selection.component.root.value && selection.component.ir.value"
+    v-if="selection.component.root.value && selection.component.element.value"
     :root="selection.component.root.value"
-    :ir="selection.component.ir.value"
+    :element="selection.component.element.value"
     @edit="apply"
     @insert-component="
       ({ targetID: targetNodeID }) => {
@@ -82,18 +83,19 @@ import Button from '@/samples/Button.vue'
 import { useTemplate } from '@/lib/composables/use-template.ts'
 import { computedAsync, useEventListener } from '@vueuse/core'
 import { applyEdition, type Edition } from '@/editor/edition'
-import { shallowRef, useTemplateRef } from 'vue'
+import { shallowRef, useTemplateRef, watchEffect } from 'vue'
 import { useSelection } from '@/lib/composables/use-selection.js'
 import { someHTMLElement } from 'transient'
 import ComponentBuilder from './ComponentBuilder.vue'
 import PropsPanel from './PropsPanel.vue'
-import { findClosestAncestorComponentElement, getSiblingElementWithIr } from '@/lib/ir/dom.ts'
 import ComponentSelection from './ComponentSelection.vue'
 import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
 import ComponentPanel from './ComponentPanel.vue'
 import SlotHighlight from './SlotHighlight.vue'
+import { useIndex } from '@/lib/composables/use-index.ts'
 
 const canvas = useTemplateRef('canvas')
+const index = useIndex()
 
 const dictionnary = useDictionnary()
 
@@ -104,16 +106,14 @@ const componentPanel = useComponentPanel()
 
 const template = useTemplate(component.template!)
 
-const selection = useSelection(shallowRef(null), template.contents, dictionnary)
+const selection = useSelection(shallowRef(null), template.contents, dictionnary, index)
 
 function apply(edition: Edition) {
   applyEdition(edition, template.contents.value.elements)
 }
 
 useEventListener(canvas, ['click', 'focusin'], (ev: MouseEvent) => {
-  selection.selected.node.value = someHTMLElement(ev.target)
-    ? (getSiblingElementWithIr(ev.target) ?? findClosestAncestorComponentElement(ev.target))
-    : null
+  selection.selected.node.value = someHTMLElement(ev.target) ? ev.target : null
 })
 </script>
 
