@@ -14,6 +14,7 @@ declare module 'vue' {
     ComponentPanel: typeof import('./src/components/ComponentPanel.vue')['default']
     ComponentSelection: typeof import('./src/components/ComponentSelection.vue')['default']
     copy: typeof import('./src/components/PageEditor copy.vue')['default']
+    EditButton: typeof import('./src/components/EditButton.vue')['default']
     EditorComponent: typeof import('./src/components/EditorComponent.vue')['default']
     EditorComponents: typeof import('./src/components/EditorComponents.vue')['default']
     ElementProp: typeof import('./src/components/ElementProp.vue')['default']

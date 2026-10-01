@@ -37,18 +37,17 @@ export function useId(
     return getElementProps(schema.value, element.value)
   })
 
-  const root = computed<HTMLElement[] | null>(() => {
+  const root = computed<Node[] | null>(() => {
     if (element.value?.isComponent) {
-      return index.locate(id.value!) as HTMLElement[]
+      return index.locate(id.value!)
     }
     return null
   })
 
-  const slots = computed<Record<string, Node[]> | null>(() => {
+  const slots = computed(() => {
     if (element.value?.isComponent) {
-      const slots = index.slotsChildren(id.value!)
-      console.log({ slots })
-      return Object.keys(slots).length > 0 ? slots : null
+      const slots = index.slots(id.value!)
+      return slots.length > 0 ? slots : null
     }
 
     return null

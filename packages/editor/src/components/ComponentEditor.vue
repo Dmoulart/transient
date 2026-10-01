@@ -24,10 +24,11 @@
   />
   <template v-if="selection.component.slots.value">
     <SlotHighlight
-      v-for="(slot, slotName) in selection.component.slots.value"
-      :key="slotName"
-      :targets="slot"
-      :slot-name="slotName"
+      v-for="slot in selection.component.slots.value"
+      :key="slot.name"
+      :targets="slot.nodes.length ? slot.nodes : slot.container"
+      :empty="slot.fallback"
+      :slot-name="slot.name"
       :owner-id="selection.component.id.value!"
       @insert-component="
         ({ targetID: targetNodeID }) => {

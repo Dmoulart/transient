@@ -54,7 +54,7 @@ const variants = {
   component: {
     stroke: 'stroke-teal-500',
     strokeWidth: 2,
-    inset: 0,
+    inset: -4,
     dash: undefined as string | undefined,
     halo: true,
     handles: true,
@@ -63,7 +63,7 @@ const variants = {
   slot: {
     stroke: 'stroke-amber-500',
     strokeWidth: 1.5,
-    inset: 4,
+    inset: -1,
     dash: '4 3',
     halo: false,
     handles: false,

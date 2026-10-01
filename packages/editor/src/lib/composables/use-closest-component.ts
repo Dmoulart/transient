@@ -10,7 +10,7 @@ export function useClosestComponent(
   dictionnary: ComponentDictionnary,
   index: Index,
 ) {
-  const id = computed(() => node.value && index.closestAncestorId(node.value))
+  const id = computed(() => node.value && index.closestComponentId(node.value))
 
   return useId(id, template, dictionnary, index)
 }

@@ -3,7 +3,7 @@
     <BoundingBox :bbox="bbox" variant="slot">
       <span
         v-if="empty"
-        class="absolute top-1 left-1 text-[10px] leading-none font-medium tracking-wide text-amber-600/80 uppercase"
+        class="z-10 absolute top-1 left-1 text-[10px] leading-none font-medium tracking-wide text-amber-600/80 uppercase"
       >
         {{ slotName }}
       </span>
@@ -21,13 +21,13 @@
 </template>
 <script setup lang="ts">
 import { Plus } from 'lucide-vue-next'
-import { computed } from 'vue'
 import BoundingBox from './BoundingBox.vue'
 import UseBoundingBox from './UseBoundingBox.vue'
 import type { EditorEvents } from '@/editor/events'
+import { watchEffect } from 'vue'
 
-const props = defineProps<{ slotName: string; ownerId: string; targets: Node[] }>()
+const props = defineProps<{ slotName: string; ownerId: string; targets: Node[]; empty: boolean }>()
 const emit = defineEmits<EditorEvents>()
 
-const empty = computed(() => props.targets.length === 0)
+watchEffect(() => console.log('targets', props.targets))
 </script>

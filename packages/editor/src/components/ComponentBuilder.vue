@@ -15,7 +15,6 @@ const index = defineModel<Index>({ default: () => useIndex() })
 
 const renderTemplate = () => {
   index.value.elements.clear()
-  index.value.slots.clear()
   const vnodes: VNode[] = []
 
   vnodes.push(...render(props.template.elements))
@@ -42,15 +41,10 @@ function renderComponent(element: TransientElement): VNode[] {
 
   assertIsDefined(component)
 
-  // declared slots too, so empty ones still get their markers
-  const slotNames = new Set([
-    ...Object.keys(props.dictionnary.get(element.tag)?.slots ?? {}),
-    ...Object.keys(element.slots ?? {}),
-  ])
   const slots = Object.fromEntries(
-    [...slotNames].map((slotName) => [
+    Object.entries(element.slots ?? {}).map(([slotName, children]) => [
       slotName,
-      () => renderSlot(element, slotName, element.slots?.[slotName] ?? []),
+      () => render(children),
     ]),
   )
 
@@ -61,12 +55,6 @@ function renderComponent(element: TransientElement): VNode[] {
   // freeze
   // componentVnode.shapeFlag = 1 << 3
   return [componentVnode]
-}
-
-function renderSlot(parent: TransientElement, slotName: string, children: TransientElement[]) {
-  const childrenVnodes = render(children)
-  index.value.slots.set(`${parent.id}:${slotName}`, childrenVnodes)
-  return childrenVnodes
 }
 
 function renderElement(element: TransientElement) {

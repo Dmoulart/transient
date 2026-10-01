@@ -1,10 +1,19 @@
-import { Fragment, reactive, type VNode } from 'vue'
+import { Fragment, reactive, type ComponentInternalInstance, type VNode } from 'vue'
 
 export type Index = ReturnType<typeof useIndex>
 
+export type SlotLocation = {
+  name: string
+  // true when Vue renders the slot's own fallback content (no IR children)
+  fallback: boolean
+  nodes: Node[]
+  // where to highlight/insert when the slot renders nothing at all
+  container: Node[]
+}
+
 export function useIndex() {
+  // irId -> vnode, filled by ComponentBuilder during render. DOM is read lazily from it.
   const elements = reactive(new Map<string, VNode>())
-  const slots = reactive(new Map<string, VNode[]>())
 
   function first(vnode: VNode): Node | null {
     if (vnode.component) {
@@ -21,16 +30,14 @@ export function useIndex() {
     return (vnode.type === Fragment ? vnode.anchor : vnode.el) as Node
   }
 
-  function range(vnode: VNode): Node[] {
+  function between(start: Node | null, end: Node | null): Node[] {
     const nodes: Node[] = []
 
-    let current = first(vnode)
-    const lastNode = last(vnode)
-
+    let current = start
     while (current) {
       nodes.push(current)
 
-      if (current === lastNode) {
+      if (current === end) {
         break
       }
 
@@ -40,7 +47,16 @@ export function useIndex() {
     return nodes
   }
 
-  function elementsNodesToId() {
+  function range(vnode: VNode): Node[] {
+    return between(first(vnode), last(vnode))
+  }
+
+  function locate(id: string): Node[] {
+    const vnode = elements.get(id)
+    return vnode ? range(vnode) : []
+  }
+
+  function nodesToId() {
     const nodeToId = new Map<Node, string>()
 
     for (const [id, vnode] of elements.entries()) {
@@ -53,47 +69,71 @@ export function useIndex() {
     return nodeToId
   }
 
-  function slotsChildren(targetId: string) {
-    const slotsChildren: Record<string, Node[]> = {}
-
-    for (const [id, vnodes] of slots.entries()) {
-      if (id.startsWith(targetId)) continue
-
-      const [, slotName] = id.split(':')
-      slotsChildren[slotName] ??= []
-
-      for (const vnode of vnodes) {
-        if (vnode.component) {
-          range(vnode).forEach((node) => slotsChildren[slotName].push(node))
-        } else if (vnode.el) {
-          slotsChildren[slotName].push(vnode.el as Node)
-        }
-      }
-    }
-    return slotsChildren
-  }
-
-  function closestAncestorId(node: Node): string | null {
-    const ids = elementsNodesToId()
+  function closestAncestorId(node: Node, match: (id: string) => boolean = () => true) {
+    const ids = nodesToId()
 
     for (let n: Node | null = node; n; n = n.parentNode) {
       const id = ids.get(n)
-      if (id) return id
+      if (id && match(id)) return id
     }
 
     return null
   }
 
-  function closestComponentRoot(node: Node): Node[] {
-    const id = closestAncestorId(node)
-    if (!id) return []
-    return locate(id)
+  function closestComponentId(node: Node) {
+    return closestAncestorId(node, (id) => !!elements.get(id)?.component)
   }
 
-  function locate(id: string): Node[] {
-    const vnode = elements.get(id)
-    return vnode ? range(vnode) : []
+  function slots(ownerId: string): SlotLocation[] {
+    const instance = elements.get(ownerId)?.component
+    if (!instance) return []
+
+    const root = locate(ownerId)
+    const found: SlotLocation[] = []
+
+    const walk = (vnode: VNode) => {
+      if (isSlotFragment(vnode, instance)) {
+        const key = vnode.key as string
+        const fallback = key.endsWith('_fb')
+        const start = vnode.el as Node
+        const end = vnode.anchor as Node
+        // drop Fragment anchors (empty text nodes)
+        const nodes = between(start, end).slice(1, -1)
+
+        found.push({
+          name: key.slice(1, fallback ? -3 : undefined),
+          fallback,
+          nodes,
+          container: containerOf(start, root),
+        })
+      }
+
+      if (vnode.component) walk(vnode.component.subTree)
+      if (Array.isArray(vnode.children)) (vnode.children as VNode[]).forEach(walk)
+    }
+
+    walk(instance.subTree)
+
+    return found
   }
 
-  return { elements, slots, closestAncestorId, locate, closestComponentRoot, slotsChildren }
+  return { elements, locate, closestAncestorId, closestComponentId, slots }
+}
+
+function isSlotFragment(vnode: VNode, owner: ComponentInternalInstance) {
+  return (
+    vnode.type === Fragment &&
+    // ctx is @internal in Vue's types
+    (vnode as VNode & { ctx: ComponentInternalInstance | null }).ctx === owner &&
+    typeof vnode.key === 'string' &&
+    vnode.key.startsWith('_')
+  )
+}
+
+// The element holding the slot, if it belongs to the component; otherwise (slot at the
+// component's root, e.g. a multi-root component) the component's root nodes.
+function containerOf(anchor: Node, root: Node[]): Node[] {
+  const parent = anchor.parentNode
+  const inside = parent && root.some((node) => node !== parent && node.contains(parent))
+  return inside ? [parent] : root
 }

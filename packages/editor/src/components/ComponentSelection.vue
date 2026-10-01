@@ -1,11 +1,24 @@
 <template>
   <UseBoundingBox :targets="root" v-slot="{ bbox }">
     <BoundingBox :bbox="bbox">
-      <span
-        class="absolute bottom-full left-0 rounded-t-sm bg-teal-500 px-1.5 py-0.5 text-[10px] leading-none font-semibold tracking-wide text-white uppercase"
-      >
-        {{ label }}
-      </span>
+      <div class="z-10 absolute bottom-full left-0 gap-2 flex">
+        <span
+          class="rounded-t-sm bg-teal-500 px-1.5 py-0.5 text-[10px] leading-none font-semibold tracking-wide text-white uppercase"
+        >
+          {{ label }}
+        </span>
+        <EditButton
+          @click="
+            emit('edit', {
+              type: 'delete-element',
+              transientId: element.id,
+            })
+          "
+        >
+          <Trash :size="14" />
+        </EditButton>
+      </div>
+
       <!-- <RichTextEditor
         v-if="text"
         class="pointer-events-auto absolute bottom-full left-0 z-10 mb-4"
@@ -24,14 +37,15 @@
   </UseBoundingBox>
 </template>
 <script setup lang="ts">
-import { Plus } from 'lucide-vue-next'
+import { Plus, Trash } from 'lucide-vue-next'
 import { computed } from 'vue'
 import BoundingBox from './BoundingBox.vue'
 import UseBoundingBox from './UseBoundingBox.vue'
 import type { EditorEvents } from '@/editor/events'
 import type { TransientElement } from 'transient'
+import EditButton from './EditButton.vue'
 
-const props = defineProps<{ root: HTMLElement[]; element: TransientElement }>()
+const props = defineProps<{ root: Node[]; element: TransientElement }>()
 const emit = defineEmits<EditorEvents>()
 
 // component name > slot name > tag
