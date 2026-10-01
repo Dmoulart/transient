@@ -69,6 +69,10 @@ export function useIndex() {
     return nodeToId
   }
 
+  function nodeId(node: Node): string | undefined {
+    return nodesToId().get(node)
+  }
+
   function closestAncestorId(node: Node, match: (id: string) => boolean = () => true) {
     const ids = nodesToId()
 
@@ -117,7 +121,7 @@ export function useIndex() {
     return found
   }
 
-  return { elements, locate, closestAncestorId, closestComponentId, slots }
+  return { elements, nodeId, locate, closestAncestorId, closestComponentId, slots }
 }
 
 function isSlotFragment(vnode: VNode, owner: ComponentInternalInstance) {

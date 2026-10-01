@@ -22,7 +22,12 @@
       }
     "
   />
-  <template v-if="selection.component.slots.value">
+
+  <TextSelection
+    v-if="selection.text.container.value"
+    :targets="[selection.text.container.value]"
+  />
+  <template v-else-if="selection.component.slots.value">
     <SlotHighlight
       v-for="slot in selection.component.slots.value"
       :key="slot.name"
@@ -39,6 +44,7 @@
       "
     />
   </template>
+
   <PropsPanel
     :schema="selection.component.schema.value"
     :component-props="selection.component.props.value"
@@ -84,7 +90,7 @@ import Button from '@/samples/Button.vue'
 import { useTemplate } from '@/lib/composables/use-template.ts'
 import { computedAsync, useEventListener } from '@vueuse/core'
 import { applyEdition, type Edition } from '@/editor/edition'
-import { shallowRef, useTemplateRef, watchEffect } from 'vue'
+import { shallowRef, useTemplateRef } from 'vue'
 import { useSelection } from '@/lib/composables/use-selection.js'
 import { someHTMLElement } from 'transient'
 import ComponentBuilder from './ComponentBuilder.vue'
@@ -94,6 +100,7 @@ import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
 import ComponentPanel from './ComponentPanel.vue'
 import SlotHighlight from './SlotHighlight.vue'
 import { useIndex } from '@/lib/composables/use-index.ts'
+import TextSelection from './TextSelection.vue'
 
 const canvas = useTemplateRef('canvas')
 const index = useIndex()
