@@ -46,7 +46,7 @@ import type { TransientElement } from 'transient'
 import EditButton from './EditButton.vue'
 
 const props = defineProps<{ root: Node[]; element: TransientElement }>()
-const emit = defineEmits<EditorEvents>()
+const emit = defineEmits<EditorEvents & { 'insert-component': [data: { targetID: string }] }>()
 
 // component name > slot name > tag
 const label = computed(() => {

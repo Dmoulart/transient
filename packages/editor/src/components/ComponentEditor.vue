@@ -23,10 +23,14 @@
     "
   />
 
-  <TextSelection
-    v-if="selection.text.container.value"
-    :targets="[selection.text.container.value]"
-  />
+  <template v-if="selection.text.container.value && selection.text.id.value">
+    <TextSelection :targets="[selection.text.container.value]" />
+    <TextEdition
+      :container="selection.text.container.value"
+      :tid="selection.text.id.value!"
+      @edit="apply"
+    />
+  </template>
   <template v-else-if="selection.component.slots.value">
     <SlotHighlight
       v-for="slot in selection.component.slots.value"
@@ -101,6 +105,7 @@ import ComponentPanel from './ComponentPanel.vue'
 import SlotHighlight from './SlotHighlight.vue'
 import { useIndex } from '@/lib/composables/use-index.ts'
 import TextSelection from './TextSelection.vue'
+import TextEdition from './TextEdition.vue'
 
 const canvas = useTemplateRef('canvas')
 const index = useIndex()

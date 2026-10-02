@@ -29,6 +29,7 @@ declare module 'vue' {
     SlotSpy: typeof import('./src/components/SlotSpy.vue')['default']
     TComment: typeof import('./src/components/TComment.vue')['default']
     TDrawer: typeof import('./src/components/TDrawer.vue')['default']
+    TextEdition: typeof import('./src/components/TextEdition.vue')['default']
     TextEditionBbox: typeof import('./src/components/TextEditionBbox.vue')['default']
     TextSelection: typeof import('./src/components/TextSelection.vue')['default']
     TransientBuilder: typeof import('./src/components/TransientBuilder.vue')['default']

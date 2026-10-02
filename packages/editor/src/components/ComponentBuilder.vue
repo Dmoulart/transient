@@ -7,7 +7,6 @@ import { h, Text, type VNode } from 'vue'
 const props = defineProps<{
   template: TransientTemplate
   dictionnary: ComponentDictionnary
-  slotLocation?: { slotName: string; ownerId: string }
   components: Record<string, unknown>
 }>()
 

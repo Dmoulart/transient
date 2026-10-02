@@ -17,7 +17,7 @@ import type { TransientElement } from 'transient'
 
 export type Edition =
   | SlotEdition
-  | ElementEdition
+  | EditElementEdition
   | AddComponentEdition
   | DeleteElementEdition
   | UpdateElementPropEdition
@@ -29,7 +29,7 @@ export type SlotEdition = {
   node: HTMLElement
 }
 
-export type ElementEdition = {
+export type EditElementEdition = {
   type: 'edit-element'
   transientId: string
   node: HTMLElement
@@ -56,7 +56,7 @@ export type UpdateElementPropEdition = {
 }
 
 export type ComponentSlotEditionInput = Omit<SlotEdition, 'node'>
-export type ElementEditionInput = Omit<ElementEdition, 'node'>
+export type ElementEditionInput = Omit<EditElementEdition, 'node'>
 
 export type EditionInput =
   | ComponentSlotEditionInput

@@ -1,9 +1,9 @@
-import type { TransientTemplate } from 'transient'
+import { htmlElementToTransientElement, type TransientTemplate } from 'transient'
 import { computed, watch, type ComputedRef, type Ref } from 'vue'
 import type { ComponentDictionnary } from './use-dictionnary'
 import type { Index } from './use-index'
 import { useId } from './use-id'
-import { whenever } from '@vueuse/core'
+import { useEventListener, whenever } from '@vueuse/core'
 
 export function useEditableText(
   maybeNode: ComputedRef<HTMLElement | null>,
@@ -13,10 +13,12 @@ export function useEditableText(
 ) {
   const nodeId = computed(() => (maybeNode.value && index.nodeId(maybeNode.value)) ?? null)
 
-  const id = useId(nodeId, template, dictionnary, index)
+  const tid = useId(nodeId, template, dictionnary, index)
+
+  const id = computed(() => tid.id.value)
 
   const editable = computed(() => {
-    return !id.element.value?.isComponent
+    return !tid.element.value?.isComponent
   })
 
   const container = computed(() => {
@@ -26,20 +28,27 @@ export function useEditableText(
     return null
   })
 
-  whenever(container, (newContainer) => {
-    newContainer.contentEditable = 'true'
-    newContainer.focus()
+  //   whenever(container, (newContainer) => {
+  //     newContainer.contentEditable = 'true'
+  //     newContainer.focus()
+  //     const stop = useEventListener(newContainer, 'focusout', (event) => {
+  //       if (event.target) {
+  //         htmlElementToTransientElement(event.target, id.id.value)
+  //       }
+  //     })
 
-    watch(
-      container,
-      () => {
-        newContainer.contentEditable = 'false'
-      },
-      { once: true },
-    )
-  })
+  //     watch(
+  //       container,
+  //       () => {
+  //         stop()
+  //         newContainer.contentEditable = 'false'
+  //       },
+  //       { once: true },
+  //     )
+  //   })
 
   return {
+    id,
     editable,
     container,
   }
