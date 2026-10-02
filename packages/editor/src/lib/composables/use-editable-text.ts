@@ -1,9 +1,8 @@
-import { htmlElementToTransientElement, type TransientTemplate } from 'transient'
-import { computed, watch, type ComputedRef, type Ref } from 'vue'
+import { type TransientTemplate } from 'transient'
+import { computed, type ComputedRef, type Ref } from 'vue'
 import type { ComponentDictionnary } from './use-dictionnary'
 import type { Index } from './use-index'
 import { useId } from './use-id'
-import { useEventListener, whenever } from '@vueuse/core'
 
 export function useEditableText(
   maybeNode: ComputedRef<HTMLElement | null>,

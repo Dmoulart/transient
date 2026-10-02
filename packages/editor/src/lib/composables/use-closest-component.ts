@@ -11,6 +11,6 @@ export function useClosestComponent(
   index: Index,
 ) {
   const id = computed(() => node.value && index.closestComponentId(node.value))
-
+  
   return useId(id, template, dictionnary, index)
 }

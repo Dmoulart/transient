@@ -84,8 +84,11 @@
     @close="componentPanel.close"
   />
 
+  Current component : {{ selection.component.element.value?.tag }}
+
   <Button @click="template.saveToLocalStorage">Save</Button>
   <Button @click="template.loadFromLocalStorage">Load</Button>
+  <code>{{ template.contents.value }}</code>
 </template>
 
 <script setup lang="ts">

@@ -11,12 +11,21 @@ whenever(
     newContainer.contentEditable = 'true'
     console.log('focus!')
     newContainer.focus()
+
+    const before = JSON.stringify(newContainer.innerHTML)
+
     const stop = useEventListener(newContainer, 'focusout', () => {
-      emit('edit', {
-        type: 'edit-element',
-        node: newContainer,
-        transientId: props.tid,
-      })
+      const after = JSON.stringify(newContainer.innerHTML)
+      // small security..
+      // when leaving an empty slot with a default value, this edition will register the default slot content as a transient node
+      // which cause havoc. A default slot value should not be part of the template
+      if (before !== after) {
+        emit('edit', {
+          type: 'edit-element',
+          node: newContainer,
+          transientId: props.tid,
+        })
+      }
     })
 
     watch(
