@@ -5,6 +5,7 @@
       :dictionnary="dictionnary"
       :template="template.contents.value"
       :components="components"
+      :selection="selection"
       @edit="apply"
     />
   </main>
@@ -25,11 +26,11 @@
 
   <template v-if="selection.text.container.value && selection.text.id.value">
     <TextSelection :targets="[selection.text.container.value]" />
-    <TextEdition
+    <!-- <TextEdition
       :container="selection.text.container.value"
       :tid="selection.text.id.value!"
       @edit="apply"
-    />
+    /> -->
   </template>
   <template v-else-if="selection.component.slots.value">
     <SlotHighlight
@@ -95,7 +96,7 @@
 import { loadAllComponents, useDictionnary } from '@/lib/composables/use-dictionnary.ts'
 import Button from '@/samples/Button.vue'
 import { useTemplate } from '@/lib/composables/use-template.ts'
-import { computedAsync, useEventListener } from '@vueuse/core'
+import { computedAsync, useEventListener, whenever } from '@vueuse/core'
 import { applyEdition, type Edition } from '@/editor/edition'
 import { shallowRef, useTemplateRef } from 'vue'
 import { useSelection } from '@/lib/composables/use-selection.js'
@@ -108,7 +109,6 @@ import ComponentPanel from './ComponentPanel.vue'
 import SlotHighlight from './SlotHighlight.vue'
 import { useIndex } from '@/lib/composables/use-index.ts'
 import TextSelection from './TextSelection.vue'
-import TextEdition from './TextEdition.vue'
 
 const canvas = useTemplateRef('canvas')
 const index = useIndex()
@@ -130,6 +130,17 @@ function apply(edition: Edition) {
 
 useEventListener(canvas, ['click', 'focusin'], (ev: MouseEvent) => {
   selection.selected.node.value = someHTMLElement(ev.target) ? ev.target : null
+
+  if (selection.selected.node.value) {
+    selection.mouse.value = { x: ev.clientX, y: ev.clientY }
+  }
+})
+
+whenever(selection.text.container, () => {
+  apply({
+    type: 'start-element-edition',
+    transientId: selection.text.id.value!,
+  })
 })
 </script>
 

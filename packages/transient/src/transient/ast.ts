@@ -7,6 +7,7 @@ import {
   type TransientType,
   type TransientTypeName,
 } from "./definition.js";
+
 export function getTypeKind(type: TransientType): TransientTypeName {
   return typeof type === "string" ? type : type.kind;
 }
@@ -15,6 +16,7 @@ export function getTextValue(element: TransientElement) {
   assert(element.tag === "#text");
   return element.attributes?.value?.expression;
 }
+
 export function getComponentDefaultPropsValues(props: TransientProps) {
   const data: Record<string, any> = {};
 
@@ -172,6 +174,27 @@ export function findNearestAncestor(
   }
 
   return undefined;
+}
+
+export function getDescendantComponents(element: TransientElement) {
+  const descendants: TransientElement[] = [];
+
+  for (const child of Object.values(element.slots ?? {}).flat(1)) {
+    if (child.isComponent) {
+      descendants.push(child);
+    }
+
+    if (child.slots) {
+      descendants.push(...getDescendantComponents(child));
+    }
+  }
+  return descendants;
+}
+
+export function* slotsOf(element: TransientElement) {
+  for (const [slotName, children] of Object.entries(element.slots ?? {})) {
+    yield [slotName, children];
+  }
 }
 
 export function replaceElement(

@@ -3,12 +3,20 @@ import { type ComponentDictionnary } from '@/lib/composables/use-dictionnary'
 import { type Index, useIndex } from '@/lib/composables/use-index'
 import { assert, assertIsDefined, type TransientElement, type TransientTemplate } from 'transient'
 import { h, Text, type VNode } from 'vue'
+import EditableRoot from './EditableRoot.vue'
+import { parseElementAttributes } from '@/lib/transient/attributes.ts'
+import type { EditorEvents } from '@/editor/events.ts'
+import type { useSelection } from '@/lib/composables/use-selection.ts'
 
 const props = defineProps<{
   template: TransientTemplate
   dictionnary: ComponentDictionnary
   components: Record<string, unknown>
+  selection: ReturnType<typeof useSelection>
+  editing?: { id: string; point: { x: number; y: number } }
 }>()
+
+defineEmits<EditorEvents>()
 
 const index = defineModel<Index>({ default: () => useIndex() })
 
@@ -64,13 +72,20 @@ function renderElement(element: TransientElement) {
     return [text]
   }
 
-  const attributes = {
-    ...Object.fromEntries(
-      Object.entries(element.attributes || {}).map(([key, value]) => [key, value.expression]),
-    ),
+  if (element.attributes['data-edition']) {
+    const editableRootVnode = h(EditableRoot, {
+      element,
+      mouse: props.selection.mouse.value,
+      renderComponent,
+    })
+
+    index.value.elements.set(element.id, editableRootVnode)
+    return [editableRootVnode]
   }
+  const attributes = parseElementAttributes(element)
 
   const children: VNode[] = []
+  //missing slots
   if (element.slots && element.slots.default) {
     children.push(...render(element.slots.default))
   }
@@ -86,14 +101,6 @@ function renderText(element: TransientElement) {
   const textVnode = h(Text, text)
   index.value.elements.set(element.id, textVnode)
   return textVnode
-}
-
-function parseElementAttributes(element: TransientElement) {
-  return {
-    ...Object.fromEntries(
-      Object.entries(element.attributes || {}).map(([key, value]) => [key, value.expression]),
-    ),
-  }
 }
 </script>
 

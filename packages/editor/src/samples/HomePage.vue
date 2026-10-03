@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Container from './Container.vue'
+import Counter from './Counter.vue'
 import Fragment from './Fragment.vue'
 
 const cards = [
@@ -28,7 +29,9 @@ const cards = [
   <main class="p-12 max-w-5xl m-auto">
     <!-- Hero Section -->
     <!-- <section class="text-center py-16"> -->
-    <h1 class="text-5xl font-semibold mb-6">Welcome to Our Store</h1>
+    <h1 class="text-5xl font-semibold mb-6">
+      Welcome to Our Store <Counter /> The clock is ticking
+    </h1>
     <p class="text-gray-500 mb-10">
       We’re delighted you’re here! Explore our range of products, grab great deals, and enjoy a
       wonderful shopping experience.

@@ -1,5 +1,6 @@
 import type { TransientComponentSchema, TransientProp } from 'transient'
 import {
+  assertIsDefined,
   findElementById,
   htmlChildrenToTransientElements,
   htmlElementToTransientElement,
@@ -17,10 +18,12 @@ import type { TransientElement } from 'transient'
 
 export type Edition =
   | SlotEdition
-  | EditElementEdition
+  | UpdateElementEdition
   | AddComponentEdition
   | DeleteElementEdition
   | UpdateElementPropEdition
+  | StartElementEdition
+  | EndElementEdition
 
 export type SlotEdition = {
   type: 'edit-slot'
@@ -29,8 +32,18 @@ export type SlotEdition = {
   node: HTMLElement
 }
 
-export type EditElementEdition = {
-  type: 'edit-element'
+export type StartElementEdition = {
+  type: 'start-element-edition'
+  transientId: string
+}
+
+export type EndElementEdition = {
+  type: 'end-element-edition'
+  transientId: string
+}
+
+export type UpdateElementEdition = {
+  type: 'update-element'
   transientId: string
   node: HTMLElement
 }
@@ -56,7 +69,7 @@ export type UpdateElementPropEdition = {
 }
 
 export type ComponentSlotEditionInput = Omit<SlotEdition, 'node'>
-export type ElementEditionInput = Omit<EditElementEdition, 'node'>
+export type ElementEditionInput = Omit<UpdateElementEdition, 'node'>
 
 export type EditionInput =
   | ComponentSlotEditionInput
@@ -72,7 +85,7 @@ export function applyEdition(edition: Edition, elements: TransientElement[]) {
       replaceElementSlot(children, edition.slotName, edition.ownerId, elements)
       break
     }
-    case 'edit-element': {
+    case 'update-element': {
       // todo put the smart comparison in replaceElement or a lower level function maybe.
       const preexistingElement = findElementById(elements, edition.transientId)
       const newElement = htmlElementToTransientElement(edition.node, edition.transientId)
@@ -122,6 +135,22 @@ export function applyEdition(edition: Edition, elements: TransientElement[]) {
     case 'update-prop': {
       updateElementProp(edition.propName, edition.value, edition.transientId, elements)
 
+      break
+    }
+
+    case 'start-element-edition': {
+      const element = findElementById(elements, edition.transientId)
+      assertIsDefined(element)
+
+      element.attributes['data-edition'] = { type: 'literal', expression: true }
+      break
+    }
+
+    case 'end-element-edition': {
+      const element = findElementById(elements, edition.transientId)
+      assertIsDefined(element)
+
+      delete element.attributes['data-edition']
       break
     }
 

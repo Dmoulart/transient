@@ -1,5 +1,5 @@
 import { type TransientTemplate } from 'transient'
-import { computed, type Ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 import { ComponentDictionnary } from './use-dictionnary'
 import { useNode } from './use-node'
 import { useClosestComponent } from './use-closest-component'
@@ -12,6 +12,7 @@ export function useSelection(
   dictionnary: ComponentDictionnary,
   index: Index,
 ) {
+  const mouse = ref({ x: 0, y: 0 })
   const selected = useNode(selectedNode, template)
 
   const component = useClosestComponent(
@@ -32,5 +33,5 @@ export function useSelection(
     index,
   )
 
-  return { selected, component, text }
+  return { mouse, selected, component, text }
 }

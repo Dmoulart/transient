@@ -10,7 +10,7 @@ import UseBoundingBox from './UseBoundingBox.vue'
 defineProps<{ targets: Node[] }>()
 </script>
 <style>
-[contenteditable='true'] {
+/* [contenteditable='true'] {
   outline: none;
-}
+} */
 </style>
