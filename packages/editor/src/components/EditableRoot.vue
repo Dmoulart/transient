@@ -12,7 +12,7 @@ const props = defineProps<{
   //islands: VNode[]
 }>()
 
-const emit = defineEmits<EditorEvents>()
+const emit = defineEmits<EditorEvents & { exitEditing: [] }>()
 
 const placeholders = new Map<string, HTMLElement>()
 const islands: VNode[] = []
@@ -39,10 +39,7 @@ function root() {
         return
       }
 
-      emit('edit', {
-        type: 'end-element-edition',
-        transientId: props.element.id,
-      })
+      emit('exitEditing')
     },
     onVnodeMounted(vnode) {
       if (vnode.el && vnode.el instanceof HTMLElement) {

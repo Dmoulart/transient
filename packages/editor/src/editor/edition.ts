@@ -22,8 +22,6 @@ export type Edition =
   | AddComponentEdition
   | DeleteElementEdition
   | UpdateElementPropEdition
-  | StartElementEdition
-  | EndElementEdition
 
 export type SlotEdition = {
   type: 'edit-slot'
@@ -135,22 +133,6 @@ export function applyEdition(edition: Edition, elements: TransientElement[]) {
     case 'update-prop': {
       updateElementProp(edition.propName, edition.value, edition.transientId, elements)
 
-      break
-    }
-
-    case 'start-element-edition': {
-      const element = findElementById(elements, edition.transientId)
-      assertIsDefined(element)
-
-      element.attributes['data-edition'] = { type: 'literal', expression: true }
-      break
-    }
-
-    case 'end-element-edition': {
-      const element = findElementById(elements, edition.transientId)
-      assertIsDefined(element)
-
-      delete element.attributes['data-edition']
       break
     }
 

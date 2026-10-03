@@ -6,17 +6,15 @@ import { h, Text, type VNode } from 'vue'
 import EditableRoot from './EditableRoot.vue'
 import { parseElementAttributes } from '@/lib/transient/attributes.ts'
 import type { EditorEvents } from '@/editor/events.ts'
-import type { useSelection } from '@/lib/composables/use-selection.ts'
 
 const props = defineProps<{
   template: TransientTemplate
   dictionnary: ComponentDictionnary
   components: Record<string, unknown>
-  selection: ReturnType<typeof useSelection>
-  editing?: { id: string; point: { x: number; y: number } }
+  editing?: { id: string; point: { x: number; y: number } } | null
 }>()
 
-defineEmits<EditorEvents>()
+const emit = defineEmits<EditorEvents & { exitEditing: [] }>()
 
 const index = defineModel<Index>({ default: () => useIndex() })
 
@@ -72,11 +70,12 @@ function renderElement(element: TransientElement) {
     return [text]
   }
 
-  if (element.attributes['data-edition']) {
+  if (props.editing?.id === element.id) {
     const editableRootVnode = h(EditableRoot, {
       element,
-      mouse: props.selection.mouse.value,
+      mouse: props.editing.point,
       renderComponent,
+      onexitEditing: () => emit('exitEditing'),
     })
 
     index.value.elements.set(element.id, editableRootVnode)

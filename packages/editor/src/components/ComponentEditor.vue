@@ -5,8 +5,9 @@
       :dictionnary="dictionnary"
       :template="template.contents.value"
       :components="components"
-      :selection="selection"
+      :editing="editing"
       @edit="apply"
+      @exit-editing="editing = null"
     />
   </main>
 
@@ -96,9 +97,9 @@
 import { loadAllComponents, useDictionnary } from '@/lib/composables/use-dictionnary.ts'
 import Button from '@/samples/Button.vue'
 import { useTemplate } from '@/lib/composables/use-template.ts'
-import { computedAsync, useEventListener, whenever } from '@vueuse/core'
+import { computedAsync, useEventListener } from '@vueuse/core'
 import { applyEdition, type Edition } from '@/editor/edition'
-import { shallowRef, useTemplateRef } from 'vue'
+import { ref, shallowRef, useTemplateRef } from 'vue'
 import { useSelection } from '@/lib/composables/use-selection.js'
 import { someHTMLElement } from 'transient'
 import ComponentBuilder from './ComponentBuilder.vue'
@@ -128,19 +129,16 @@ function apply(edition: Edition) {
   applyEdition(edition, template.contents.value.elements)
 }
 
+// Set once on click, never derived from the DOM: EditableRoot replaces the clicked node.
+const editing = ref<{ id: string; point: { x: number; y: number } } | null>(null)
+
 useEventListener(canvas, ['click', 'focusin'], (ev: MouseEvent) => {
   selection.selected.node.value = someHTMLElement(ev.target) ? ev.target : null
 
-  if (selection.selected.node.value) {
-    selection.mouse.value = { x: ev.clientX, y: ev.clientY }
+  const id = selection.text.id.value
+  if (ev.type === 'click' && selection.text.container.value && id && editing.value?.id !== id) {
+    editing.value = { id, point: { x: ev.clientX, y: ev.clientY } }
   }
-})
-
-whenever(selection.text.container, () => {
-  apply({
-    type: 'start-element-edition',
-    transientId: selection.text.id.value!,
-  })
 })
 </script>
 
