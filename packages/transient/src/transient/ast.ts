@@ -367,3 +367,16 @@ export function createTextElement(text: string): TransientElement {
     },
   };
 }
+
+export function getAncestorsChain(
+  id: string,
+  elements: TransientElement[],
+): { element: TransientElement; slotName: string }[] | undefined {
+  for (const element of elements) {
+    if (element.id === id) return [];
+    for (const [slotName, children] of Object.entries(element.slots ?? {})) {
+      const found = getAncestorsChain(id, children);
+      if (found) return [{ element, slotName }, ...found];
+    }
+  }
+}
