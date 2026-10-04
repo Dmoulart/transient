@@ -14,7 +14,7 @@ const props = defineProps<{
   editing?: { id: string; point: { x: number; y: number } } | null
 }>()
 
-const emit = defineEmits<EditorEvents>()
+const emit = defineEmits<EditorEvents & { exitEditing: [] }>()
 
 const index = defineModel<Index>({ default: () => useIndex() })
 
@@ -76,6 +76,7 @@ function renderElement(element: TransientElement) {
       mouse: props.editing.point,
       renderComponent,
       onEdit: (e) => emit('edit', e),
+      onExitEditing: () => emit('exitEditing'),
     })
 
     index.value.elements.set(element.id, editableRootVnode)

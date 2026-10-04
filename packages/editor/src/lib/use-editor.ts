@@ -8,6 +8,7 @@ import type { ComponentDictionnary } from './composables/use-dictionnary'
 import { computed, readonly, ref, type Ref } from 'vue'
 import { useElement } from './use-element'
 import { applyEdition, type Edition } from '@/editor/edition'
+import type { Index } from './composables/use-index'
 
 export type Selection =
   | { kind: 'element'; id: string }
@@ -15,7 +16,11 @@ export type Selection =
 
 export type Editing = { id: string; point: { x: number; y: number }; slotName?: string }
 
-export function useEditor(template: Ref<TransientTemplate>, dictionnary: ComponentDictionnary) {
+export function useEditor(
+  template: Ref<TransientTemplate>,
+  dictionnary: ComponentDictionnary,
+  index: Index,
+) {
   const selection = ref<Selection | null>(null)
   const editing = ref<Editing | null>(null)
 
@@ -69,30 +74,32 @@ export function useEditor(template: Ref<TransientTemplate>, dictionnary: Compone
 
   const activeComponent = useElement(activeComponentId, template, dictionnary)
 
+  const editTarget = computed<{ id: string; slotName?: string } | null>(() => {
+    const element = selectedElement.value
+    if (!element || element.isComponent) return null
+
+    const slot = selectedSlot.value
+    if (slot) return { id: slot.ownerId, slotName: slot.slotName }
+
+    if (element.tag === '#text') {
+      const parent = ancestors.value?.at(-1)?.element
+      return parent ? { id: parent.id } : null
+    }
+    return { id: element.id }
+  })
+
   function pointOn(id: string, point: { x: number; y: number }) {
     select({ kind: 'element', id })
-
-    const parent = ancestors.value?.at(-1)
-
-    if (!parent) return
-
-    startEditing(parent.element.id, point, parent.element.isComponent ? parent.slotName : undefined)
+    if (editTarget.value) startEditing(editTarget.value.id, point, editTarget.value.slotName)
   }
 
   function select(newSelection: Selection | null) {
     selection.value = newSelection
-    if (editing.value && newSelection === null) {
-      stopEditing()
-    }
+    stopEditing()
   }
 
   function edit(edition: Edition) {
     applyEdition(edition, template.value.elements)
-
-    //@todo relocate
-    if (edition.type === 'replace-slot-content') {
-      stopEditing()
-    }
   }
 
   function startEditing(id: string, point: { x: number; y: number }, slotName?: string) {

@@ -7,6 +7,7 @@
       :components="components"
       :editing="editor.editing.value"
       @edit="editor.edit"
+      @exit-editing="editor.stopEditing"
     />
   </main>
 
@@ -89,7 +90,6 @@
   <div>Editing: {{ editor.editing }}</div>
   <Button @click="template.saveToLocalStorage">Save</Button>
   <Button @click="template.loadFromLocalStorage">Load</Button>
-  <!-- <code>{{ template.contents.value }}</code> -->
 </template>
 
 <script setup lang="ts">
@@ -120,7 +120,7 @@ const componentPanel = useComponentPanel()
 
 const template = useTemplate(component.template!)
 
-const editor = useEditor(template.contents, dictionnary)
+const editor = useEditor(template.contents, dictionnary, index)
 
 useEventListener(canvas, ['click'], (ev: MouseEvent) => {
   if (ev.target instanceof Element && ev.target.closest('[contenteditable="true"]')) return

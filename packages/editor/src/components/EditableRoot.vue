@@ -13,7 +13,7 @@ const props = defineProps<{
   //islands: VNode[]
 }>()
 
-const emit = defineEmits<EditorEvents>()
+const emit = defineEmits<EditorEvents & { exitEditing: [] }>()
 
 const elements = new WeakMap<Node, string>()
 const placeholders = new Map<string, HTMLElement>()
@@ -49,6 +49,7 @@ function root() {
         slotName: 'default',
         content,
       })
+      emit('exitEditing')
     },
     onVnodeMounted(vnode) {
       if (vnode.el && vnode.el instanceof HTMLElement) {
