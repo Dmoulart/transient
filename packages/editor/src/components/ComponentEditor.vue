@@ -7,7 +7,6 @@
       :components="components"
       :editing="editing"
       @edit="apply"
-      @exit-editing="editing = null"
     />
   </main>
 
@@ -27,11 +26,6 @@
 
   <template v-if="selection.text.container.value && selection.text.id.value">
     <TextSelection :targets="[selection.text.container.value]" />
-    <!-- <TextEdition
-      :container="selection.text.container.value"
-      :tid="selection.text.id.value!"
-      @edit="apply"
-    /> -->
   </template>
   <template v-else-if="selection.component.slots.value">
     <SlotHighlight
@@ -90,7 +84,7 @@
 
   <Button @click="template.saveToLocalStorage">Save</Button>
   <Button @click="template.loadFromLocalStorage">Load</Button>
-  <code>{{ template.contents.value }}</code>
+  <!-- <code>{{ template.contents.value }}</code> -->
 </template>
 
 <script setup lang="ts">
@@ -127,6 +121,9 @@ const selection = useSelection(shallowRef(null), template.contents, dictionnary,
 
 function apply(edition: Edition) {
   applyEdition(edition, template.contents.value.elements)
+  if (edition.type === 'replace-slot-content') {
+    editing.value = null
+  }
 }
 
 // Set once on click, never derived from the DOM: EditableRoot replaces the clicked node.

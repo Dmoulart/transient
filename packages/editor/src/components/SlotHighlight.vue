@@ -23,10 +23,7 @@
 import { Plus } from 'lucide-vue-next'
 import BoundingBox from './BoundingBox.vue'
 import UseBoundingBox from './UseBoundingBox.vue'
-import { watchEffect } from 'vue'
 
-const props = defineProps<{ slotName: string; ownerId: string; targets: Node[]; empty: boolean }>()
+defineProps<{ slotName: string; ownerId: string; targets: Node[]; empty: boolean }>()
 const emit = defineEmits<{ 'insert-component': [data: { targetID: string }] }>()
-
-watchEffect(() => console.log('targets', props.targets))
 </script>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { type EditorEvents } from '@/editor/events'
+import { captureEditable } from '@/lib/edition/capture'
 import { parseElementAttributes } from '@/lib/transient/attributes'
 import { getDescendantComponents, type TransientElement } from 'transient'
 import { h, Teleport, type VNode } from 'vue'
@@ -12,16 +13,18 @@ const props = defineProps<{
   //islands: VNode[]
 }>()
 
-const emit = defineEmits<EditorEvents & { exitEditing: [] }>()
+const emit = defineEmits<EditorEvents>()
 
+const elements = new WeakMap<Node, string>()
 const placeholders = new Map<string, HTMLElement>()
 const islands: VNode[] = []
 
 for (const child of getDescendantComponents(props.element)) {
-  const el = document.createElement('span')
+  const el = document.createElement('tst-island')
   el.contentEditable = 'false'
-  el.dataset.tid = child.id
+  el.style.display = 'contents'
   placeholders.set(child.id, el)
+  elements.set(el, child.id)
   islands.push(h(Teleport, { to: el }, props.renderComponent(child)))
 }
 
@@ -38,8 +41,14 @@ function root() {
       if (e.relatedTarget && el.contains(e.relatedTarget as HTMLElement)) {
         return
       }
+      const content = captureEditable(el, props.element, elements)
 
-      emit('exitEditing')
+      emit('edit', {
+        type: 'replace-slot-content',
+        id: props.element.id,
+        slotName: 'default',
+        content,
+      })
     },
     onVnodeMounted(vnode) {
       if (vnode.el && vnode.el instanceof HTMLElement) {
@@ -70,9 +79,14 @@ function renderIslandToHTml(element: TransientElement): Node {
   const placeholder = placeholders.get(element.id)
   if (placeholder) return placeholder
   if (element.tag === '#text') {
-    return document.createTextNode((element.attributes?.value?.expression as string) ?? '')
+    const textNode = document.createTextNode(
+      (element.attributes?.value?.expression as string) ?? '',
+    )
+    elements.set(textNode, element.id)
+    return textNode
   }
   const root = document.createElement(element.tag)
+  elements.set(root, element.id)
   for (const [attrName, { type, expression }] of Object.entries(element.attributes ?? {})) {
     if (type === 'literal') {
       root.setAttribute(attrName, String(expression))

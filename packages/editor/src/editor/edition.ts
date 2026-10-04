@@ -22,6 +22,7 @@ export type Edition =
   | AddComponentEdition
   | DeleteElementEdition
   | UpdateElementPropEdition
+  | ReplaceSlotContentEdition
 
 export type SlotEdition = {
   type: 'edit-slot'
@@ -30,14 +31,11 @@ export type SlotEdition = {
   node: HTMLElement
 }
 
-export type StartElementEdition = {
-  type: 'start-element-edition'
-  transientId: string
-}
-
-export type EndElementEdition = {
-  type: 'end-element-edition'
-  transientId: string
+export type ReplaceSlotContentEdition = {
+  type: 'replace-slot-content'
+  id: string
+  slotName: string
+  content: TransientElement[]
 }
 
 export type UpdateElementEdition = {
@@ -132,6 +130,12 @@ export function applyEdition(edition: Edition, elements: TransientElement[]) {
 
     case 'update-prop': {
       updateElementProp(edition.propName, edition.value, edition.transientId, elements)
+
+      break
+    }
+
+    case 'replace-slot-content': {
+      replaceElementSlot(edition.content, edition.slotName, edition.id, elements)
 
       break
     }

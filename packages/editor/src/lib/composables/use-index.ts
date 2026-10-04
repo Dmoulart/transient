@@ -4,15 +4,12 @@ export type Index = ReturnType<typeof useIndex>
 
 export type SlotLocation = {
   name: string
-  // true when Vue renders the slot's own fallback content (no IR children)
   fallback: boolean
   nodes: Node[]
-  // where to highlight/insert when the slot renders nothing at all
   container: Node[]
 }
 
 export function useIndex() {
-  // irId -> vnode, filled by ComponentBuilder during render. DOM is read lazily from it.
   const elements = reactive(new Map<string, VNode>())
 
   function first(vnode: VNode): Node | null {
