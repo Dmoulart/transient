@@ -3,9 +3,11 @@ import { computed, type ComputedRef, type Ref } from 'vue'
 import type { ComponentDictionnary } from './use-dictionnary'
 import type { Index } from './use-index'
 import { useId } from './use-id'
+import type { useClosestComponent } from './use-closest-component'
 
 export function useEditableText(
   maybeNode: ComputedRef<HTMLElement | null>,
+  component: ReturnType<typeof useClosestComponent>,
   template: Ref<TransientTemplate>,
   dictionnary: ComponentDictionnary,
   index: Index,
@@ -17,6 +19,7 @@ export function useEditableText(
   const id = computed(() => tid.id.value)
 
   const editable = computed(() => {
+    console.log('component slots', component.slots.value, 'selected node', maybeNode.value)
     return !tid.element.value?.isComponent
   })
 
@@ -26,25 +29,6 @@ export function useEditableText(
     }
     return null
   })
-
-  //   whenever(container, (newContainer) => {
-  //     newContainer.contentEditable = 'true'
-  //     newContainer.focus()
-  //     const stop = useEventListener(newContainer, 'focusout', (event) => {
-  //       if (event.target) {
-  //         htmlElementToTransientElement(event.target, id.id.value)
-  //       }
-  //     })
-
-  //     watch(
-  //       container,
-  //       () => {
-  //         stop()
-  //         newContainer.contentEditable = 'false'
-  //       },
-  //       { once: true },
-  //     )
-  //   })
 
   return {
     id,

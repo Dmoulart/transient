@@ -28,6 +28,7 @@ export function useSelection(
     computed(() => {
       return selected.node.value
     }),
+    component,
     template,
     dictionnary,
     index,
