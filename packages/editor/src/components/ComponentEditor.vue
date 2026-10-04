@@ -5,40 +5,45 @@
       :dictionnary="dictionnary"
       :template="template.contents.value"
       :components="components"
-      :editing="editing"
-      @edit="apply"
+      :editing="editor.editing.value"
+      @edit="editor.edit"
     />
   </main>
 
   <ComponentSelection
-    v-if="selection.component.root.value && selection.component.element.value"
-    :root="selection.component.root.value"
-    :element="selection.component.element.value"
-    @edit="apply"
+    v-if="editor.activeComponent.element.value"
+    :root="index.locate(editor.activeComponent.element.value.id)"
+    :element="editor.activeComponent.element.value!"
+    @edit="editor.edit"
     @insert-component="
       ({ targetID: targetNodeID }) => {
         componentPanel.open((schema) => {
-          apply({ type: 'add-component', targetId: targetNodeID, position: 'after', schema })
+          editor.edit({ type: 'add-component', targetId: targetNodeID, position: 'after', schema })
         })
       }
     "
   />
 
-  <template v-if="selection.text.container.value && selection.text.id.value">
-    <TextSelection :targets="[selection.text.container.value]" />
+  <template v-if="editor.editing.value">
+    <TextSelection :targets="index.locate(editor.editing.value.id)" />
   </template>
-  <template v-else-if="selection.component.slots.value">
+  <template v-else-if="editor.activeComponent.element.value">
     <SlotHighlight
-      v-for="slot in selection.component.slots.value"
+      v-for="slot in index.slots(editor.activeComponent.element.value.id)"
       :key="slot.name"
       :targets="slot.nodes.length ? slot.nodes : slot.container"
       :empty="slot.fallback"
       :slot-name="slot.name"
-      :owner-id="selection.component.id.value!"
+      :owner-id="editor.activeComponent.id.value!"
       @insert-component="
         ({ targetID: targetNodeID }) => {
           componentPanel.open((schema) => {
-            apply({ type: 'add-component', targetId: targetNodeID, position: 'append', schema })
+            editor.edit({
+              type: 'add-component',
+              targetId: targetNodeID,
+              position: 'append',
+              schema,
+            })
           })
         }
       "
@@ -46,17 +51,17 @@
   </template>
 
   <PropsPanel
-    :schema="selection.component.schema.value"
-    :component-props="selection.component.props.value"
-    @close="() => (selection.selected.node.value = null)"
+    :schema="editor.activeComponent.schema.value"
+    :component-props="editor.activeComponent.props.value"
+    @close="() => editor.select(null)"
     @update="
       ({ prop, propName, value }) => {
-        apply({
+        editor.edit({
           type: 'update-prop',
           prop,
           propName,
           value,
-          transientId: selection.component.id.value!,
+          transientId: editor.activeComponent.id.value!,
         })
       }
     "
@@ -79,9 +84,9 @@
     "
     @close="componentPanel.close"
   />
-
-  Current component : {{ selection.component.element.value?.tag }}
-
+  <div>Current component : {{ editor.activeComponent.element.value?.tag }}</div>
+  <div>Selected slot :{{ editor.selectedSlot }}</div>
+  <div>Editing: {{ editor.editing }}</div>
   <Button @click="template.saveToLocalStorage">Save</Button>
   <Button @click="template.loadFromLocalStorage">Load</Button>
   <!-- <code>{{ template.contents.value }}</code> -->
@@ -92,10 +97,7 @@ import { loadAllComponents, useDictionnary } from '@/lib/composables/use-diction
 import Button from '@/samples/Button.vue'
 import { useTemplate } from '@/lib/composables/use-template.ts'
 import { computedAsync, useEventListener } from '@vueuse/core'
-import { applyEdition, type Edition } from '@/editor/edition'
-import { ref, shallowRef, useTemplateRef } from 'vue'
-import { useSelection } from '@/lib/composables/use-selection.js'
-import { someHTMLElement } from 'transient'
+import { useTemplateRef } from 'vue'
 import ComponentBuilder from './ComponentBuilder.vue'
 import PropsPanel from './PropsPanel.vue'
 import ComponentSelection from './ComponentSelection.vue'
@@ -104,6 +106,7 @@ import ComponentPanel from './ComponentPanel.vue'
 import SlotHighlight from './SlotHighlight.vue'
 import { useIndex } from '@/lib/composables/use-index.ts'
 import TextSelection from './TextSelection.vue'
+import { useEditor } from '@/lib/use-editor.ts'
 
 const canvas = useTemplateRef('canvas')
 const index = useIndex()
@@ -117,25 +120,16 @@ const componentPanel = useComponentPanel()
 
 const template = useTemplate(component.template!)
 
-const selection = useSelection(shallowRef(null), template.contents, dictionnary, index)
+const editor = useEditor(template.contents, dictionnary)
 
-function apply(edition: Edition) {
-  applyEdition(edition, template.contents.value.elements)
-  if (edition.type === 'replace-slot-content') {
-    editing.value = null
-  }
-}
+useEventListener(canvas, ['click'], (ev: MouseEvent) => {
+  if (ev.target instanceof Element && ev.target.closest('[contenteditable="true"]')) return
 
-// Set once on click, never derived from the DOM: EditableRoot replaces the clicked node.
-const editing = ref<{ id: string; point: { x: number; y: number } } | null>(null)
+  const hit = document.caretPositionFromPoint(ev.clientX, ev.clientY)?.offsetNode ?? ev.target
+  const id = hit instanceof Node ? index.closestAncestorId(hit) : null
 
-useEventListener(canvas, ['click', 'focusin'], (ev: MouseEvent) => {
-  selection.selected.node.value = someHTMLElement(ev.target) ? ev.target : null
-
-  const id = selection.text.id.value
-  if (ev.type === 'click' && selection.text.container.value && id && editing.value?.id !== id) {
-    editing.value = { id, point: { x: ev.clientX, y: ev.clientY } }
-  }
+  if (id) editor.pointOn(id, { x: ev.clientX, y: ev.clientY })
+  else editor.select(null)
 })
 </script>
 

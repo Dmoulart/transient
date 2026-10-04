@@ -23,6 +23,7 @@ export function useEditor(template: Ref<TransientTemplate>, dictionnary: Compone
     if (selection.value?.kind === 'element') {
       return getAncestorsChain(selection.value.id, template.value.elements)
     }
+
     return []
   })
 
@@ -32,9 +33,9 @@ export function useEditor(template: Ref<TransientTemplate>, dictionnary: Compone
 
   const selectedSlot = computed(() => {
     if (selection.value?.kind === 'slot') {
-      return owner.value
+      return { ownerId: selection.value.ownerId, slotName: selection.value.slotName }
     }
-    return owner.value ?? null
+    return owner.value ? { ownerId: owner.value.element.id, slotName: owner.value.slotName } : null
   })
 
   const selectedElement = computed(() => {
@@ -68,8 +69,21 @@ export function useEditor(template: Ref<TransientTemplate>, dictionnary: Compone
 
   const activeComponent = useElement(activeComponentId, template, dictionnary)
 
-  function select(newSelection: Selection) {
+  function pointOn(id: string, point: { x: number; y: number }) {
+    select({ kind: 'element', id })
+
+    const parent = ancestors.value?.at(-1)
+
+    if (!parent) return
+
+    startEditing(parent.element.id, point, parent.element.isComponent ? parent.slotName : undefined)
+  }
+
+  function select(newSelection: Selection | null) {
     selection.value = newSelection
+    if (editing.value && newSelection === null) {
+      stopEditing()
+    }
   }
 
   function edit(edition: Edition) {
@@ -96,6 +110,7 @@ export function useEditor(template: Ref<TransientTemplate>, dictionnary: Compone
     selectedSlot,
     activeComponent,
     editing: readonly(editing),
+    pointOn,
     edit,
     startEditing,
     stopEditing,

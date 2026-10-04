@@ -19,7 +19,6 @@ export function useEditableText(
   const id = computed(() => tid.id.value)
 
   const editable = computed(() => {
-    console.log('component slots', component.slots.value, 'selected node', maybeNode.value)
     return !tid.element.value?.isComponent
   })
 
