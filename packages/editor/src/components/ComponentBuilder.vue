@@ -55,7 +55,6 @@ function renderComponent(element: TransientElement): VNode[] {
   const slots = Object.fromEntries(
     Object.entries({ ...schemaSlots, ...(element.slots ?? {}) }).map(([slotName, children]) => {
       if (props.editing?.id === element.id && props.editing?.slotName === slotName) {
-        debugger
         const container: TransientElement = {
           id: 'transient-slot-edition',
           attributes: {},
@@ -72,7 +71,9 @@ function renderComponent(element: TransientElement): VNode[] {
               mouse: props.editing!.point,
               ownerId: element.id,
               slotName,
+              occurrence: props.editing!.occurrence ?? 0,
               renderComponent,
+              render,
               onEdit: (e) => emit('edit', e),
               onExitEditing: () => emit('exitEditing'),
             }),
@@ -106,6 +107,7 @@ function renderElement(element: TransientElement) {
       slotName: 'default',
       mouse: props.editing.point,
       renderComponent,
+      render,
       onEdit: (e) => emit('edit', e),
       onExitEditing: () => emit('exitEditing'),
     })

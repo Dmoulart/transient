@@ -30,7 +30,13 @@
   </template>
   <template v-else-if="editor.editing.value && editor.editing.value.slotName">
     <EditionZone
-      :targets="index.slot(editor.editing.value.id, editor.editing.value.slotName)!.container"
+      :targets="
+        index.slot(
+          editor.editing.value.id,
+          editor.editing.value.slotName,
+          editor.editing.value.occurrence,
+        )!.container
+      "
       :slot-name="editor.editing.value.slotName"
     />
   </template>
@@ -133,8 +139,8 @@ useEventListener(canvas, ['click'], (ev: MouseEvent) => {
   const target = ev.target instanceof Node ? ev.target : null
   const id = target ? index.closestAncestorId(target) : null
   if (!id) return editor.select(null)
-  const slotName = index.vnode(id)?.component ? index.slotAt(id, target!) : undefined
-  editor.pointOn(id, { x: ev.clientX, y: ev.clientY }, slotName ?? undefined)
+  const slot = index.vnode(id)?.component ? index.slotAt(id, target!) : null
+  editor.pointOn(id, { x: ev.clientX, y: ev.clientY }, slot?.name, slot?.occurrence)
 })
 </script>
 

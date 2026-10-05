@@ -122,16 +122,19 @@ export function useIndex() {
     return found
   }
 
-  function slot(ownerId: string, slotName: string): SlotLocation | undefined {
-    return slots(ownerId).find((slot) => slot.name === slotName)
+  // a slot can be rendered several times (v-for): `occurrence` picks the copy, in render order
+  function slot(ownerId: string, slotName: string, occurrence = 0): SlotLocation | undefined {
+    return slots(ownerId).filter((slot) => slot.name === slotName)[occurrence]
   }
 
-  function slotAt(ownerId: string, node: Node): string | null {
+  function slotAt(ownerId: string, node: Node): { name: string; occurrence: number } | null {
     const found = slots(ownerId)
     const hit =
       found.find((slot) => slot.nodes.some((n) => n.contains(node))) ??
       found.find((slot) => slot.container.some((c) => c.contains(node)))
-    return hit?.name ?? null
+    if (!hit) return null
+    const occurrence = found.filter((slot) => slot.name === hit.name).indexOf(hit)
+    return { name: hit.name, occurrence }
   }
 
   return {

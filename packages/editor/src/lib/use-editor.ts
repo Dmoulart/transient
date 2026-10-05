@@ -15,7 +15,13 @@ export type Selection =
   | { kind: 'element'; id: string }
   | { kind: 'slot'; slotName: string; ownerId: string }
 
-export type Editing = { id: string; point: { x: number; y: number }; slotName?: string }
+export type Editing = {
+  id: string
+  point: { x: number; y: number }
+  slotName?: string
+  // which copy of a slot rendered several times, in render order
+  occurrence?: number
+}
 
 export function useEditor(
   template: Ref<TransientTemplate>,
@@ -91,10 +97,15 @@ export function useEditor(
     return hasText(element) ? { id: element.id } : null
   })
 
-  function pointOn(id: string, point: { x: number; y: number }, slotName?: string) {
+  function pointOn(
+    id: string,
+    point: { x: number; y: number },
+    slotName?: string,
+    occurrence?: number,
+  ) {
     if (slotName) {
       select({ kind: 'slot', ownerId: id, slotName })
-      startEditing(id, point, slotName)
+      startEditing(id, point, slotName, occurrence)
       return
     }
 
@@ -114,8 +125,13 @@ export function useEditor(
     history.value = [edition, ...history.value].slice(0, 20)
   }
 
-  function startEditing(id: string, point: { x: number; y: number }, slotName?: string) {
-    editing.value = { id, point, slotName }
+  function startEditing(
+    id: string,
+    point: { x: number; y: number },
+    slotName?: string,
+    occurrence?: number,
+  ) {
+    editing.value = { id, point, slotName, occurrence }
   }
 
   function stopEditing() {

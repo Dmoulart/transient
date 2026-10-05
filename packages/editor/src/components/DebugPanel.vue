@@ -38,7 +38,7 @@
       <span>
         <template v-if="editing">
           <span class="text-amber-300">{{ tagOf(editing.id) }}</span>
-          <span v-if="editing.slotName" class="text-amber-300"> #{{ editing.slotName }}</span>
+          <span v-if="editing.slotName" class="text-amber-300"> #{{ editing.slotName }}<template v-if="editing.occurrence"> [{{ editing.occurrence }}]</template></span>
           <span class="text-white/30"> @ {{ editing.point.x }},{{ editing.point.y }}</span>
         </template>
         <template v-else>—</template>
