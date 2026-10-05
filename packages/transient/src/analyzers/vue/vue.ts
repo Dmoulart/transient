@@ -39,7 +39,7 @@ export function defineVueAnalyzer(options: VueAnalyzerOptions) {
 function describeComponent(
   meta: ComponentMeta,
   src: string,
-  path: string
+  path: string,
 ): TransientComponentSchema {
   const tag =
     src

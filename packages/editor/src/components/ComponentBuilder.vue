@@ -44,10 +44,16 @@ function renderComponent(element: TransientElement): VNode[] {
 
   const component = props.components[element.tag]
 
-  assertIsDefined(component)
+  const schema = props.dictionnary.get(element.tag)
 
+  // component instances with empty slots must still be editable
+  const schemaSlots = schema.slots
+    ? Object.fromEntries(Object.keys(schema.slots).map((slotName) => [slotName, []]))
+    : {}
+
+  assertIsDefined(component)
   const slots = Object.fromEntries(
-    Object.entries(element.slots ?? {}).map(([slotName, children]) => {
+    Object.entries({ ...schemaSlots, ...(element.slots ?? {}) }).map(([slotName, children]) => {
       if (props.editing?.id === element.id && props.editing?.slotName === slotName) {
         debugger
         const container: TransientElement = {

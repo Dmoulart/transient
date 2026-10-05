@@ -113,6 +113,11 @@ function renderIslandToHTml(content: TransientElement[]): Node[] {
 </script>
 <template><root /></template>
 <style>
+tst-slot-edition:empty {
+  display: inline-block;
+  min-width: 1ch;
+}
+
 [contenteditable='true'] {
   outline: none;
 }
