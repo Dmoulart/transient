@@ -25,14 +25,20 @@
     "
   />
 
-  <template v-if="editor.editing.value">
-    <TextSelection :targets="index.rootNodes(editor.editing.value.id)" />
+  <template v-if="editor.editing.value && !editor.editing.value.slotName">
+    <EditionZone :targets="index.rootNodes(editor.editing.value.id)" />
+  </template>
+  <template v-else-if="editor.editing.value && editor.editing.value.slotName">
+    <EditionZone
+      :targets="index.slot(editor.editing.value.id, editor.editing.value.slotName)!.container"
+      :slot-name="editor.editing.value.slotName"
+    />
   </template>
   <template v-else-if="editor.activeComponent.element.value">
     <SlotHighlight
       v-for="slot in index.slots(editor.activeComponent.element.value.id)"
       :key="slot.name"
-      :targets="slot.nodes.length ? slot.nodes : slot.container"
+      :targets="slot.container"
       :empty="slot.fallback"
       :slot-name="slot.name"
       :owner-id="editor.activeComponent.id.value!"
@@ -85,9 +91,7 @@
     "
     @close="componentPanel.close"
   />
-  <div>Current component : {{ editor.activeComponent.element.value?.tag }}</div>
-  <div>Selected slot :{{ editor.selectedSlot }}</div>
-  <div>Editing: {{ editor.editing }}</div>
+  <DebugPanel :editor="editor" :template="template.contents.value" :index="index" />
   <Button @click="template.saveToLocalStorage">Save</Button>
   <Button @click="template.loadFromLocalStorage">Load</Button>
 </template>
@@ -105,8 +109,9 @@ import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
 import ComponentPanel from './ComponentPanel.vue'
 import SlotHighlight from './SlotHighlight.vue'
 import { useIndex } from '@/lib/composables/use-index.ts'
-import TextSelection from './TextSelection.vue'
 import { useEditor } from '@/lib/use-editor.ts'
+import DebugPanel from './DebugPanel.vue'
+import EditionZone from './EditionZone.vue'
 
 const canvas = useTemplateRef('canvas')
 const index = useIndex()
@@ -120,7 +125,7 @@ const componentPanel = useComponentPanel()
 
 const template = useTemplate(component.template!)
 
-const editor = useEditor(template.contents, dictionnary, index)
+const editor = useEditor(template.contents, dictionnary)
 
 useEventListener(canvas, ['click'], (ev: MouseEvent) => {
   if (ev.target instanceof Element && ev.target.closest('[contenteditable="true"]')) return

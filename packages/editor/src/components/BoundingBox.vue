@@ -24,8 +24,7 @@
       />
       <rect
         v-bind="frame"
-        class="fill-transparent"
-        :class="[style.stroke, style.dash && 'ants']"
+        :class="[style.fill, style.stroke]"
         :stroke-width="style.strokeWidth"
         :stroke-dasharray="style.dash"
       />
@@ -53,6 +52,7 @@ import { computed } from 'vue'
 const variants = {
   component: {
     stroke: 'stroke-teal-500',
+    fill: 'fill-transparent',
     strokeWidth: 2,
     inset: -4,
     dash: undefined as string | undefined,
@@ -60,14 +60,27 @@ const variants = {
     handles: true,
     shadow: 'drop-shadow(0 1px 3px rgb(0 0 0 / 0.35))',
   },
+  // available slot: quiet, static
   slot: {
-    stroke: 'stroke-amber-500',
-    strokeWidth: 1.5,
+    stroke: 'stroke-amber-500/50',
+    fill: 'fill-transparent',
+    strokeWidth: 1,
     inset: -1,
     dash: '4 3',
     halo: false,
     handles: false,
-    shadow: 'drop-shadow(0 0 2px rgb(255 255 255 / 0.9))',
+    shadow: undefined,
+  },
+  // slot being typed in: solid, tinted, focus-ring glow
+  editing: {
+    stroke: 'stroke-amber-400',
+    fill: 'fill-amber-400/[0.06]',
+    strokeWidth: 2,
+    inset: -3,
+    dash: undefined,
+    halo: false,
+    handles: false,
+    shadow: 'drop-shadow(0 0 4px rgb(251 191 36 / 0.45))',
   },
 } as const
 
@@ -107,18 +120,3 @@ const corners = computed(() => {
   ]
 })
 </script>
-<style scoped>
-.ants {
-  animation: ants 1.4s linear infinite;
-}
-@keyframes ants {
-  to {
-    stroke-dashoffset: -7; /* = dash + gap */
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ants {
-    animation: none;
-  }
-}
-</style>

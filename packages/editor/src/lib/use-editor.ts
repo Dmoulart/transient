@@ -6,7 +6,7 @@ import {
   type TransientTemplate,
 } from 'transient'
 import type { ComponentDictionnary } from './composables/use-dictionnary'
-import { computed, readonly, ref, type Ref } from 'vue'
+import { computed, readonly, ref, shallowRef, type Ref } from 'vue'
 import { useElement } from './use-element'
 import { applyEdition, type Edition } from '@/editor/edition'
 import type { Index } from './composables/use-index'
@@ -20,10 +20,11 @@ export type Editing = { id: string; point: { x: number; y: number }; slotName?: 
 export function useEditor(
   template: Ref<TransientTemplate>,
   dictionnary: ComponentDictionnary,
-  index: Index,
 ) {
   const selection = ref<Selection | null>(null)
   const editing = ref<Editing | null>(null)
+  // latest first, capped
+  const history = shallowRef<Edition[]>([])
 
   const ancestors = computed(() => {
     if (selection.value?.kind === 'element') {
@@ -110,6 +111,7 @@ export function useEditor(
 
   function edit(edition: Edition) {
     applyEdition(edition, template.value.elements)
+    history.value = [edition, ...history.value].slice(0, 20)
   }
 
   function startEditing(id: string, point: { x: number; y: number }, slotName?: string) {
@@ -133,6 +135,7 @@ export function useEditor(
     selectedSlot,
     activeComponent,
     editing: readonly(editing),
+    history: readonly(history),
     pointOn,
     edit,
     startEditing,

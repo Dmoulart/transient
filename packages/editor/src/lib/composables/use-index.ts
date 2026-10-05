@@ -122,6 +122,10 @@ export function useIndex() {
     return found
   }
 
+  function slot(ownerId: string, slotName: string): SlotLocation | undefined {
+    return slots(ownerId).find((slot) => slot.name === slotName)
+  }
+
   function slotAt(ownerId: string, node: Node): string | null {
     const found = slots(ownerId)
     const hit =
@@ -138,6 +142,7 @@ export function useIndex() {
     closestAncestorId,
     closestComponentId,
     slots,
+    slot,
     slotAt,
   }
 }
