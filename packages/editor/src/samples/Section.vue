@@ -1,9 +1,11 @@
 <template>
   <section class="section">
-    <h1>Title</h1>
+    <h1>
+      <slot name="header" />
+    </h1>
     <div>
       <slot />
     </div>
-    Hello !
+    <footer><slot name="footer" /></footer>
   </section>
 </template>

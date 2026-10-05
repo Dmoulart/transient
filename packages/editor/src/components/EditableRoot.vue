@@ -6,11 +6,11 @@ import { getDescendantComponents, type TransientElement } from 'transient'
 import { h, Teleport, type VNode } from 'vue'
 
 const props = defineProps<{
-  element: TransientElement
+  container: TransientElement
   renderComponent: (element: TransientElement) => VNode[]
   mouse: { x: number; y: number }
-  //placeholders: Map<string, HTMLElement>
-  //islands: VNode[]
+  ownerId: string
+  slotName: string
 }>()
 
 const emit = defineEmits<EditorEvents & { exitEditing: [] }>()
@@ -19,7 +19,7 @@ const elements = new WeakMap<Node, string>()
 const placeholders = new Map<string, HTMLElement>()
 const islands: VNode[] = []
 
-for (const child of getDescendantComponents(props.element)) {
+for (const child of getDescendantComponents(props.container)) {
   const el = document.createElement('tst-island')
   el.contentEditable = 'false'
   el.style.display = 'contents'
@@ -28,23 +28,23 @@ for (const child of getDescendantComponents(props.element)) {
   islands.push(h(Teleport, { to: el }, props.renderComponent(child)))
 }
 
-const children = renderIslandToHTml(props.element.slots?.default ?? [])
+const children = renderIslandToHTml(props.container.slots?.[props.slotName] ?? [])
 
 function root() {
-  const editionContainer = h(props.element.tag, {
-    ...parseElementAttributes(props.element),
+  const editionContainer = h(props.container.tag, {
+    ...parseElementAttributes(props.container),
     contenteditable: 'true',
     onFocusout: (e: FocusEvent) => {
       const el = e.currentTarget as HTMLElement
       if (e.relatedTarget && el.contains(e.relatedTarget as HTMLElement)) {
         return
       }
-      const content = captureEditable(el, props.element, elements)
+      const content = captureEditable(el, props.container, elements)
 
       emit('edit', {
         type: 'replace-slot-content',
-        id: props.element.id,
-        slotName: 'default',
+        id: props.ownerId,
+        slotName: props.slotName,
         content,
       })
       emit('exitEditing')

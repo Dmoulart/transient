@@ -6,12 +6,12 @@ import { h, Text, type VNode } from 'vue'
 import EditableRoot from './EditableRoot.vue'
 import { parseElementAttributes } from '@/lib/transient/attributes.ts'
 import type { EditorEvents } from '@/editor/events.ts'
-
+import type { Editing } from '@/lib/use-editor.ts'
 const props = defineProps<{
   template: TransientTemplate
   dictionnary: ComponentDictionnary
   components: Record<string, unknown>
-  editing?: { id: string; point: { x: number; y: number } } | null
+  editing?: Editing | null
 }>()
 
 const emit = defineEmits<EditorEvents & { exitEditing: [] }>()
@@ -47,10 +47,33 @@ function renderComponent(element: TransientElement): VNode[] {
   assertIsDefined(component)
 
   const slots = Object.fromEntries(
-    Object.entries(element.slots ?? {}).map(([slotName, children]) => [
-      slotName,
-      () => render(children),
-    ]),
+    Object.entries(element.slots ?? {}).map(([slotName, children]) => {
+      if (props.editing?.id === element.id && props.editing?.slotName === slotName) {
+        debugger
+        const container: TransientElement = {
+          id: 'transient-slot-edition',
+          attributes: {},
+          isComponent: false,
+          tag: 'tst-slot-edition',
+          slots: { [slotName]: children },
+        }
+
+        return [
+          slotName,
+          () =>
+            h(EditableRoot, {
+              container,
+              mouse: props.editing!.point,
+              ownerId: element.id,
+              slotName,
+              renderComponent,
+              onEdit: (e) => emit('edit', e),
+              onExitEditing: () => emit('exitEditing'),
+            }),
+        ]
+      }
+      return [slotName, () => render(children)]
+    }),
   )
 
   const attributes = parseElementAttributes(element)
@@ -72,7 +95,9 @@ function renderElement(element: TransientElement) {
 
   if (props.editing?.id === element.id) {
     const editableRootVnode = h(EditableRoot, {
-      element,
+      container: element,
+      ownerId: element.id,
+      slotName: 'default',
       mouse: props.editing.point,
       renderComponent,
       onEdit: (e) => emit('edit', e),

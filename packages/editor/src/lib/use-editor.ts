@@ -90,7 +90,9 @@ export function useEditor(
 
   function pointOn(id: string, point: { x: number; y: number }) {
     select({ kind: 'element', id })
-    if (editTarget.value) startEditing(editTarget.value.id, point, editTarget.value.slotName)
+    if (editTarget.value) {
+      startEditing(editTarget.value.id, point, editTarget.value.slotName)
+    }
   }
 
   function select(newSelection: Selection | null) {

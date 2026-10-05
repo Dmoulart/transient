@@ -2,6 +2,7 @@
 import Container from './Container.vue'
 import Counter from './Counter.vue'
 import Fragment from './Fragment.vue'
+import Section from './Section.vue'
 
 const cards = [
   {
@@ -38,7 +39,11 @@ const cards = [
     </p>
     <Container> Container ! </Container>
     <Fragment />
-
+    <Section>
+      <template #header> Header </template>
+      Content
+      <template #footer> Footer </template>
+    </Section>
     <!-- </section> -->
 
     <!-- Cards Section -->
