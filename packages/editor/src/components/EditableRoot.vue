@@ -28,9 +28,7 @@ for (const child of getDescendantComponents(props.element)) {
   islands.push(h(Teleport, { to: el }, props.renderComponent(child)))
 }
 
-const children = props.element.slots?.default
-  ? props.element.slots.default.map(renderIslandToHTml)
-  : []
+const children = renderIslandToHTml(props.element.slots?.default ?? [])
 
 function root() {
   const editionContainer = h(props.element.tag, {
@@ -76,29 +74,41 @@ function root() {
   return [editionContainer, ...islands]
 }
 
-function renderIslandToHTml(element: TransientElement): Node {
-  const placeholder = placeholders.get(element.id)
-  if (placeholder) return placeholder
-  if (element.tag === '#text') {
-    const textNode = document.createTextNode(
-      (element.attributes?.value?.expression as string) ?? '',
-    )
-    elements.set(textNode, element.id)
-    return textNode
-  }
-  const root = document.createElement(element.tag)
-  elements.set(root, element.id)
-  for (const [attrName, { type, expression }] of Object.entries(element.attributes ?? {})) {
-    if (type === 'literal') {
-      root.setAttribute(attrName, String(expression))
+function renderIslandToHTml(content: TransientElement[]): Node[] {
+  const nodes: Node[] = []
+  for (const element of content) {
+    const placeholder = placeholders.get(element.id)
+    if (placeholder) {
+      nodes.push(placeholder)
+      continue
     }
+
+    if (element.tag === '#text') {
+      const textNode = document.createTextNode(
+        (element.attributes?.value?.expression as string) ?? '',
+      )
+      elements.set(textNode, element.id)
+      nodes.push(textNode)
+      continue
+    }
+    const root = document.createElement(element.tag)
+    elements.set(root, element.id)
+
+    for (const [attrName, { type, expression }] of Object.entries(element.attributes ?? {})) {
+      if (type === 'literal') {
+        root.setAttribute(attrName, String(expression))
+      }
+    }
+
+    const children: Node[] = []
+    if (element.slots && element.slots.default) {
+      children.push(...renderIslandToHTml(element.slots.default))
+    }
+    root.append(...children)
+
+    nodes.push(root)
   }
-  const children: Node[] = []
-  if (element.slots && element.slots.default) {
-    children.push(...element.slots.default.map(renderIslandToHTml))
-  }
-  root.append(...children)
-  return root
+  return nodes
 }
 </script>
 <template><root /></template>
