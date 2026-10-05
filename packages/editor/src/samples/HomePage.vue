@@ -1,80 +1,70 @@
 <script setup lang="ts">
-import Container from './Container.vue'
-import Counter from './Counter.vue'
-import Fragment from './Fragment.vue'
-import Section from './Section.vue'
-
-const cards = [
-  {
-    id: 1,
-    title: 'Fast Delivery',
-    description: 'Get your products in record time with our speedy delivery service.',
-    icon: '🚀',
-  },
-  {
-    id: 2,
-    title: 'Best Quality',
-    description: 'We guarantee high standards for all our products.',
-    icon: '🏆',
-  },
-  {
-    id: 3,
-    title: 'Affordable Prices',
-    description: 'Shop without breaking your budget.',
-    icon: '💵',
-  },
-]
+import ConditionalSlot from './ConditionalSlot.vue'
+import DefaultSlot from './DefaultSlot.vue'
+import EmptySlot from './EmptySlot.vue'
+import FallbackSlot from './FallbackSlot.vue'
+import InlineSlot from './InlineSlot.vue'
+import MultiRootSlot from './MultiRootSlot.vue'
+import NamedSlots from './NamedSlots.vue'
+import PropToggledSlot from './PropToggledSlot.vue'
+import ReactiveIsland from './ReactiveIsland.vue'
+import RepeatedSlot from './RepeatedSlot.vue'
+import SwitchedSlot from './SwitchedSlot.vue'
 </script>
 
 <template>
-  <main class="p-12 max-w-5xl m-auto">
-    <!-- Hero Section -->
-    <!-- <section class="text-center py-16"> -->
-    <h1 class="text-5xl font-semibold mb-6">
-      Welcome to Our Store <Counter /> The clock is ticking
-    </h1>
-    <p class="text-gray-500 mb-10">
-      We’re delighted you’re here! Explore our range of products, grab great deals, and enjoy a
-      wonderful shopping experience.
-    </p>
-    <Container> Container ! </Container>
-    <Fragment />
-    <Section>
-      <template #header> Header </template>
-      Content
-      <template #footer> Footer </template>
-    </Section>
-    <!-- </section> -->
-
-    <!-- Cards Section -->
-    <!-- <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      <div
-        v-for="item in cards"
-        :key="item.id"
-        class="bg-gray-100 p-6 rounded-md shadow-md transform hover:shadow-lg hover:translate-y-[-5px] transition-all"
-      >
-        <div class="text-4xl mb-4">{{ item.icon }}</div>
-        <h2 class="text-2xl font-semibold mb-2">
-          {{ item.title }}
-        </h2>
-        <p>{{ item.description }}</p>
-      </div>
-    </section> -->
-
-    <!-- Call to Action Section
-    <section class="text-center mt-16">
-      <h2 class="text-3xl font-semibold mb-4">Join Our Community</h2>
-      <p class="text-gray-500 mb-6">
-        Become a member today and enjoy exclusive offers and promotions.
+  <main class="min-h-screen bg-[#0C1222] text-white">
+    <div class="mx-auto flex max-w-2xl flex-col gap-4 px-6 py-16">
+      <h1 class="text-4xl font-semibold tracking-tight">Slots playground</h1>
+      <p class="mb-6 text-white/75">
+        Click any text to edit it. A <InlineSlot>highlighted</InlineSlot> slot and a live counter
+        <ReactiveIsland /> both sit inside this paragraph.
       </p>
-      <button
-        class="bg-green-500 hover:bg-green-600 text-gray-50 font-semibold py-2 px-6 rounded-md shadow-md transform hover:translate-y-[-2px] transition-all"
-      >
-        Signup Now
-      </button>
-    </section>
-    -->
+
+      <DefaultSlot>Plain text in the default slot.</DefaultSlot>
+
+      <DefaultSlot>Text with <b>bold</b>, <i>italic</i> and a <a href="#">link</a>.</DefaultSlot>
+
+      <NamedSlots>
+        <template #header>Header slot</template>
+        Default slot between two named slots.
+        <template #footer>Footer slot</template>
+      </NamedSlots>
+
+      <FallbackSlot />
+
+      <FallbackSlot>Content passed, fallback replaced.</FallbackSlot>
+
+      <EmptySlot />
+
+      <ConditionalSlot>
+        <template #icon>✦</template>
+        Icon slot provided, wrapper rendered.
+      </ConditionalSlot>
+
+      <ConditionalSlot>No icon slot, wrapper skipped.</ConditionalSlot>
+
+      <PropToggledSlot>
+        <template #header>Header, hidden when showHeader is off</template>
+        Always rendered.
+        <template #footer>Footer, shown when showFooter is on</template>
+      </PropToggledSlot>
+
+      <SwitchedSlot>
+        <template #loading>Loading slot</template>
+        <template #empty>Empty slot</template>
+        <template #ready>Ready slot</template>
+      </SwitchedSlot>
+
+      <RepeatedSlot>Same slot rendered count times.</RepeatedSlot>
+
+      <DefaultSlot>
+        Outer slot text
+        <DefaultSlot>Nested slot, <InlineSlot>inline</InlineSlot> inside.</DefaultSlot>
+        more outer text.
+      </DefaultSlot>
+
+      <MultiRootSlot>Slot in a component with several root nodes.</MultiRootSlot>
+    </div>
   </main>
 </template>
-
-<style scoped></style>
