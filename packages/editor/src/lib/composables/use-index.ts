@@ -48,7 +48,11 @@ export function useIndex() {
     return between(first(vnode), last(vnode))
   }
 
-  function locate(id: string): Node[] {
+  function vnode(id: string): VNode | undefined {
+    return elements.get(id)
+  }
+
+  function rootNodes(id: string): Node[] {
     const vnode = elements.get(id)
     return vnode ? range(vnode) : []
   }
@@ -89,7 +93,7 @@ export function useIndex() {
     const instance = elements.get(ownerId)?.component
     if (!instance) return []
 
-    const root = locate(ownerId)
+    const root = rootNodes(ownerId)
     const found: SlotLocation[] = []
 
     const walk = (vnode: VNode) => {
@@ -118,7 +122,24 @@ export function useIndex() {
     return found
   }
 
-  return { elements, nodeId, locate, closestAncestorId, closestComponentId, slots }
+  function slotAt(ownerId: string, node: Node): string | null {
+    const found = slots(ownerId)
+    const hit =
+      found.find((slot) => slot.nodes.some((n) => n.contains(node))) ??
+      found.find((slot) => slot.container.some((c) => c.contains(node)))
+    return hit?.name ?? null
+  }
+
+  return {
+    elements,
+    nodeId,
+    rootNodes,
+    vnode,
+    closestAncestorId,
+    closestComponentId,
+    slots,
+    slotAt,
+  }
 }
 
 function isSlotFragment(vnode: VNode, owner: ComponentInternalInstance) {

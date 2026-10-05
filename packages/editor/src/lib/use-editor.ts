@@ -2,6 +2,7 @@ import {
   findElementById,
   findNearestAncestor,
   getAncestorsChain,
+  type TransientElement,
   type TransientTemplate,
 } from 'transient'
 import type { ComponentDictionnary } from './composables/use-dictionnary'
@@ -85,10 +86,17 @@ export function useEditor(
       const parent = ancestors.value?.at(-1)?.element
       return parent ? { id: parent.id } : null
     }
-    return { id: element.id }
+    // layout containers (only blocks inside) are selected, not edited
+    return hasText(element) ? { id: element.id } : null
   })
 
-  function pointOn(id: string, point: { x: number; y: number }) {
+  function pointOn(id: string, point: { x: number; y: number }, slotName?: string) {
+    if (slotName) {
+      select({ kind: 'slot', ownerId: id, slotName })
+      startEditing(id, point, slotName)
+      return
+    }
+
     select({ kind: 'element', id })
     if (editTarget.value) {
       startEditing(editTarget.value.id, point, editTarget.value.slotName)
@@ -110,6 +118,12 @@ export function useEditor(
 
   function stopEditing() {
     editing.value = null
+  }
+
+  function hasText(element: TransientElement) {
+    return !!element.slots?.default?.some(
+      (child) => child.tag === '#text' && String(child.attributes.value?.expression ?? '').trim(),
+    )
   }
 
   return {

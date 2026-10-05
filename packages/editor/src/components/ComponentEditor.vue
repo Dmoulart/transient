@@ -13,7 +13,7 @@
 
   <ComponentSelection
     v-if="editor.activeComponent.element.value"
-    :root="index.locate(editor.activeComponent.element.value.id)"
+    :root="index.rootNodes(editor.activeComponent.element.value.id)"
     :element="editor.activeComponent.element.value!"
     @edit="editor.edit"
     @insert-component="
@@ -26,7 +26,7 @@
   />
 
   <template v-if="editor.editing.value">
-    <TextSelection :targets="index.locate(editor.editing.value.id)" />
+    <TextSelection :targets="index.rootNodes(editor.editing.value.id)" />
   </template>
   <template v-else-if="editor.activeComponent.element.value">
     <SlotHighlight
@@ -125,11 +125,11 @@ const editor = useEditor(template.contents, dictionnary, index)
 useEventListener(canvas, ['click'], (ev: MouseEvent) => {
   if (ev.target instanceof Element && ev.target.closest('[contenteditable="true"]')) return
 
-  const hit = document.caretPositionFromPoint(ev.clientX, ev.clientY)?.offsetNode ?? ev.target
-  const id = hit instanceof Node ? index.closestAncestorId(hit) : null
-
-  if (id) editor.pointOn(id, { x: ev.clientX, y: ev.clientY })
-  else editor.select(null)
+  const target = ev.target instanceof Node ? ev.target : null
+  const id = target ? index.closestAncestorId(target) : null
+  if (!id) return editor.select(null)
+  const slotName = index.vnode(id)?.component ? index.slotAt(id, target!) : undefined
+  editor.pointOn(id, { x: ev.clientX, y: ev.clientY }, slotName ?? undefined)
 })
 </script>
 

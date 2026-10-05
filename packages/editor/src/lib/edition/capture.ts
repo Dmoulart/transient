@@ -14,7 +14,8 @@ export function captureEditable(
       Object.values(element.slots ?? {}).forEach(index)
     }
   }
-  index(originalElement.slots?.default ?? [])
+
+  Object.values(originalElement.slots ?? {}).forEach(index)
 
   return capture(root, byId, ids)
 }

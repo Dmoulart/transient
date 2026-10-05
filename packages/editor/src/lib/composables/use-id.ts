@@ -39,7 +39,7 @@ export function useId(
 
   const root = computed<Node[] | null>(() => {
     if (element.value?.isComponent) {
-      return index.locate(id.value!)
+      return index.rootNodes(id.value!)
     }
     return null
   })
