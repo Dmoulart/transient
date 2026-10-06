@@ -16,24 +16,25 @@ const props = defineProps<{
   occurrence?: number
 }>()
 
-
 editableRoots.count += 1
 onUnmounted(() => {
   editableRoots.count -= 1
 })
 
-const emit = defineEmits<EditorEvents & { exitEditing: [] } & { created: [] }>()
+const emit = defineEmits<
+  EditorEvents & { exitEditing: []; created: []; islandsMounted: [Map<string, VNode>] }
+>()
 emit('created')
-onErrorCaptured((err) => {
-  console.log({ err })
-})
+
 let root: () => void
 
 // setup runs once per copy, in render order: the count gives this copy's position
 if (editableRoots.count - 1 === (props.occurrence ?? 0)) {
   const elements = new WeakMap<Node, string>()
   const placeholders = new Map<string, HTMLElement>()
-  const islands: VNode[] = []
+  // the component vnodes go to the index (it needs `.component`), the Teleports to the render
+  const islands = new Map<string, VNode>()
+  const teleports: VNode[] = []
 
   for (const child of getDescendantComponents(props.container)) {
     const el = document.createElement('tst-island')
@@ -41,7 +42,10 @@ if (editableRoots.count - 1 === (props.occurrence ?? 0)) {
     el.style.display = 'contents'
     placeholders.set(child.id, el)
     elements.set(el, child.id)
-    islands.push(h(Teleport, { to: el }, props.renderComponent(child)))
+
+    const vnodes = props.renderComponent(child)
+    islands.set(child.id, vnodes[0]!)
+    teleports.push(h(Teleport, { to: el }, vnodes))
   }
 
   const children = renderIslandToHTml(props.container.slots?.[props.slotName] ?? [])
@@ -84,10 +88,11 @@ if (editableRoots.count - 1 === (props.occurrence ?? 0)) {
             }
           }
         }
+        emit('islandsMounted', islands)
       },
     })
 
-    return [editionContainer, ...islands]
+    return [editionContainer, ...teleports]
   }
 
   function renderIslandToHTml(content: TransientElement[]): Node[] {

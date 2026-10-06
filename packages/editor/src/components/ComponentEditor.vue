@@ -134,11 +134,11 @@ const template = useTemplate(component.template!)
 const editor = useEditor(template.contents, dictionnary)
 
 useEventListener(canvas, ['click'], (ev: MouseEvent) => {
-  if (ev.target instanceof Element && ev.target.closest('[contenteditable="true"]')) return
-
   const target = ev.target instanceof Node ? ev.target : null
   const id = target ? index.closestAncestorId(target) : null
-  if (!id) return editor.select(null)
+  if (!id) {
+    return editor.select(null)
+  }
   const slot = index.vnode(id)?.component ? index.slotAt(id, target!) : null
   editor.pointOn(id, { x: ev.clientX, y: ev.clientY }, slot?.name, slot?.occurrence)
 })
