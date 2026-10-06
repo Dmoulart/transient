@@ -4,7 +4,7 @@ import { captureEditable } from '@/lib/edition/capture'
 import { editableRoots } from '@/lib/edition/editable-root'
 import { parseElementAttributes } from '@/lib/transient/attributes'
 import { getDescendantComponents, type TransientElement } from 'transient'
-import { h, onErrorCaptured, onUnmounted, Teleport, type VNode } from 'vue'
+import { h, onUnmounted, Teleport, type VNode } from 'vue'
 const props = defineProps<{
   container: TransientElement
   renderComponent: (element: TransientElement) => VNode[]
@@ -16,9 +16,12 @@ const props = defineProps<{
   occurrence?: number
 }>()
 
-editableRoots.count += 1
+const rootKey = `${props.ownerId}:${props.slotName}`
+// setup runs once per copy, in render order: the count gives this copy's position
+const position = editableRoots.get(rootKey) ?? 0
+editableRoots.set(rootKey, position + 1)
 onUnmounted(() => {
-  editableRoots.count -= 1
+  editableRoots.set(rootKey, editableRoots.get(rootKey)! - 1)
 })
 
 const emit = defineEmits<
@@ -28,8 +31,7 @@ emit('created')
 
 let root: () => void
 
-// setup runs once per copy, in render order: the count gives this copy's position
-if (editableRoots.count - 1 === (props.occurrence ?? 0)) {
+if (position === (props.occurrence ?? 0)) {
   const elements = new WeakMap<Node, string>()
   const placeholders = new Map<string, HTMLElement>()
   // the component vnodes go to the index (it needs `.component`), the Teleports to the render
@@ -54,6 +56,7 @@ if (editableRoots.count - 1 === (props.occurrence ?? 0)) {
     const editionContainer = h(props.container.tag, {
       ...parseElementAttributes(props.container),
       contenteditable: 'true',
+      'data-test': 'editable',
       onFocusout: (e: FocusEvent) => {
         const el = e.currentTarget as HTMLElement
         if (e.relatedTarget && el.contains(e.relatedTarget as HTMLElement)) {

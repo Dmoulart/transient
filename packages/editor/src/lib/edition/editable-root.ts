@@ -1,5 +1,3 @@
-import { ref } from 'vue'
-
-export const editableRoots = {
-  count: 0,
-}
+// mounted EditableRoot copies, per `${ownerId}:${slotName}`: a root being replaced by
+// another slot's (still mounted while the new one sets up) must not shift its count
+export const editableRoots = new Map<string, number>()

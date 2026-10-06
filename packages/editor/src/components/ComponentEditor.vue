@@ -1,5 +1,5 @@
 <template>
-  <main ref="canvas" v-if="components">
+  <main ref="canvas" v-if="components" data-test="canvas">
     <ComponentBuilder
       v-model="index"
       :dictionnary="dictionnary"
@@ -97,7 +97,7 @@
     "
     @close="componentPanel.close"
   />
-  <DebugPanel :editor="editor" :template="template.contents.value" :index="index" />
+  <DebugPanel v-if="debug" :editor="editor" :template="template.contents.value" :index="index" />
   <Button @click="template.saveToLocalStorage">Save</Button>
   <Button @click="template.loadFromLocalStorage">Load</Button>
 </template>
@@ -108,6 +108,7 @@ import Button from '@/samples/Button.vue'
 import { useTemplate } from '@/lib/composables/use-template.ts'
 import { computedAsync, useEventListener } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
+import { useRoute } from 'vue-router'
 import ComponentBuilder from './ComponentBuilder.vue'
 import PropsPanel from './PropsPanel.vue'
 import ComponentSelection from './ComponentSelection.vue'
@@ -124,7 +125,10 @@ const index = useIndex()
 
 const dictionnary = useDictionnary()
 
-const component = dictionnary.get('HomePage')
+// ?page=Slots loads another template (e2e fixtures live in src/tests/e2e), &debug=false hides the debug panel
+const route = useRoute()
+const component = dictionnary.get((route.query.page as string | undefined) ?? 'HomePage')
+const debug = route.query.debug !== 'false'
 const components = computedAsync(async () => await loadAllComponents())
 
 const componentPanel = useComponentPanel()

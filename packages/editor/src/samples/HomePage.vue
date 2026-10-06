@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import ConditionalSlot from './ConditionalSlot.vue'
-import DefaultSlot from './DefaultSlot.vue'
-import EmptySlot from './EmptySlot.vue'
-import FallbackSlot from './FallbackSlot.vue'
-import InlineSlot from './InlineSlot.vue'
-import MultiRootSlot from './MultiRootSlot.vue'
-import NamedSlots from './NamedSlots.vue'
-import PropToggledSlot from './PropToggledSlot.vue'
+import ConditionalSlot from '../tests/e2e/Slots/ConditionalSlot.vue'
+import DefaultSlot from '../tests/e2e/Slots/DefaultSlot.vue'
+import EmptySlot from '../tests/e2e/Slots/EmptySlot.vue'
+import FallbackSlot from '../tests/e2e/Slots/FallbackSlot.vue'
+import InlineSlot from '../tests/e2e/Slots/InlineSlot.vue'
+import MultiRootSlot from '../tests/e2e/Slots/MultiRootSlot.vue'
+import NamedSlots from '../tests/e2e/Slots/NamedSlots.vue'
+import PropToggledSlot from '../tests/e2e/Slots/PropToggledSlot.vue'
 import ReactiveIsland from './ReactiveIsland.vue'
-import RepeatedSlot from './RepeatedSlot.vue'
-import SwitchedSlot from './SwitchedSlot.vue'
+import RepeatedSlot from '../tests/e2e/Slots/RepeatedSlot.vue'
+import SwitchedSlot from '../tests/e2e/Slots/SwitchedSlot.vue'
 </script>
 
 <template>

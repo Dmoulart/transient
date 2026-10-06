@@ -19,7 +19,7 @@ export function useDictionnary() {
   return dictionnary
 }
 
-const componentModules = import.meta.glob('@/samples/**/*.vue')
+const componentModules = import.meta.glob(['@/samples/**/*.vue', '@/tests/**/*.vue'])
 
 export async function loadAllComponents(): Promise<Record<string, unknown>> {
   const result: Record<string, unknown> = {}

@@ -30,3 +30,6 @@ coverage
 *.tsbuildinfo
 
 __schemas__.json
+# Playwright
+/test-results/
+/playwright-report/

@@ -84,7 +84,14 @@ function renderComponent(element: TransientElement): VNode[] {
               renderComponent,
               render,
               onEdit: (e) => emit('edit', e),
-              onExitEditing: () => emit('exitEditing'),
+              onExitEditing: () => {
+                // the focusout of a root being replaced must not cancel the edition that replaced it
+                const isCurrentEditionZone =
+                  props.editing?.id === element.id && props.editing?.slotName === slotName
+                if (isCurrentEditionZone) {
+                  emit('exitEditing')
+                }
+              },
               onIslandsMounted: (islands) => {
                 islands.forEach((value, key) => index.value.elements.set(key, value))
               },

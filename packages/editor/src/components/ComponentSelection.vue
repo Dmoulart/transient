@@ -3,6 +3,8 @@
     <BoundingBox :bbox="bbox">
       <div class="z-10 absolute bottom-full left-0 gap-2 flex">
         <span
+          data-test="selection"
+          :data-tag="element.tag"
           class="rounded-t-sm bg-teal-500 px-1.5 py-0.5 text-[10px] leading-none font-semibold tracking-wide text-white uppercase"
         >
           {{ label }}
