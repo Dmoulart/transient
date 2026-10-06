@@ -105,8 +105,10 @@ export function useIndex() {
         // drop Fragment anchors (empty text nodes)
         const nodes = between(start, end).slice(1, -1)
 
+        // see component builder, we need to clearly state the slot name in the key in the case of v-fored slots
+        const slotName = key.slice(1, fallback ? -3 : undefined).split('__!__')[0]!
         found.push({
-          name: key.slice(1, fallback ? -3 : undefined),
+          name: slotName,
           fallback,
           nodes,
           container: containerOf(start, root),

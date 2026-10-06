@@ -39,6 +39,15 @@ function render(elements: TransientElement[]) {
   return vnodes
 }
 
+function nameSlot(slotName: string, renderSlot: () => VNode[] | VNode) {
+  return (props?: { key: unknown }) => {
+    if (props?.key) {
+      props.key = `_${slotName}__!__${String(props.key)}`
+    }
+    return renderSlot()
+  }
+}
+
 function renderComponent(element: TransientElement): VNode[] {
   assert(element.isComponent)
 
@@ -65,7 +74,7 @@ function renderComponent(element: TransientElement): VNode[] {
 
         return [
           slotName,
-          () =>
+          nameSlot(slotName, () =>
             h(EditableRoot, {
               container,
               mouse: props.editing!.point,
@@ -77,9 +86,10 @@ function renderComponent(element: TransientElement): VNode[] {
               onEdit: (e) => emit('edit', e),
               onExitEditing: () => emit('exitEditing'),
             }),
+          ),
         ]
       }
-      return [slotName, () => render(children)]
+      return [slotName, nameSlot(slotName, () => render(children))]
     }),
   )
 
