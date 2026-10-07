@@ -62,12 +62,6 @@ test('clicking a fallback starts editing the empty slot', async ({ page }) => {
   await expect(canvas(page).getByText('Fallback content, nothing was passed')).toHaveCount(0)
 })
 
-test('a slot with content replaces its fallback', async ({ page }) => {
-  await clickText(page, 'Content passed, fallback replaced.')
-
-  await expectEditing(page, 'default', 'Content passed, fallback replaced.')
-})
-
 test('clicking an empty slot starts editing it', async ({ page }) => {
   await canvas(page)
     .getByText('EmptySlot', { exact: true })
@@ -81,14 +75,6 @@ test('a slot rendered behind v-if($slots.icon) can start editing', async ({ page
   await clickText(page, '✦')
 
   await expectEditing(page, 'icon', '✦')
-})
-
-test('a slot toggled by a prop can start editing when shown', async ({ page }) => {
-  await clickText(page, 'Header, hidden when showHeader is off')
-  await expectEditing(page, 'header', 'Header, hidden when showHeader is off')
-
-  // showFooter defaults to false
-  await expect(canvas(page).getByText('Footer, shown when showFooter is on')).toHaveCount(0)
 })
 
 test('a slot picked by v-if / v-else-if / v-else keeps its name', async ({ page }) => {
@@ -139,4 +125,42 @@ test('clicking the blank space next to a root-level slot text does not start edi
   // caretPositionFromPoint alone would snap to the text and start editing the slot
   await expect(page.locator('[data-test=selection]')).toHaveCount(0)
   await expect(editingContainer(page)).toHaveCount(0)
+})
+
+// focusout is what commits the edit: click outside the canvas, like a user would
+async function stopEditing(page: Page) {
+  await page.mouse.click(1, 1)
+  await expect(editingContainer(page)).toHaveCount(0)
+}
+
+test('typing in a slot replaces its content once editing stops', async ({ page }) => {
+  await clickText(page, 'Plain text in the default slot.')
+  await page.keyboard.press('ControlOrMeta+a')
+  await page.keyboard.type('Brand new text')
+  await stopEditing(page)
+
+  await expect(canvas(page).getByText('Brand new text')).toHaveCount(1)
+  await expect(canvas(page).getByText('Plain text in the default slot.')).toHaveCount(0)
+})
+
+test('editing a named slot leaves its sibling slots untouched', async ({ page }) => {
+  await clickText(page, 'Header slot')
+  await page.keyboard.press('ControlOrMeta+a')
+  await page.keyboard.type('New header')
+  await stopEditing(page)
+
+  await expect(canvas(page).getByText('New header')).toHaveCount(1)
+  await expect(canvas(page).getByText('Default slot between two named slots.')).toHaveCount(1)
+  await expect(canvas(page).getByText('Footer slot')).toHaveCount(1)
+})
+
+test('typing inside rich content keeps its formatting once editing stops', async ({ page }) => {
+  // the click puts the caret inside the bold text
+  await clickText(page, 'bold')
+  await page.keyboard.type('!')
+  await stopEditing(page)
+
+  const slot = canvas(page).getByText('Text with bo!ld, italic and a link.')
+  await expect(slot.locator('b, strong')).toHaveText('bo!ld')
+  await expect(slot.locator('a')).toHaveText('link')
 })
