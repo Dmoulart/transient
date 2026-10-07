@@ -137,8 +137,29 @@ const template = useTemplate(component.template!)
 
 const editor = useEditor(template.contents, dictionnary)
 
+// caretPositionFromPoint snaps to the *closest* text (padding, blank space next to a
+// line): keep it only if the point is really on the text's rendered lines
+function textNodeAt(x: number, y: number): Text | null {
+  const node = document.caretPositionFromPoint(x, y)?.offsetNode
+  if (!(node instanceof Text)) return null
+  const range = document.createRange()
+  range.selectNodeContents(node)
+  const onText = [...range.getClientRects()].some(
+    (r) => x >= r.left && x <= r.right && y >= r.top && y <= r.bottom,
+  )
+  return onText ? node : null
+}
+
 useEventListener(canvas, ['click'], (ev: MouseEvent) => {
-  const target = ev.target instanceof Node ? ev.target : null
+  // a text node is never an event target: a slot rendered at a multi-root component's
+  // root would resolve to the (foreign) parent element
+  const text = textNodeAt(ev.clientX, ev.clientY)
+  const target =
+    text && ev.target instanceof Node && ev.target.contains(text)
+      ? text
+      : ev.target instanceof Node
+        ? ev.target
+        : null
   const id = target ? index.closestAncestorId(target) : null
   if (!id) {
     return editor.select(null)
