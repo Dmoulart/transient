@@ -1,4 +1,4 @@
-import { fileURLToPath, resolve, URL } from 'node:url'
+import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
@@ -12,7 +12,7 @@ export default defineConfig({
     ui(),
     vueAnalyzerPlugin({
       tsConfigPath: fileURLToPath(new URL('./tsconfig.app.json', import.meta.url)),
-      glob: fileURLToPath(new URL('./src/**/*.vue', import.meta.url)),
+      glob: fileURLToPath(new URL('./src/{samples,tests}/**/*.vue', import.meta.url)),
       dest: fileURLToPath(new URL('./src/assets/schemas', import.meta.url)),
     }),
   ],

@@ -145,7 +145,7 @@ function textNodeAt(x: number, y: number): Text | null {
   const range = document.createRange()
   range.selectNodeContents(node)
   const onText = [...range.getClientRects()].some(
-    (r) => x >= r.left && x <= r.right && y >= r.top && y <= r.bottom,
+    ({ left, right, top, bottom }) => x >= left && x <= right && y >= top && y <= bottom,
   )
   return onText ? node : null
 }
