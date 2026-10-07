@@ -17,6 +17,8 @@ declare module 'vue' {
     DebugTree: typeof import('./src/components/DebugTree.vue')['default']
     EditableRoot: typeof import('./src/components/EditableRoot.vue')['default']
     EditButton: typeof import('./src/components/EditButton.vue')['default']
+    EditingContainer: typeof import('./src/components/EditingContainer.vue')['default']
+    EditingFrame: typeof import('./src/components/EditingFrame.vue')['default']
     EditionZone: typeof import('./src/components/EditionZone.vue')['default']
     EditorComponent: typeof import('./src/components/EditorComponent.vue')['default']
     EditorComponents: typeof import('./src/components/EditorComponents.vue')['default']

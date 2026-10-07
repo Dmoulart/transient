@@ -2,7 +2,7 @@
   <UseBoundingBox :targets="targets" v-slot="{ bbox }">
     <BoundingBox :bbox="bbox" variant="editing">
       <span
-        data-test="edition-zone"
+        data-test="editing-frame"
         :data-slot-name="slotName"
         class="absolute top-[-4px] left-[-4px] -translate-y-full rounded-t-md bg-amber-400 px-1.5 py-0.5 font-mono text-[10px] leading-none font-medium text-[#0C1222]"
       >

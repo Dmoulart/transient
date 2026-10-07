@@ -26,10 +26,10 @@
   />
 
   <template v-if="editor.editing.value && !editor.editing.value.slotName">
-    <EditionZone :targets="index.rootNodes(editor.editing.value.id)" />
+    <EditingFrame :targets="index.rootNodes(editor.editing.value.id)" />
   </template>
   <template v-else-if="editor.editing.value && editor.editing.value.slotName">
-    <EditionZone
+    <EditingFrame
       :targets="
         index.slot(
           editor.editing.value.id,
@@ -118,7 +118,7 @@ import SlotHighlight from './SlotHighlight.vue'
 import { useIndex } from '@/lib/composables/use-index.ts'
 import { useEditor } from '@/lib/use-editor.ts'
 import DebugPanel from './DebugPanel.vue'
-import EditionZone from './EditionZone.vue'
+import EditingFrame from './EditingFrame.vue'
 
 const canvas = useTemplateRef('canvas')
 const index = useIndex()

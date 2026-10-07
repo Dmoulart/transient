@@ -53,10 +53,10 @@ if (position === (props.occurrence ?? 0)) {
   const children = renderIslandToHTml(props.container.slots?.[props.slotName] ?? [])
 
   root = function () {
-    const editionContainer = h(props.container.tag, {
+    const editingContainer = h(props.container.tag, {
       ...parseElementAttributes(props.container),
       contenteditable: 'true',
-      'data-test': 'editable',
+      'data-test': 'editing-container',
       onFocusout: (e: FocusEvent) => {
         const el = e.currentTarget as HTMLElement
         if (e.relatedTarget && el.contains(e.relatedTarget as HTMLElement)) {
@@ -95,7 +95,7 @@ if (position === (props.occurrence ?? 0)) {
       },
     })
 
-    return [editionContainer, ...teleports]
+    return [editingContainer, ...teleports]
   }
 
   function renderIslandToHTml(content: TransientElement[]): Node[] {

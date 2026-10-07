@@ -3,10 +3,11 @@ import { type ComponentDictionnary } from '@/lib/composables/use-dictionnary'
 import { type Index, useIndex } from '@/lib/composables/use-index'
 import { assert, assertIsDefined, type TransientElement, type TransientTemplate } from 'transient'
 import { h, Text, type VNode } from 'vue'
-import EditableRoot from './EditableRoot.vue'
 import { parseElementAttributes } from '@/lib/transient/attributes.ts'
 import type { EditorEvents } from '@/editor/events.ts'
 import type { Editing } from '@/lib/use-editor.ts'
+import EditingContainer from './EditingContainer.vue'
+
 const props = defineProps<{
   template: TransientTemplate
   dictionnary: ComponentDictionnary
@@ -75,7 +76,7 @@ function renderComponent(element: TransientElement): VNode[] {
         return [
           slotName,
           nameSlot(slotName, () =>
-            h(EditableRoot, {
+            h(EditingContainer, {
               container,
               mouse: props.editing!.point,
               ownerId: element.id,
@@ -121,7 +122,7 @@ function renderElement(element: TransientElement) {
   }
 
   if (props.editing?.id === element.id) {
-    const editableRootVnode = h(EditableRoot, {
+    const editableRootVnode = h(EditingContainer, {
       container: element,
       ownerId: element.id,
       slotName: 'default',
