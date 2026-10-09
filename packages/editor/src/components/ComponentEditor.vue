@@ -100,6 +100,15 @@
   <DebugPanel v-if="debug" :editor="editor" :template="template.contents.value" :index="index" />
   <Button @click="template.saveToLocalStorage">Save</Button>
   <Button @click="template.loadFromLocalStorage">Load</Button>
+  <SlashMenu
+    v-if="slashMenu.open.value && slashMenu.rect.value"
+    class="fixed z-50 w-72"
+    id="slash-menu"
+    :style="{
+      top: `${slashMenu.rect.value.bottom + 4}px`,
+      left: `${slashMenu.rect.value.left}px`,
+    }"
+  />
 </template>
 
 <script setup lang="ts">
@@ -119,6 +128,8 @@ import { useIndex } from '@/lib/composables/use-index.ts'
 import { useEditor } from '@/lib/use-editor.ts'
 import DebugPanel from './DebugPanel.vue'
 import EditingFrame from './EditingFrame.vue'
+import { useSlashMenu } from '@/lib/composables/use-slash-menu.ts'
+import SlashMenu from './SlashMenu.vue'
 
 const canvas = useTemplateRef('canvas')
 const index = useIndex()
@@ -132,6 +143,7 @@ const debug = route.query.debug !== 'false'
 const components = computedAsync(async () => await loadAllComponents())
 
 const componentPanel = useComponentPanel()
+const slashMenu = useSlashMenu()
 
 const template = useTemplate(component.template!)
 

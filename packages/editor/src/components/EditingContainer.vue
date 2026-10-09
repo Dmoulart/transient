@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { type EditorEvents } from '@/editor/events'
+import { useSlashMenu } from '@/lib/composables/use-slash-menu'
 import { captureEditable } from '@/lib/edition/capture'
 import { editableRoots } from '@/lib/edition/editable-root'
 import { parseElementAttributes } from '@/lib/transient/attributes'
+import { useEventListener } from '@vueuse/core'
 import { getDescendantComponents, type TransientElement } from 'transient'
 import { h, onUnmounted, Teleport, type VNode } from 'vue'
 const props = defineProps<{
@@ -24,10 +26,7 @@ onUnmounted(() => {
   editableRoots.set(rootKey, editableRoots.get(rootKey)! - 1)
 })
 
-const emit = defineEmits<
-  EditorEvents & { exitEditing: []; created: []; islandsMounted: [Map<string, VNode>] }
->()
-emit('created')
+const emit = defineEmits<EditorEvents & { exitEditing: []; islandsMounted: [Map<string, VNode>] }>()
 
 let root: () => void
 
@@ -78,6 +77,17 @@ if (position === (props.occurrence ?? 0)) {
           ;(vnode.el as HTMLElement).focus({ preventScroll: true })
           const caret = document.caretPositionFromPoint(props.mouse.x, props.mouse.y)
 
+          useEventListener(vnode.el, 'keydown', (e) => {
+            if (e.key === '/') {
+              console.log('hello')
+              const slashMenu = useSlashMenu()
+              // the caret now, not the click that started editing
+              const range = window.getSelection()?.getRangeAt(0)
+              slashMenu.rect.value = range?.getBoundingClientRect() ?? null
+              slashMenu.open.value = true
+            }
+          })
+
           if (caret && (vnode.el as HTMLElement).contains(caret.offsetNode)) {
             const node = caret.offsetNode
             const range = document.createRange()
@@ -91,6 +101,7 @@ if (position === (props.occurrence ?? 0)) {
             }
           }
         }
+
         emit('islandsMounted', islands)
       },
     })
