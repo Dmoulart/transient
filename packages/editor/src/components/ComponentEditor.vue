@@ -100,7 +100,7 @@
   <DebugPanel v-if="debug" :editor="editor" :template="template.contents.value" :index="index" />
   <Button @click="template.saveToLocalStorage">Save</Button>
   <Button @click="template.loadFromLocalStorage">Load</Button>
-  <SlashMenu
+  <!-- <SlashMenu
     v-if="slashMenu.open.value && slashMenu.rect.value"
     class="fixed z-50 w-72"
     id="slash-menu"
@@ -108,7 +108,7 @@
       top: `${slashMenu.rect.value.bottom + 4}px`,
       left: `${slashMenu.rect.value.left}px`,
     }"
-  />
+  /> -->
 </template>
 
 <script setup lang="ts">
@@ -130,6 +130,8 @@ import DebugPanel from './DebugPanel.vue'
 import EditingFrame from './EditingFrame.vue'
 import { useSlashMenu } from '@/lib/composables/use-slash-menu.ts'
 import SlashMenu from './SlashMenu.vue'
+import { getCaretOffsetRelativeTo } from '@/lib/edition/caret.ts'
+import { someHTMLElement } from 'transient'
 
 const canvas = useTemplateRef('canvas')
 const index = useIndex()
@@ -172,11 +174,14 @@ useEventListener(canvas, ['click'], (ev: MouseEvent) => {
       : ev.target instanceof Node
         ? ev.target
         : null
+
   const id = target ? index.closestAncestorId(target) : null
+
   if (!id) {
     return editor.select(null)
   }
   const slot = index.vnode(id)?.component ? index.slotAt(id, target!) : null
+
   editor.pointOn(id, { x: ev.clientX, y: ev.clientY }, slot?.name, slot?.occurrence)
 })
 </script>

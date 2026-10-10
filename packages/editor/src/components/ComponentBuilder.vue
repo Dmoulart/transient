@@ -2,7 +2,7 @@
 import { type ComponentDictionnary } from '@/lib/composables/use-dictionnary'
 import { type Index, useIndex } from '@/lib/composables/use-index'
 import { assert, assertIsDefined, type TransientElement, type TransientTemplate } from 'transient'
-import { h, Text, type VNode } from 'vue'
+import { h, onErrorCaptured, Text, type VNode } from 'vue'
 import { parseElementAttributes } from '@/lib/transient/attributes.ts'
 import type { EditorEvents } from '@/editor/events.ts'
 import type { Editing } from '@/lib/use-editor.ts'
@@ -15,6 +15,9 @@ const props = defineProps<{
   editing?: Editing | null
 }>()
 
+onErrorCaptured((e) => {
+  console.error(e)
+})
 const emit = defineEmits<EditorEvents & { exitEditing: [] }>()
 
 const index = defineModel<Index>({ default: () => useIndex() })

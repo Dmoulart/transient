@@ -1,12 +1,13 @@
-import type { TransientElement } from 'transient'
+import type { JSONContent } from '@tiptap/vue-3'
+import { assertIsDefined, type TransientElement } from 'transient'
 
 // Reads back the children of an editable root. Nodes built by EditableRoot are found in `ids`;
 // anything else was created by the browser and gets a fresh id.
 export function captureEditable(
-  root: HTMLElement,
+  root: JSONContent,
   originalElement: TransientElement,
-  ids: WeakMap<Node, string>,
 ): TransientElement[] {
+  debugger
   const byId = new Map<string, TransientElement>()
   const index = (elements: TransientElement[]) => {
     for (const element of elements) {
@@ -17,18 +18,14 @@ export function captureEditable(
 
   Object.values(originalElement.slots ?? {}).forEach(index)
 
-  return capture(root, byId, ids)
+  return capture(root, byId)
 }
 
-function capture(
-  parent: Node,
-  byId: Map<string, TransientElement>,
-  ids: WeakMap<Node, string>,
-): TransientElement[] {
+function capture(root: JSONContent, byId: Map<string, TransientElement>): TransientElement[] {
   const children: TransientElement[] = []
 
-  for (const node of Array.from(parent.childNodes)) {
-    const id = ids.get(node)
+  for (const node of root.content ?? [root]) {
+    const id = node.attrs?.id
     const original = id ? byId.get(id) : undefined
 
     // islands are opaque: keep the component as it was
@@ -37,26 +34,53 @@ function capture(
       continue
     }
 
-    if (node.nodeType === Node.TEXT_NODE) {
-      if (!node.textContent) continue
+    if (node.type === 'text') {
+      console.log('here')
+      if (!node.text) continue
 
-      children.push({
+      const text: TransientElement = {
         id: id ?? crypto.randomUUID(),
         tag: '#text',
         isComponent: false,
-        attributes: { value: { type: 'literal', expression: node.textContent } },
-      })
+        attributes: { value: { type: 'literal', expression: node.text } },
+      }
+
+      if (node.marks && node.marks.length > 0) {
+        const stack: TransientElement[] = []
+
+        for (const mark of node.marks) {
+          stack.push(...capture(mark, byId))
+        }
+
+        for (let i = 0; i < stack.length; i++) {
+          const wrapper = stack[i]
+          const wrapped = stack[i + 1]
+          wrapper.slots ??= { default: [] }
+
+          if (wrapped) {
+            wrapper.slots.default.push(wrapped)
+          } else {
+            wrapper.slots.default.push(text)
+            break
+          }
+        }
+
+        children.push(stack[0])
+      } else {
+        children.push(text)
+      }
+
       continue
     }
 
-    if (node instanceof HTMLElement) {
+    if (node.type === 'inlineElement') {
+      assertIsDefined(node.attrs)
+
       children.push({
         id: id ?? crypto.randomUUID(),
-        tag: node.tagName.toLowerCase(),
+        tag: node.attrs.tag,
         isComponent: false,
-        // known nodes keep their attributes, browser-made ones get none (drops Chrome's style="")
-        attributes: original?.attributes ?? {},
-        slots: { default: capture(node, byId, ids) },
+        attributes: original ? original.attributes : {},
       })
     }
   }

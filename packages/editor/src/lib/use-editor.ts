@@ -23,10 +23,7 @@ export type Editing = {
   occurrence?: number
 }
 
-export function useEditor(
-  template: Ref<TransientTemplate>,
-  dictionnary: ComponentDictionnary,
-) {
+export function useEditor(template: Ref<TransientTemplate>, dictionnary: ComponentDictionnary) {
   const selection = ref<Selection | null>(null)
   const editing = ref<Editing | null>(null)
   // latest first, capped

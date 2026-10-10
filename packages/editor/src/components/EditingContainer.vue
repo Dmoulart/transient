@@ -1,12 +1,14 @@
 <script setup lang="ts">
+import { Editor, type JSONContent, Mark, Node as PmNode } from '@tiptap/vue-3'
 import { type EditorEvents } from '@/editor/events'
-import { useSlashMenu } from '@/lib/composables/use-slash-menu'
 import { captureEditable } from '@/lib/edition/capture'
 import { editableRoots } from '@/lib/edition/editable-root'
 import { parseElementAttributes } from '@/lib/transient/attributes'
-import { useEventListener } from '@vueuse/core'
 import { getDescendantComponents, type TransientElement } from 'transient'
-import { h, onUnmounted, Teleport, type VNode } from 'vue'
+import { h, onErrorCaptured, onUnmounted, Teleport, type VNode } from 'vue'
+import Document from '@tiptap/extension-document'
+import Text from '@tiptap/extension-text'
+
 const props = defineProps<{
   container: TransientElement
   renderComponent: (element: TransientElement) => VNode[]
@@ -17,6 +19,9 @@ const props = defineProps<{
   // which copy of a repeated slot is editable; the others render normally
   occurrence?: number
 }>()
+onErrorCaptured((err) => {
+  console.log(err)
+})
 
 const rootKey = `${props.ownerId}:${props.slotName}`
 // setup runs once per copy, in render order: the count gives this copy's position
@@ -29,7 +34,8 @@ onUnmounted(() => {
 const emit = defineEmits<EditorEvents & { exitEditing: []; islandsMounted: [Map<string, VNode>] }>()
 
 let root: () => void
-
+const caret = document.caretPositionFromPoint(props.mouse.x, props.mouse.y)
+console.log({ caretAfter: caret })
 if (position === (props.occurrence ?? 0)) {
   const elements = new WeakMap<Node, string>()
   const placeholders = new Map<string, HTMLElement>()
@@ -40,7 +46,7 @@ if (position === (props.occurrence ?? 0)) {
   for (const child of getDescendantComponents(props.container)) {
     const el = document.createElement('tst-island')
     el.contentEditable = 'false'
-    el.style.display = 'contents'
+    el.style.display = 'inline-block'
     placeholders.set(child.id, el)
     elements.set(el, child.id)
 
@@ -49,101 +55,121 @@ if (position === (props.occurrence ?? 0)) {
     teleports.push(h(Teleport, { to: el }, vnodes))
   }
 
-  const children = renderIslandToHTml(props.container.slots?.[props.slotName] ?? [])
+  let editor: Editor | undefined
+  onUnmounted(() => editor?.destroy())
 
   root = function () {
+    // Vue renders the slot's own tag and leaves its children alone: ProseMirror owns them
     const editingContainer = h(props.container.tag, {
       ...parseElementAttributes(props.container),
-      contenteditable: 'true',
       'data-test': 'editing-container',
-      onFocusout: (e: FocusEvent) => {
-        const el = e.currentTarget as HTMLElement
-        if (e.relatedTarget && el.contains(e.relatedTarget as HTMLElement)) {
-          return
-        }
-        const content = captureEditable(el, props.container, elements)
-
-        emit('edit', {
-          type: 'replace-slot-content',
-          id: props.ownerId,
-          slotName: props.slotName,
-          content,
-        })
-        emit('exitEditing')
-      },
       onVnodeMounted(vnode) {
-        if (vnode.el && vnode.el instanceof HTMLElement) {
-          ;(vnode.el as HTMLElement).append(...children)
-          ;(vnode.el as HTMLElement).focus({ preventScroll: true })
-          const caret = document.caretPositionFromPoint(props.mouse.x, props.mouse.y)
+        editor = new Editor({
+          // mount on the element itself, not in a <div> appended to it
+          element: { mount: vnode.el as HTMLElement },
+          // a slot is inline content (it may live in a <span> or an <h3>): no paragraph level
+          extensions: [
+            Document.extend({ content: 'inline*' }),
+            Text,
+            Island(placeholders),
+            InlineElement(),
+          ],
+          content: toPMContent(props.container.slots?.[props.slotName] ?? []),
+          autofocus: false,
+          enableContentCheck: true,
+          onMount({ editor }) {
+            const initialCaretPosition = editor.view.posAtCoords({
+              left: props.mouse.x,
+              top: props.mouse.y,
+            })
 
-          useEventListener(vnode.el, 'keydown', (e) => {
-            if (e.key === '/') {
-              console.log('hello')
-              const slashMenu = useSlashMenu()
-              // the caret now, not the click that started editing
-              const range = window.getSelection()?.getRangeAt(0)
-              slashMenu.rect.value = range?.getBoundingClientRect() ?? null
-              slashMenu.open.value = true
-            }
-          })
+            editor?.chain().focus(initialCaretPosition?.pos).run()
+          },
+          onBlur({ editor }) {
+            const root = editor.getJSON()
 
-          if (caret && (vnode.el as HTMLElement).contains(caret.offsetNode)) {
-            const node = caret.offsetNode
-            const range = document.createRange()
-            range.setStart(node, caret.offset)
-            range.setEnd(node, caret.offset)
+            const content = captureEditable(root!, props.container)
 
-            const selection = window.getSelection()
-            if (selection) {
-              selection.removeAllRanges()
-              selection.addRange(range)
-            }
-          }
-        }
-
-        emit('islandsMounted', islands)
+            emit('edit', {
+              type: 'replace-slot-content',
+              id: props.ownerId,
+              slotName: props.slotName,
+              content,
+            })
+            emit('exitEditing')
+          },
+        })
       },
     })
 
     return [editingContainer, ...teleports]
   }
 
-  function renderIslandToHTml(content: TransientElement[]): Node[] {
-    const nodes: Node[] = []
-    for (const element of content) {
-      const placeholder = placeholders.get(element.id)
-      if (placeholder) {
-        nodes.push(placeholder)
-        continue
+  function toPMContent(content: TransientElement[]): JSONContent {
+    return { type: 'doc', content: toPMInline(content) }
+  }
+  const INLINE_TAGS = new Set(['b', 'strong', 'i', 'em', 'u', 'a', 'span', 'mark', 'code', 's'])
+
+  function toPMInline(
+    content: TransientElement[],
+    marks: JSONContent['marks'] = [],
+  ): JSONContent[] {
+    return content.flatMap((element): JSONContent[] => {
+      if (placeholders.has(element.id)) {
+        return [{ type: 'island', attrs: { id: element.id } }]
       }
 
       if (element.tag === '#text') {
-        const textNode = document.createTextNode(
-          (element.attributes?.value?.expression as string) ?? '',
-        )
-        elements.set(textNode, element.id)
-        nodes.push(textNode)
-        continue
-      }
-      const root = document.createElement(element.tag)
-      elements.set(root, element.id)
-
-      for (const [attrName, { type, expression }] of Object.entries(element.attributes ?? {})) {
-        if (type === 'literal') {
-          root.setAttribute(attrName, String(expression))
-        }
+        const text = String(element.attributes?.value?.expression ?? '')
+        // ProseMirror rejects empty text nodes
+        return text ? [{ type: 'text', text, marks }] : []
       }
 
-      const children: Node[] = []
-      if (element.slots && element.slots.default) {
-        children.push(...renderIslandToHTml(element.slots.default))
+      if (INLINE_TAGS.has(element.tag)) {
+        const attributes = parseElementAttributes(element)
+        return toPMInline(element.slots?.default ?? [], [
+          ...marks,
+          { type: 'inlineElement', attrs: { id: element.id, tag: element.tag, attributes } },
+        ])
       }
-      root.append(...children)
 
-      nodes.push(root)
-    }
-    return nodes
+      return toPMInline(element.slots?.default ?? [])
+    })
+  }
+
+  function InlineElement() {
+    return Mark.create({
+      name: 'inlineElement',
+      excludes: '',
+      addAttributes: () => ({
+        id: { default: null },
+        tag: { default: 'span' },
+        attributes: { default: {} },
+      }),
+      renderHTML: ({ mark }) => [mark.attrs.tag, mark.attrs.attributes, 0],
+    })
+  }
+
+  function Island(placeholders: Map<string, HTMLElement>) {
+    return PmNode.create({
+      name: 'island',
+      inline: true,
+      group: 'inline',
+      atom: true,
+      selectable: true,
+      addAttributes: () => ({ id: { default: null } }),
+      addNodeView:
+        () =>
+        ({ node }) => {
+          const id = node.attrs.id
+          return {
+            dom: placeholders.get(id)!,
+            ignoreMutation: () => true,
+            stopEvent: () => true,
+            update: (next) => next.attrs.id === id,
+          }
+        },
+    })
   }
 } else {
   root = function () {
