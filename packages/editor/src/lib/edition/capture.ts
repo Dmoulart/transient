@@ -1,5 +1,5 @@
 import type { JSONContent } from '@tiptap/vue-3'
-import { assertIsDefined, type TransientElement } from 'transient'
+import { assertIs, assertIsDefined, someString, type TransientElement } from 'transient'
 
 // Reads back the children of an editable root. Nodes built by EditableRoot are found in `ids`;
 // anything else was created by the browser and gets a fresh id.
@@ -20,8 +20,16 @@ export function captureEditable(
 
   return capture(root, byId)
 }
-
-function capture(root: JSONContent, byId: Map<string, TransientElement>): TransientElement[] {
+type Stack<T = string> = {
+  [key: string]: T | Stack<T>
+}
+function capture(
+  root: JSONContent,
+  byId: Map<string, TransientElement>,
+  stack: Stack = { root: {} },
+  stackElements: Record<string, TransientElement> = {},
+  currentStackElementId: string = 'root',
+): TransientElement[] {
   const children: TransientElement[] = []
 
   for (const node of root.content ?? [root]) {
@@ -46,15 +54,27 @@ function capture(root: JSONContent, byId: Map<string, TransientElement>): Transi
       }
 
       if (node.marks && node.marks.length > 0) {
-        const stack: TransientElement[] = []
+        const newStackElements: TransientElement[] = []
 
+        let bottom = stack[currentStackElementId]
         for (const mark of node.marks) {
-          stack.push(...capture(mark, byId))
+          assertIsDefined(mark.attrs)
+          assertIs(someString, mark.attrs.id)
+
+          currentStackElementId = mark.attrs.id
+
+          if (!bottom[currentStackElementId]) {
+            bottom[currentStackElementId] = {}
+            const [element] = capture(mark, byId, bottom, stackElements, currentStackElementId)
+            stackElements[element.id] = element
+            newStackElements.push(element)
+          }
+          bottom = bottom[currentStackElementId]
         }
 
-        for (let i = 0; i < stack.length; i++) {
-          const wrapper = stack[i]
-          const wrapped = stack[i + 1]
+        for (let i = 0; i < newStackElements.length; i++) {
+          const wrapper = newStackElements[i]
+          const wrapped = newStackElements[i + 1]
           wrapper.slots ??= { default: [] }
 
           if (wrapped) {
@@ -65,7 +85,30 @@ function capture(root: JSONContent, byId: Map<string, TransientElement>): Transi
           }
         }
 
-        children.push(stack[0])
+        currentStackElementId = 'root'
+
+        const parentStackElement = newStackElements[0]
+        let mustRattachToId: string | null = null
+
+        let parent = children
+        if (parentStackElement) {
+          for (let i = node.marks.length - 1; i >= 0; i--) {
+            const mark = node.marks[i]
+            assertIsDefined(mark.attrs)
+            assertIs(someString, mark.attrs.id)
+            if (mark.attrs.id == parentStackElement.id && i > 0) {
+              mustRattachToId = node.marks[i - 1]!.attrs!.id!
+              stackElements[mustRattachToId as string].slots ??= { default: [] }
+              parent = stackElements[mustRattachToId as string].slots.default
+              break
+            }
+          }
+        }
+
+        // const mustRattachToId =
+        //   (parentStackElement && stackElements[stack[parentStackElement.id]]) || children
+
+        parent.push(newStackElements[0])
       } else {
         children.push(text)
       }

@@ -164,3 +164,28 @@ test('typing inside rich content keeps its formatting once editing stops', async
   await expect(slot.locator('b, strong')).toHaveText('bo!ld')
   await expect(slot.locator('a')).toHaveText('link')
 })
+
+// nested inline elements, an inline style and identical neighbours: what the flat marks
+// of the editor have to rebuild exactly
+const nestedFormatting = (page: Page) =>
+  canvas(page).getByText(/^Crimson .* next to twintwin\.$/)
+
+test('leaving a slot without typing keeps its markup as is', async ({ page }) => {
+  const before = await nestedFormatting(page).innerHTML()
+
+  await clickText(page, 'Crimson')
+  await stopEditing(page)
+
+  expect(await nestedFormatting(page).innerHTML()).toBe(before)
+})
+
+test('typing inside nested formatting keeps the nesting', async ({ page }) => {
+  await clickText(page, 'emphasis')
+  await page.keyboard.type('X')
+  await stopEditing(page)
+
+  const strong = nestedFormatting(page).locator('strong')
+  await expect(strong).toHaveCount(1)
+  await expect(strong).toHaveAttribute('style', /color: crimson/)
+  await expect(strong.locator('em')).toContainText('X')
+})

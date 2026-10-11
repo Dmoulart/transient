@@ -25,6 +25,8 @@ import SwitchedSlot from './Slots/SwitchedSlot.vue'
 
       <DefaultSlot>Text with <b>bold</b>, <i>italic</i> and a <a href="#">link</a>.</DefaultSlot>
 
+      <DefaultSlot><strong style="color: crimson">Crimson <em>emphasis</em></strong> next to <span class="tag">twin</span><span class="tag">twin</span>.</DefaultSlot>
+
       <NamedSlots>
         <template #header>Header slot</template>
         Default slot between two named slots.
