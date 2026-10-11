@@ -130,8 +130,6 @@ import DebugPanel from './DebugPanel.vue'
 import EditingFrame from './EditingFrame.vue'
 import { useSlashMenu } from '@/lib/composables/use-slash-menu.ts'
 import SlashMenu from './SlashMenu.vue'
-import { getCaretOffsetRelativeTo } from '@/lib/edition/caret.ts'
-import { someHTMLElement } from 'transient'
 
 const canvas = useTemplateRef('canvas')
 const index = useIndex()

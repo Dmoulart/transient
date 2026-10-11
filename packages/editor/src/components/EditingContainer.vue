@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Editor, type JSONContent, Mark, Node as PmNode } from '@tiptap/vue-3'
 import { type EditorEvents } from '@/editor/events'
-import { captureEditable } from '@/lib/edition/capture'
+import { pmContentToTransientElements, transientElementsToPmContent } from '@/lib/edition/richtext'
 import { editableRoots } from '@/lib/edition/editable-root'
 import { parseElementAttributes } from '@/lib/transient/attributes'
 import { getDescendantComponents, type TransientElement } from 'transient'
@@ -34,8 +34,7 @@ onUnmounted(() => {
 const emit = defineEmits<EditorEvents & { exitEditing: []; islandsMounted: [Map<string, VNode>] }>()
 
 let root: () => void
-const caret = document.caretPositionFromPoint(props.mouse.x, props.mouse.y)
-console.log({ caretAfter: caret })
+
 if (position === (props.occurrence ?? 0)) {
   const elements = new WeakMap<Node, string>()
   const placeholders = new Map<string, HTMLElement>()
@@ -74,7 +73,10 @@ if (position === (props.occurrence ?? 0)) {
             Island(placeholders),
             InlineElement(),
           ],
-          content: toPMContent(props.container.slots?.[props.slotName] ?? []),
+          content: transientElementsToPmContent(
+            props.container.slots?.[props.slotName] ?? [],
+            placeholders,
+          ),
           autofocus: false,
           enableContentCheck: true,
           onMount({ editor }) {
@@ -84,11 +86,12 @@ if (position === (props.occurrence ?? 0)) {
             })
 
             editor?.chain().focus(initialCaretPosition?.pos).run()
+            emit('islandsMounted', islands)
           },
           onBlur({ editor }) {
             const root = editor.getJSON()
 
-            const content = captureEditable(root!, props.container)
+            const content = pmContentToTransientElements(root!, props.container)
 
             emit('edit', {
               type: 'replace-slot-content',
@@ -103,38 +106,6 @@ if (position === (props.occurrence ?? 0)) {
     })
 
     return [editingContainer, ...teleports]
-  }
-
-  function toPMContent(content: TransientElement[]): JSONContent {
-    return { type: 'doc', content: toPMInline(content) }
-  }
-  const INLINE_TAGS = new Set(['b', 'strong', 'i', 'em', 'u', 'a', 'span', 'mark', 'code', 's'])
-
-  function toPMInline(
-    content: TransientElement[],
-    marks: JSONContent['marks'] = [],
-  ): JSONContent[] {
-    return content.flatMap((element): JSONContent[] => {
-      if (placeholders.has(element.id)) {
-        return [{ type: 'island', attrs: { id: element.id } }]
-      }
-
-      if (element.tag === '#text') {
-        const text = String(element.attributes?.value?.expression ?? '')
-        // ProseMirror rejects empty text nodes
-        return text ? [{ type: 'text', text, marks }] : []
-      }
-
-      if (INLINE_TAGS.has(element.tag)) {
-        const attributes = parseElementAttributes(element)
-        return toPMInline(element.slots?.default ?? [], [
-          ...marks,
-          { type: 'inlineElement', attrs: { id: element.id, tag: element.tag, attributes } },
-        ])
-      }
-
-      return toPMInline(element.slots?.default ?? [])
-    })
   }
 
   function InlineElement() {
