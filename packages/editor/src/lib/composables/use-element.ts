@@ -5,7 +5,7 @@ import {
   getElementProps,
 } from 'transient'
 import { computed, type Ref } from 'vue'
-import type { ComponentDictionnary } from './composables/use-dictionnary'
+import type { ComponentDictionnary } from './use-dictionnary'
 
 export function useElement(
   id: Ref<string | null>,

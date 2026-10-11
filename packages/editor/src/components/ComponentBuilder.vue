@@ -5,7 +5,7 @@ import { assert, assertIsDefined, type TransientElement, type TransientTemplate 
 import { h, onErrorCaptured, Text, type VNode } from 'vue'
 import { parseElementAttributes } from '@/lib/transient/attributes.ts'
 import type { EditorEvents } from '@/editor/events.ts'
-import type { Editing } from '@/lib/use-editor.ts'
+import type { Editing } from '@/lib/composables/use-editor.ts'
 import EditingContainer from './EditingContainer.vue'
 
 const props = defineProps<{

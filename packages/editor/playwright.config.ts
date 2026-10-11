@@ -2,6 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
   testMatch: '**/*.e2e.ts',
+  workers: 3,
   use: {
     baseURL: 'http://localhost:5173',
     trace: 'retain-on-failure',

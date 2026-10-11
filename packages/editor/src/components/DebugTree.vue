@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import type { TransientElement } from 'transient'
-import type { Editing } from '@/lib/use-editor'
+import type { Editing } from '@/lib/composables/use-editor'
 
 export type DebugTreeState = {
   selectedId: string | null
@@ -67,7 +67,8 @@ const text = (element: TransientElement) => {
 function slotClass(ownerId: string, slotName: string) {
   const { editing, selectedSlot } = props.state
   if (editing?.id === ownerId && editing.slotName === slotName) return 'text-amber-300'
-  if (selectedSlot?.ownerId === ownerId && selectedSlot.slotName === slotName) return 'text-teal-300'
+  if (selectedSlot?.ownerId === ownerId && selectedSlot.slotName === slotName)
+    return 'text-teal-300'
   return 'text-white/40'
 }
 </script>

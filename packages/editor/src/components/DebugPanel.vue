@@ -4,7 +4,9 @@
     class="fixed bottom-4 left-4 z-50 flex max-h-[70vh] w-96 flex-col overflow-auto rounded-xl border border-white/15 bg-[#0C1222]/95 font-mono text-xs text-white shadow-2xl backdrop-blur"
     @click.stop
   >
-    <summary class="sticky top-0 cursor-pointer bg-[#0C1222] px-3 py-2 tracking-wider text-white/60 uppercase">
+    <summary
+      class="sticky top-0 cursor-pointer bg-[#0C1222] px-3 py-2 tracking-wider text-white/60 uppercase"
+    >
       Editor debug
     </summary>
 
@@ -38,7 +40,10 @@
       <span>
         <template v-if="editing">
           <span class="text-amber-300">{{ tagOf(editing.id) }}</span>
-          <span v-if="editing.slotName" class="text-amber-300"> #{{ editing.slotName }}<template v-if="editing.occurrence"> [{{ editing.occurrence }}]</template></span>
+          <span v-if="editing.slotName" class="text-amber-300">
+            #{{ editing.slotName
+            }}<template v-if="editing.occurrence"> [{{ editing.occurrence }}]</template></span
+          >
           <span class="text-white/30"> @ {{ editing.point.x }},{{ editing.point.y }}</span>
         </template>
         <template v-else>—</template>
@@ -67,7 +72,9 @@
     </details>
 
     <details open class="border-t border-white/10 px-3 py-2">
-      <summary class="cursor-pointer text-white/40">editions ({{ editor.history.value.length }})</summary>
+      <summary class="cursor-pointer text-white/40">
+        editions ({{ editor.history.value.length }})
+      </summary>
       <ol class="mt-1 flex flex-col gap-0.5">
         <li v-for="(edition, i) in editor.history.value" :key="i" class="flex gap-2">
           <span class="shrink-0 text-emerald-300">{{ edition.type }}</span>
@@ -82,7 +89,7 @@
 <script setup lang="ts">
 import { findElementById, type TransientTemplate } from 'transient'
 import { computed } from 'vue'
-import type { useEditor } from '@/lib/use-editor'
+import type { useEditor } from '@/lib/composables/use-editor.ts'
 import type { Index } from '@/lib/composables/use-index'
 import DebugTree, { type DebugTreeState } from './DebugTree.vue'
 
@@ -117,8 +124,10 @@ function describe(edition: { type: string }) {
     .map(([key, value]) => {
       if (Array.isArray(value)) return `${key}[${value.length}]`
       if (value instanceof HTMLElement) return `${key}=<${value.tagName.toLowerCase()}>`
-      if (value && typeof value === 'object') return `${key}=${(value as { tag?: string }).tag ?? '{…}'}`
-      if (typeof value === 'string' && /^[0-9a-f-]{36}$/.test(value)) return `${key}=${tagOf(value)}`
+      if (value && typeof value === 'object')
+        return `${key}=${(value as { tag?: string }).tag ?? '{…}'}`
+      if (typeof value === 'string' && /^[0-9a-f-]{36}$/.test(value))
+        return `${key}=${tagOf(value)}`
       return `${key}=${JSON.stringify(value)}`
     })
     .join(' ')

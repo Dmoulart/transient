@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Editor, type JSONContent, Mark, Node as PmNode } from '@tiptap/vue-3'
+import { Editor, Mark, Node as PmNode } from '@tiptap/vue-3'
 import { type EditorEvents } from '@/editor/events'
 import { pmContentToTransientElements, transientElementsToPmContent } from '@/lib/edition/richtext'
 import { editableRoots } from '@/lib/edition/editable-root'

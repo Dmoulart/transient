@@ -5,11 +5,11 @@ import {
   type TransientElement,
   type TransientTemplate,
 } from 'transient'
-import type { ComponentDictionnary } from './composables/use-dictionnary'
+import type { ComponentDictionnary } from './use-dictionnary'
 import { computed, readonly, ref, shallowRef, type Ref } from 'vue'
 import { useElement } from './use-element'
 import { applyEdition, type Edition } from '@/editor/edition'
-import type { Index } from './composables/use-index'
+import type { Index } from './use-index'
 
 export type Selection =
   | { kind: 'element'; id: string }
