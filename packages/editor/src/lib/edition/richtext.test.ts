@@ -39,22 +39,28 @@ const t = (value: string, ...marks: ReturnType<typeof mark>[]): JSONContent =>
   marks.length ? { type: 'text', text: value, marks } : { type: 'text', text: value }
 const island = (id: string): JSONContent => ({ type: 'island', attrs: { id } })
 
-// text ids are regenerated on every capture: compare the shape, as markup with element ids
-function html(elements: TransientElement[]): string {
+// text ids are regenerated on every capture: compare the shape, as markup with element ids.
+// An id the original slot doesn't have prints as #new: a split element must not reuse its id
+function html(elements: TransientElement[], known: Set<string>): string {
   return elements
     .map((element) => {
       if (element.tag === '#text') return String(element.attributes.value?.expression)
-      if (element.isComponent) return `<${element.tag}#${element.id}/>`
+      const id = known.has(element.id) ? element.id : 'new'
+      if (element.isComponent) return `<${element.tag}#${id}/>`
       const attrs = Object.entries(element.attributes)
         .map(([name, { expression }]) => ` ${name}="${expression}"`)
         .join('')
-      return `<${element.tag}#${element.id}${attrs}>${html(element.slots?.default ?? [])}</${element.tag}>`
+      return `<${element.tag}#${id}${attrs}>${html(element.slots?.default ?? [], known)}</${element.tag}>`
     })
     .join('')
 }
 
+function ids(elements: TransientElement[]): string[] {
+  return elements.flatMap((element) => [element.id, ...ids(element.slots?.default ?? [])])
+}
+
 const capture = (pm: JSONContent, original: TransientElement) =>
-  html(pmContentToTransientElements(pm, original))
+  html(pmContentToTransientElements(pm, original), new Set(ids([original])))
 
 describe('pmContentToTransientElements', () => {
   test('plain text', () => {
@@ -129,5 +135,45 @@ describe('pmContentToTransientElements', () => {
     const pm = doc(t('Count: '), island('c'), t('!'))
 
     expect(capture(pm, original)).toBe('Count: <Counter#c/>!')
+  })
+
+  // the stack of open elements: a mark only continues the element open at the same depth
+
+  test('an element split in two by plain text gives two elements, in order', () => {
+    // the user removed the bold in the middle of <strong>abc</strong>
+    const original = container(el('s', 'strong', [text('t1', 'abc')]))
+
+    const pm = doc(t('a', mark('s', 'strong')), t('b'), t('c', mark('s', 'strong')))
+
+    expect(capture(pm, original)).toBe('<strong#s>a</strong>b<strong#new>c</strong>')
+  })
+
+  test('an inner mark outliving its outer one leaves the outer element', () => {
+    const original = container(el('s', 'strong', [el('e', 'em', [text('t1', 'ab')])]))
+
+    const pm = doc(t('a', mark('s', 'strong'), mark('e', 'em')), t('b', mark('e', 'em')))
+
+    expect(capture(pm, original)).toBe('<strong#s><em#e>a</em></strong><em#new>b</em>')
+  })
+
+  test('an inner element closed by a sibling does not reopen', () => {
+    const original = container(
+      el('s', 'strong', [
+        el('e', 'em', [text('t1', 'a')]),
+        el('u', 'u', [text('t2', 'b')]),
+        text('t3', 'c'),
+      ]),
+    )
+
+    // c is italic again after the underline: a new <em>, after the <u>
+    const pm = doc(
+      t('a', mark('s', 'strong'), mark('e', 'em')),
+      t('b', mark('s', 'strong'), mark('u', 'u')),
+      t('c', mark('s', 'strong'), mark('e', 'em')),
+    )
+
+    expect(capture(pm, original)).toBe(
+      '<strong#s><em#e>a</em><u#u>b</u><em#new>c</em></strong>',
+    )
   })
 })

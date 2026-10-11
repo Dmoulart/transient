@@ -66,6 +66,7 @@ function pmContentToTransientElementsInner(
   root: JSONContent,
   byId: Map<string, TransientElement>,
 ): TransientElement[] {
+  const usedMarksIds = new Set<string>()
   const children: TransientElement[] = []
 
   const stack: TransientElement[] = []
@@ -77,32 +78,40 @@ function pmContentToTransientElementsInner(
     const original = id ? byId.get(id) : undefined
 
     let wrapper: TransientElement[] = children
-    for (const mark of node.marks ?? []) {
-      assertIsDefined(mark.attrs)
-      assertIs(someString, mark.attrs.tag)
+    stack.length = node?.marks?.length ?? 0
 
-      const id = mark?.attrs?.id
-      const index = stack.findIndex((wrapper) => wrapper.id === id)
+    if (node.marks) {
+      for (const [i, mark] of node.marks.entries()) {
+        assertIsDefined(mark.attrs)
+        assertIs(someString, mark.attrs.tag)
 
-      if (index === -1) {
-        const element: TransientElement = {
-          id: id ?? crypto.randomUUID(),
-          tag: mark.attrs.tag,
-          isComponent: false,
-          attributes: mapObjectValues(mark.attrs?.attributes ?? {}, (value: string) => ({
-            type: 'literal',
-            expression: value,
-          })),
-          slots: { default: [] },
+        const id = mark?.attrs?.id
+
+        const sameLevelPreviousMark = stack[i]
+
+        if (!sameLevelPreviousMark || sameLevelPreviousMark.id !== id) {
+          const element: TransientElement = {
+            id: id && !usedMarksIds.has(id) ? id : crypto.randomUUID(),
+            tag: mark.attrs.tag,
+            isComponent: false,
+            attributes: mapObjectValues(mark.attrs?.attributes ?? {}, (value: string) => ({
+              type: 'literal',
+              expression: value,
+            })),
+            slots: { default: [] },
+          }
+
+          usedMarksIds.add(element.id)
+
+          stack.length = i
+          depth = stack.push(element)
+          wrapper.push(element)
+        } else {
+          depth = i + 1
         }
 
-        depth = stack.push(element)
-        wrapper.push(element)
-      } else {
-        depth = index + 1
+        wrapper = depth > 0 ? stack[depth - 1]!.slots!.default : children
       }
-
-      wrapper = depth > 0 ? stack[depth - 1]!.slots!.default : children
     }
 
     let element: TransientElement | null
