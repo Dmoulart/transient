@@ -45,7 +45,6 @@ if (position === (props.occurrence ?? 0)) {
   for (const child of getDescendantComponents(props.container)) {
     const el = document.createElement('tst-island')
     el.contentEditable = 'false'
-    el.style.display = 'inline-block'
     placeholders.set(child.id, el)
     elements.set(el, child.id)
 
