@@ -22,7 +22,6 @@ const emit = defineEmits<EditorEvents & { exitEditing: [] }>();
 
 const index = defineModel<Index>({ default: () => useIndex() });
 
-// biome-ignore lint/correctness/noUnusedVariables: used in template
 const RenderTemplate = () => {
   index.value.elements.clear();
   const vnodes: VNode[] = [];
