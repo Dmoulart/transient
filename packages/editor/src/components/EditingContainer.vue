@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
+import { UndoRedo } from '@tiptap/extensions'
 import { Editor, Mark, Node as PmNode } from '@tiptap/vue-3'
 import { getDescendantComponents, type TransientElement } from 'transient'
 import { h, onErrorCaptured, onUnmounted, shallowRef, Teleport, type VNode } from 'vue'
@@ -75,6 +76,7 @@ if (position === (props.occurrence ?? 0)) {
           extensions: [
             Document.extend({ content: 'inline*' }),
             Text,
+            UndoRedo,
             Island(placeholders),
             InlineElement(),
           ],
