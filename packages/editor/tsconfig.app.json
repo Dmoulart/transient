@@ -4,7 +4,7 @@
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "lib": ["DOM", "es2023"],
+    "lib": ["DOM", "DOM.Iterable", "es2023"],
     "types": ["bun"],
     "paths": {
       "@/*": ["./src/*"]

@@ -10,6 +10,7 @@
   >
     <slot />
     <svg
+      aria-hidden="true"
       class="absolute inset-0 overflow-visible"
       :style="{ filter: style.shadow }"
       :width="bbox.width.value"
@@ -44,8 +45,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useElementsBounding } from '@/lib/composables/use-bounding-box'
 import { computed } from 'vue'
+import type { useElementsBounding } from '@/lib/composables/use-bounding-box'
 
 // a slot box is drawn inside the component box: with equal geometry (a component that is
 // only a slot) both must stay visible, hence the inset.

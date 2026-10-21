@@ -32,8 +32,8 @@ bun dev
 bun run build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### Lint and format with [Biome](https://biomejs.dev/)
 
 ```sh
-bun lint
+bun run check
 ```

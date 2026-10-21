@@ -11,8 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { type TransientProp, type TransientType } from 'transient'
-import type { TransientAttribute } from 'transient'
+import type { TransientAttribute, TransientProp, TransientType } from 'transient'
 import { computed } from 'vue'
 
 const props = defineProps<{

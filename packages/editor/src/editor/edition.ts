@@ -1,4 +1,4 @@
-import type { TransientComponentSchema, TransientProp } from 'transient'
+import type { TransientComponentSchema, TransientElement, TransientProp } from 'transient'
 import {
   appendElement,
   insertAfterElement,
@@ -7,7 +7,6 @@ import {
   replaceElementSlot,
   updateElementProp,
 } from 'transient'
-import type { TransientElement } from 'transient'
 
 export type Edition =
   | AddComponentEdition

@@ -1,15 +1,12 @@
 import {
   tryOnMounted,
-  unrefElement,
+  type UseElementBoundingOptions,
   useEventListener,
   useMutationObserver,
   useResizeObserver,
-  type MaybeComputedElementRef,
-  type MaybeElement,
-  type UseElementBoundingOptions,
   type VueInstance,
 } from '@vueuse/core'
-import { computed, shallowRef, toValue, unref, watch, type MaybeRefOrGetter } from 'vue'
+import { computed, type MaybeRefOrGetter, shallowRef, toValue, unref, watch } from 'vue'
 
 export type MaybeNode = Node | VueInstance | undefined | null
 export type MaybeComputedNodeRef<T extends MaybeNode = MaybeNode> = MaybeRefOrGetter<T>

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { Editor, Mark, Node as PmNode } from '@tiptap/vue-3'
-import { type EditorEvents } from '@/editor/events'
-import { pmContentToTransientElements, transientElementsToPmContent } from '@/lib/edition/richtext'
-import { editableRoots } from '@/lib/edition/editable-root'
-import { parseElementAttributes } from '@/lib/transient/attributes'
-import { getDescendantComponents, type TransientElement } from 'transient'
-import { h, onErrorCaptured, onUnmounted, shallowRef, Teleport, type VNode } from 'vue'
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
+import { Editor, Mark, Node as PmNode } from '@tiptap/vue-3'
+import { getDescendantComponents, type TransientElement } from 'transient'
+import { h, onErrorCaptured, onUnmounted, shallowRef, Teleport, type VNode } from 'vue'
+import type { EditorEvents } from '@/editor/events'
+import { editableRoots } from '@/lib/edition/editable-root'
+import { pmContentToTransientElements, transientElementsToPmContent } from '@/lib/edition/richtext'
+import { parseElementAttributes } from '@/lib/transient/attributes'
 import RichTextMenu from './RichTextMenu.vue'
 
 const props = defineProps<{
@@ -39,7 +39,7 @@ const emit = defineEmits<
   }
 >()
 
-let root: () => void
+let Root: () => void
 
 if (position === (props.occurrence ?? 0)) {
   const elements = new WeakMap<Node, string>()
@@ -62,7 +62,7 @@ if (position === (props.occurrence ?? 0)) {
   const editor = shallowRef<Editor | undefined>()
   onUnmounted(() => editor.value?.destroy())
 
-  root = function () {
+  Root = () => {
     // Vue renders the slot's own tag and leaves its children alone: ProseMirror owns them
     const editingContainer = h(props.container.tag, {
       ...parseElementAttributes(props.container),
@@ -149,12 +149,10 @@ if (position === (props.occurrence ?? 0)) {
     })
   }
 } else {
-  root = function () {
-    return props.render(props.container?.slots ? props.container.slots[props.slotName] : [])
-  }
+  Root = () => props.render(props.container?.slots ? props.container.slots[props.slotName] : [])
 }
 </script>
-<template><root /></template>
+<template><Root /></template>
 <style>
 tst-slot-edition:empty {
   display: inline-block;

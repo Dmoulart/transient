@@ -1,9 +1,8 @@
 <script setup lang="ts">
+import { assert, getTransientID } from 'transient'
+import { type ComputedRef, computed, type Ref, ref } from 'vue'
+import { useComponentPanel } from '@/lib/composables/use-components-panel'
 import { useTextSelection } from '@/lib/composables/use-text-selection'
-import { assert } from 'transient'
-import { computed, ref, type ComputedRef, type Ref } from 'vue'
-
-import { getTransientID } from 'transient'
 
 const selection = useTextSelection()
 
@@ -56,7 +55,9 @@ function wrapSelection(tag: string, sel: Selection): HTMLElement {
 
 // extractContents() leaves empty shells behind when the range partially covers an inline (<em></em>)
 function removeEmptyInlines() {
-  props.node.querySelectorAll('strong:empty, em:empty, u:empty').forEach((el) => el.remove())
+  props.node.querySelectorAll('strong:empty, em:empty, u:empty').forEach((el) => {
+    el.remove()
+  })
 }
 
 function unwrapSelection(tag: string, sel: Selection) {
@@ -164,7 +165,7 @@ function defineActionToggle(
   onDisable: (selectionValue: Selection) => void,
   { allowCollapsed = false } = {},
 ) {
-  return function (selected: boolean) {
+  return (selected: boolean) => {
     const sel = selection.value
     if (!sel || !inEditedNode(sel)) return
     // wrapping a caret creates an empty <strong> the browser won't reliably type into
@@ -381,6 +382,7 @@ const toolbarItems: ToolbarItem[] = [
   <div class="toolbar">
     <template v-for="(item, index) in toolbarItems" :key="index">
       <button
+        type="button"
         v-if="item.type === 'item' && (item.condition ? item.condition() : true)"
         :title="item.title"
         :class="{ active: item.selected.value }"
@@ -404,6 +406,13 @@ const toolbarItems: ToolbarItem[] = [
   background: #f9f9f9;
 }
 
+.icon {
+  width: 20px;
+  height: 20px;
+  fill: black;
+  transition: fill 0.2s;
+}
+
 button {
   background: none;
   border: none;
@@ -419,13 +428,6 @@ button.active {
   .icon {
     fill: white;
   }
-}
-
-.icon {
-  width: 20px;
-  height: 20px;
-  fill: black;
-  transition: fill 0.2s;
 }
 
 .separator {

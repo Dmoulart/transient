@@ -1,6 +1,6 @@
-import { Plugin } from 'vite'
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import { defineVueAnalyzer, type VueAnalyzerOptions } from 'transient/server'
+import type { Plugin } from 'vite'
 
 function generateSchemas(options: VueAnalyzerOptions) {
   console.log('Génération des schémas des components Vue…')

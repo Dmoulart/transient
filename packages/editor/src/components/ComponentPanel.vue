@@ -6,15 +6,12 @@
   </UDrawer>
 </template>
 <script setup lang="ts">
-import EditorComponents from './EditorComponents.vue'
 import type { TransientComponentSchema } from 'transient'
+import EditorComponents from './EditorComponents.vue'
 
-const emit = defineEmits<{
-  (
+const emit = defineEmits<(
     e: 'select',
     data: {
       schema: TransientComponentSchema
-    },
-  ): void
-}>()
+    },) => void>()
 </script>

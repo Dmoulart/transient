@@ -1,4 +1,5 @@
 <template>
+  <!-- biome-ignore lint/a11y/useKeyWithClickEvents: only stops clicks from reaching the canvas -->
   <details
     open
     class="fixed bottom-4 left-4 z-50 flex max-h-[70vh] w-96 flex-col overflow-auto rounded-xl border border-white/15 bg-[#0C1222]/95 font-mono text-xs text-white shadow-2xl backdrop-blur"

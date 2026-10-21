@@ -73,9 +73,7 @@ describe('pmContentToTransientElements', () => {
 
     const pm = doc(t('red', mark('s', 'strong', { style: 'color: crimson' })))
 
-    expect(capture(pm, original)).toBe(
-      '<strong#s style="color: crimson">red</strong>',
-    )
+    expect(capture(pm, original)).toBe('<strong#s style="color: crimson">red</strong>')
   })
 
   test('neighbour texts sharing a mark end up in one element', () => {
@@ -172,8 +170,6 @@ describe('pmContentToTransientElements', () => {
       t('c', mark('s', 'strong'), mark('e', 'em')),
     )
 
-    expect(capture(pm, original)).toBe(
-      '<strong#s><em#e>a</em><u#u>b</u><em#new>c</em></strong>',
-    )
+    expect(capture(pm, original)).toBe('<strong#s><em#e>a</em><u#u>b</u><em#new>c</em></strong>')
   })
 })

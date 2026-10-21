@@ -1,5 +1,5 @@
-import { test, expect, type Page } from '@playwright/test'
-import { clickText, canvas } from './helpers'
+import { expect, type Page, test } from '@playwright/test'
+import { canvas, clickText } from './helpers'
 
 const editingContainer = (page: Page) => page.locator('[data-test=editing-container]')
 const editingFrame = (page: Page) => page.locator('[data-test=editing-frame]')
@@ -28,7 +28,9 @@ test('clicking a named slot starts editing it', async ({ page }) => {
   await expect(editingContainer(page)).toHaveText('Footer slot')
 })
 
-test('clicking a slot nested in the editing slot starts editing the nested one', async ({ page }) => {
+test('clicking a slot nested in the editing slot starts editing the nested one', async ({
+  page,
+}) => {
   await clickText(page, 'Outer slot text')
   await expect(editingContainer(page)).toContainText('Outer slot text')
 
@@ -167,8 +169,7 @@ test('typing inside rich content keeps its formatting once editing stops', async
 
 // nested inline elements, an inline style and identical neighbours: what the flat marks
 // of the editor have to rebuild exactly
-const nestedFormatting = (page: Page) =>
-  canvas(page).getByText(/^Crimson .* next to twintwin\.$/)
+const nestedFormatting = (page: Page) => canvas(page).getByText(/^Crimson .* next to twintwin\.$/)
 
 test('leaving a slot without typing keeps its markup as is', async ({ page }) => {
   const before = await nestedFormatting(page).innerHTML()

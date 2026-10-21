@@ -7,9 +7,9 @@ import InlineSlot from '../tests/e2e/Slots/InlineSlot.vue'
 import MultiRootSlot from '../tests/e2e/Slots/MultiRootSlot.vue'
 import NamedSlots from '../tests/e2e/Slots/NamedSlots.vue'
 import PropToggledSlot from '../tests/e2e/Slots/PropToggledSlot.vue'
-import ReactiveIsland from './ReactiveIsland.vue'
 import RepeatedSlot from '../tests/e2e/Slots/RepeatedSlot.vue'
 import SwitchedSlot from '../tests/e2e/Slots/SwitchedSlot.vue'
+import ReactiveIsland from './ReactiveIsland.vue'
 </script>
 
 <template>

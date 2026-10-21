@@ -1,8 +1,8 @@
 import {
-  type TransientTemplate,
   assertIsDefined,
   findElementById,
   getElementProps,
+  type TransientTemplate,
 } from 'transient'
 import { computed, type Ref } from 'vue'
 import type { ComponentDictionnary } from './use-dictionnary'

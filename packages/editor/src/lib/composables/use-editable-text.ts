@@ -1,13 +1,13 @@
-import { type TransientTemplate } from 'transient'
-import { computed, type ComputedRef, type Ref } from 'vue'
-import type { ComponentDictionnary } from './use-dictionnary'
-import type { Index } from './use-index'
-import { useId } from './use-id'
+import type { TransientTemplate } from 'transient'
+import { type ComputedRef, computed, type Ref } from 'vue'
 import type { useClosestComponent } from './use-closest-component'
+import type { ComponentDictionnary } from './use-dictionnary'
+import { useId } from './use-id'
+import type { Index } from './use-index'
 
 export function useEditableText(
   maybeNode: ComputedRef<HTMLElement | null>,
-  component: ReturnType<typeof useClosestComponent>,
+  _component: ReturnType<typeof useClosestComponent>,
   template: Ref<TransientTemplate>,
   dictionnary: ComponentDictionnary,
   index: Index,

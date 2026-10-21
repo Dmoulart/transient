@@ -1,6 +1,7 @@
 <template>
   <img
     :src="src"
+    :alt="alt"
     :class="[
       borderRadiusMap[borderRadius],
       borderMap[border],
@@ -16,6 +17,7 @@
 withDefaults(
   defineProps<{
     src?: string
+    alt?: string
     borderRadius?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full'
     border?: 'none' | 'sm' | 'md' | 'lg'
     shadow?: 'none' | 'sm' | 'md' | 'lg'

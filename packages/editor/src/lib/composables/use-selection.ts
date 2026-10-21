@@ -1,10 +1,10 @@
-import { type TransientTemplate } from 'transient'
-import { computed, ref, type Ref } from 'vue'
-import { ComponentDictionnary } from './use-dictionnary'
-import { useNode } from './use-node'
+import type { TransientTemplate } from 'transient'
+import { computed, type Ref, ref } from 'vue'
 import { useClosestComponent } from './use-closest-component'
-import type { Index } from './use-index'
+import type { ComponentDictionnary } from './use-dictionnary'
 import { useEditableText } from './use-editable-text'
+import type { Index } from './use-index'
+import { useNode } from './use-node'
 
 export function useSelection(
   selectedNode: Ref<HTMLElement | null>,

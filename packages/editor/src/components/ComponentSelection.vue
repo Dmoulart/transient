@@ -29,6 +29,7 @@
         @insert-component="emit('insert-component', { targetNodeID: id() })"
       /> -->
       <button
+        type="button"
         title="Insert after"
         class="pointer-events-auto absolute top-full left-1/2 z-10 flex size-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-teal-500 text-white shadow-md ring-2 ring-white transition hover:scale-110 hover:bg-teal-400"
         @click="emit('insert-component', { targetID: element.id })"
@@ -40,12 +41,12 @@
 </template>
 <script setup lang="ts">
 import { Plus, Trash } from 'lucide-vue-next'
-import { computed } from 'vue'
-import BoundingBox from './BoundingBox.vue'
-import UseBoundingBox from './UseBoundingBox.vue'
-import type { EditorEvents } from '@/editor/events'
 import type { TransientElement } from 'transient'
+import { computed } from 'vue'
+import type { EditorEvents } from '@/editor/events'
+import BoundingBox from './BoundingBox.vue'
 import EditButton from './EditButton.vue'
+import UseBoundingBox from './UseBoundingBox.vue'
 
 const props = defineProps<{ root: Node[]; element: TransientElement }>()
 const emit = defineEmits<EditorEvents & { 'insert-component': [data: { targetID: string }] }>()

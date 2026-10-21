@@ -1,11 +1,5 @@
 import type { JSONContent } from '@tiptap/vue-3'
-import {
-  assertIs,
-  assertIsArrayOf,
-  assertIsDefined,
-  someString,
-  type TransientElement,
-} from 'transient'
+import { assertIs, assertIsDefined, someString, type TransientElement } from 'transient'
 import { mapObjectValues } from '../objects'
 import { parseElementAttributes } from '../transient/attributes'
 

@@ -8,8 +8,9 @@
   />
 </template>
 <script setup lang="ts">
-import { useDictionnary } from '@/lib/composables/use-dictionnary'
 import { computed } from 'vue'
+import { useDictionnary } from '@/lib/composables/use-dictionnary'
+
 const emit = defineEmits<{ close: []; insert: [string] }>()
 const dictionnary = useDictionnary()
 

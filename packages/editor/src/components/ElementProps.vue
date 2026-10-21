@@ -10,10 +10,8 @@
   </form>
 </template>
 <script setup lang="ts">
-import type { TransientProps } from 'transient'
+import type { TransientElementAttributes, TransientProp, TransientProps } from 'transient'
 import ElementProp from './ElementProp.vue'
-import type { TransientProp } from 'transient'
-import type { TransientElementAttributes } from 'transient'
 
 defineProps<{ propsSchema: TransientProps; values: TransientElementAttributes }>()
 

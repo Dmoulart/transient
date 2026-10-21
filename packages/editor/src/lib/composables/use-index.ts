@@ -1,4 +1,4 @@
-import { Fragment, reactive, type ComponentInternalInstance, type VNode } from 'vue'
+import { type ComponentInternalInstance, Fragment, reactive, type VNode } from 'vue'
 
 export type Index = ReturnType<typeof useIndex>
 
@@ -62,7 +62,7 @@ export function useIndex() {
 
     for (const [id, vnode] of elements.entries()) {
       if (vnode.component) {
-        range(vnode).forEach((node) => nodeToId.set(node, id))
+        for (const node of range(vnode)) nodeToId.set(node, id)
       } else if (vnode.el) {
         nodeToId.set(vnode.el as Node, id)
       }

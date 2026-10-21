@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ReactiveIsland from '../../samples/ReactiveIsland.vue'
 import ConditionalSlot from './Slots/ConditionalSlot.vue'
 import DefaultSlot from './Slots/DefaultSlot.vue'
 import EmptySlot from './Slots/EmptySlot.vue'
@@ -7,7 +8,6 @@ import InlineSlot from './Slots/InlineSlot.vue'
 import MultiRootSlot from './Slots/MultiRootSlot.vue'
 import NamedSlots from './Slots/NamedSlots.vue'
 import PropToggledSlot from './Slots/PropToggledSlot.vue'
-import ReactiveIsland from '../../samples/ReactiveIsland.vue'
 import RepeatedSlot from './Slots/RepeatedSlot.vue'
 import SwitchedSlot from './Slots/SwitchedSlot.vue'
 </script>

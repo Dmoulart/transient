@@ -28,7 +28,7 @@
   <template v-if="editor.editing.value && !editor.editing.value.slotName">
     <EditingFrame :targets="index.rootNodes(editor.editing.value.id)" />
   </template>
-  <template v-else-if="editor.editing.value && editor.editing.value.slotName">
+  <template v-else-if="editor.editing.value?.slotName">
     <EditingFrame
       :targets="
         index.slot(
@@ -112,26 +112,25 @@
 </template>
 
 <script setup lang="ts">
-import { loadAllComponents, useDictionnary } from '@/lib/composables/use-dictionnary.ts'
-import Button from '@/samples/Button.vue'
-import { useTemplate } from '@/lib/composables/use-template.ts'
 import { computedAsync, useEventListener } from '@vueuse/core'
-import { useTemplateRef } from 'vue'
 import { findElementById, getAncestorsChain } from 'transient'
-import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
+import { useTemplateRef } from 'vue'
 import { useRoute } from 'vue-router'
-import ComponentBuilder from './ComponentBuilder.vue'
-import PropsPanel from './PropsPanel.vue'
-import ComponentSelection from './ComponentSelection.vue'
 import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
-import ComponentPanel from './ComponentPanel.vue'
-import SlotHighlight from './SlotHighlight.vue'
-import { useIndex } from '@/lib/composables/use-index.ts'
+import { loadAllComponents, useDictionnary } from '@/lib/composables/use-dictionnary.ts'
 import { useEditor } from '@/lib/composables/use-editor.ts'
+import { useIndex } from '@/lib/composables/use-index.ts'
+import { useSlashMenu } from '@/lib/composables/use-slash-menu.ts'
+import { useTemplate } from '@/lib/composables/use-template.ts'
+import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
+import Button from '@/samples/Button.vue'
+import ComponentBuilder from './ComponentBuilder.vue'
+import ComponentPanel from './ComponentPanel.vue'
+import ComponentSelection from './ComponentSelection.vue'
 import DebugPanel from './DebugPanel.vue'
 import EditingFrame from './EditingFrame.vue'
-import { useSlashMenu } from '@/lib/composables/use-slash-menu.ts'
-import SlashMenu from './SlashMenu.vue'
+import PropsPanel from './PropsPanel.vue'
+import SlotHighlight from './SlotHighlight.vue'
 
 const canvas = useTemplateRef('canvas')
 const index = useIndex()
@@ -145,7 +144,7 @@ const debug = route.query.debug !== 'false'
 const components = computedAsync(async () => await loadAllComponents())
 
 const componentPanel = useComponentPanel()
-const slashMenu = useSlashMenu()
+const _slashMenu = useSlashMenu()
 
 const template = useTemplate(component.template!)
 

@@ -13,7 +13,7 @@ export class ComponentDictionnary {
   }
 }
 
-const dictionnary = new ComponentDictionnary(schemas as TransientComponentDictionnary)
+const dictionnary = new ComponentDictionnary(schemas as unknown as TransientComponentDictionnary)
 
 export function useDictionnary() {
   return dictionnary
@@ -36,5 +36,3 @@ export async function loadAllComponents(): Promise<Record<string, unknown>> {
 
   return result
 }
-
-class MissingComponentError extends Error {}

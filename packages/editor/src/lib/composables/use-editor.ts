@@ -1,16 +1,14 @@
 import {
   findElementById,
-  findNearestAncestor,
   getAncestorsChain,
   type TransientElement,
   type TransientTemplate,
 } from 'transient'
-import type { ComponentDictionnary } from './use-dictionnary'
-import { computed, readonly, ref, shallowRef, type Ref } from 'vue'
-import { useElement } from './use-element'
+import { computed, type Ref, readonly, ref, shallowRef } from 'vue'
 import { applyEdition, type Edition } from '@/editor/edition'
-import type { Index } from './use-index'
 import { INLINE_TAGS } from '../edition/richtext'
+import type { ComponentDictionnary } from './use-dictionnary'
+import { useElement } from './use-element'
 
 export type Selection =
   | { kind: 'element'; id: string }

@@ -9,6 +9,7 @@
       </span>
       <!-- empty slot: the box is the only way in -->
       <button
+        type="button"
         v-if="empty"
         title="Insert here"
         class="pointer-events-auto absolute top-1/2 left-1/2 z-10 flex size-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-amber-500 text-white shadow-md ring-2 ring-white transition hover:scale-110 hover:bg-amber-400"

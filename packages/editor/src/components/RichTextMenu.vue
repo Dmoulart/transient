@@ -1,5 +1,5 @@
 <template>
-  <bubble-menu
+  <BubbleMenu
     :editor="editor"
     :append-to="document.body"
     :options="{ strategy: 'fixed', placement: 'top' }"
@@ -18,12 +18,12 @@
         @mousedown.prevent="toggleTag(tag)"
       />
     </div>
-  </bubble-menu>
+  </BubbleMenu>
 </template>
 <script setup lang="ts">
-import { BubbleMenu } from '@tiptap/vue-3/menus'
-import type { Editor } from '@tiptap/vue-3'
 import type { Mark } from '@tiptap/pm/model'
+import type { Editor } from '@tiptap/vue-3'
+import { BubbleMenu } from '@tiptap/vue-3/menus'
 
 const props = defineProps<{ editor: Editor }>()
 
@@ -41,11 +41,11 @@ function toggleTag(tag: string) {
   if (empty) return
   const type = state.schema.marks.inlineElement!
   const found = new Set<Mark>()
-  state.doc.nodesBetween(from, to, (node) =>
-    node.marks.forEach((m) => m.type === type && m.attrs.tag === tag && found.add(m)),
-  )
+  state.doc.nodesBetween(from, to, (node) => {
+    for (const m of node.marks) if (m.type === type && m.attrs.tag === tag) found.add(m)
+  })
   const transaction = state.tr
-  if (found.size) found.forEach((m) => transaction.removeMark(from, to, m))
+  if (found.size) for (const m of found) transaction.removeMark(from, to, m)
   else transaction.addMark(from, to, type.create({ tag }))
   view.dispatch(transaction)
 }

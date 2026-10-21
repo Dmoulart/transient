@@ -15,14 +15,12 @@
 </template>
 
 <script setup lang="ts">
+import type { TransientComponentSchema } from 'transient'
 import { useDictionnary } from '@/lib/composables/use-dictionnary.ts'
 import EditorComponent from './EditorComponent.vue'
-import type { TransientComponentSchema } from 'transient'
 
 const registry = useDictionnary()
-const emit = defineEmits<{
-  (e: 'select', data: { schema: TransientComponentSchema }): void
-}>()
+const emit = defineEmits<(e: 'select', data: { schema: TransientComponentSchema }) => void>()
 </script>
 
 <style scoped>
