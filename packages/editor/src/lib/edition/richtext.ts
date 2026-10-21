@@ -15,7 +15,8 @@ export function transientElementsToPmContent(
 ): JSONContent {
   return { type: 'doc', content: transientElementsToPMInlineContent(content, placeholders) }
 }
-const INLINE_TAGS = new Set(['b', 'strong', 'i', 'em', 'u', 'a', 'span', 'mark', 'code', 's'])
+// rich text formatting: part of the text, never selected on its own
+export const INLINE_TAGS =new Set(['b', 'strong', 'i', 'em', 'u', 'a', 'span', 'mark', 'code', 's'])
 
 export function transientElementsToPMInlineContent(
   content: TransientElement[],

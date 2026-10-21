@@ -10,6 +10,7 @@ import { computed, readonly, ref, shallowRef, type Ref } from 'vue'
 import { useElement } from './use-element'
 import { applyEdition, type Edition } from '@/editor/edition'
 import type { Index } from './use-index'
+import { INLINE_TAGS } from '../edition/richtext'
 
 export type Selection =
   | { kind: 'element'; id: string }
@@ -86,10 +87,6 @@ export function useEditor(template: Ref<TransientTemplate>, dictionnary: Compone
     const slot = selectedSlot.value
     if (slot) return { id: slot.ownerId, slotName: slot.slotName }
 
-    if (element.tag === '#text') {
-      const parent = ancestors.value?.at(-1)?.element
-      return parent ? { id: parent.id } : null
-    }
     // layout containers (only blocks inside) are selected, not edited
     return hasText(element) ? { id: element.id } : null
   })
@@ -135,9 +132,11 @@ export function useEditor(template: Ref<TransientTemplate>, dictionnary: Compone
     editing.value = null
   }
 
-  function hasText(element: TransientElement) {
-    return !!element.slots?.default?.some(
-      (child) => child.tag === '#text' && String(child.attributes.value?.expression ?? '').trim(),
+  function hasText(element: TransientElement): boolean {
+    return !!element.slots?.default?.some((child) =>
+      child.tag === '#text'
+        ? !!String(child.attributes.value?.expression ?? '').trim()
+        : INLINE_TAGS.has(child.tag) && hasText(child),
     )
   }
 

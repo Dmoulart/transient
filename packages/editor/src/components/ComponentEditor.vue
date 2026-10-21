@@ -116,7 +116,8 @@ import { loadAllComponents, useDictionnary } from '@/lib/composables/use-diction
 import Button from '@/samples/Button.vue'
 import { useTemplate } from '@/lib/composables/use-template.ts'
 import { computedAsync, useEventListener } from '@vueuse/core'
-import { useTemplateRef } from 'vue'
+import { Text as TextVNode, useTemplateRef } from 'vue'
+import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
 import { useRoute } from 'vue-router'
 import ComponentBuilder from './ComponentBuilder.vue'
 import PropsPanel from './PropsPanel.vue'
@@ -173,11 +174,18 @@ useEventListener(canvas, ['click'], (ev: MouseEvent) => {
         ? ev.target
         : null
 
-  const id = target ? index.closestAncestorId(target) : null
+  // text and its formatting (<strong>, <a>…) belong to the closest block holding them
+  const id = target
+    ? index.closestAncestorId(target, (id) => {
+        const type = index.vnode(id)?.type
+        return type !== TextVNode &&!(typeof type === 'string' && INLINE_TAGS.has(type))
+      })
+    : null
 
   if (!id) {
     return editor.select(null)
   }
+
   const slot = index.vnode(id)?.component ? index.slotAt(id, target!) : null
 
   editor.pointOn(id, { x: ev.clientX, y: ev.clientY }, slot?.name, slot?.occurrence)
