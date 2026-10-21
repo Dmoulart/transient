@@ -16,7 +16,18 @@ export function transientElementsToPmContent(
   return { type: 'doc', content: transientElementsToPMInlineContent(content, placeholders) }
 }
 // rich text formatting: part of the text, never selected on its own
-export const INLINE_TAGS =new Set(['b', 'strong', 'i', 'em', 'u', 'a', 'span', 'mark', 'code', 's'])
+export const INLINE_TAGS = new Set([
+  'b',
+  'strong',
+  'i',
+  'em',
+  'u',
+  'a',
+  'span',
+  'mark',
+  'code',
+  's',
+])
 
 export function transientElementsToPMInlineContent(
   content: TransientElement[],

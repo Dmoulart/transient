@@ -116,7 +116,8 @@ import { loadAllComponents, useDictionnary } from '@/lib/composables/use-diction
 import Button from '@/samples/Button.vue'
 import { useTemplate } from '@/lib/composables/use-template.ts'
 import { computedAsync, useEventListener } from '@vueuse/core'
-import { Text as TextVNode, useTemplateRef } from 'vue'
+import { useTemplateRef } from 'vue'
+import { findElementById, getAncestorsChain } from 'transient'
 import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
 import { useRoute } from 'vue-router'
 import ComponentBuilder from './ComponentBuilder.vue'
@@ -174,17 +175,20 @@ useEventListener(canvas, ['click'], (ev: MouseEvent) => {
         ? ev.target
         : null
 
-  // text and its formatting (<strong>, <a>…) belong to the closest block holding them
-  const id = target
-    ? index.closestAncestorId(target, (id) => {
-        const type = index.vnode(id)?.type
-        return type !== TextVNode &&!(typeof type === 'string' && INLINE_TAGS.has(type))
-      })
-    : null
+  const clicked = target ? index.closestAncestorId(target) : null
 
-  if (!id) {
+  if (!clicked) {
     return editor.select(null)
   }
+
+  // text and its formatting (<strong>, <a>…) belong to the closest block holding them.
+  // Walk the template, not the DOM: a slot at a multi-root component's root has a foreign parent
+  const self = findElementById(template.contents.value.elements, clicked)
+  const chain = getAncestorsChain(clicked, template.contents.value.elements) ?? []
+  const id =
+    [...chain.map(({ element }) => element), self].findLast(
+      (el) => el && !(el.tag === '#text' || (!el.isComponent && INLINE_TAGS.has(el.tag))),
+    )?.id ?? clicked
 
   const slot = index.vnode(id)?.component ? index.slotAt(id, target!) : null
 
