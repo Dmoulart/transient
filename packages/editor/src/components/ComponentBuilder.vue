@@ -96,7 +96,7 @@ function renderComponent(element: TransientElement): VNode[] {
                   emit('exitEditing')
                 }
               },
-              onIslandsMounted: (islands) => {
+              onIslandsMounted: ({ islands }) => {
                 islands.forEach((value, key) => index.value.elements.set(key, value))
               },
             }),

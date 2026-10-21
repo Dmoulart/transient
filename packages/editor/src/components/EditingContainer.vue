@@ -5,9 +5,10 @@ import { pmContentToTransientElements, transientElementsToPmContent } from '@/li
 import { editableRoots } from '@/lib/edition/editable-root'
 import { parseElementAttributes } from '@/lib/transient/attributes'
 import { getDescendantComponents, type TransientElement } from 'transient'
-import { h, onErrorCaptured, onUnmounted, Teleport, type VNode } from 'vue'
+import { h, onErrorCaptured, onUnmounted, shallowRef, Teleport, type VNode } from 'vue'
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
+import RichTextMenu from './RichTextMenu.vue'
 
 const props = defineProps<{
   container: TransientElement
@@ -31,7 +32,12 @@ onUnmounted(() => {
   editableRoots.set(rootKey, editableRoots.get(rootKey)! - 1)
 })
 
-const emit = defineEmits<EditorEvents & { exitEditing: []; islandsMounted: [Map<string, VNode>] }>()
+const emit = defineEmits<
+  EditorEvents & {
+    exitEditing: []
+    islandsMounted: [{ editor: Editor; islands: Map<string, VNode> }]
+  }
+>()
 
 let root: () => void
 
@@ -53,8 +59,8 @@ if (position === (props.occurrence ?? 0)) {
     teleports.push(h(Teleport, { to: el }, vnodes))
   }
 
-  let editor: Editor | undefined
-  onUnmounted(() => editor?.destroy())
+  const editor = shallowRef<Editor | undefined>()
+  onUnmounted(() => editor.value?.destroy())
 
   root = function () {
     // Vue renders the slot's own tag and leaves its children alone: ProseMirror owns them
@@ -62,7 +68,7 @@ if (position === (props.occurrence ?? 0)) {
       ...parseElementAttributes(props.container),
       'data-test': 'editing-container',
       onVnodeMounted(vnode) {
-        editor = new Editor({
+        editor.value = new Editor({
           // mount on the element itself, not in a <div> appended to it
           element: { mount: vnode.el as HTMLElement },
           // a slot is inline content (it may live in a <span> or an <h3>): no paragraph level
@@ -85,7 +91,8 @@ if (position === (props.occurrence ?? 0)) {
             })
 
             editor?.chain().focus(initialCaretPosition?.pos).run()
-            emit('islandsMounted', islands)
+            // callbacks are typed with the core Editor, but this instance is the Vue one
+            emit('islandsMounted', { editor: editor as Editor, islands })
           },
           onBlur({ editor }) {
             const root = editor.getJSON()
@@ -104,7 +111,7 @@ if (position === (props.occurrence ?? 0)) {
       },
     })
 
-    return [editingContainer, ...teleports]
+    return [editingContainer, ...teleports, editor.value && h(RichTextMenu, { editor: editor.value })]
   }
 
   function InlineElement() {

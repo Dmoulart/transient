@@ -27,6 +27,7 @@ declare module 'vue' {
     ElementProps: typeof import('./src/components/ElementProps.vue')['default']
     PropsPanel: typeof import('./src/components/PropsPanel.vue')['default']
     RichTextEditor: typeof import('./src/components/RichTextEditor.vue')['default']
+    RichTextMenu: typeof import('./src/components/RichTextMenu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SlashMenu: typeof import('./src/components/SlashMenu.vue')['default']
