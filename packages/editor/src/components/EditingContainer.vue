@@ -3,9 +3,11 @@ import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
 import { UndoRedo } from '@tiptap/extensions'
 import { Editor, Mark, Node as PmNode } from '@tiptap/vue-3'
+import { useEventListener } from '@vueuse/core'
 import { getDescendantComponents, type TransientElement } from 'transient'
 import { h, onErrorCaptured, onUnmounted, shallowRef, Teleport, type VNode } from 'vue'
 import type { EditorEvents } from '@/editor/events'
+import { useSlashMenu } from '@/lib/composables/use-slash-menu.ts'
 import { editableRoots } from '@/lib/edition/editable-root'
 import { pmContentToTransientElements, transientElementsToPmContent } from '@/lib/edition/richtext'
 import { parseElementAttributes } from '@/lib/transient/attributes'
@@ -21,6 +23,7 @@ const props = defineProps<{
   // which copy of a repeated slot is editable; the others render normally
   occurrence?: number
 }>()
+
 onErrorCaptured((err) => {
   console.log(err)
 })
@@ -29,6 +32,7 @@ const rootKey = `${props.ownerId}:${props.slotName}`
 // setup runs once per copy, in render order: the count gives this copy's position
 const position = editableRoots.get(rootKey) ?? 0
 editableRoots.set(rootKey, position + 1)
+
 onUnmounted(() => {
   editableRoots.set(rootKey, editableRoots.get(rootKey)! - 1)
 })
@@ -97,6 +101,7 @@ if (position === (props.occurrence ?? 0)) {
             emit('islandsMounted', { editor: editor as Editor, islands })
           },
           onBlur({ editor }) {
+            console.log('blur')
             const root = editor.getJSON()
 
             const content = pmContentToTransientElements(root!, props.container)
@@ -107,6 +112,7 @@ if (position === (props.occurrence ?? 0)) {
               slotName: props.slotName,
               content,
             })
+
             emit('exitEditing')
           },
         })

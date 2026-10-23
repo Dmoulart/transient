@@ -100,15 +100,15 @@
   <DebugPanel v-if="debug" :editor="editor" :template="template.contents.value" :index="index" />
   <Button @click="template.saveToLocalStorage">Save</Button>
   <Button @click="template.loadFromLocalStorage">Load</Button>
-  <!-- <SlashMenu
-    v-if="slashMenu.open.value && slashMenu.rect.value"
-    class="fixed z-50 w-72"
-    id="slash-menu"
-    :style="{
+    <SlashMenu
+      v-if="slashMenu.open.value && slashMenu.rect.value"
+      class="fixed z-50 w-72"
+      id="slash-menu"
+      :style="{
       top: `${slashMenu.rect.value.bottom + 4}px`,
       left: `${slashMenu.rect.value.left}px`,
     }"
-  /> -->
+    />
 </template>
 
 <script setup lang="ts">
@@ -130,6 +130,7 @@ import ComponentSelection from './ComponentSelection.vue'
 import DebugPanel from './DebugPanel.vue'
 import EditingFrame from './EditingFrame.vue'
 import PropsPanel from './PropsPanel.vue'
+import SlashMenu from './SlashMenu.vue'
 import SlotHighlight from './SlotHighlight.vue'
 
 const canvas = useTemplateRef('canvas')
@@ -144,11 +145,35 @@ const debug = route.query.debug !== 'false'
 const components = computedAsync(async () => await loadAllComponents())
 
 const componentPanel = useComponentPanel()
-const _slashMenu = useSlashMenu()
+const slashMenu = useSlashMenu()
 
 const template = useTemplate(component.template!)
 
 const editor = useEditor(template.contents, dictionnary)
+
+// useEventListener('keypress', (ev) => {
+//   if(editor.editing.value){
+//     if(ev.key === '/'){
+//       const slashMenu = useSlashMenu()
+//       slashMenu.open.value = true
+//       const sel = window.getSelection()
+//       const range = sel?.getRangeAt(0)
+//       slashMenu.rect.value = range?.getBoundingClientRect() ?? null
+//       slashMenu.point.value = editor.editing.value.point
+//       const stop = useEventListener('click', (ev) => {
+//         if(ev.target && ev.target instanceof Node){
+//           if(!document.querySelector('#slash-menu')?.contains(ev.target)){
+//             slashMenu.open.value = false
+//             slashMenu.point.value = null
+//             stop()
+//           }
+//         }
+//       })
+//     }
+//   }
+// })
+
+
 
 // caretPositionFromPoint snaps to the *closest* text (padding, blank space next to a
 // line): keep it only if the point is really on the text's rendered lines
