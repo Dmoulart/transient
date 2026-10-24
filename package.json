@@ -2,19 +2,11 @@
   "name": "bridge",
   "private": true,
   "workspaces": [
-    "packages/*",
-    "playground"
+    "packages/*"
   ],
   "scripts": {
     "dev": "bun run --cwd packages/editor dev",
-    "build": "bun run build:transient && bun run build:editor",
-    "build:transient": "bun run --cwd packages/transient build",
-    "build:editor": "bun run --cwd packages/editor build",
+    "build": "tsc -b",
     "test": "bun test"
-  },
-  "dependencies": {
-    "@tiptap/pm": "^3.31.4",
-    "@tiptap/starter-kit": "^3.31.4",
-    "@tiptap/vue-3": "^3.31.4"
   }
 }

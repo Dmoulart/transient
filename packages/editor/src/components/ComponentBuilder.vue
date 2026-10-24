@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { assert, assertIsDefined, type TransientElement, type TransientTemplate } from "transient";
+import { assert, assertDefined, type TransientElement, type TransientTemplate } from "transient";
 import { h, onErrorCaptured, Text, type VNode } from "vue";
 import type { EditorEvents } from "@/editor/events.ts";
 import type { ComponentDictionnary } from "@/lib/composables/use-dictionnary";
@@ -64,7 +64,7 @@ function renderComponent(element: TransientElement): VNode[] {
     ? Object.fromEntries(Object.keys(schema.slots).map((slotName) => [slotName, []]))
     : {};
 
-  assertIsDefined(component);
+  assertDefined(component);
   const slots = Object.fromEntries(
     Object.entries({ ...schemaSlots, ...(element.slots ?? {}) }).map(([slotName, children]) => {
       if (props.editing?.id === element.id && props.editing?.slotName === slotName) {

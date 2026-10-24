@@ -13,7 +13,7 @@ const props = defineProps<{ node: HTMLElement }>()
 const emit = defineEmits<{ delete: []; 'insert-component': [] }>()
 
 // function wrap(tag: string, node: Node) {
-//   assertIsDefined(selection.value, 'Selection must have a range')
+//   assertDefined(selection.value, 'Selection must have a range')
 
 //   const wrapper = document.createElement(tag)
 //   wrapper.appendChild(node.cloneNode(true))

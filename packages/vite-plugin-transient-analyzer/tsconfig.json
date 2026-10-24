@@ -1,0 +1,11 @@
+{
+  "references": [
+    {
+      "path": "../core"
+    },
+    {
+      "path": "../ir"
+    }
+  ],
+  "extends": "../../tsconfig.base.json",
+}
