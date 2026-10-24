@@ -88,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { findElementById, type TransientTemplate } from 'transient'
+import { findElementById, type TransientTemplate } from '@transient/ir'
 import { computed } from 'vue'
 import type { useEditor } from '@/lib/composables/use-editor.ts'
 import type { Index } from '@/lib/composables/use-index'

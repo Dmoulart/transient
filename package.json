@@ -5,12 +5,15 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "bun run --cwd packages/editor dev",
+    "dev": "tsc -b && run-p watch dev:editor",
+    "dev:editor": "bun run --cwd packages/editor dev",
+    "watch": "tsc -b --watch --preserveWatchOutput",
     "build": "tsc -b",
     "test": "bun test src/"
   },
   "devDependencies": {
     "@types/bun": "^1.4.2",
+    "npm-run-all2": "^7.0.2",
     "typescript": "^5.8.2"
   }
 }

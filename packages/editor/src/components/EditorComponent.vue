@@ -16,8 +16,8 @@
   </Suspense>
 </template>
 <script setup lang="ts">
-import type { TransientComponentSchema } from 'transient'
-import { getComponentDefaultPropsValues } from 'transient'
+import type { TransientComponentSchema } from '@transient/ir'
+import { getComponentDefaultPropsValues } from '@transient/ir'
 import type { CSSProperties } from 'vue'
 import { defineAsyncComponent, shallowRef, watch } from 'vue'
 import { useDictionnary } from '@/lib/composables/use-dictionnary'

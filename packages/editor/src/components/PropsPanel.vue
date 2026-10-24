@@ -11,7 +11,7 @@
   </TDrawer>
 </template>
 <script setup lang="ts">
-import type { TransientComponentSchema, TransientElementAttributes, TransientProp } from 'transient'
+import type { TransientComponentSchema, TransientElementAttributes, TransientProp } from '@transient/ir'
 import ElementProps from './ElementProps.vue'
 
 defineProps<{

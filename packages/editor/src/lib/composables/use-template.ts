@@ -1,4 +1,4 @@
-import type { TransientTemplate } from 'transient'
+import type { TransientTemplate } from '@transient/ir'
 import { ref } from 'vue'
 
 const STORAGE_KEY = 'page-schema'

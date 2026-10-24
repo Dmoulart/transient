@@ -1,4 +1,4 @@
-import type { TransientTemplate } from 'transient'
+import type { TransientTemplate } from '@transient/ir'
 import { type ComputedRef, computed, type Ref } from 'vue'
 import type { ComponentDictionnary } from './use-dictionnary'
 import { useId } from './use-id'

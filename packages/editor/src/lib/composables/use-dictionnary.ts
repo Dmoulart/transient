@@ -1,4 +1,4 @@
-import type { TransientComponentDictionnary, TransientComponentSchema } from 'transient'
+import type { TransientComponentDictionnary, TransientComponentSchema } from '@transient/ir'
 import schemas from '@/assets/schemas/__schemas__.json'
 
 export class ComponentDictionnary {

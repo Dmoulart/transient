@@ -1,4 +1,5 @@
-import { assertDefined, type TransientComponentSchema } from "transient";
+import { assertDefined } from "@transient/core"
+import { type TransientComponentSchema } from "@transient/ir"
 import { readonly, ref } from "vue";
 
 type OnCloseCb = (componentSchema: TransientComponentSchema) => void;

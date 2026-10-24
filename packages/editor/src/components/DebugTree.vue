@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TransientElement } from 'transient'
+import type { TransientElement } from '@transient/ir'
 import type { Editing } from '@/lib/composables/use-editor'
 
 export type DebugTreeState = {

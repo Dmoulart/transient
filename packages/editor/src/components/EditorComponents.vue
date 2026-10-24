@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TransientComponentSchema } from 'transient'
+import type { TransientComponentSchema } from '@transient/ir'
 import { useDictionnary } from '@/lib/composables/use-dictionnary.ts'
 import EditorComponent from './EditorComponent.vue'
 

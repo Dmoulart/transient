@@ -1,3 +1,4 @@
+import { findElementById, getAncestorsChain, type TransientElement, type TransientTemplate } from '@transient/ir'
 import { computed, type Ref, readonly, ref, shallowRef } from 'vue'
 import { applyEdition, type Edition } from '@/editor/edition'
 import { INLINE_TAGS } from '../edition/richtext'

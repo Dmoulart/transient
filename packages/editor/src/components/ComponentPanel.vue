@@ -6,7 +6,7 @@
   </UDrawer>
 </template>
 <script setup lang="ts">
-import type { TransientComponentSchema } from 'transient'
+import type { TransientComponentSchema } from '@transient/ir'
 import EditorComponents from './EditorComponents.vue'
 
 const emit = defineEmits<(

@@ -1,4 +1,5 @@
-import { assertDefined, findElementById, getElementProps, type TransientTemplate } from "transient";
+import { assertDefined } from "@transient/core"
+import { findElementById, getElementProps, type TransientTemplate } from "@transient/ir"
 import { computed, type Ref } from "vue";
 import type { ComponentDictionnary } from "./use-dictionnary";
 import type { Index } from "./use-index";

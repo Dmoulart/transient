@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 import type { JSONContent } from '@tiptap/vue-3'
-import type { TransientElement } from 'transient'
+import type { TransientElement } from '@transient/ir'
 import { pmContentToTransientElements } from './richtext'
 
 // --- builders: the slot as it was before editing, and what ProseMirror hands back ---
