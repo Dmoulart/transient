@@ -3,11 +3,12 @@
     <div class="full-width">
       <div class="component-container">
         <EditorComponent
-          v-for="schema in registry.all()"
+          v-for="schema in dictionnary"
           :key="schema.path"
           :schema="schema"
           v-on="$attrs"
           @select="(data) => emit('select', data)"
+          :dictionnary="dictionnary"
         />
       </div>
     </div>
@@ -15,11 +16,14 @@
 </template>
 
 <script setup lang="ts">
-import type { TransientComponentSchema } from '@transient/ir'
-import { useDictionnary } from '@/lib/composables/use-dictionnary.ts'
+import type { TransientComponentDictionnary, TransientComponentSchema } from '@transient/ir'
 import EditorComponent from './EditorComponent.vue'
 
-const registry = useDictionnary()
+const {dictionnary} = defineProps<{
+  dictionnary: TransientComponentDictionnary;
+}>();
+
+
 const emit = defineEmits<(e: 'select', data: { schema: TransientComponentSchema }) => void>()
 </script>
 

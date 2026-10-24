@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { assert, assertDefined } from "@transient/core"
-import type { TransientElement, TransientTemplate } from "@transient/ir"
+import type { TransientComponentDictionnary, TransientElement, TransientTemplate } from "@transient/ir"
 import { h, onErrorCaptured, Text, type VNode } from "vue";
 import type { EditorEvents } from "@/editor/events.ts";
-import type { ComponentDictionnary } from "@/lib/composables/use-dictionnary";
 import type { Editing } from "@/lib/composables/use-editor.ts";
 import { type Index, useIndex } from "@/lib/composables/use-index";
 import { parseElementAttributes } from "@/lib/transient/attributes.ts";
@@ -11,7 +10,7 @@ import EditingContainer from "./EditingContainer.vue";
 
 const props = defineProps<{
   template: TransientTemplate;
-  dictionnary: ComponentDictionnary;
+  dictionnary: TransientComponentDictionnary;
   components: Record<string, unknown>;
   editing?: Editing | null;
 }>();
@@ -58,7 +57,7 @@ function renderComponent(element: TransientElement): VNode[] {
 
   const component = props.components[element.tag];
 
-  const schema = props.dictionnary.get(element.tag);
+  const schema = props.dictionnary[element.tag];
 
   // component instances with empty slots must still be editable
   const schemaSlots = schema.slots

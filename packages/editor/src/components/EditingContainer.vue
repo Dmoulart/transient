@@ -99,7 +99,6 @@ if (position === (props.occurrence ?? 0)) {
             emit('islandsMounted', { editor: editor as Editor, islands })
           },
           onBlur({ editor }) {
-            console.log('blur')
             const root = editor.getJSON()
 
             const content = pmContentToTransientElements(root!, props.container)

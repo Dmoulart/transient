@@ -1,24 +1,28 @@
 import { assertDefined } from '@transient/core'
-import { findElementById, getElementProps, type TransientTemplate } from '@transient/ir'
+import {
+  findElementById,
+  getElementProps,
+  type TransientComponentDictionnary,
+  type TransientComponentSchema,
+} from '@transient/ir'
 import { computed, type Ref } from 'vue'
-import type { ComponentDictionnary } from './use-dictionnary'
 
 export function useElement(
   id: Ref<string | null>,
-  template: Ref<TransientTemplate>,
-  dictionnary: ComponentDictionnary,
+  component: Ref<TransientComponentSchema>,
+  dictionnary: TransientComponentDictionnary,
 ) {
   const element = computed(() => {
     if (!id.value) {
       return null
     }
-    return findElementById(template.value.elements, id.value)
+    return findElementById(component.value.template?.elements ?? [], id.value)
   })
 
   const schema = computed(() => {
     if (element.value?.isComponent) {
       assertDefined(element.value.tag)
-      return dictionnary.get(element.value.tag)
+      return dictionnary[element.value.tag]
     }
 
     return null

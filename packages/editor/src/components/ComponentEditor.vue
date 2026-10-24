@@ -3,7 +3,7 @@
     <ComponentBuilder
       v-model="index"
       :dictionnary="dictionnary"
-      :template="template.contents.value"
+      :template="component.template ?? {elements: []}"
       :components="components"
       :editing="editor.editing.value"
       @edit="editor.edit"
@@ -96,34 +96,31 @@
       }
     "
     @close="componentPanel.close"
+    :dictionnary="dictionnary"
   />
-  <DebugPanel v-if="debug" :editor="editor" :template="template.contents.value" :index="index" />
-  <Button @click="template.saveToLocalStorage">Save</Button>
-  <Button @click="template.loadFromLocalStorage">Load</Button>
-    <SlashMenu
-      v-if="slashMenu.open.value && slashMenu.rect.value"
-      class="fixed z-50 w-72"
-      id="slash-menu"
-      :style="{
+  <DebugPanel v-if="debug" :editor="editor" :template="component.template ?? {elements : []}" :index="index" />
+  <SlashMenu
+    v-if="slashMenu.open.value && slashMenu.rect.value"
+    class="fixed z-50 w-72"
+    id="slash-menu"
+    :style="{
       top: `${slashMenu.rect.value.bottom + 4}px`,
       left: `${slashMenu.rect.value.left}px`,
     }"
+    :dictionnary="dictionnary"
     />
 </template>
 
 <script setup lang="ts">
-import { findElementById, getAncestorsChain } from '@transient/ir'
+import { findElementById, getAncestorsChain, type TransientComponentDictionnary, type TransientComponentSchema } from '@transient/ir'
 import { computedAsync, useEventListener } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
-import { useRoute } from 'vue-router'
 import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
-import { loadAllComponents, useDictionnary } from '@/lib/composables/use-dictionnary.ts'
+import { loadAllComponents } from '@/lib/composables/use-dictionnary.ts'
 import { useEditor } from '@/lib/composables/use-editor.ts'
 import { useIndex } from '@/lib/composables/use-index.ts'
 import { useSlashMenu } from '@/lib/composables/use-slash-menu.ts'
-import { useTemplate } from '@/lib/composables/use-template.ts'
 import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
-import Button from '@/samples/Button.vue'
 import ComponentBuilder from './ComponentBuilder.vue'
 import ComponentPanel from './ComponentPanel.vue'
 import ComponentSelection from './ComponentSelection.vue'
@@ -133,23 +130,22 @@ import PropsPanel from './PropsPanel.vue'
 import SlashMenu from './SlashMenu.vue'
 import SlotHighlight from './SlotHighlight.vue'
 
+const { dictionnary, debug = false } = defineProps<{
+  dictionnary: TransientComponentDictionnary
+  debug?: boolean
+}>()
+
+const component = defineModel<TransientComponentSchema>({required:true})
+
 const canvas = useTemplateRef('canvas')
 const index = useIndex()
 
-const dictionnary = useDictionnary()
-
-// ?page=Slots loads another template (e2e fixtures live in src/tests/e2e), &debug=false hides the debug panel
-const route = useRoute()
-const component = dictionnary.get((route.query.page as string | undefined) ?? 'HomePage')
-const debug = route.query.debug !== 'false'
 const components = computedAsync(async () => await loadAllComponents())
 
 const componentPanel = useComponentPanel()
 const slashMenu = useSlashMenu()
 
-const template = useTemplate(component.template!)
-
-const editor = useEditor(template.contents, dictionnary)
+const editor = useEditor(component, dictionnary)
 
 // useEventListener('keypress', (ev) => {
 //   if(editor.editing.value){
@@ -207,8 +203,8 @@ useEventListener(canvas, ['click'], (ev: MouseEvent) => {
 
   // text and its formatting (<strong>, <a>…) belong to the closest block holding them.
   // Walk the template, not the DOM: a slot at a multi-root component's root has a foreign parent
-  const self = findElementById(template.contents.value.elements, clicked)
-  const chain = getAncestorsChain(clicked, template.contents.value.elements) ?? []
+  const self = findElementById(component.value.template?.elements ?? [], clicked)
+  const chain = getAncestorsChain(clicked, component.value.template?.elements ?? []) ?? []
   const id =
     [...chain.map(({ element }) => element), self].findLast(
       (el) => el && !(el.tag === '#text' || (!el.isComponent && INLINE_TAGS.has(el.tag))),

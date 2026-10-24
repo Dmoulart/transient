@@ -11,7 +11,7 @@
     "format": "biome format --write .",
     "fix": "biome check --write .",
     "type-check": "bun check && bun run --cwd packages/editor type-check",
-    "test": "bun test src/",
+    "test": "bun test src/ && bun run --cwd packages/editor test:e2e",
     "verify": "biome ci --error-on-warnings && bun run build && bun run type-check && bun run test",
     "dev:editor": "bun run --cwd packages/editor dev",
     "dev": "tsc -b && bun run --parallel watch dev:editor"

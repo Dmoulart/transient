@@ -16,15 +16,15 @@
   </Suspense>
 </template>
 <script setup lang="ts">
-import type { TransientComponentSchema } from '@transient/ir'
+import type { TransientComponentDictionnary, TransientComponentSchema } from '@transient/ir'
 import { getComponentDefaultPropsValues } from '@transient/ir'
 import type { CSSProperties } from 'vue'
 import { defineAsyncComponent, shallowRef, watch } from 'vue'
-import { useDictionnary } from '@/lib/composables/use-dictionnary'
 
 const props = withDefaults(
   defineProps<{
     schema: TransientComponentSchema
+    dictionnary: TransientComponentDictionnary
     item?: boolean
   }>(),
   {
@@ -48,7 +48,6 @@ const styles = {
     overflow: 'hidden',
   } as CSSProperties,
 }
-const dictionnary = useDictionnary()
 
 const component = shallowRef<unknown>(null)
 const defaultProps = shallowRef<Record<string, unknown>>({})
@@ -59,7 +58,7 @@ watch(
     component.value = defineAsyncComponent({
       loader: () => import(/* @vite-ignore */ props.schema.path),
     })
-    defaultProps.value = getComponentDefaultPropsValues(dictionnary.get(props.schema.tag).props)
+    defaultProps.value = getComponentDefaultPropsValues(props.dictionnary[props.schema.tag].props)
   },
   { immediate: true },
 )

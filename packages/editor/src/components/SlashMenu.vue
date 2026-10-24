@@ -9,14 +9,14 @@
 </ul>
 </template>
 <script setup lang="ts">
+import type { TransientComponentDictionnary } from '@transient/ir';
 import { computed } from 'vue'
-import { useDictionnary } from '@/lib/composables/use-dictionnary'
 
+const {dictionnary} = defineProps<{dictionnary: TransientComponentDictionnary}>()
 const emit = defineEmits<{ close: []; insert: [string] }>()
-const dictionnary = useDictionnary()
 
 const items = computed(() => {
-  return Object.entries(dictionnary.all()).map(([name]) => ({
+  return Object.entries(dictionnary).map(([name]) => ({
     id: name,
     label: name,
   }))

@@ -1,13 +1,13 @@
 import {
   findElementById,
   getAncestorsChain,
+  type TransientComponentDictionnary,
+  type TransientComponentSchema,
   type TransientElement,
-  type TransientTemplate,
 } from '@transient/ir'
 import { computed, type Ref, readonly, ref, shallowRef } from 'vue'
 import { applyEdition, type Edition } from '@/editor/edition'
 import { INLINE_TAGS } from '../edition/richtext'
-import type { ComponentDictionnary } from './use-dictionnary'
 import { useElement } from './use-element'
 
 export type Selection =
@@ -22,7 +22,10 @@ export type Editing = {
   occurrence?: number
 }
 
-export function useEditor(template: Ref<TransientTemplate>, dictionnary: ComponentDictionnary) {
+export function useEditor(
+  component: Ref<TransientComponentSchema>,
+  dictionnary: TransientComponentDictionnary,
+) {
   const selection = ref<Selection | null>(null)
   const editing = ref<Editing | null>(null)
   // latest first, capped
@@ -30,7 +33,7 @@ export function useEditor(template: Ref<TransientTemplate>, dictionnary: Compone
 
   const ancestors = computed(() => {
     if (selection.value?.kind === 'element') {
-      return getAncestorsChain(selection.value.id, template.value.elements)
+      return getAncestorsChain(selection.value.id, component.value.template?.elements ?? [])
     }
 
     return []
@@ -49,7 +52,7 @@ export function useEditor(template: Ref<TransientTemplate>, dictionnary: Compone
 
   const selectedElement = computed(() => {
     if (selection.value?.kind === 'element') {
-      return findElementById(template.value.elements, selection.value.id) ?? null
+      return findElementById(component.value.template?.elements ?? [], selection.value.id) ?? null
     }
 
     return null
@@ -76,7 +79,7 @@ export function useEditor(template: Ref<TransientTemplate>, dictionnary: Compone
     return null
   })
 
-  const activeComponent = useElement(activeComponentId, template, dictionnary)
+  const activeComponent = useElement(activeComponentId, component, dictionnary)
 
   const editTarget = computed<{ id: string; slotName?: string } | null>(() => {
     const element = selectedElement.value
@@ -113,7 +116,7 @@ export function useEditor(template: Ref<TransientTemplate>, dictionnary: Compone
   }
 
   function edit(edition: Edition) {
-    applyEdition(edition, template.value.elements)
+    applyEdition(edition, component.value?.template?.elements ?? [])
     history.value = [edition, ...history.value].slice(0, 20)
   }
 
