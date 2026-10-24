@@ -6,12 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": [
-      "packages/**",
-      "!!**/dist",
-      "!**/auto-imports.d.ts",
-      "!**/components.d.ts"
-    ]
+    "includes": ["packages/**", "!!**/dist", "!**/auto-imports.d.ts", "!**/components.d.ts"]
   },
   "formatter": {
     "enabled": true,
@@ -31,9 +26,7 @@
   },
   "overrides": [
     {
-      "includes": [
-        "**/*.vue"
-      ],
+      "includes": ["**/*.vue"],
       "linter": {
         "rules": {
           "correctness": {
@@ -50,10 +43,7 @@
       }
     },
     {
-      "includes": [
-        "packages/editor/src/samples/HomePage.vue",
-        "packages/editor/src/tests/e2e/**"
-      ],
+      "includes": ["packages/editor/src/samples/HomePage.vue", "packages/editor/src/tests/e2e/**"],
       "linter": {
         "rules": {
           "a11y": "off"

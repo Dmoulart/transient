@@ -5,5 +5,5 @@ export function parseElementAttributes(element: TransientElement) {
     ...Object.fromEntries(
       Object.entries(element.attributes || {}).map(([key, value]) => [key, value.expression]),
     ),
-  };
+  }
 }

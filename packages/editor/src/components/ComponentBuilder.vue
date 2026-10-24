@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { assert, assertDefined } from "@transient/core"
-import { type TransientElement, type TransientTemplate } from "@transient/ir"
+import type { TransientElement, TransientTemplate } from "@transient/ir"
 import { h, onErrorCaptured, Text, type VNode } from "vue";
 import type { EditorEvents } from "@/editor/events.ts";
 import type { ComponentDictionnary } from "@/lib/composables/use-dictionnary";

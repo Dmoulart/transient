@@ -40,8 +40,8 @@
   </UseBoundingBox>
 </template>
 <script setup lang="ts">
-import { Plus, Trash } from 'lucide-vue-next'
 import type { TransientElement } from '@transient/ir'
+import { Plus, Trash } from 'lucide-vue-next'
 import { computed } from 'vue'
 import type { EditorEvents } from '@/editor/events'
 import BoundingBox from './BoundingBox.vue'

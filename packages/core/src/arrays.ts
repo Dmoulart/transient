@@ -3,12 +3,12 @@ export function isArrayOfType<T>(
   items: unknown,
 ): items is Array<T> {
   if (!Array.isArray(items)) {
-    return false;
+    return false
   }
 
   if (!items.every(isOfType)) {
-    return false;
+    return false
   }
 
-  return true;
+  return true
 }

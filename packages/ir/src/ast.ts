@@ -1,88 +1,77 @@
-import { assert, assertDefined } from "@transient/core";
+import { assert, assertDefined } from '@transient/core'
 import type {
+  BindingValue,
+  TransientComponentSchema,
+  TransientElement,
+  TransientElementAttributes,
+  TransientProps,
   TransientType,
   TransientTypeName,
-  TransientElement,
-  TransientProps,
-  TransientElementAttributes,
-  TransientComponentSchema,
-} from "./definition.js";
+} from './definition.js'
 
 export function getTypeKind(type: TransientType): TransientTypeName {
-  return typeof type === "string" ? type : type.kind;
+  return typeof type === 'string' ? type : type.kind
 }
 
 export function getTextValue(element: TransientElement) {
-  assert(element.tag === "#text");
-  return element.attributes?.value?.expression;
+  assert(element.tag === '#text')
+  return element.attributes?.value?.expression
 }
 
 export function getComponentDefaultPropsValues(props: TransientProps) {
-  const data: Record<string, any> = {};
+  const data: Record<string, unknown> = {}
 
   for (const prop in props) {
-    const defaultValue = props[prop]?.default;
+    const defaultValue = props[prop]?.default
 
     if (defaultValue !== undefined) {
-      data[prop] = defaultValue;
+      data[prop] = defaultValue
     }
   }
 
-  return data;
+  return data
 }
 
-export function getElementDefaultPropsValues(
-  props: TransientProps,
-): TransientElementAttributes {
-  const data: Record<string, any> = {};
+export function getElementDefaultPropsValues(props: TransientProps): TransientElementAttributes {
+  const data: TransientElementAttributes = {}
 
   for (const prop in props) {
-    const defaultValue = props[prop]?.default;
+    const defaultValue = props[prop]?.default
 
-    data[prop] = { expression: defaultValue, type: "literal" };
+    data[prop] = { expression: defaultValue, type: 'literal' }
   }
 
-  return data;
+  return data
 }
 
-export function hasTextChildren(
-  element: TransientElement,
-  slotName = "default",
-): boolean {
-  return slotContainsSome(element, (child) => child.tag === "#text", slotName);
+export function hasTextChildren(element: TransientElement, slotName = 'default'): boolean {
+  return slotContainsSome(element, (child) => child.tag === '#text', slotName)
 }
 
 export function slotContainsSome(
   element: TransientElement,
-  cb: (
-    value: TransientElement,
-    index: number,
-    array: TransientElement[],
-  ) => boolean,
-  slotName = "default",
+  cb: (value: TransientElement, index: number, array: TransientElement[]) => boolean,
+  slotName = 'default',
 ): boolean {
   if (!element.slots?.[slotName]) {
-    return false;
+    return false
   }
 
-  return element.slots[slotName].some(cb);
+  return element.slots[slotName].some(cb)
 }
 
-export function isTextZone(
-  element: TransientElement,
-  slotName = "default",
-): boolean {
+export function isTextZone(element: TransientElement, slotName = 'default'): boolean {
   return (
     !element.slots?.[slotName] ||
     hasTextChildren(element, slotName) ||
-    (slotContainsSome(element, (child) => child.tag === "br", slotName) &&
+    (slotContainsSome(element, (child) => child.tag === 'br', slotName) &&
       element.slots?.[slotName]?.length === 1) ||
     element.slots?.[slotName]?.length === 0
-  );
+  )
 }
 
 export function hasSlots(element: TransientElement): boolean {
-  return element.slots !== undefined;
+  return element.slots !== undefined
 }
 
 export function findElementById(
@@ -90,16 +79,16 @@ export function findElementById(
   id: string,
 ): TransientElement | undefined {
   for (const element of elements) {
-    if (element.id === id) return element;
+    if (element.id === id) return element
 
     if (element.slots) {
       for (const slotElements of Object.values(element.slots)) {
-        const found = findElementById(slotElements, id);
-        if (found) return found;
+        const found = findElementById(slotElements, id)
+        if (found) return found
       }
     }
   }
-  return undefined;
+  return undefined
 }
 
 export function getPathOfElementById(
@@ -109,38 +98,31 @@ export function getPathOfElementById(
   path: Array<string | number> = [],
 ): Array<string | number> | undefined {
   for (let i = 0; i < elements.length; i++) {
-    path[depth] = i;
+    path[depth] = i
 
-    const element = elements[i]!;
+    const element = elements[i]!
 
     if (element.id === id) {
-      return path;
+      return path
     }
 
     const slotsChildren =
-      element.slots && Object.keys(element.slots)?.length > 0
-        ? Object.entries(element.slots)
-        : null;
+      element.slots && Object.keys(element.slots)?.length > 0 ? Object.entries(element.slots) : null
 
     if (slotsChildren) {
       for (const [slotName, slotElements] of slotsChildren) {
-        const newPath = [...path, "slots", slotName];
+        const newPath = [...path, 'slots', slotName]
 
-        const found = getPathOfElementById(
-          slotElements,
-          id,
-          newPath.length,
-          newPath,
-        );
+        const found = getPathOfElementById(slotElements, id, newPath.length, newPath)
 
         if (found) {
-          return found;
+          return found
         }
       }
     }
   }
 
-  return undefined;
+  return undefined
 }
 
 export function findNearestAncestor(
@@ -148,52 +130,46 @@ export function findNearestAncestor(
   id: string,
   cb: (element: TransientElement) => boolean,
 ): TransientElement | undefined {
-  let path = getPathOfElementById(elements, id);
+  const path = getPathOfElementById(elements, id)
   if (!path) {
-    return undefined;
+    return undefined
   }
-  let len = path.length;
   // pop current array, slotName, slots key every step to avoid matching a brother or an uncle..
-  const up = () => {
-    // wasteful, path should maybe not be a literal object path
-    len -= 3;
-    if (len <= 0) return undefined;
-    return path!.slice(0, len);
-  };
-  while ((path = up()) !== undefined) {
+  // wasteful, path should maybe not be a literal object path
+  for (let len = path.length - 3; len > 0; len -= 3) {
     //@ts-expect-error
-    const candidate: TransientElement = path.reduce(
+    const candidate: TransientElement = path.slice(0, len).reduce(
       //@ts-expect-error
       (newPath, key) => newPath[key],
       elements,
-    );
+    )
 
     if (cb(candidate as TransientElement)) {
-      return candidate as TransientElement;
+      return candidate as TransientElement
     }
   }
 
-  return undefined;
+  return undefined
 }
 
 export function getDescendantComponents(element: TransientElement) {
-  const descendants: TransientElement[] = [];
+  const descendants: TransientElement[] = []
 
   for (const child of Object.values(element.slots ?? {}).flat(1)) {
     if (child.isComponent) {
-      descendants.push(child);
+      descendants.push(child)
     }
 
     if (child.slots) {
-      descendants.push(...getDescendantComponents(child));
+      descendants.push(...getDescendantComponents(child))
     }
   }
-  return descendants;
+  return descendants
 }
 
 export function* slotsOf(element: TransientElement) {
   for (const [slotName, children] of Object.entries(element.slots ?? {})) {
-    yield [slotName, children];
+    yield [slotName, children]
   }
 }
 
@@ -203,26 +179,26 @@ export function replaceElement(
 ): TransientElement | undefined {
   for (let i = 0; i < elements.length; i++) {
     if (elements[i]!.id === newElement.id) {
-      elements[i] = newElement;
-      return newElement;
+      elements[i] = newElement
+      return newElement
     }
 
     if (elements[i]!.slots) {
       for (const slotName in elements[i]!.slots) {
-        const slotElements = elements[i]!.slots![slotName];
+        const slotElements = elements[i]!.slots![slotName]
 
         if (slotElements) {
-          const updated = replaceElement(newElement, slotElements);
+          const updated = replaceElement(newElement, slotElements)
 
           if (updated) {
-            return updated;
+            return updated
           }
         }
       }
     }
   }
 
-  return undefined;
+  return undefined
 }
 
 export function replaceElementSlot(
@@ -231,12 +207,12 @@ export function replaceElementSlot(
   ownerId: string,
   elements: TransientElement[], // assumed root or current branch
 ) {
-  const owner = findElementById(elements, ownerId);
+  const owner = findElementById(elements, ownerId)
   if (!owner) {
-    throw new Error("Unknown slot parent");
+    throw new Error('Unknown slot parent')
   }
-  owner.slots ??= {};
-  owner.slots[slot] = newSlotContent;
+  owner.slots ??= {}
+  owner.slots[slot] = newSlotContent
 }
 
 export function appendElement(
@@ -244,42 +220,39 @@ export function appendElement(
   parentId: string,
   elements: TransientElement[],
 ) {
-  const parent = findElementById(elements, parentId);
+  const parent = findElementById(elements, parentId)
   if (!parent) {
-    console.warn(`appendElement: parent ${parentId} non trouvé.`);
-    return false;
+    console.warn(`appendElement: parent ${parentId} non trouvé.`)
+    return false
   }
 
-  parent.slots ??= {};
+  parent.slots ??= {}
 
   if (parent.slots.default) {
-    parent.slots.default.push(element);
+    parent.slots.default.push(element)
   } else {
-    parent.slots.default = [element];
+    parent.slots.default = [element]
   }
 
-  return true;
+  return true
 }
 
-export function removeElement(
-  idToRemove: string,
-  elements: TransientElement[],
-): boolean {
+export function removeElement(idToRemove: string, elements: TransientElement[]): boolean {
   for (let i = 0; i < elements.length; i++) {
     if (elements[i]!.id === idToRemove) {
-      elements.splice(i, 1);
-      return true;
+      elements.splice(i, 1)
+      return true
     }
 
     if (elements[i]!.slots) {
       for (const slotName in elements[i]!.slots) {
         if (removeElement(idToRemove, elements[i]!.slots![slotName]!)) {
-          return true;
+          return true
         }
       }
     }
   }
-  return false;
+  return false
 }
 
 export function insertAfterElement(
@@ -289,21 +262,19 @@ export function insertAfterElement(
 ): boolean {
   for (let i = 0; i < elements.length; i++) {
     if (elements[i]!.id === id) {
-      elements.splice(i + 1, 0, newElement);
-      return true;
+      elements.splice(i + 1, 0, newElement)
+      return true
     }
 
     if (elements[i]!.slots) {
       for (const slotName in elements[i]!.slots) {
-        if (
-          insertAfterElement(newElement, id, elements[i]!.slots![slotName]!)
-        ) {
-          return true;
+        if (insertAfterElement(newElement, id, elements[i]!.slots![slotName]!)) {
+          return true
         }
       }
     }
   }
-  return false;
+  return false
 }
 
 export function insertBeforeElement(
@@ -313,35 +284,33 @@ export function insertBeforeElement(
 ): boolean {
   for (let i = 0; i < elements.length; i++) {
     if (elements[i]!.id === id) {
-      elements.splice(i, 0, newElement);
-      return true;
+      elements.splice(i, 0, newElement)
+      return true
     }
 
     if (elements[i]!.slots) {
       for (const slotName in elements[i]!.slots) {
-        if (
-          insertBeforeElement(newElement, id, elements[i]!.slots![slotName]!)
-        ) {
-          return true;
+        if (insertBeforeElement(newElement, id, elements[i]!.slots![slotName]!)) {
+          return true
         }
       }
     }
   }
-  return false;
+  return false
 }
 
 export function updateElementProp(
   propName: string,
-  value: any,
+  value: BindingValue,
   id: string,
   elements: TransientElement[],
 ): void {
-  const element = findElementById(elements, id);
+  const element = findElementById(elements, id)
 
-  assertDefined(element, `Element with id ${id} not found`);
+  assertDefined(element, `Element with id ${id} not found`)
   // only literals are supported for now
-  element.attributes[propName] ??= { type: "literal", expression: "" };
-  element.attributes[propName].expression = value;
+  element.attributes[propName] ??= { type: 'literal', expression: '' }
+  element.attributes[propName].expression = value
 }
 
 export function getElementProps(
@@ -351,21 +320,21 @@ export function getElementProps(
   return {
     ...getElementDefaultPropsValues(schema.props),
     ...element.attributes,
-  };
+  }
 }
 
 export function createTextElement(text: string): TransientElement {
   return {
     id: crypto.randomUUID(),
-    tag: "#text",
+    tag: '#text',
     isComponent: false,
     attributes: {
       value: {
-        type: "literal",
+        type: 'literal',
         expression: text,
       },
     },
-  };
+  }
 }
 
 export function getAncestorsChain(
@@ -373,10 +342,10 @@ export function getAncestorsChain(
   elements: TransientElement[],
 ): { element: TransientElement; slotName: string }[] | undefined {
   for (const element of elements) {
-    if (element.id === id) return [];
+    if (element.id === id) return []
     for (const [slotName, children] of Object.entries(element.slots ?? {})) {
-      const found = getAncestorsChain(id, children);
-      if (found) return [{ element, slotName }, ...found];
+      const found = getAncestorsChain(id, children)
+      if (found) return [{ element, slotName }, ...found]
     }
   }
 }

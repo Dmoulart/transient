@@ -112,8 +112,8 @@
 </template>
 
 <script setup lang="ts">
-import { computedAsync, useEventListener } from '@vueuse/core'
 import { findElementById, getAncestorsChain } from '@transient/ir'
+import { computedAsync, useEventListener } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
 import { useRoute } from 'vue-router'
 import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
