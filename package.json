@@ -5,16 +5,16 @@
     "packages/*"
   ],
   "scripts": {
+    "watch": "tsc -b --watch --preserveWatchOutput",
+    "build": "tsc -b",
     "lint": "biome lint --write .",
     "format": "biome format --write .",
     "fix": "biome check --write .",
-    "ci": "biome ci && bun run build && bun run type-check && bun run test",
     "type-check": "bun check && bun run --cwd packages/editor type-check",
-    "dev": "tsc -b && bun run --parallel watch dev:editor",
+    "test": "bun test src/",
+    "verify": "biome ci --error-on-warnings && bun run build && bun run type-check && bun run test",
     "dev:editor": "bun run --cwd packages/editor dev",
-    "watch": "tsc -b --watch --preserveWatchOutput",
-    "build": "tsc -b",
-    "test": "bun test src/"
+    "dev": "tsc -b && bun run --parallel watch dev:editor"
   },
   "devDependencies": {
     "@types/bun": "^1.4.2",

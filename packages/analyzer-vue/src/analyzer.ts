@@ -1,12 +1,9 @@
 import { writeFileSync } from 'node:fs'
-import { dirname, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { resolve } from 'node:path'
 import type { TransientComponentDictionnary, TransientComponentSchema } from '@transient/ir'
 import type { Pattern } from 'fast-glob'
 import fastGlob from 'fast-glob'
 import { logger } from './log/logger.js'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const { sync } = fastGlob
 
@@ -36,9 +33,10 @@ const BASE_ANALYZER: Partial<Analyzer> = {
   tsConfigPath: './tsconfig.json',
   log: true,
   scanDir(dir: string, glob: Pattern) {
-    logger.info(`Scanning directories : ${resolve(__dirname, dir)} ${glob}`)
+    const path = resolve(process.cwd(), dir)
+    logger.info(`Scanning directories : ${path} ${glob}`)
     const files = sync(glob, {
-      cwd: resolve(__dirname, dir),
+      cwd: path,
       absolute: false,
     })
 

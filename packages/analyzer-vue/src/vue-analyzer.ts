@@ -1,5 +1,4 @@
-import { dirname, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { resolve } from 'node:path'
 import type { TransientComponentSchema, TransientProps, TransientSlots } from '@transient/ir'
 import { type ComponentMeta, createChecker } from 'vue-component-meta'
 import { type AnalyzerConfig, defineAnalyzer } from './analyzer.js'
@@ -8,8 +7,6 @@ import { logger } from './log/logger.js'
 import { analyzeTemplateElements } from './template.js'
 
 export type VueAnalyzerOptions = Pick<AnalyzerConfig, 'tsConfigPath' | 'dest' | 'glob'>
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export function defineVueAnalyzer(options: VueAnalyzerOptions) {
   const checker = createChecker(options.tsConfigPath, {
@@ -22,7 +19,7 @@ export function defineVueAnalyzer(options: VueAnalyzerOptions) {
     tsConfigPath: options.tsConfigPath,
     glob: options.glob ?? './**/*.vue',
     describe(path, dir) {
-      const src = resolve(__dirname, dir, path)
+      const src = resolve(process.cwd(), dir, path)
       const meta = checker.getComponentMeta(src)
       return describeComponent(meta, src, path)
     },
