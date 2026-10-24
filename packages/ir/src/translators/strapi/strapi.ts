@@ -3,7 +3,11 @@ import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { defineTranslator, type TranslatorConfig } from "../translator.js";
 import { assertIs, assertDefined, someRecord } from "@transient/core/assert.js";
 import { getTypeKind } from "../../ast.js";
-import type { TransientProps, TransientProp, TransientComponentSchema } from "../../definition.js";
+import type {
+  TransientProps,
+  TransientProp,
+  TransientComponentSchema,
+} from "../../definition.js";
 import { logger } from "../../log/logger.js";
 
 type StrapiComponent = {

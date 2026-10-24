@@ -45,20 +45,21 @@
       "name": "@transient/ir",
       "dependencies": {
         "@transient/core": "workspace:*",
+        "chalk": "^5.4.1",
+        "fast-glob": "^3.3.3",
+        "vue-component-meta": "^2.2.8",
       },
       "devDependencies": {
         "@types/bun": "^1.4.2",
-        "chalk": "^5.4.1",
-        "fast-glob": "^3.3.3",
         "typescript": "^5.8.2",
         "vue": "^3.5.13",
-        "vue-component-meta": "^2.2.8",
         "vue-tsc": "^2.2.8",
       },
     },
-    "playground": {
-      "name": "playground",
+    "packages/vite-plugin-transient-analyzer": {
+      "name": "@transient/vite-plugin-transient-analyzer",
       "dependencies": {
+        "@transient/core": "workspace:*",
         "@transient/ir": "workspace:*",
       },
     },
@@ -407,6 +408,8 @@
     "@transient/editor": ["@transient/editor@workspace:packages/editor"],
 
     "@transient/ir": ["@transient/ir@workspace:packages/ir"],
+
+    "@transient/vite-plugin-transient-analyzer": ["@transient/vite-plugin-transient-analyzer@workspace:packages/vite-plugin-transient-analyzer"],
 
     "@tsconfig/node22": ["@tsconfig/node22@22.0.1", "", {}, "sha512-VkgOa3n6jvs1p+r3DiwBqeEwGAwEvnVCg/hIjiANl5IEcqP3G0u5m8cBJspe1t9qjZRlZ7WFgqq5bJrGdgAKMg=="],
 
@@ -821,8 +824,6 @@
     "pinia": ["pinia@3.0.1", "", { "dependencies": { "@vue/devtools-api": "^7.7.2" }, "peerDependencies": { "typescript": ">=4.4.4", "vue": "^2.7.0 || ^3.5.11" }, "optionalPeers": ["typescript"] }, "sha512-WXglsDzztOTH6IfcJ99ltYZin2mY8XZCXujkYWVIJlBjqsP6ST7zw+Aarh63E1cDVYeyUcPCxPHzJpEOmzB6Wg=="],
 
     "pkg-types": ["pkg-types@2.1.0", "", { "dependencies": { "confbox": "^0.2.1", "exsolve": "^1.0.1", "pathe": "^2.0.3" } }, "sha512-wmJwA+8ihJixSoHKxZJRBQG1oY8Yr9pGLzRmSsNms0iNWyHHAlZCa7mmKiFR10YPZuz/2k169JiS/inOjBCZ2A=="],
-
-    "playground": ["playground@workspace:playground"],
 
     "playwright": ["playwright@1.63.0", "", { "dependencies": { "playwright-core": "1.63.0" }, "bin": { "playwright": "cli.js" } }, "sha512-+7ziBLidS4NaNCdt57SUDT+wYmmd5fmiQejUic/kb+YsYSCPyOOE9sebzMjNmQrsnNpDJqd4WHvV/8lfKfUDUg=="],
 
