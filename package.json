@@ -5,6 +5,9 @@
     "packages/*"
   ],
   "scripts": {
+    "lint": "biome lint --write .",
+    "format": "biome format --write .",
+    "check": "biome check --write .",
     "dev": "tsc -b && run-p watch dev:editor",
     "dev:editor": "bun run --cwd packages/editor dev",
     "watch": "tsc -b --watch --preserveWatchOutput",
