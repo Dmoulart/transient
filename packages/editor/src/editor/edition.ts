@@ -1,4 +1,9 @@
-import type { TransientComponentSchema, TransientElement, TransientProp } from '@transient/ir'
+import type {
+  BindingValue,
+  TransientComponentSchema,
+  TransientElement,
+  TransientProp,
+} from '@transient/ir'
 import {
   appendElement,
   insertAfterElement,
@@ -37,7 +42,7 @@ export type UpdateElementPropEdition = {
   type: 'update-prop'
   prop: TransientProp
   propName: string
-  value: unknown
+  value: BindingValue
   transientId: string
 }
 

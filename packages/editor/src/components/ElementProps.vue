@@ -10,12 +10,12 @@
   </form>
 </template>
 <script setup lang="ts">
-import type { TransientElementAttributes, TransientProp, TransientProps } from '@transient/ir'
+import type { BindingValue, TransientElementAttributes, TransientProp, TransientProps } from '@transient/ir'
 import ElementProp from './ElementProp.vue'
 
 defineProps<{ propsSchema: TransientProps; values: TransientElementAttributes }>()
 
 const emit = defineEmits<{
-  update: [data: { prop: TransientProp; propName: string; value: unknown }]
+  update: [data: { prop: TransientProp; propName: string; value: BindingValue }]
 }>()
 </script>

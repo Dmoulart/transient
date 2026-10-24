@@ -157,7 +157,7 @@ function renderElement(element: TransientElement) {
 
 function renderText(element: TransientElement) {
   assert(element.tag === "#text");
-  const text = element?.attributes?.value?.expression ?? "";
+  const text = String(element.attributes.value?.expression ?? "");
   const textVnode = h(Text, text);
   index.value.elements.set(element.id, textVnode);
   return textVnode;

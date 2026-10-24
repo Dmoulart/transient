@@ -8,6 +8,7 @@
     "lint": "biome lint --write .",
     "format": "biome format --write .",
     "fix": "biome check --write .",
+    "ci": "biome ci && bun run type-check",
     "type-check": "bun check && bun run --cwd packages/editor type-check",
     "dev": "tsc -b && run-p watch dev:editor",
     "dev:editor": "bun run --cwd packages/editor dev",

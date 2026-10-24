@@ -11,7 +11,7 @@
   </TDrawer>
 </template>
 <script setup lang="ts">
-import type { TransientComponentSchema, TransientElementAttributes, TransientProp } from '@transient/ir'
+import type { BindingValue, TransientComponentSchema, TransientElementAttributes, TransientProp } from '@transient/ir'
 import ElementProps from './ElementProps.vue'
 
 defineProps<{
@@ -21,6 +21,6 @@ defineProps<{
 
 const emit = defineEmits<{
   close: []
-  update: [data: { prop: TransientProp; propName: string; value: unknown }]
+  update: [data: { prop: TransientProp; propName: string; value: BindingValue }]
 }>()
 </script>
