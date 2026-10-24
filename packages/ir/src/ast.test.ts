@@ -49,12 +49,11 @@ describe('ast', () => {
       isComponent: false,
     },
   ]
+
   test('getPathOfElementById', () => {
     const path = getPathOfElementById(elements, '3')
     expect(path).toEqual([0, 'slots', 'default', 1])
-  })
 
-  test('getPathOfElementById', () => {
     const nested = findNearestAncestor(elements, '5', (element) => element.isComponent)
     expect(nested).toBeDefined()
     expect(nested!.id).toEqual('1')
