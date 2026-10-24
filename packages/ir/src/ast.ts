@@ -6,7 +6,7 @@ import type {
   TransientProps,
   TransientElementAttributes,
   TransientComponentSchema,
-} from "./definition";
+} from "./definition.js";
 
 export function getTypeKind(type: TransientType): TransientTypeName {
   return typeof type === "string" ? type : type.kind;

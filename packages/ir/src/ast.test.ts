@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import type { TransientElement } from "./definition";
-import { findNearestAncestor, getPathOfElementById } from "./ast";
+import type { TransientElement } from "./definition.js";
+import { findNearestAncestor, getPathOfElementById } from "./ast.js";
 
 describe("ast", () => {
   const elements: TransientElement[] = [
