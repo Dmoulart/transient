@@ -1,17 +1,20 @@
 {
   "name": "@transient/vite-plugin-transient-analyzer",
   "type": "module",
-  "types": "dist/index.d.ts",
-  "main": "dist/index.js",
+  "private": true,
   "files": [
     "dist"
   ],
   "dependencies": {
-    "@transient/core": "workspace:*",
-    "@transient/ir": "workspace:*"
+    "@transient/analyzer-vue": "workspace:*"
   },
-  "scripts": {},
+  "peerDependencies": {
+    "vite": "^6.0.0"
+  },
+  "devDependencies": {
+    "vite": "^6.2.4"
+  },
   "exports": {
-    "./*": "./dist/*"
+    ".": "./dist/index.js"
   }
 }

@@ -4,8 +4,5 @@
       "path": "../core"
     }
   ],
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions":{
-    "types": ["bun-types"]
-  }
+  "extends": "../../tsconfig.base.json"
 }

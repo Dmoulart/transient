@@ -1,10 +1,7 @@
 {
   "references": [
     {
-      "path": "../core"
-    },
-    {
-      "path": "../ir"
+      "path": "../analyzer-vue"
     }
   ],
   "extends": "../../tsconfig.base.json",

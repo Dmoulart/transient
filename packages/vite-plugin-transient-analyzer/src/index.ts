@@ -1,7 +1,7 @@
 import {
   defineVueAnalyzer,
   type VueAnalyzerOptions,
-} from "@transient/ir/analyzers/vue/vue.js";
+} from "@transient/analyzer-vue";
 import { resolve } from "node:path";
 import type { Plugin } from "vite";
 

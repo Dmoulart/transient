@@ -6,16 +6,12 @@ import {
   assertIsArrayOf,
   someRecord,
   someString,
-} from "@transient/core/assert.js";
-import {
-  isEscapedString,
-  isNumeric,
-  unescapeString,
-} from "@transient/core/string.js";
-import { somePropertyMetaSchema } from "../../utils/assert.js";
-import { getTypeKind } from "../../ast.js";
-import type { TransientType, TransientProp } from "../../definition.js";
-import { logger } from "../../log/logger.js";
+} from "@transient/core";
+import { isEscapedString, isNumeric, unescapeString } from "@transient/core";
+import { somePropertyMetaSchema } from "./utils/assert.js";
+import { getTypeKind } from "@transient/ir";
+import type { TransientType, TransientProp } from "@transient/ir";
+import { logger } from "./log/logger.js";
 
 export type TypeAnalysis = {
   type: TransientType;

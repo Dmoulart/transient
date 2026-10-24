@@ -1,0 +1,21 @@
+{
+  "name": "@transient/analyzer-vue",
+  "type": "module",
+  "private": true,
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "dependencies": {
+    "@transient/core": "workspace:*",
+    "@transient/ir": "workspace:*",
+    "@vue/compiler-dom": "^3.5.13",
+    "@vue/compiler-sfc": "^3.5.13",
+    "chalk": "^5.4.1",
+    "fast-glob": "^3.3.3",
+    "vue-component-meta": "^2.2.8"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  }
+}

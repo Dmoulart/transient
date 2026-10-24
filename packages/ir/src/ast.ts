@@ -1,4 +1,4 @@
-import { assert, assertDefined } from "@transient/core/assert.js";
+import { assert, assertDefined } from "@transient/core";
 import type {
   TransientType,
   TransientTypeName,

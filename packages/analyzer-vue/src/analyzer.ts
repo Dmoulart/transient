@@ -1,12 +1,12 @@
-import { dirname, resolve } from "path";
+import { dirname, resolve } from "node:path";
 import fastGlob from "fast-glob";
 import type { Pattern } from "fast-glob";
 import { writeFileSync } from "fs";
 import type {
   TransientComponentDictionnary,
   TransientComponentSchema,
-} from "../definition";
-import { logger } from "../log/logger.js";
+} from "@transient/ir";
+import { logger } from "./log/logger.js";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));

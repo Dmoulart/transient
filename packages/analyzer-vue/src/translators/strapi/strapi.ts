@@ -1,13 +1,13 @@
-import { join, parse, resolve } from "path";
+import { join, parse, resolve } from "node:path";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { defineTranslator, type TranslatorConfig } from "../translator.js";
-import { assertIs, assertDefined, someRecord } from "@transient/core/assert.js";
-import { getTypeKind } from "../../ast.js";
+import { assertIs, assertDefined, someRecord } from "@transient/core";
+import { getTypeKind } from "@transient/ir";
 import type {
   TransientProps,
   TransientProp,
   TransientComponentSchema,
-} from "../../definition.js";
+} from "@transient/ir";
 import { logger } from "../../log/logger.js";
 
 type StrapiComponent = {

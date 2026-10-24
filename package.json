@@ -7,6 +7,10 @@
   "scripts": {
     "dev": "bun run --cwd packages/editor dev",
     "build": "tsc -b",
-    "test": "bun test"
+    "test": "bun test src/"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.2",
+    "typescript": "^5.8.2"
   }
 }

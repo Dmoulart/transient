@@ -1,4 +1,4 @@
-import type { TransientComponentDictionnary } from "../definition.js";
+import type { TransientComponentDictionnary } from "@transient/ir";
 import { logger } from "../log/logger.js";
 
 export type TranslatorConfig<T> = {

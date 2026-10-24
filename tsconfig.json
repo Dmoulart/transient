@@ -4,8 +4,6 @@
         {"path": "packages/core"},
         {"path": "packages/ir"},
         {"path": "packages/vite-plugin-transient-analyzer"},
-    ],
-    "compilerOptions":{
-        "skipLibCheck": true
-    }
+        {"path": "packages/analyzer-vue"},
+    ]
 }

@@ -1,13 +1,13 @@
 import { createChecker, type ComponentMeta } from "vue-component-meta";
 import { castDefaultValue, castPropType } from "./cast.js";
-import { defineAnalyzer, type AnalyzerConfig } from "../analyzer.js";
-import { dirname, resolve } from "path";
+import { defineAnalyzer, type AnalyzerConfig } from "./analyzer.js";
+import { dirname, resolve } from "node:path";
 import type {
   TransientComponentSchema,
   TransientProps,
   TransientSlots,
-} from "../../definition.js";
-import { logger } from "../../log/logger.js";
+} from "@transient/ir";
+import { logger } from "./log/logger.js";
 import { analyzeTemplateElements } from "./template.js";
 import { fileURLToPath } from "url";
 
