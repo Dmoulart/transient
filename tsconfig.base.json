@@ -3,6 +3,7 @@
     "outDir": "${configDir}/dist",
     "rootDir": "${configDir}/src",
     "declaration": true,
+    "declarationMap": true,
     "composite": true,
     "emitDeclarationOnly": false,
     "lib": ["esnext"],

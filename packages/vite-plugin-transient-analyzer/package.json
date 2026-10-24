@@ -4,16 +4,13 @@
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "files": [
-    "/dist"
+    "dist"
   ],
   "dependencies": {
     "@transient/core": "workspace:*",
     "@transient/ir": "workspace:*"
   },
-  "scripts": {
-    "build": "tsc",
-    "build:watch": "tsc --watch index.ts --declaration"
-  },
+  "scripts": {},
   "exports": {
     "./*": "./dist/*"
   }
