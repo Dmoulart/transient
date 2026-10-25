@@ -30,7 +30,7 @@ const emit = defineEmits<{
 onKeyStroke('Escape', () => emit('close'))
 </script>
 <template>
-  <aside class="tr-panel tr-gap-4 tr-max-h-[80dvh] tr-overflow-y-auto">
+  <aside class="tr-panel tr-gap-4 tr-max-h-[80dvh] tr-scroll-root tr-overflow-hidden">
     <header
       class="tr-scroll-shadow tr-p-4 tr-pb-1 tr-bg-surface tr-sticky tr-top-0 tr-z-1 tr-flex tr-flex-row tr-justify-between"
     >
@@ -55,7 +55,7 @@ onKeyStroke('Escape', () => emit('close'))
     </header>
     <PropsFields
       v-if="Object.keys(schema.props).length > 0"
-      class="tr-p-4"
+      class="tr-scroll-body tr-overflow-y-auto tr-p-4"
       :props-schema="schema.props"
       :values="model.attributes"
       @update="(data) => emit('updateProp', data)"

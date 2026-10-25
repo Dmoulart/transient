@@ -135,9 +135,17 @@
 
 @layer transient {
   @supports (animation-timeline: scroll()) {
+    .tr-scroll-root {
+      timeline-scope: --tr-scroll;
+    }
+
+    .tr-scroll-body {
+      scroll-timeline: --tr-scroll block;
+    }
+
     .tr-scroll-shadow {
       animation: tr-scroll-shadow linear both;
-      animation-timeline: scroll();
+      animation-timeline: --tr-scroll;
       animation-range: 0 24px;
     }
   }
