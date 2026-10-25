@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from 'node:url'
-import ui from '@nuxt/ui/vite'
+import tailwindcss from '@tailwindcss/vite'
 import transientAnalyzerPlugin from '@transient/vite-plugin-transient-analyzer'
 import vue from '@vitejs/plugin-vue'
 import UnoCSS from 'unocss/vite'
@@ -10,13 +10,14 @@ export default defineConfig({
   plugins: [
     vue(),
     vueDevTools(),
-    ui(),
     transientAnalyzerPlugin({
       tsConfigPath: fileURLToPath(new URL('./tsconfig.app.json', import.meta.url)),
       glob: fileURLToPath(new URL('./src/{samples,tests}/**/*.vue', import.meta.url)),
       dest: fileURLToPath(new URL('./src/assets/schemas', import.meta.url)),
     }),
     UnoCSS(),
+    // samples and e2e fixtures only (assets/samples.css), the editor itself ships without it
+    tailwindcss(),
   ],
   server: {
     watch: {

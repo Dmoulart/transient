@@ -11,7 +11,7 @@
         @exit-editing="editor.stopEditing"
       />
     </main>
-
+    <!-- 
     <ComponentSelection
       v-if="editor.activeComponent.element.value"
       :root="index.rootNodes(editor.activeComponent.element.value.id)"
@@ -24,7 +24,7 @@
           })
         }
       "
-    />
+    /> -->
 
     <template v-if="editor.editing.value && !editor.editing.value.slotName">
       <EditingFrame :targets="index.rootNodes(editor.editing.value.id)" />
@@ -64,23 +64,26 @@
       />
     </template>
 
-    <PropsPanel
+    <slot
+      v-if="editor.activeComponent.element.value && editor.activeComponent.schema.value"
+      name="panel"
+      :element="editor.activeComponent.element.value"
       :schema="editor.activeComponent.schema.value"
-      :component-props="editor.activeComponent.props.value"
-      @close="() => editor.select(null)"
-      @update="
-        ({ prop, propName, value }) => {
-          editor.edit({
-            type: 'update-prop',
-            prop,
-            propName,
-            value,
-            transientId: editor.activeComponent.id.value!,
-          })
-        }
-      "
-    />
-    <ComponentPanel
+      :template="component.template"
+      :update-prop="updateProp"
+      :close="closeComponent"
+    >
+      <ElementPanel
+        class="tr-fixed tr-top-[10%] tr-right-4"
+        :model-value="editor.activeComponent.element.value"
+        :schema="editor.activeComponent.schema.value"
+        :template="component.template"
+        @update-prop="updateProp"
+        @close="closeComponent"
+      />
+    </slot>
+
+    <!-- <ComponentPanel
       :open="componentPanel.isOpen.value"
       @select="
         (selected) => {
@@ -98,9 +101,9 @@
       "
       @close="componentPanel.close"
       :dictionnary="dictionnary"
-    />
-    <DebugPanel v-if="debug" :editor="editor" :template="component.template" :index="index" />
-    <SlashMenu
+    /> -->
+    <!-- <DebugPanel v-if="debug" :editor="editor" :template="component.template" :index="index" /> -->
+    <!-- <SlashMenu
       v-if="slashMenu.open.value && slashMenu.rect.value"
       class="fixed z-50 w-72"
       id="slash-menu"
@@ -109,13 +112,20 @@
         left: `${slashMenu.rect.value.left}px`,
       }"
       :dictionnary="dictionnary"
-      />
+    /> -->
   </div>
 </template>
 
 <script setup lang="ts">
-import { findElementById, getAncestorsChain, type TransientComponentDictionnary, type TransientComponentSchema } from '@transient/ir'
-import {  useEventListener } from '@vueuse/core'
+import {
+  type BindingValue,
+  findElementById,
+  getAncestorsChain,
+  type TransientComponentDictionnary,
+  type TransientComponentSchema,
+  type TransientProp,
+} from '@transient/ir'
+import { useEventListener } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
 import type { ResolveComponent } from '@/lib/components.ts'
 import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
@@ -124,12 +134,9 @@ import { useIndex } from '@/lib/composables/use-index.ts'
 import { useSlashMenu } from '@/lib/composables/use-slash-menu.ts'
 import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
 import ComponentBuilder from './ComponentBuilder.vue'
-import ComponentPanel from './ComponentPanel.vue'
-import ComponentSelection from './ComponentSelection.vue'
 import DebugPanel from './DebugPanel.vue'
 import EditingFrame from './EditingFrame.vue'
-import PropsPanel from './PropsPanel.vue'
-import SlashMenu from './SlashMenu.vue'
+import ElementPanel from './ElementPanel/ElementPanel.vue'
 import SlotHighlight from './SlotHighlight.vue'
 
 const { dictionnary, debug = false } = defineProps<{
@@ -138,7 +145,7 @@ const { dictionnary, debug = false } = defineProps<{
   debug?: boolean
 }>()
 
-const component = defineModel<TransientComponentSchema>({required:true})
+const component = defineModel<TransientComponentSchema>({ required: true })
 
 const canvas = useTemplateRef('canvas')
 const index = useIndex()
@@ -169,8 +176,6 @@ const editor = useEditor(component, dictionnary)
 //     }
 //   }
 // })
-
-
 
 // caretPositionFromPoint snaps to the *closest* text (padding, blank space next to a
 // line): keep it only if the point is really on the text's rendered lines
@@ -215,6 +220,28 @@ useEventListener(canvas, ['click'], (ev: MouseEvent) => {
 
   editor.pointOn(id, { x: ev.clientX, y: ev.clientY }, slot?.name, slot?.occurrence)
 })
+
+function updateProp({
+  prop,
+  propName,
+  value,
+}: {
+  prop: TransientProp
+  propName: string
+  value: BindingValue
+}) {
+  editor.edit({
+    type: 'update-prop',
+    prop,
+    propName,
+    value,
+    transientId: editor.activeComponent.id.value!,
+  })
+}
+
+function closeComponent() {
+  editor.select(null)
+}
 </script>
 
 <style></style>

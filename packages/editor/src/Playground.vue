@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { TransientComponentDictionnary } from '@transient/ir'
-import { ref,   } from 'vue'
+import { ref } from 'vue'
 import _dictionnary from '@/assets/schemas/__schemas__.json'
 import { useTemplate } from '@/lib/composables/use-template.ts'
 import Button from '@/samples/Button.vue'
@@ -16,13 +16,15 @@ const component = ref(structuredClone(dictionnary[query.get('page') ?? 'HomePage
 const debug = query.get('debug') !== 'false'
 
 const template = useTemplate(component)
-
 </script>
 
 <template>
-  <UApp>
-    <ComponentEditor :resolve-component="resolveComponent" v-model="component" :dictionnary="dictionnary" :debug="debug" />
-    <Button @click="template.saveToLocalStorage">Save</Button>
-    <Button @click="template.loadFromLocalStorage">Load</Button>
-  </UApp>
+  <ComponentEditor
+    :resolve-component="resolveComponent"
+    v-model="component"
+    :dictionnary="dictionnary"
+    :debug="debug"
+  />
+  <Button @click="template.saveToLocalStorage">Save</Button>
+  <Button @click="template.loadFromLocalStorage">Load</Button>
 </template>

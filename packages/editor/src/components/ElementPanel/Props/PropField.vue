@@ -8,7 +8,7 @@
   <NumberFieldRoot
     v-else-if="kind === 'integer' || kind === 'decimal'"
     v-model="number"
-    :step="kind === 'integer' ? 1 : 0.1"
+    :step="1"
     :format-options="{ maximumFractionDigits: kind === 'integer' ? 0 : 10 }"
     class="tr-flex tr-items-center tr-gap-1"
   >

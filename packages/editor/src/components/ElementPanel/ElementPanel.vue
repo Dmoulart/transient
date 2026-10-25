@@ -24,7 +24,7 @@ const parents = computed<ReturnType<typeof getAncestorsChain>>(() => {
 
 const emit = defineEmits<{
   close: []
-  update: [data: { prop: TransientProp; propName: string; value: BindingValue }]
+  updateProp: [data: { prop: TransientProp; propName: string; value: BindingValue }]
 }>()
 
 onKeyStroke('Escape', () => emit('close'))
@@ -58,7 +58,7 @@ onKeyStroke('Escape', () => emit('close'))
       class="tr-p-4"
       :props-schema="schema.props"
       :values="model.attributes"
-      @update="(data) => emit('update', data)"
+      @update="(data) => emit('updateProp', data)"
     />
   </aside>
 </template>
