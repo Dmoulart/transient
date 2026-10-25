@@ -45,7 +45,7 @@
       v-for="slot in index.slots(editor.activeComponent.element.value.id)"
       :key="slot.name"
       :targets="slot.container"
-      :empty="slot.fallback"
+      :empty="slot.fallback || !slot.nodes.length"
       :slot-name="slot.name"
       :owner-id="editor.activeComponent.id.value!"
       @insert-component="

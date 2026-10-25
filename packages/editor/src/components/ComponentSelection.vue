@@ -10,6 +10,8 @@
           {{ label }}
         </span>
         <EditButton
+          data-action="insert-after"
+          title="Delete"
           @click="
             emit('edit', {
               type: 'delete-element',
@@ -30,6 +32,7 @@
       /> -->
       <button
         type="button"
+        data-action="insert-after"
         title="Insert after"
         class="pointer-events-auto absolute top-full left-1/2 z-10 flex size-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-teal-500 text-white shadow-md ring-2 ring-white transition hover:scale-110 hover:bg-teal-400"
         @click="emit('insert-component', { targetID: element.id })"

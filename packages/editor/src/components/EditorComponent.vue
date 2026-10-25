@@ -4,6 +4,8 @@
     <div
       role="button"
       tabindex="0"
+      data-test="component-item"
+      :data-tag="schema.tag"
       :style="item ? styles.item : undefined"
       @click="emit('select', props)"
       @keydown.enter="emit('select', props)"
