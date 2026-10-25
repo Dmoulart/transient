@@ -9,7 +9,7 @@ import type { EditorEvents } from '@/editor/events'
 import { editableRoots } from '@/lib/edition/editable-root'
 import { pmContentToTransientElements, transientElementsToPmContent } from '@/lib/edition/richtext'
 import { parseElementAttributes } from '@/lib/transient/attributes'
-import RichTextMenu from './RichTextMenu.vue'
+import RichTextToolbar from './RichTextToolbar.vue'
 
 const props = defineProps<{
   container: TransientElement
@@ -116,7 +116,11 @@ if (position === (props.occurrence ?? 0)) {
       },
     })
 
-    return [editingContainer, ...teleports, editor.value && h(RichTextMenu, { editor: editor.value })]
+    return [
+      editingContainer,
+      ...teleports,
+      editor.value && h(RichTextToolbar, { editor: editor.value }),
+    ]
   }
 
   function InlineElement() {
@@ -157,14 +161,16 @@ if (position === (props.occurrence ?? 0)) {
   Root = () => props.render(props.container?.slots ? props.container.slots[props.slotName] : [])
 }
 </script>
-<template><Root /></template>
+<template
+  ><Root /></template
+>
 <style>
 tst-slot-edition:empty {
   display: inline-block;
   min-width: 1ch;
 }
 
-[contenteditable='true'] {
+[contenteditable="true"] {
   outline: none;
 }
 </style>

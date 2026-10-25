@@ -1,38 +1,39 @@
 <template>
+  <!-- appended to this editor's .tr-root, not <body>: the --tr-* tokens and the theme live there -->
   <BubbleMenu
     :editor="editor"
-    :append-to="document.body"
+    :append-to="root"
     :options="{ strategy: 'fixed', placement: 'top' }"
   >
-    <div
-      class="flex gap-0.5 rounded-(--ui-radius) bg-(--ui-bg) p-1 shadow-lg ring ring-(--ui-border)"
-    >
-      <UButton
+    <ToolbarRoot class="tr-floating tr-flex tr-gap-1 tr-p-1" aria-label="Formatting">
+      <ToolbarButton
         v-for="{ tag, label, icon } in styles"
         :key="tag"
-        :icon="icon"
+        class="tr-icon-btn aria-pressed:(tr-bg-accent-soft tr-text-accent)"
         :aria-label="label"
-        size="sm"
-        :color="editor.isActive('inlineElement', { tag }) ? 'primary' : 'neutral'"
-        :variant="editor.isActive('inlineElement', { tag }) ? 'soft' : 'ghost'"
+        :aria-pressed="editor.isActive('inlineElement', { tag })"
         @mousedown.prevent="toggleTag(tag)"
-      />
-    </div>
+      >
+        <span :class="icon" aria-hidden="true" />
+      </ToolbarButton>
+    </ToolbarRoot>
   </BubbleMenu>
 </template>
 <script setup lang="ts">
 import type { Mark } from '@tiptap/pm/model'
 import type { Editor } from '@tiptap/vue-3'
 import { BubbleMenu } from '@tiptap/vue-3/menus'
+import { ToolbarButton, ToolbarRoot } from 'reka-ui'
 
 const props = defineProps<{ editor: Editor }>()
 
-const document = window.document
+const root = () => props.editor.view.dom.closest<HTMLElement>('.tr-root') ?? document.body
 
+// full class names: UnoCSS only generates what it can read in the source, not `tr-${icon}`
 const styles = [
-  { tag: 'strong', label: 'Bold', icon: 'i-lucide-bold' },
-  { tag: 'em', label: 'Italic', icon: 'i-lucide-italic' },
-  { tag: 's', label: 'Strike', icon: 'i-lucide-strikethrough' },
+  { tag: 'strong', label: 'Bold', icon: 'tr-i-lucide-bold' },
+  { tag: 'em', label: 'Italic', icon: 'tr-i-lucide-italic' },
+  { tag: 's', label: 'Strike', icon: 'tr-i-lucide-strikethrough' },
 ] as const
 
 function toggleTag(tag: string) {
