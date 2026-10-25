@@ -1,10 +1,9 @@
 import './assets/main.css'
-
 import ui from '@nuxt/ui/vue-plugin'
 import { createApp } from 'vue'
-import App from './App.vue'
+import Playground from './Playground.vue'
 
-const app = createApp(App)
+const app = createApp(Playground)
 
 app.use(ui)
 
