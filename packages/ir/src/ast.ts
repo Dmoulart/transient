@@ -337,14 +337,19 @@ export function createTextElement(text: string): TransientElement {
   }
 }
 
-export function getAncestorsChain(
-  id: string,
-  elements: TransientElement[],
-): { element: TransientElement; slotName: string }[] | undefined {
+type AncestorsChain = { element: TransientElement; slotName: string }[]
+
+// [] for a root element, and for a missing one
+export function getAncestorsChain(id: string, elements: TransientElement[]): AncestorsChain {
+  return findAncestorsChain(id, elements) ?? []
+}
+
+// undefined = not found: the recursion must tell it apart from [] (found at this level)
+function findAncestorsChain(id: string, elements: TransientElement[]): AncestorsChain | undefined {
   for (const element of elements) {
     if (element.id === id) return []
     for (const [slotName, children] of Object.entries(element.slots ?? {})) {
-      const found = getAncestorsChain(id, children)
+      const found = findAncestorsChain(id, children)
       if (found) return [{ element, slotName }, ...found]
     }
   }

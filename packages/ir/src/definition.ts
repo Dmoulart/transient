@@ -32,7 +32,7 @@ export type TransientProp = {
   type: TransientType
   description?: string
   required?: boolean
-  default?: string | boolean | undefined
+  default?: string | number | boolean | undefined
 }
 
 // unused for now
@@ -42,7 +42,7 @@ export type TransientType<T extends TransientTypeName = TransientTypeName> =
   T extends TransientPrimitiveTypeName
     ? T | { kind: T }
     : T extends 'enum'
-      ? { kind: 'enum'; enum: string[] }
+      ? { kind: 'enum'; enum: (string | number)[] }
       : T extends 'object'
         ? { kind: 'object'; object: Record<string, TransientProp> }
         : T extends 'list'

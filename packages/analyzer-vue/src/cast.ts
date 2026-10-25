@@ -27,6 +27,13 @@ export function castDefaultValue(
     case 'boolean': {
       return value === 'true'
     }
+    case 'decimal': {
+      return Number(value)
+    }
+    // numeric literal ('2'), or quoted string literal ('"2"')
+    case 'enum': {
+      return isEscapedString(value) ? unescapeString(value) : Number(value)
+    }
     //@todo
     default:
       return unescapeString(value)
@@ -197,12 +204,13 @@ export function collectOptionalsFromEnum(
 export function collectNumbersFromEnum(
   enumeration: PropertyMetaSchema[],
 ): TypeNormalizationAnalysis {
-  const numbers: string[] = []
+  const numbers: number[] = []
   for (let i = enumeration.length - 1; i >= 0; i--) {
     const type = enumeration[i]
 
     if (someString(type) && isNumeric(type)) {
-      numbers.push(...(enumeration.splice(i, 1) as string[]))
+      enumeration.splice(i, 1)
+      numbers.push(Number(type))
     }
   }
 

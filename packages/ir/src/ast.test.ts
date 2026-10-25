@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { findNearestAncestor, getPathOfElementById } from './ast.js'
+import { findNearestAncestor, getAncestorsChain, getPathOfElementById } from './ast.js'
 import type { TransientElement } from './definition.js'
 
 describe('ast', () => {
@@ -64,5 +64,14 @@ describe('ast', () => {
 
     const none = findNearestAncestor(elements, '1', (element) => element.isComponent)
     expect(none).toBeUndefined()
+  })
+
+  test('getAncestorsChain', () => {
+    const ids = (id: string) => getAncestorsChain(id, elements).map(({ element }) => element.id)
+
+    expect(ids('5')).toEqual(['1', '4'])
+    expect(ids('1')).toEqual([])
+    // a slot that doesn't hold the element must not end the search
+    expect(ids('missing')).toEqual([])
   })
 })

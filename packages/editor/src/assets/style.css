@@ -121,3 +121,24 @@
     --tr-shadow-drag: 0 16px 32px -10px rgba(0, 0, 0, 0.6);
   }
 }
+
+/* sticky header shadow that fades in with the scroll of the nearest scroller.
+   No support (Firefox < 142): no shadow, nothing breaks. */
+@keyframes tr-scroll-shadow {
+  from {
+    box-shadow: 0 0 0 transparent;
+  }
+  to {
+    box-shadow: var(--tr-shadow-raised);
+  }
+}
+
+@layer transient {
+  @supports (animation-timeline: scroll()) {
+    .tr-scroll-shadow {
+      animation: tr-scroll-shadow linear both;
+      animation-timeline: scroll();
+      animation-range: 0 24px;
+    }
+  }
+}

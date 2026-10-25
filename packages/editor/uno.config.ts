@@ -107,7 +107,7 @@ export default defineConfig({
       'tr-toolbar': 'tr-floating tr-flex tr-items-center tr-gap-2 tr-p-3 tr-z-[var(--tr-z-panel)]',
       'tr-menu': 'tr-floating tr-flex tr-flex-col tr-p-2 tr-z-[var(--tr-z-menu)]',
       'tr-menu-item':
-        'tr-h-[30px] tr-px-4 tr-flex tr-items-center tr-justify-between tr-rounded-sm tr-cursor-pointer hover:tr-bg-surface-hover aria-selected:(tr-bg-slot-soft tr-text-slot tr-font-medium)',
+        'tr-h-[30px] tr-px-4 tr-flex tr-items-center tr-justify-between tr-rounded-sm tr-cursor-pointer tr-outline-none tr-select-none data-[highlighted]:tr-bg-surface-hover aria-selected:(tr-bg-slot-soft tr-text-slot tr-font-medium) data-[disabled]:(tr-text-ink-disabled tr-cursor-default)',
 
       'tr-btn-reset':
         'tr-border-0 tr-bg-transparent tr-p-0 tr-[font:inherit] tr-[color:inherit] tr-cursor-pointer focus-visible:(tr-outline-2 tr-outline-solid tr-outline-focus tr-outline-offset-1)',
@@ -125,9 +125,12 @@ export default defineConfig({
       'tr-segment':
         'tr-btn-reset tr-h-segment tr-rounded-sm tr-text-ink-secondary aria-pressed:(tr-bg-surface tr-shadow-raised tr-text-ink tr-font-medium)',
       'tr-switch':
-        'tr-btn-reset tr-relative tr-w-[36px] tr-h-[20px] tr-rounded-full tr-bg-track-off aria-pressed:tr-bg-accent',
+        'tr-btn-reset tr-relative tr-w-[36px] tr-h-[20px] tr-rounded-full tr-bg-track-off aria-checked:tr-bg-accent',
+      'tr-switch-thumb':
+        'tr-block tr-w-[16px] tr-h-[16px] tr-rounded-full tr-bg-surface tr-shadow-raised tr-translate-x-[2px] tr-transition-transform data-[state=checked]:tr-translate-x-[18px]',
       'tr-prop-row': 'tr-flex tr-flex-col tr-gap-[7px]',
       'tr-prop-head': 'tr-flex tr-justify-between tr-items-baseline',
+      'tr-prop-name': 'tr-font-medium tr-text-body',
       'tr-prop-type': 'tr-font-mono tr-text-meta tr-text-ink-muted',
 
       'tr-overlay':

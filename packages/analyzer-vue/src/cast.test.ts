@@ -1,5 +1,16 @@
 import { describe, expect, test } from 'bun:test'
-import { castEnumType } from './cast.js'
+import { castDefaultValue, castEnumType } from './cast.js'
+
+describe('default values', () => {
+  test('decimal', () => {
+    expect(castDefaultValue('3', 'decimal')).toBe(3)
+  })
+
+  test('numeric enum keeps numbers, string enum keeps strings', () => {
+    expect(castDefaultValue('2', { kind: 'enum', enum: [1, 2] })).toBe(2)
+    expect(castDefaultValue('"2"', { kind: 'enum', enum: ['1', '2'] })).toBe('2')
+  })
+})
 
 describe('enum types normalization', () => {
   test('boolean', () => {
@@ -40,7 +51,7 @@ describe('enum types normalization', () => {
     expect(propInfos!.required).toEqual(true)
     expect(type).toEqual({
       kind: 'enum',
-      enum: ['1', '2', '3'],
+      enum: [1, 2, 3],
     })
   })
 
@@ -66,7 +77,7 @@ describe('enum types normalization', () => {
         },
         {
           kind: 'enum',
-          enum: ['1', '2', '3'],
+          enum: [1, 2, 3],
         },
       ],
     })
