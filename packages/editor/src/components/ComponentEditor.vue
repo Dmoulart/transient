@@ -3,7 +3,7 @@
     <ComponentBuilder
       v-model="index"
       :dictionnary="dictionnary"
-      :template="component.template ?? {elements: []}"
+      :template="component.template"
       :components="components"
       :editing="editor.editing.value"
       @edit="editor.edit"
@@ -98,7 +98,7 @@
     @close="componentPanel.close"
     :dictionnary="dictionnary"
   />
-  <DebugPanel v-if="debug" :editor="editor" :template="component.template ?? {elements : []}" :index="index" />
+  <DebugPanel v-if="debug" :editor="editor" :template="component.template" :index="index" />
   <SlashMenu
     v-if="slashMenu.open.value && slashMenu.rect.value"
     class="fixed z-50 w-72"
@@ -203,8 +203,8 @@ useEventListener(canvas, ['click'], (ev: MouseEvent) => {
 
   // text and its formatting (<strong>, <a>…) belong to the closest block holding them.
   // Walk the template, not the DOM: a slot at a multi-root component's root has a foreign parent
-  const self = findElementById(component.value.template?.elements ?? [], clicked)
-  const chain = getAncestorsChain(clicked, component.value.template?.elements ?? []) ?? []
+  const self = findElementById(component.value.template.elements, clicked)
+  const chain = getAncestorsChain(clicked, component.value.template.elements) ?? []
   const id =
     [...chain.map(({ element }) => element), self].findLast(
       (el) => el && !(el.tag === '#text' || (!el.isComponent && INLINE_TAGS.has(el.tag))),

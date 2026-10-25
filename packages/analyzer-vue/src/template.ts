@@ -21,13 +21,13 @@ import { parse as parseSFC } from '@vue/compiler-sfc'
 export function analyzeTemplateElements(
   componentPath: string,
   props: TransientProps,
-): TransientTemplate | undefined {
+): TransientTemplate {
   const source = readFileSync(componentPath, 'utf-8')
   const sfc = parseSFC(source)
 
   const template = sfc.descriptor.template?.content
 
-  if (!template) return
+  if (!template) return { elements: [] }
 
   const ast = baseParse(template)
 

@@ -33,7 +33,7 @@ export function useEditor(
 
   const ancestors = computed(() => {
     if (selection.value?.kind === 'element') {
-      return getAncestorsChain(selection.value.id, component.value.template?.elements ?? [])
+      return getAncestorsChain(selection.value.id, component.value.template.elements)
     }
 
     return []
@@ -52,7 +52,7 @@ export function useEditor(
 
   const selectedElement = computed(() => {
     if (selection.value?.kind === 'element') {
-      return findElementById(component.value.template?.elements ?? [], selection.value.id) ?? null
+      return findElementById(component.value.template.elements, selection.value.id) ?? null
     }
 
     return null

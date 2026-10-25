@@ -16,7 +16,7 @@ export function useElement(
     if (!id.value) {
       return null
     }
-    return findElementById(component.value.template?.elements ?? [], id.value)
+    return findElementById(component.value.template.elements, id.value)
   })
 
   const schema = computed(() => {

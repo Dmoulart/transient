@@ -21,7 +21,7 @@ export type TransientComponentSchema = {
   path: string
   props: TransientProps
   slots?: TransientSlots
-  template?: TransientTemplate
+  template: TransientTemplate
 }
 
 export type TransientSlots = Record<string, TransientSlot>
