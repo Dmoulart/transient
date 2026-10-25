@@ -19,7 +19,9 @@ const props = defineProps<{
 const model = defineModel<TransientElement>({ required: true })
 
 const parents = computed<ReturnType<typeof getAncestorsChain>>(() => {
-  return getAncestorsChain(model.value.id, props.template.elements)
+  return getAncestorsChain(model.value.id, props.template.elements).filter(
+    ({ element }) => element.isComponent,
+  )
 })
 
 const emit = defineEmits<{
@@ -32,10 +34,10 @@ onKeyStroke('Escape', () => emit('close'))
 <template>
   <aside class="tr-panel tr-gap-4 tr-max-h-[80dvh] tr-scroll-root tr-overflow-hidden">
     <header
-      class="tr-scroll-shadow tr-p-4 tr-pb-1 tr-bg-surface tr-sticky tr-top-0 tr-z-1 tr-flex tr-flex-row tr-justify-between"
+      class="tr-scroll-shadow tr-p-4 tr-pb-1 tr-bg-surface tr-sticky tr-top-0 tr-z-1 tr-flex tr-flex-row tr-justify-between tr-items-center"
     >
       <div class="tr-flex tr-flex-col tr-gap-2">
-        <nav aria-label="Breadcrumb">
+        <nav aria-label="Breadcrumb" v-if="parents.length > 0">
           <ol class="tr-breadcrumb tr-flex tr-flex-row tr-gap-2 tr-flex-wrap">
             <li
               class="tr-font-mono tr-text-meta tr-text-ink-muted"
