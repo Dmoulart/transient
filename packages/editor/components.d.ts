@@ -20,6 +20,7 @@ declare module 'vue' {
     EditingFrame: typeof import('./src/components/EditingFrame.vue')['default']
     EditorComponent: typeof import('./src/components/EditorComponent.vue')['default']
     EditorComponents: typeof import('./src/components/EditorComponents.vue')['default']
+    ElementPanel: typeof import('./src/components/ElementPanel/ElementPanel.vue')['default']
     ElementProp: typeof import('./src/components/ElementProp.vue')['default']
     ElementProps: typeof import('./src/components/ElementProps.vue')['default']
     PropsPanel: typeof import('./src/components/PropsPanel.vue')['default']

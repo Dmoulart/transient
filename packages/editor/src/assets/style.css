@@ -1,0 +1,123 @@
+@layer transient {
+  .tr-root {
+    --tr-gray-0: #ffffff;
+    --tr-gray-50: #fafaf8;
+    --tr-gray-100: #f4f3f0;
+    --tr-gray-150: #efeeea;
+    --tr-gray-200: #e6e5e1;
+    --tr-gray-250: #dcdbd6;
+    --tr-gray-300: #c9c8c3;
+    --tr-gray-400: #a3a29d;
+    --tr-gray-600: #6b6a66;
+    --tr-gray-700: #4a4945;
+    --tr-gray-750: #3a3a36;
+    --tr-gray-800: #2f2f2c;
+    --tr-gray-850: #2a2a27;
+    --tr-gray-900: #1e1e1c;
+    --tr-gray-950: #1c1c1a;
+    --tr-blue-300: #7c97ff;
+    --tr-blue-500: #2d5bff;
+    --tr-blue-950: #0e1330;
+    --tr-orange-700: #964000;
+    --tr-yellow-600: #c39a00;
+    --tr-amber-300: #f2b05a;
+    --tr-amber-400: #f2a33a;
+    --tr-green-400: #4cc08b;
+    --tr-green-500: #3ba776;
+    --tr-red-400: #f07272;
+    --tr-red-600: #c93a3a;
+  }
+
+  .tr-root,
+  .tr-root[data-theme="light"] {
+    --tr-accent: var(--tr-blue-500);
+    --tr-on-accent: var(--tr-gray-0);
+    --tr-accent-soft: color-mix(in srgb, var(--tr-accent) 8%, transparent);
+    --tr-accent-faint: color-mix(in srgb, var(--tr-accent) 3%, transparent);
+    --tr-slot: var(--tr-orange-700);
+    --tr-slot-soft: color-mix(in srgb, var(--tr-slot) 8%, transparent);
+    --tr-slot-selection: color-mix(in srgb, var(--tr-slot) 20%, transparent);
+    --tr-surface: var(--tr-gray-0);
+    --tr-surface-sunken: var(--tr-gray-100);
+    --tr-surface-hover: var(--tr-gray-50);
+    --tr-border: var(--tr-gray-200);
+    --tr-divider: var(--tr-gray-150);
+    --tr-ink: var(--tr-gray-950);
+    --tr-ink-secondary: var(--tr-gray-700);
+    --tr-ink-muted: var(--tr-gray-600);
+    --tr-ink-disabled: var(--tr-gray-400);
+    --tr-track-off: var(--tr-gray-250);
+    --tr-inverse: var(--tr-gray-950);
+    --tr-on-inverse: var(--tr-gray-0);
+    --tr-warning: var(--tr-amber-400);
+    --tr-success: var(--tr-green-500);
+    --tr-danger: var(--tr-red-600);
+    --tr-focus-ring: var(--tr-accent);
+    color-scheme: light;
+  }
+
+  .tr-root[data-theme="dark"] {
+    --tr-accent: var(--tr-blue-300);
+    --tr-on-accent: var(--tr-blue-950);
+    --tr-accent-soft: color-mix(in srgb, var(--tr-accent) 14%, transparent);
+    --tr-accent-faint: color-mix(in srgb, var(--tr-accent) 8%, transparent);
+    --tr-slot: var(--tr-yellow-600);
+    --tr-slot-soft: color-mix(in srgb, var(--tr-slot) 14%, transparent);
+    --tr-slot-selection: color-mix(in srgb, var(--tr-slot) 25%, transparent);
+    --tr-surface: var(--tr-gray-900);
+    --tr-surface-sunken: var(--tr-gray-800);
+    --tr-surface-hover: var(--tr-gray-850);
+    --tr-border: var(--tr-gray-750);
+    --tr-divider: var(--tr-gray-850);
+    --tr-ink: var(--tr-gray-100);
+    --tr-ink-secondary: var(--tr-gray-300);
+    --tr-ink-muted: var(--tr-gray-400);
+    --tr-ink-disabled: var(--tr-gray-600);
+    --tr-track-off: var(--tr-gray-700);
+    --tr-inverse: var(--tr-gray-100);
+    --tr-on-inverse: var(--tr-gray-950);
+    --tr-warning: var(--tr-amber-300);
+    --tr-success: var(--tr-green-400);
+    --tr-danger: var(--tr-red-400);
+    --tr-focus-ring: var(--tr-accent);
+    color-scheme: dark;
+  }
+
+  .tr-root {
+    --tr-space-1: 2px;
+    --tr-space-2: 4px;
+    --tr-space-3: 8px;
+    --tr-space-4: 12px;
+    --tr-space-5: 16px;
+    --tr-space-6: 24px;
+    --tr-radius-xs: 4px;
+    --tr-radius-sm: 6px;
+    --tr-radius-md: 8px;
+    --tr-radius-lg: 14px;
+    --tr-radius-full: 999px;
+    --tr-control-h: 34px;
+    --tr-segment-h: 28px;
+    --tr-toolbar-btn: 36px;
+    --tr-hit-min: 44px;
+    --tr-insert-btn: 26px;
+    --tr-panel-w: 320px;
+    --tr-stroke-selected: 1.5px;
+    --tr-stroke-hover: 1px;
+    --tr-overlay-offset: 6px;
+    --tr-label-gap: 6px;
+    --tr-z-overlay: 2147483000;
+    --tr-z-panel: 2147483100;
+    --tr-z-menu: 2147483200;
+    --tr-font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --tr-font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --tr-shadow-float: 0 12px 32px -8px rgba(20, 20, 18, 0.14), 0 2px 6px rgba(20, 20, 18, 0.05);
+    --tr-shadow-raised: 0 1px 2px rgba(20, 20, 18, 0.08);
+    --tr-shadow-drag: 0 16px 32px -10px rgba(20, 20, 18, 0.28);
+  }
+
+  .tr-root[data-theme="dark"] {
+    --tr-shadow-float: 0 12px 32px -8px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.3);
+    --tr-shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --tr-shadow-drag: 0 16px 32px -10px rgba(0, 0, 0, 0.6);
+  }
+}

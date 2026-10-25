@@ -1,114 +1,116 @@
 <template>
-  <main ref="canvas" data-test="canvas">
-    <ComponentBuilder
-      v-model="index"
-      :dictionnary="dictionnary"
-      :template="component.template"
-      :resolve-component="resolveComponent"
-      :editing="editor.editing.value"
+  <div class="tr-root" :style="{display: 'contents'}">
+    <main ref="canvas" data-test="canvas">
+      <ComponentBuilder
+        v-model="index"
+        :dictionnary="dictionnary"
+        :template="component.template"
+        :resolve-component="resolveComponent"
+        :editing="editor.editing.value"
+        @edit="editor.edit"
+        @exit-editing="editor.stopEditing"
+      />
+    </main>
+
+    <ComponentSelection
+      v-if="editor.activeComponent.element.value"
+      :root="index.rootNodes(editor.activeComponent.element.value.id)"
+      :element="editor.activeComponent.element.value!"
       @edit="editor.edit"
-      @exit-editing="editor.stopEditing"
-    />
-  </main>
-
-  <ComponentSelection
-    v-if="editor.activeComponent.element.value"
-    :root="index.rootNodes(editor.activeComponent.element.value.id)"
-    :element="editor.activeComponent.element.value!"
-    @edit="editor.edit"
-    @insert-component="
-      ({ targetID: targetNodeID }) => {
-        componentPanel.open((schema) => {
-          editor.edit({ type: 'add-component', targetId: targetNodeID, position: 'after', schema })
-        })
-      }
-    "
-  />
-
-  <template v-if="editor.editing.value && !editor.editing.value.slotName">
-    <EditingFrame :targets="index.rootNodes(editor.editing.value.id)" />
-  </template>
-  <template v-else-if="editor.editing.value?.slotName">
-    <EditingFrame
-      :targets="
-        index.slot(
-          editor.editing.value.id,
-          editor.editing.value.slotName,
-          editor.editing.value.occurrence,
-        )!.container
-      "
-      :slot-name="editor.editing.value.slotName"
-    />
-  </template>
-  <template v-else-if="editor.activeComponent.element.value">
-    <SlotHighlight
-      v-for="slot in index.slots(editor.activeComponent.element.value.id)"
-      :key="slot.name"
-      :targets="slot.container"
-      :empty="slot.fallback || !slot.nodes.length"
-      :slot-name="slot.name"
-      :owner-id="editor.activeComponent.id.value!"
       @insert-component="
         ({ targetID: targetNodeID }) => {
           componentPanel.open((schema) => {
-            editor.edit({
-              type: 'add-component',
-              targetId: targetNodeID,
-              position: 'append',
-              schema,
-            })
+            editor.edit({ type: 'add-component', targetId: targetNodeID, position: 'after', schema })
           })
         }
       "
     />
-  </template>
 
-  <PropsPanel
-    :schema="editor.activeComponent.schema.value"
-    :component-props="editor.activeComponent.props.value"
-    @close="() => editor.select(null)"
-    @update="
-      ({ prop, propName, value }) => {
-        editor.edit({
-          type: 'update-prop',
-          prop,
-          propName,
-          value,
-          transientId: editor.activeComponent.id.value!,
-        })
-      }
-    "
-  />
-  <ComponentPanel
-    :open="componentPanel.isOpen.value"
-    @select="
-      (selected) => {
-        componentPanel.select(selected.schema)
-        componentPanel.close()
-      }
-    "
-    @update:open="
-      (open: boolean) => {
-        if (!open) {
-          // drawer has a crazy api should do somethign about it. Maybe wrap it.
+    <template v-if="editor.editing.value && !editor.editing.value.slotName">
+      <EditingFrame :targets="index.rootNodes(editor.editing.value.id)" />
+    </template>
+    <template v-else-if="editor.editing.value?.slotName">
+      <EditingFrame
+        :targets="
+          index.slot(
+            editor.editing.value.id,
+            editor.editing.value.slotName,
+            editor.editing.value.occurrence,
+          )!.container
+        "
+        :slot-name="editor.editing.value.slotName"
+      />
+    </template>
+    <template v-else-if="editor.activeComponent.element.value">
+      <SlotHighlight
+        v-for="slot in index.slots(editor.activeComponent.element.value.id)"
+        :key="slot.name"
+        :targets="slot.container"
+        :empty="slot.fallback || !slot.nodes.length"
+        :slot-name="slot.name"
+        :owner-id="editor.activeComponent.id.value!"
+        @insert-component="
+          ({ targetID: targetNodeID }) => {
+            componentPanel.open((schema) => {
+              editor.edit({
+                type: 'add-component',
+                targetId: targetNodeID,
+                position: 'append',
+                schema,
+              })
+            })
+          }
+        "
+      />
+    </template>
+
+    <PropsPanel
+      :schema="editor.activeComponent.schema.value"
+      :component-props="editor.activeComponent.props.value"
+      @close="() => editor.select(null)"
+      @update="
+        ({ prop, propName, value }) => {
+          editor.edit({
+            type: 'update-prop',
+            prop,
+            propName,
+            value,
+            transientId: editor.activeComponent.id.value!,
+          })
+        }
+      "
+    />
+    <ComponentPanel
+      :open="componentPanel.isOpen.value"
+      @select="
+        (selected) => {
+          componentPanel.select(selected.schema)
           componentPanel.close()
         }
-      }
-    "
-    @close="componentPanel.close"
-    :dictionnary="dictionnary"
-  />
-  <DebugPanel v-if="debug" :editor="editor" :template="component.template" :index="index" />
-  <SlashMenu
-    v-if="slashMenu.open.value && slashMenu.rect.value"
-    class="fixed z-50 w-72"
-    id="slash-menu"
-    :style="{
-      top: `${slashMenu.rect.value.bottom + 4}px`,
-      left: `${slashMenu.rect.value.left}px`,
-    }"
-    :dictionnary="dictionnary"
+      "
+      @update:open="
+        (open: boolean) => {
+          if (!open) {
+            // drawer has a crazy api should do somethign about it. Maybe wrap it.
+            componentPanel.close()
+          }
+        }
+      "
+      @close="componentPanel.close"
+      :dictionnary="dictionnary"
     />
+    <DebugPanel v-if="debug" :editor="editor" :template="component.template" :index="index" />
+    <SlashMenu
+      v-if="slashMenu.open.value && slashMenu.rect.value"
+      class="fixed z-50 w-72"
+      id="slash-menu"
+      :style="{
+        top: `${slashMenu.rect.value.bottom + 4}px`,
+        left: `${slashMenu.rect.value.left}px`,
+      }"
+      :dictionnary="dictionnary"
+      />
+  </div>
 </template>
 
 <script setup lang="ts">
