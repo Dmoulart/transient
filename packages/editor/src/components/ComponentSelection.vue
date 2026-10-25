@@ -1,11 +1,11 @@
 <template>
   <UseBoundingBox :targets="root" v-slot="{ bbox }">
     <BoundingBox :bbox="bbox">
-      <div class="z-10 absolute bottom-full left-0 gap-2 flex">
+      <div class="tr-z-10 tr-absolute tr-bottom-full tr-left-0 tr-gap-2 tr-flex">
         <span
           data-test="selection"
           :data-tag="element.tag"
-          class="rounded-t-sm bg-teal-500 px-1.5 py-0.5 text-[10px] leading-none font-semibold tracking-wide text-white uppercase"
+          class="tr-rounded-t-sm tr-bg-teal-500 tr-px-1.5 tr-py-0.5 tr-text-[10px] tr-leading-none tr-font-semibold tr-tracking-wide tr-text-white tr-uppercase"
         >
           {{ label }}
         </span>
@@ -23,21 +23,14 @@
         </EditButton>
       </div>
 
-      <!-- <RichTextEditor
-        v-if="text"
-        class="pointer-events-auto absolute bottom-full left-0 z-10 mb-4"
-        :node="text"
-        @delete="emit('edit', { type: 'delete-element', transientId: id() })"
-        @insert-component="emit('insert-component', { targetNodeID: id() })"
-      /> -->
       <button
         type="button"
         data-action="insert-after"
         title="Insert after"
-        class="pointer-events-auto absolute top-full left-1/2 z-10 flex size-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-teal-500 text-white shadow-md ring-2 ring-white transition hover:scale-110 hover:bg-teal-400"
+        class="tr-pointer-events-auto tr-absolute tr-top-full tr-left-1/2 tr-z-10 tr-flex tr-size-6 tr--translate-x-1/2 tr--translate-y-1/2 tr-items-center tr-justify-center tr-rounded-full tr-bg-teal-500 tr-text-white tr-shadow-md tr-ring-2 tr-ring-white tr-transition tr-hover:scale-110 tr-hover:bg-teal-400"
         @click="emit('insert-component', { targetID: element.id })"
       >
-        <Plus class="size-4" :stroke-width="2.5" />
+        <Plus class="tr-size-4" :stroke-width="2.5" />
       </button>
     </BoundingBox>
   </UseBoundingBox>

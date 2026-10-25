@@ -4,7 +4,7 @@
       <span
         data-test="editing-frame"
         :data-slot-name="slotName"
-        class="absolute top-[-4px] left-[-4px] -translate-y-full rounded-t-md bg-amber-400 px-1.5 py-0.5 font-mono text-[10px] leading-none font-medium text-[#0C1222]"
+        class="tr-absolute tr-top-[-4px] tr-left-[-4px] tr--translate-y-full tr-rounded-t-md tr-bg-amber-400 tr-px-1.5 tr-py-0.5 tr-font-mono tr-text-[10px] tr-leading-none tr-font-medium tr-text-[#0C1222]"
       >
         ✎ {{ slotName ? `#${slotName}` : 'text' }}
       </span>
