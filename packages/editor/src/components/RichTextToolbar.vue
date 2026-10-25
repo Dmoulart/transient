@@ -1,10 +1,6 @@
 <template>
   <!-- appended to this editor's .tr-root, not <body>: the --tr-* tokens and the theme live there -->
-  <BubbleMenu
-    :editor="editor"
-    :append-to="root"
-    :options="{ strategy: 'fixed', placement: 'top' }"
-  >
+  <BubbleMenu :editor="editor" :append-to="root" :options="{ strategy: 'fixed', placement: 'top' }">
     <ToolbarRoot class="tr-floating tr-flex tr-gap-1 tr-p-1" aria-label="Formatting">
       <ToolbarButton
         v-for="{ tag, label, icon } in styles"
@@ -29,7 +25,6 @@ const props = defineProps<{ editor: Editor }>()
 
 const root = () => props.editor.view.dom.closest<HTMLElement>('.tr-root') ?? document.body
 
-// full class names: UnoCSS only generates what it can read in the source, not `tr-${icon}`
 const styles = [
   { tag: 'strong', label: 'Bold', icon: 'tr-i-lucide-bold' },
   { tag: 'em', label: 'Italic', icon: 'tr-i-lucide-italic' },

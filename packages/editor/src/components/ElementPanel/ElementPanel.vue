@@ -49,7 +49,7 @@ onKeyStroke('Escape', () => emit('close'))
             </li>
           </ol>
         </nav>
-        <strong class="tr-text-title">{{ schema.tag }}</strong>
+        <strong class="tr-title">{{ schema.tag }}</strong>
       </div>
       <button type="button" class="tr-icon-btn" aria-label="Fermer" @click="$emit('close')">
         <span class="tr-i-lucide-x" aria-hidden="true" />

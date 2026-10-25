@@ -130,8 +130,9 @@ export default defineConfig({
         'tr-block tr-w-[16px] tr-h-[16px] tr-rounded-full tr-bg-surface tr-shadow-raised tr-translate-x-[2px] tr-transition-transform data-[state=checked]:tr-translate-x-[18px]',
       'tr-prop-row': 'tr-flex tr-flex-col tr-gap-[7px]',
       'tr-prop-head': 'tr-flex tr-justify-between tr-items-baseline',
-      'tr-prop-name': 'tr-font-medium tr-text-body',
+      'tr-prop-name': 'tr-font-sans tr-font-medium tr-text-body tr-text-ink',
       'tr-prop-type': 'tr-font-mono tr-text-meta tr-text-ink-muted',
+      'tr-title': 'tr-text-title tr-font-sans tr-text-ink tr-tracking-tight ',
 
       'tr-overlay':
         'tr-absolute tr-pointer-events-none tr-z-[var(--tr-z-overlay)] tr-inset-[calc(var(--tr-overlay-offset)*-1)]',
