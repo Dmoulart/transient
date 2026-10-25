@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { assert, assertDefined } from "@transient/core"
+import { assert } from "@transient/core"
 import type { TransientComponentDictionnary, TransientElement, TransientTemplate } from "@transient/ir"
-import { h, onErrorCaptured, Text, type VNode } from "vue";
+import { h, onErrorCaptured, resolveComponent as resolveVueComponent, Text, type VNode } from "vue";
 import type { EditorEvents } from "@/editor/events.ts";
+import type { ResolveComponent } from "@/lib/components.ts";
 import type { Editing } from "@/lib/composables/use-editor.ts";
 import { type Index, useIndex } from "@/lib/composables/use-index";
 import { parseElementAttributes } from "@/lib/transient/attributes.ts";
@@ -11,7 +12,7 @@ import EditingContainer from "./EditingContainer.vue";
 const props = defineProps<{
   template: TransientTemplate;
   dictionnary: TransientComponentDictionnary;
-  components: Record<string, unknown>;
+  resolveComponent?: ResolveComponent
   editing?: Editing | null;
 }>();
 
@@ -55,16 +56,18 @@ function nameSlot(slotName: string, renderSlot: () => VNode[] | VNode) {
 function renderComponent(element: TransientElement): VNode[] {
   assert(element.isComponent);
 
-  const component = props.components[element.tag];
-
+  
   const schema = props.dictionnary[element.tag];
+
+  const component =
+    props.resolveComponent?.(element.tag, schema) ?? resolveVueComponent(element.tag);
+  assert(typeof component !== "string", `Unknown component <${element.tag}>`);
 
   // component instances with empty slots must still be editable
   const schemaSlots = schema.slots
     ? Object.fromEntries(Object.keys(schema.slots).map((slotName) => [slotName, []]))
     : {};
 
-  assertDefined(component);
   const slots = Object.fromEntries(
     Object.entries({ ...schemaSlots, ...(element.slots ?? {}) }).map(([slotName, children]) => {
       if (props.editing?.id === element.id && props.editing?.slotName === slotName) {

@@ -1,10 +1,10 @@
 <template>
-  <main ref="canvas" v-if="components" data-test="canvas">
+  <main ref="canvas" data-test="canvas">
     <ComponentBuilder
       v-model="index"
       :dictionnary="dictionnary"
       :template="component.template"
-      :components="components"
+      :resolve-component="resolveComponent"
       :editing="editor.editing.value"
       @edit="editor.edit"
       @exit-editing="editor.stopEditing"
@@ -113,10 +113,10 @@
 
 <script setup lang="ts">
 import { findElementById, getAncestorsChain, type TransientComponentDictionnary, type TransientComponentSchema } from '@transient/ir'
-import { computedAsync, useEventListener } from '@vueuse/core'
+import {  useEventListener } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
+import type { ResolveComponent } from '@/lib/components.ts'
 import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
-import { loadAllComponents } from '@/lib/composables/use-dictionnary.ts'
 import { useEditor } from '@/lib/composables/use-editor.ts'
 import { useIndex } from '@/lib/composables/use-index.ts'
 import { useSlashMenu } from '@/lib/composables/use-slash-menu.ts'
@@ -132,6 +132,7 @@ import SlotHighlight from './SlotHighlight.vue'
 
 const { dictionnary, debug = false } = defineProps<{
   dictionnary: TransientComponentDictionnary
+  resolveComponent?: ResolveComponent
   debug?: boolean
 }>()
 
@@ -139,8 +140,6 @@ const component = defineModel<TransientComponentSchema>({required:true})
 
 const canvas = useTemplateRef('canvas')
 const index = useIndex()
-
-const components = computedAsync(async () => await loadAllComponents())
 
 const componentPanel = useComponentPanel()
 const slashMenu = useSlashMenu()
