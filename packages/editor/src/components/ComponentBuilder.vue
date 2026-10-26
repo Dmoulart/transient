@@ -56,7 +56,7 @@ function nameSlot(slotName: string, renderSlot: () => VNode[] | VNode) {
 function renderComponent(element: TransientElement): VNode[] {
   assert(element.isComponent);
 
-  
+
   const schema = props.dictionnary[element.tag];
 
   const component =
@@ -115,7 +115,9 @@ function renderComponent(element: TransientElement): VNode[] {
   const attributes = parseElementAttributes(element);
 
   const componentVnode = h(component, attributes, slots);
+
   index.value.elements.set(element.id, componentVnode);
+
   // freeze
   // componentVnode.shapeFlag = 1 << 3
   return [componentVnode];

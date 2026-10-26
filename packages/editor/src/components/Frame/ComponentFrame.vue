@@ -1,7 +1,10 @@
 <template>
   <UseBoundingBox :targets="root" v-slot="{ bbox }">
-    <BoundingBox :bbox="bbox" class="tr-frame-selected">
-      <div class="tr-tag-bar">
+    <BoundingBox
+      :bbox="bbox"
+      :class="hover ? 'tr-frame-hover tr-animate-fade-in' : 'tr-frame-selected'"
+    >
+      <div v-if="!hover" class="tr-tag-bar">
         <span data-test="selection" :data-tag="element.tag" class="tr-tag">
           {{ label }}
         </span>
@@ -23,6 +26,7 @@
       </div>
 
       <button
+        v-if="!hover"
         type="button"
         data-action="insert-after"
         title="Insert after"
@@ -43,7 +47,7 @@ import { getFlow } from '@/lib/flow.ts'
 import BoundingBox from './BoundingBox.vue'
 import UseBoundingBox from './UseBoundingBox.vue'
 
-const props = defineProps<{ root: Node[]; element: TransientElement }>()
+const props = defineProps<{ root: Node[]; element: TransientElement; hover?: boolean }>()
 const emit = defineEmits<EditorEvents & { 'insert-component': [data: { targetID: string }] }>()
 
 // component name > slot name > tag

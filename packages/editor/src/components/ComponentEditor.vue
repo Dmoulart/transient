@@ -12,7 +12,7 @@
       />
     </main>
 
-    <ComponentSelection
+    <ComponentFrame
       v-if="editor.activeComponent.element.value"
       :root="index.rootNodes(editor.activeComponent.element.value.id)"
       :element="editor.activeComponent.element.value!"
@@ -24,6 +24,26 @@
           })
         }
       "
+    />
+    <ComponentFrame
+      v-if="
+        hoveredElement &&
+        !pointed?.slot &&
+        hoveredElement.id !== editor.activeComponent.id.value &&
+        !editor.editing.value
+      "
+      :key="hoveredElement.id"
+      :root="index.rootNodes(hoveredElement.id)"
+      :element="hoveredElement"
+      hover
+    />
+    <!-- clicking a not-yet-selected component's slot edits it right away: preview that -->
+    <EditingFrame
+      v-if="hoveredSlot"
+      :key="`${pointed!.id}-${pointed!.slot!.name}-${pointed!.slot!.occurrence}`"
+      :targets="hoveredSlot.container"
+      :slot-name="pointed!.slot!.name"
+      hover
     />
 
     <template v-if="editor.editing.value && !editor.editing.value.slotName">
@@ -43,23 +63,15 @@
     </template>
     <template v-else-if="editor.activeComponent.element.value">
       <SlotHighlight
-        v-for="slot in index.slots(editor.activeComponent.element.value.id)"
-        :key="slot.name"
+        v-for="slot in activeSlots"
+        :key="`${slot.name}-${slot.occurrence}`"
         :targets="slot.container"
         :empty="slot.fallback || !slot.nodes.length"
         :slot-name="slot.name"
         :owner-id="editor.activeComponent.id.value!"
-        @insert-component="
-          ({ targetID: targetNodeID }) => {
-            componentPanel.open((schema) => {
-              editor.edit({
-                type: 'add-component',
-                targetId: targetNodeID,
-                position: 'append',
-                schema,
-              })
-            })
-          }
+        :hover="
+          !editor.editing.value &&
+          isSlotHovered(editor.activeComponent.id.value!, slot.name, slot.occurrence)
         "
       />
     </template>
@@ -127,7 +139,7 @@ import {
   type TransientProp,
 } from '@transient/ir'
 import { useEventListener } from '@vueuse/core'
-import { useTemplateRef } from 'vue'
+import { computed, ref, useTemplateRef } from 'vue'
 import type { ResolveComponent } from '@/lib/components.ts'
 import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
 import { useEditor } from '@/lib/composables/use-editor.ts'
@@ -136,7 +148,7 @@ import { useSlashMenu } from '@/lib/composables/use-slash-menu.ts'
 import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
 import ComponentBuilder from './ComponentBuilder.vue'
 import ElementPanel from './ElementPanel/ElementPanel.vue'
-import ComponentSelection from './Frame/ComponentFrame.vue'
+import ComponentFrame from './Frame/ComponentFrame.vue'
 import EditingFrame from './Frame/EditingFrame.vue'
 import SlotHighlight from './SlotHighlight.vue'
 
@@ -155,6 +167,39 @@ const componentPanel = useComponentPanel()
 const slashMenu = useSlashMenu()
 
 const editor = useEditor(component, dictionnary)
+
+const pointed = ref<PointedElement | null>(null)
+// computed: only notifies when the id changes, not on every pointermove
+const hoveredId = computed(() => pointed.value?.id ?? null)
+const hoveredElement = computed(() =>
+  hoveredId.value ? findElementById(component.value.template.elements, hoveredId.value) : null,
+)
+const activeSlots = computed(() => {
+  const id = editor.activeComponent.id.value
+  const slots = id ? index.slots(id) : []
+  return slots.map((slot) => ({
+    ...slot,
+    occurrence: slots.filter((s) => s.name === slot.name).indexOf(slot),
+  }))
+})
+
+const hoveredSlot = computed(() => {
+  const hit = pointed.value
+  // the selected component's slots are already outlined by SlotHighlight
+  if (!hit?.slot || editor.editing.value || hit.id === editor.activeComponent.id.value) return null
+  return index.slot(hit.id, hit.slot.name, hit.slot.occurrence) ?? null
+})
+
+function isSlotHovered(ownerId: string, name: string, occurrence: number) {
+  const slot = pointed.value?.slot
+  return hoveredId.value === ownerId && slot?.name === name && slot.occurrence === occurrence
+}
+useEventListener(canvas, 'pointermove', (ev) => {
+  pointed.value = pointedElement(ev)
+})
+useEventListener(canvas, 'pointerleave', () => {
+  pointed.value = null
+})
 
 // useEventListener('keypress', (ev) => {
 //   if(editor.editing.value){
@@ -192,34 +237,15 @@ function textNodeAt(x: number, y: number): Text | null {
 }
 
 useEventListener(canvas, ['click'], (ev: MouseEvent) => {
-  // a text node is never an event target: a slot rendered at a multi-root component's
-  // root would resolve to the (foreign) parent element
-  const text = textNodeAt(ev.clientX, ev.clientY)
-  const target =
-    text && ev.target instanceof Node && ev.target.contains(text)
-      ? text
-      : ev.target instanceof Node
-        ? ev.target
-        : null
+  const hit = pointedElement(ev)
 
-  const clicked = target ? index.closestAncestorId(target) : null
-
-  if (!clicked) {
+  if (!hit) {
     return editor.select(null)
   }
 
-  // text and its formatting (<strong>, <a>…) belong to the closest block holding them.
-  // Walk the template, not the DOM: a slot at a multi-root component's root has a foreign parent
-  const self = findElementById(component.value.template.elements, clicked)
-  const chain = getAncestorsChain(clicked, component.value.template.elements) ?? []
-  const id =
-    [...chain.map(({ element }) => element), self].findLast(
-      (el) => el && !(el.tag === '#text' || (!el.isComponent && INLINE_TAGS.has(el.tag))),
-    )?.id ?? clicked
+  const { id, slot, x, y } = hit
 
-  const slot = index.vnode(id)?.component ? index.slotAt(id, target!) : null
-
-  editor.pointOn(id, { x: ev.clientX, y: ev.clientY }, slot?.name, slot?.occurrence)
+  editor.pointOn(id, { x, y }, slot?.name, slot?.occurrence)
 })
 
 function updateProp({
@@ -242,6 +268,40 @@ function updateProp({
 
 function closeComponent() {
   editor.select(null)
+}
+
+type PointedElement = {
+  id: string
+  x: number
+  y: number
+  slot: { name: string; occurrence: number } | null
+}
+
+function pointedElement(ev: MouseEvent): null | PointedElement {
+  const text = textNodeAt(ev.clientX, ev.clientY)
+  const target =
+    text && ev.target instanceof Node && ev.target.contains(text)
+      ? text
+      : ev.target instanceof Node
+        ? ev.target
+        : null
+
+  const clicked = target ? index.closestAncestorId(target) : null
+
+  if (!clicked) {
+    return null
+  }
+
+  const self = findElementById(component.value.template.elements, clicked)
+  const chain = getAncestorsChain(clicked, component.value.template.elements) ?? []
+  const id =
+    [...chain.map(({ element }) => element), self].findLast(
+      (el) => el && !(el.tag === '#text' || (!el.isComponent && INLINE_TAGS.has(el.tag))),
+    )?.id ?? clicked
+
+  const slot = index.vnode(id)?.component ? index.slotAt(id, target!) : null
+
+  return { id, slot, x: ev.clientX, y: ev.clientY }
 }
 </script>
 

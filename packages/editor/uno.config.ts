@@ -51,6 +51,12 @@ export default defineConfig({
       danger: v('danger'),
       focus: v('focus-ring'),
     },
+    // hover frames fade in at their new place instead of sweeping from the previous one
+    animation: {
+      keyframes: { 'fade-in': '{from{opacity:0}to{opacity:1}}' },
+      durations: { 'fade-in': '120ms' },
+      timingFns: { 'fade-in': 'ease-out' },
+    },
     spacing: {
       1: v('space-1'),
       2: v('space-2'),
