@@ -22,8 +22,8 @@
 </template>
 <script setup lang="ts">
 import { Plus } from 'lucide-vue-next'
-import BoundingBox from './BoundingBox.vue'
-import UseBoundingBox from './UseBoundingBox.vue'
+import BoundingBox from './Frame/BoundingBox.vue'
+import UseBoundingBox from './Frame/UseBoundingBox.vue'
 
 defineProps<{ slotName: string; ownerId: string; targets: Node[]; empty: boolean }>()
 const emit = defineEmits<{ 'insert-component': [data: { targetID: string }] }>()

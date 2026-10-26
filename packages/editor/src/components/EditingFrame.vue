@@ -12,8 +12,8 @@
   </UseBoundingBox>
 </template>
 <script setup lang="ts">
-import BoundingBox from './BoundingBox.vue'
-import UseBoundingBox from './UseBoundingBox.vue'
+import BoundingBox from './Frame/BoundingBox.vue'
+import UseBoundingBox from './Frame/UseBoundingBox.vue'
 
 defineProps<{ targets: Node[]; slotName?: string }>()
 </script>

@@ -134,8 +134,7 @@ export default defineConfig({
       'tr-prop-type': 'tr-font-mono tr-text-meta tr-text-ink-muted',
       'tr-title': 'tr-text-title tr-font-sans tr-text-ink tr-tracking-tight ',
 
-      'tr-overlay':
-        'tr-absolute tr-pointer-events-none tr-z-[var(--tr-z-overlay)] tr-inset-[calc(var(--tr-overlay-offset)*-1)]',
+      'tr-overlay': 'tr-fixed tr-pointer-events-none tr-z-[var(--tr-z-overlay)]',
       'tr-frame-hover': 'tr-overlay tr-border tr-border-dashed tr-border-accent tr-rounded-sm',
       'tr-frame-selected':
         'tr-overlay tr-border-[length:var(--tr-stroke-selected)] tr-border-solid tr-border-accent tr-rounded-sm',
@@ -145,6 +144,12 @@ export default defineConfig({
 
       'tr-tag':
         'tr-inline-flex tr-items-center tr-gap-[5px] tr-h-[26px] tr-pl-3 tr-pr-4 tr-rounded-sm tr-bg-accent tr-text-accent-on tr-text-small tr-font-medium tr-whitespace-nowrap tr-cursor-grab',
+      'tr-tag-bar':
+        'tr-absolute tr-left-[calc(var(--tr-overlay-offset)*-1)] tr-bottom-[calc(100%+var(--tr-overlay-offset)+var(--tr-label-gap))] tr-flex tr-items-center tr-gap-2 tr-pointer-events-auto tr-z-[var(--tr-z-overlay)]',
+      'tr-tag-action':
+        'tr-btn-reset tr-relative tr-w-[26px] tr-h-[26px] tr-flex tr-items-center tr-justify-center tr-rounded-sm tr-bg-surface tr-border tr-border-solid tr-border-line tr-shadow-raised tr-text-ink-secondary hover:tr-text-ink after:(tr-content-empty tr-absolute tr-inset-[-9px])',
+      'tr-tag-action-danger':
+        'tr-tag-action hover:(tr-text-danger tr-border-danger) focus-visible:tr-text-danger',
       'tr-tag-ghost':
         'tr-inline-flex tr-items-center tr-h-[22px] tr-px-3 tr-rounded-sm tr-bg-surface tr-border tr-border-solid tr-border-line tr-text-accent tr-font-mono tr-text-meta',
       'tr-slot-label':

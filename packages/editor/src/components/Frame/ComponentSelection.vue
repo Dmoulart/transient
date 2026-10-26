@@ -1,16 +1,15 @@
 <template>
   <UseBoundingBox :targets="root" v-slot="{ bbox }">
-    <BoundingBox :bbox="bbox">
-      <div class="tr-z-10 tr-absolute tr-bottom-full tr-left-0 tr-gap-2 tr-flex">
-        <span
-          data-test="selection"
-          :data-tag="element.tag"
-          class="tr-rounded-t-sm tr-bg-teal-500 tr-px-1.5 tr-py-0.5 tr-text-[10px] tr-leading-none tr-font-semibold tr-tracking-wide tr-text-white tr-uppercase"
-        >
+    <BoundingBox :bbox="bbox" class="tr-frame-selected">
+      <div class="tr-tag-bar">
+        <span data-test="selection" :data-tag="element.tag" class="tr-tag">
           {{ label }}
         </span>
-        <EditButton
-          data-action="insert-after"
+
+        <button
+          type="button"
+          class="tr-tag-action"
+          data-action="delete-element"
           title="Delete"
           @click="
             emit('edit', {
@@ -20,14 +19,14 @@
           "
         >
           <Trash :size="14" />
-        </EditButton>
+        </button>
       </div>
 
       <button
         type="button"
         data-action="insert-after"
         title="Insert after"
-        class="tr-pointer-events-auto tr-absolute tr-top-full tr-left-1/2 tr-z-10 tr-flex tr-size-6 tr--translate-x-1/2 tr--translate-y-1/2 tr-items-center tr-justify-center tr-rounded-full tr-bg-teal-500 tr-text-white tr-shadow-md tr-ring-2 tr-ring-white tr-transition tr-hover:scale-110 tr-hover:bg-teal-400"
+        :class="`tr-insert tr-insert-${getFlow(root)}`"
         @click="emit('insert-component', { targetID: element.id })"
       >
         <Plus class="tr-size-4" :stroke-width="2.5" />
@@ -40,8 +39,8 @@ import type { TransientElement } from '@transient/ir'
 import { Plus, Trash } from 'lucide-vue-next'
 import { computed } from 'vue'
 import type { EditorEvents } from '@/editor/events'
+import { getFlow } from '@/lib/flow.ts'
 import BoundingBox from './BoundingBox.vue'
-import EditButton from './EditButton.vue'
 import UseBoundingBox from './UseBoundingBox.vue'
 
 const props = defineProps<{ root: Node[]; element: TransientElement }>()

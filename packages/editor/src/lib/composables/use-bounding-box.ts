@@ -60,6 +60,8 @@ export function useElementsBounding(
   const x = shallowRef(0)
   const y = shallowRef(0)
 
+  const borderRadius = shallowRef<string | null>(null)
+
   function recalculate() {
     if (!nodes.value || nodes.value.length === 0) {
       if (reset) {
@@ -105,6 +107,9 @@ export function useElementsBounding(
       return
     }
 
+    const [onlyNode] = nodes.value.length === 1 ? nodes.value : []
+    const node = onlyNode && unrefNode(onlyNode)
+    borderRadius.value = node instanceof Element ? getComputedStyle(node).borderRadius : null
     height.value = union.height
     bottom.value = union.bottom
     left.value = union.left
@@ -151,6 +156,7 @@ export function useElementsBounding(
     x,
     y,
     update,
+    borderRadius,
   }
 }
 

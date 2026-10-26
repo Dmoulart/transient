@@ -11,7 +11,7 @@
         @exit-editing="editor.stopEditing"
       />
     </main>
-    <!-- 
+
     <ComponentSelection
       v-if="editor.activeComponent.element.value"
       :root="index.rootNodes(editor.activeComponent.element.value.id)"
@@ -24,7 +24,7 @@
           })
         }
       "
-    /> -->
+    />
 
     <template v-if="editor.editing.value && !editor.editing.value.slotName">
       <EditingFrame :targets="index.rootNodes(editor.editing.value.id)" />
@@ -74,6 +74,7 @@
       :close="closeComponent"
     >
       <ElementPanel
+        v-if="Object.keys(editor.activeComponent.schema.value.props).length > 0"
         class="tr-fixed tr-top-[10%] tr-right-4"
         :model-value="editor.activeComponent.element.value"
         :schema="editor.activeComponent.schema.value"
@@ -137,6 +138,7 @@ import ComponentBuilder from './ComponentBuilder.vue'
 import DebugPanel from './DebugPanel.vue'
 import EditingFrame from './EditingFrame.vue'
 import ElementPanel from './ElementPanel/ElementPanel.vue'
+import ComponentSelection from './Frame/ComponentSelection.vue'
 import SlotHighlight from './SlotHighlight.vue'
 
 const { dictionnary, debug = false } = defineProps<{
