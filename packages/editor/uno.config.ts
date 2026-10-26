@@ -140,7 +140,8 @@ export default defineConfig({
         'tr-overlay tr-border-[length:var(--tr-stroke-selected)] tr-border-solid tr-border-accent tr-rounded-sm',
       'tr-frame-slot': 'tr-overlay tr-border tr-border-dashed tr-border-slot tr-rounded-sm',
       'tr-frame-slot-editing':
-        'tr-overlay tr-border tr-border-solid tr-border-slot tr-bg-slot-soft tr-rounded-sm',
+        // fieldset: la <legend> interrompt nativement la bordure
+        'tr-overlay tr-border tr-border-solid tr-border-slot tr-bg-slot-soft tr-rounded-sm tr-m-0 tr-p-0 tr-min-w-0 tr-box-border',
 
       'tr-tag':
         'tr-inline-flex tr-items-center tr-gap-[5px] tr-h-[26px] tr-pl-3 tr-pr-4 tr-rounded-sm tr-bg-accent tr-text-accent-on tr-text-small tr-font-medium tr-whitespace-nowrap tr-cursor-grab',
@@ -153,7 +154,10 @@ export default defineConfig({
       'tr-tag-ghost':
         'tr-inline-flex tr-items-center tr-h-[22px] tr-px-3 tr-rounded-sm tr-bg-surface tr-border tr-border-solid tr-border-line tr-text-accent tr-font-mono tr-text-meta',
       'tr-slot-label':
-        'tr-absolute tr-top-[-8px] tr-left-2 tr-px-2 tr-font-mono tr-text-micro tr-font-medium tr-text-slot',
+        // h-0: la légende ne pousse plus la bordure haute vers le bas, la box garde sa taille
+        'tr-ml-2 tr-h-0 tr-font-mono tr-text-micro tr-font-medium tr-text-slot',
+      // le texte se centre sur la bordure grâce à son propre -50%
+      'tr-slot-label-text': 'tr-block tr-px-2 tr-translate-y-[-50%]',
 
       'tr-insert':
         'tr-btn-reset tr-absolute tr-w-insert tr-h-insert tr-rounded-full tr-bg-accent tr-text-accent-on tr-flex tr-items-center tr-justify-center tr-border-2 tr-border-solid tr-border-[var(--tr-surface)] tr-pointer-events-auto',

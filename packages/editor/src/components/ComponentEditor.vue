@@ -135,10 +135,9 @@ import { useIndex } from '@/lib/composables/use-index.ts'
 import { useSlashMenu } from '@/lib/composables/use-slash-menu.ts'
 import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
 import ComponentBuilder from './ComponentBuilder.vue'
-import DebugPanel from './DebugPanel.vue'
-import EditingFrame from './EditingFrame.vue'
 import ElementPanel from './ElementPanel/ElementPanel.vue'
-import ComponentSelection from './Frame/ComponentSelection.vue'
+import ComponentSelection from './Frame/ComponentFrame.vue'
+import EditingFrame from './Frame/EditingFrame.vue'
 import SlotHighlight from './SlotHighlight.vue'
 
 const { dictionnary, debug = false } = defineProps<{
