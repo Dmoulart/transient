@@ -129,7 +129,7 @@ export default defineConfig({
       'tr-segmented':
         'tr-grid tr-grid-flow-col tr-auto-cols-fr tr-gap-1 tr-p-1 tr-bg-surface-sunken tr-rounded-md',
       'tr-segment':
-        'tr-btn-reset tr-h-segment tr-rounded-sm tr-text-ink-secondary aria-pressed:(tr-bg-surface tr-shadow-raised tr-text-ink tr-font-medium)',
+        'tr-btn-reset tr-h-segment tr-rounded-sm tr-text-body tr-text-ink-secondary aria-pressed:(tr-bg-surface tr-shadow-raised tr-text-ink tr-font-medium)',
       'tr-switch':
         'tr-btn-reset tr-relative tr-w-[36px] tr-h-[20px] tr-rounded-full tr-bg-track-off aria-checked:tr-bg-accent',
       'tr-switch-thumb':
@@ -164,6 +164,15 @@ export default defineConfig({
         'tr-ml-2 tr-h-0 tr-font-mono tr-text-micro tr-font-medium tr-text-slot',
       // le texte se centre sur la bordure grâce à son propre -50%
       'tr-slot-label-text': 'tr-block tr-px-2 tr-translate-y-[-50%]',
+
+      'tr-card-grid': 'tr-grid tr-grid-cols-2 tr-gap-3',
+      'tr-card':
+        'tr-btn-reset tr-flex tr-flex-col tr-gap-3 tr-pt-[6px] tr-px-[6px] tr-pb-4 tr-text-left tr-bg-surface tr-border tr-border-solid tr-border-line tr-rounded-[10px] tr-text-ink tr-transition-shadow hover:(tr-border-accent tr-ring-3 tr-ring-accent-soft) focus-visible:(tr-outline-2 tr-outline-solid tr-outline-accent tr-outline-offset-2) aria-disabled:(tr-opacity-45 tr-cursor-not-allowed hover:tr-border-line hover:tr-ring-0)',
+      'tr-card-thumb':
+        'tr-h-[84px] tr-w-full tr-rounded-sm tr-bg-surface-sunken tr-object-cover tr-overflow-hidden tr-block',
+      'tr-card-thumb-fallback':
+        'tr-card-thumb tr-flex tr-items-center tr-justify-center tr-text-ink-disabled tr-text-[22px]',
+      'tr-card-name': 'tr-px-2 tr-text-body tr-font-medium tr-truncate',
 
       'tr-insert':
         'tr-btn-reset tr-absolute tr-w-insert tr-h-insert tr-rounded-full tr-bg-accent tr-text-accent-on tr-flex tr-items-center tr-justify-center tr-border-2 tr-border-solid tr-border-[var(--tr-surface)] tr-pointer-events-auto',

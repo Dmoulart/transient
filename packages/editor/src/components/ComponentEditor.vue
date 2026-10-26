@@ -96,8 +96,10 @@
       />
     </slot>
 
-    <!-- <ComponentPanel
-      :open="componentPanel.isOpen.value"
+    <ComponentPanel
+      id="component-panel"
+      v-if="componentPanel.isOpen.value"
+      data-test="component-panel"
       @select="
         (selected) => {
           componentPanel.select(selected.schema)
@@ -114,7 +116,7 @@
       "
       @close="componentPanel.close"
       :dictionnary="dictionnary"
-    /> -->
+    />
     <!-- <DebugPanel v-if="debug" :editor="editor" :template="component.template" :index="index" /> -->
     <!-- <SlashMenu
       v-if="slashMenu.open.value && slashMenu.rect.value"
@@ -147,6 +149,7 @@ import { useIndex } from '@/lib/composables/use-index.ts'
 import { useSlashMenu } from '@/lib/composables/use-slash-menu.ts'
 import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
 import ComponentBuilder from './ComponentBuilder.vue'
+import ComponentPanel from './ComponentPanel/ComponentPanel.vue'
 import ElementPanel from './ElementPanel/ElementPanel.vue'
 import ComponentFrame from './Frame/ComponentFrame.vue'
 import EditingFrame from './Frame/EditingFrame.vue'
@@ -235,6 +238,16 @@ function textNodeAt(x: number, y: number): Text | null {
   )
   return onText ? node : null
 }
+
+useEventListener('click', (ev) => {
+  if (componentPanel.isOpen.value && ev.target) {
+    if (ev.target instanceof HTMLElement) {
+      if (!document.querySelector('#component-panel')?.contains(ev.target)) {
+        componentPanel.close()
+      }
+    }
+  }
+})
 
 useEventListener(canvas, ['click'], (ev: MouseEvent) => {
   const hit = pointedElement(ev)
