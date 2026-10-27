@@ -140,7 +140,7 @@ import {
   type TransientComponentSchema,
   type TransientProp,
 } from '@transient/ir'
-import { useEventListener } from '@vueuse/core'
+import { useEventListener, watchOnce, whenever } from '@vueuse/core'
 import { computed, ref, useTemplateRef } from 'vue'
 import type { ResolveComponent } from '@/lib/components.ts'
 import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
@@ -239,14 +239,8 @@ function textNodeAt(x: number, y: number): Text | null {
   return onText ? node : null
 }
 
-useEventListener('click', (ev) => {
-  if (componentPanel.isOpen.value && ev.target) {
-    if (ev.target instanceof HTMLElement) {
-      if (!document.querySelector('#component-panel')?.contains(ev.target)) {
-        componentPanel.close()
-      }
-    }
-  }
+whenever(componentPanel.isOpen, () => {
+  watchOnce(editor.selection, componentPanel.close)
 })
 
 useEventListener(canvas, ['click'], (ev: MouseEvent) => {
