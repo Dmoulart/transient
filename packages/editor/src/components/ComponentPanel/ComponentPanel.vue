@@ -3,9 +3,10 @@
     <template #header>
       <strong class="tr-title">Ajouter un composant</strong>
     </template>
+    <SearchInput ref="searchInput" v-model="search" autofocus/>
     <div class="tr-card-grid">
       <ComponentItem
-        v-for="schema in dictionnary"
+        v-for="schema in filteredDictionnary"
         :key="schema.path"
         :schema="schema"
         @select="(data) => emit('select', data)"
@@ -16,10 +17,12 @@
 </template>
 <script setup lang="ts">
 import type { TransientComponentDictionnary, TransientComponentSchema } from '@transient/ir'
+import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import Panel from '../Panel.vue'
+import SearchInput from '../SearchInput.vue'
 import ComponentItem from './ComponentItem.vue'
 
-defineProps<{ dictionnary: TransientComponentDictionnary }>()
+const props = defineProps<{ dictionnary: TransientComponentDictionnary }>()
 const emit =
   defineEmits<
     (
@@ -29,4 +32,24 @@ const emit =
       },
     ) => void
   >()
+
+const search = ref('')
+
+const filteredDictionnary = computed(() => {
+  const terms = normalizeSearchTerms(search.value)
+
+  if (terms === '') {
+    return props.dictionnary
+  }
+
+  return Object.fromEntries(
+    Object.entries(props.dictionnary).filter(([name]) => {
+      return normalizeSearchTerms(name).includes(terms)
+    }),
+  )
+})
+
+function normalizeSearchTerms(text:string){
+  return text.trim().toLowerCase()
+}
 </script>

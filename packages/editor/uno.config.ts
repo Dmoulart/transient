@@ -124,6 +124,15 @@ export default defineConfig({
       'tr-btn-secondary':
         'tr-btn-reset tr-h-[28px] tr-px-4 tr-rounded-md tr-bg-surface tr-border tr-border-solid tr-border-line tr-text-small',
 
+      'tr-search': 'tr-relative tr-w-full',
+      'tr-search-icon':
+        'tr-absolute tr-left-[10px] tr-top-1/2 tr-translate-y-[-50%] tr-text-[15px] tr-text-ink-muted tr-pointer-events-none',
+      'tr-search-input':
+        'tr-field tr-px-[34px] tr-appearance-none placeholder:tr-text-ink-muted hover:tr-border-line-strong focus:hover:tr-border-accent [&::-webkit-search-cancel-button]:tr-hidden',
+      'tr-search-clear':
+        'tr-btn-reset tr-absolute tr-right-[5px] tr-top-1/2 tr-translate-y-[-50%] tr-w-[24px] tr-h-[24px] tr-flex tr-items-center tr-justify-center tr-rounded-sm tr-text-ink-muted hover:(tr-bg-surface-hover tr-text-ink)',
+      'tr-search-empty': 'tr-m-0 tr-text-small tr-text-ink-muted',
+
       'tr-field':
         'tr-h-control tr-w-full tr-px-4 tr-bg-surface tr-border tr-border-solid tr-border-line tr-rounded-md tr-text-ink tr-text-body tr-outline-none focus:(tr-border-accent tr-ring-3 tr-ring-accent-soft)',
       'tr-segmented':
