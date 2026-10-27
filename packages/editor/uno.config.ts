@@ -45,7 +45,15 @@ export default defineConfig({
         disabled: v('ink-disabled'),
       },
       track: { off: v('track-off') },
-      inverse: { DEFAULT: v('inverse'), on: v('on-inverse') },
+      inverse: {
+        DEFAULT: v('inverse'),
+        on: v('on-inverse'),
+        muted: v('inverse-muted'),
+        disabled: v('inverse-disabled'),
+        hover: v('inverse-hover'),
+        active: v('inverse-active'),
+        line: v('inverse-line'),
+      },
       warning: v('warning'),
       success: v('success'),
       danger: v('danger'),
@@ -187,6 +195,25 @@ export default defineConfig({
         'tr-btn-reset tr-absolute tr-w-insert tr-h-insert tr-rounded-full tr-bg-accent tr-text-accent-on tr-flex tr-items-center tr-justify-center tr-border-2 tr-border-solid tr-border-[var(--tr-surface)] tr-pointer-events-auto',
 
       'tr-dot': 'tr-w-[6px] tr-h-[6px] tr-rounded-full tr-shrink-0',
+
+      'tr-rt-bar':
+        'tr-inline-flex tr-items-center tr-gap-[2px] tr-p-2 tr-w-max tr-bg-inverse tr-text-inverse-on tr-rounded-[10px] tr-shadow-float tr-font-sans tr-text-body tr-z-[var(--tr-z-menu)]',
+      'tr-rt-btn':
+        'tr-btn-reset tr-w-[30px] tr-h-[30px] tr-flex tr-items-center tr-justify-center tr-shrink-0 tr-rounded-sm tr-text-inverse-muted tr-text-[16px] hover:(tr-bg-inverse-hover tr-text-inverse-on) aria-pressed:(tr-bg-inverse-active tr-text-inverse-on) data-[state=on]:(tr-bg-inverse-active tr-text-inverse-on) disabled:(tr-bg-transparent tr-text-inverse-disabled tr-cursor-default) focus-visible:(tr-outline-2 tr-outline-solid tr-outline-accent tr-outline-offset-1)',
+      'tr-rt-btn-text':
+        'tr-rt-btn tr-w-auto tr-gap-[6px] tr-pl-4 tr-pr-3 tr-text-inverse-on tr-text-body tr-whitespace-nowrap aria-expanded:tr-bg-inverse-active',
+      'tr-rt-sep': 'tr-w-px tr-h-[18px] tr-mx-[3px] tr-shrink-0 tr-bg-inverse-line',
+
+      // Menus de la barre (niveau de bloc, débordement « … »)
+      'tr-rt-menu':
+        'tr-flex tr-flex-col tr-min-w-[168px] tr-p-2 tr-bg-inverse tr-text-inverse-on tr-rounded-[10px] tr-shadow-float tr-text-body tr-z-[var(--tr-z-menu)]',
+      'tr-rt-menu-item':
+        'tr-h-[32px] tr-px-4 tr-flex tr-items-center tr-justify-between tr-gap-4 tr-rounded-sm tr-cursor-pointer tr-outline-none data-[highlighted]:tr-bg-inverse-active data-[state=checked]:tr-font-semibold',
+      'tr-rt-kbd': 'tr-font-mono tr-text-meta tr-text-inverse-muted',
+
+      // Infobulle d'un bouton (claire, au-dessus de la barre sombre)
+      'tr-rt-tooltip':
+        'tr-flex tr-items-center tr-gap-3 tr-px-3 tr-py-2 tr-bg-surface tr-border tr-border-solid tr-border-line tr-rounded-sm tr-shadow-float tr-text-small tr-text-ink tr-z-[var(--tr-z-menu)]',
     },
     [
       /^tr-insert-(bottom|right|left|top)$/,

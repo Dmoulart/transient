@@ -1,11 +1,16 @@
 <template>
-  <!-- appended to this editor's .tr-root, not <body>: the --tr-* tokens and the theme live there -->
-  <BubbleMenu :editor="editor" :append-to="root" :options="{ strategy: 'fixed', placement: 'top' }">
-    <ToolbarRoot class="tr-floating tr-flex tr-gap-1 tr-p-1" aria-label="Formatting">
+  <!-- z-index on the wrapper: tiptap positions it, the inner toolbar is not a positioned element so its own z-index is ignored -->
+  <BubbleMenu
+    class="tr-z-[var(--tr-z-panel)]"
+    :editor="editor"
+    :append-to="root"
+    :options="{ strategy: 'fixed', placement: 'top' }"
+  >
+    <ToolbarRoot class="tr-rt-bar" aria-label="Formatting">
       <ToolbarButton
         v-for="{ tag, label, icon } in styles"
         :key="tag"
-        class="tr-icon-btn aria-pressed:(tr-bg-accent-soft tr-text-accent)"
+        class="tr-rt-btn"
         :aria-label="label"
         :aria-pressed="editor.isActive('inlineElement', { tag })"
         @mousedown.prevent="toggleTag(tag)"

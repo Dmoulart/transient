@@ -84,6 +84,12 @@
   }
 
   .tr-root {
+    /* tints of the inverse surface, derived so they follow both themes */
+    --tr-inverse-muted: color-mix(in srgb, var(--tr-on-inverse) 70%, transparent);
+    --tr-inverse-disabled: color-mix(in srgb, var(--tr-on-inverse) 35%, transparent);
+    --tr-inverse-hover: color-mix(in srgb, var(--tr-on-inverse) 10%, transparent);
+    --tr-inverse-active: color-mix(in srgb, var(--tr-on-inverse) 18%, transparent);
+    --tr-inverse-line: color-mix(in srgb, var(--tr-on-inverse) 20%, transparent);
     --tr-space-1: 2px;
     --tr-space-2: 4px;
     --tr-space-3: 8px;
