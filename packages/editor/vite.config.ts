@@ -19,11 +19,6 @@ export default defineConfig({
     // samples and e2e fixtures only (assets/samples.css), the editor itself ships without it
     tailwindcss(),
   ],
-  server: {
-    watch: {
-      ignored: ['!src/samples/**/*.vue'],
-    },
-  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

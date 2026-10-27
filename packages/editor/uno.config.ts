@@ -113,7 +113,7 @@ export default defineConfig({
       'tr-toolbar': 'tr-floating tr-flex tr-items-center tr-gap-2 tr-p-3 tr-z-[var(--tr-z-panel)]',
       'tr-menu': 'tr-floating tr-flex tr-flex-col tr-p-2 tr-z-[var(--tr-z-menu)]',
       'tr-menu-item':
-        'tr-h-[30px] tr-px-4 tr-flex tr-items-center tr-justify-between tr-rounded-sm tr-cursor-pointer tr-outline-none tr-select-none data-[highlighted]:tr-bg-surface-hover aria-selected:(tr-bg-slot-soft tr-text-slot tr-font-medium) data-[disabled]:(tr-text-ink-disabled tr-cursor-default)',
+        'tr-h-[30px] tr-px-4 tr-flex tr-items-center tr-justify-between tr-rounded-sm tr-cursor-pointer tr-outline-none tr-text-body tr-select-none data-[highlighted]:tr-bg-surface-hover aria-selected:(tr-bg-slot-soft tr-text-slot tr-font-medium) data-[disabled]:(tr-text-ink-disabled tr-cursor-default)',
 
       'tr-btn-reset':
         'tr-border-0 tr-bg-transparent tr-p-0 tr-[font:inherit] tr-[color:inherit] tr-cursor-pointer focus-visible:(tr-outline-2 tr-outline-solid tr-outline-focus tr-outline-offset-1)',

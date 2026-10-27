@@ -11,11 +11,10 @@
       @keydown.enter="emit('select', props)"
     >
       <div v-if="component" ref="thumb" class="tr-card-thumb tr-relative" inert>
-        <!-- rendered at a fixed virtual width, then scaled down to fit the thumbnail -->
         <div
           ref="content"
           class="tr-absolute tr-top-1/2 tr-left-1/2 tr-origin-center tr-flex tr-justify-center"
-          :style="{ width: `${PREVIEW_WIDTH}px`, transform: `translate(-50%, -50%) scale(${scale})` }"
+          :style="{ width: 'max-content', transform: `translate(-50%, -50%) scale(${scale})` }"
         >
           <component :is="component" v-bind="defaultProps" />
         </div>
@@ -40,17 +39,15 @@ const props = defineProps<{
 
 const emit = defineEmits<(e: 'select', data: { schema: TransientComponentSchema }) => void>()
 
-const PREVIEW_WIDTH = 320
-
 const thumb = useTemplateRef('thumb')
 const content = useTemplateRef('content')
 const thumbSize = useElementSize(thumb)
 const contentSize = useElementSize(content)
-// never upscale; fit both width and height
+
 const scale = computed(() =>
   Math.min(
     1,
-    thumbSize.width.value / PREVIEW_WIDTH,
+    contentSize.width.value ? thumbSize.width.value / contentSize.width.value : 1,
     contentSize.height.value ? thumbSize.height.value / contentSize.height.value : 1,
   ),
 )

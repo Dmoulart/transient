@@ -25,7 +25,6 @@ export default function vueAnalyzerPlugin(options: VueAnalyzerOptions): Plugin {
       if (context.file.endsWith('.vue')) {
         generateSchemas(options)
       }
-      return []
     },
   }
 }
