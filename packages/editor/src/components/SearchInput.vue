@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { FieldControl, FieldRoot } from 'reka-ui'
-import { nextTick, onMounted, useTemplateRef } from 'vue';
+import { nextTick, onMounted, useTemplateRef } from 'vue'
 
-const props = defineProps<{ placeholder?: string, autofocus?:boolean }>()
+const props = defineProps<{ placeholder?: string; focusOnMount?: boolean }>()
 
 const model = defineModel<string>({ default: '' })
 
 const input = useTemplateRef('input')
 onMounted(async () => {
-  if(props.autofocus){
+  if (props.focusOnMount) {
     await nextTick()
     input.value?.$el.focus()
   }

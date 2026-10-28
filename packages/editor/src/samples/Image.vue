@@ -10,7 +10,7 @@
       opacityMap[opacity],
       aspectRatioMap[aspectRatio],
     ]"
-  />
+  >
 </template>
 
 <script lang="ts" setup>

@@ -18,7 +18,8 @@ import ReactiveIsland from './ReactiveIsland.vue'
       <h1 class="text-4xl font-semibold tracking-tight">Slots playground</h1>
       <p class="mb-6 text-white/75">
         Click any text to edit it. A <InlineSlot>highlighted</InlineSlot> slot and a live counter
-        <ReactiveIsland /> both sit inside this paragraph.
+        <ReactiveIsland />
+        both sit inside this paragraph.
       </p>
 
       <DefaultSlot>Plain text in the default slot.</DefaultSlot>
@@ -26,7 +27,8 @@ import ReactiveIsland from './ReactiveIsland.vue'
       <DefaultSlot>Text with <b>bold</b>, <i>italic</i> and a <a href="#">link</a>.</DefaultSlot>
 
       <DefaultSlot
-        ><strong style="color: crimson">Crimson <em>emphasis</em></strong> next to
+        ><strong style="color: crimson">Crimson <em>emphasis</em></strong>
+        next to
         <span class="tag">twin</span><span class="tag">twin</span>.</DefaultSlot
       >
 

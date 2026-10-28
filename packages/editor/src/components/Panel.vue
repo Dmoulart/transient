@@ -10,7 +10,9 @@
         <span class="tr-i-lucide-x" aria-hidden="true" />
       </button>
     </header>
-    <div class="tr-scroll-body tr-min-h-0 tr-overflow-y-auto tr-flex tr-flex-col tr-gap-6 tr-pb-6 tr-px-4">
+    <div
+      class="tr-scroll-body tr-min-h-0 tr-overflow-y-auto tr-flex tr-flex-col tr-gap-6 tr-pb-6 tr-px-4"
+    >
       <slot />
     </div>
   </aside>

@@ -31,7 +31,8 @@
       <span class="text-white/40">slot</span>
       <span>
         <template v-if="editor.selectedSlot.value">
-          <span class="text-teal-300">#{{ editor.selectedSlot.value.slotName }}</span> of
+          <span class="text-teal-300">#{{ editor.selectedSlot.value.slotName }}</span>
+          of
           {{ tagOf(editor.selectedSlot.value.ownerId) }}
         </template>
         <template v-else>—</template>

@@ -3,7 +3,7 @@
     <template #header>
       <strong class="tr-title">Ajouter un composant</strong>
     </template>
-    <SearchInput ref="searchInput" v-model="search" autofocus />
+    <SearchInput ref="searchInput" v-model="search" focus-on-mount />
     <div class="tr-card-grid">
       <ComponentItem
         v-for="schema in filteredDictionnary"
