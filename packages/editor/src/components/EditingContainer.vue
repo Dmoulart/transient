@@ -13,7 +13,7 @@ import RichTextToolbar from './RichTextToolbar.vue'
 
 const props = defineProps<{
   container: TransientElement
-  renderComponent: (element: TransientElement) => VNode[]
+  renderComponent: (element: TransientElement) => VNode
   render: (elements: TransientElement[]) => VNode[]
   mouse: { x: number; y: number }
   ownerId: string
@@ -58,7 +58,7 @@ if (position === (props.occurrence ?? 0)) {
     elements.set(el, child.id)
 
     const vnodes = props.renderComponent(child)
-    islands.set(child.id, vnodes[0]!)
+    islands.set(child.id, vnodes)
     teleports.push(h(Teleport, { to: el }, vnodes))
   }
 
