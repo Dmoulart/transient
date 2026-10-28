@@ -9,10 +9,10 @@ import type {
 } from '@transient/ir'
 import {
   type AttributeNode,
-  baseParse,
   type DirectiveNode,
   type ElementNode,
   NodeTypes,
+  parse as parseTemplate,
   type TemplateChildNode,
   type TextNode,
 } from '@vue/compiler-dom'
@@ -29,7 +29,7 @@ export function analyzeTemplateElements(
 
   if (!template) return { elements: [] }
 
-  const ast = baseParse(template)
+  const ast = parseTemplate(template)
 
   const elements = ast.children
     .map((node) => walk(node, props))

@@ -141,7 +141,6 @@ import type { ResolveComponent } from '@/lib/components.ts'
 import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
 import { useEditor } from '@/lib/composables/use-editor.ts'
 import { useIndex } from '@/lib/composables/use-index.ts'
-import { useSlashMenu } from '@/lib/composables/use-slash-menu.ts'
 import { provideTemplate } from '@/lib/composables/use-template.ts'
 import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
 import ComponentBuilder from './ComponentBuilder.vue'
@@ -152,7 +151,7 @@ import EditingFrame from './Frame/EditingFrame.vue'
 import SlotHighlight from './SlotHighlight.vue'
 import Toolbar from './Toolbar.vue'
 
-const { dictionnary, debug = false } = defineProps<{
+const { dictionnary } = defineProps<{
   dictionnary: TransientComponentDictionnary
   resolveComponent?: ResolveComponent
   debug?: boolean
@@ -166,7 +165,7 @@ const canvas = useTemplateRef('canvas')
 const index = useIndex()
 
 const componentPanel = useComponentPanel()
-const slashMenu = useSlashMenu()
+// const slashMenu = useSlashMenu()
 
 const editor = useEditor(component, dictionnary)
 
