@@ -5,7 +5,7 @@ import {
   type TransientComponentSchema,
   type TransientElement,
 } from '@transient/ir'
-import { computed, type Ref, readonly, ref, shallowRef, toRaw, watch } from 'vue'
+import { computed, type Ref, readonly, ref, shallowRef } from 'vue'
 import { applyEdition, type Edition } from '@/editor/edition'
 import { INLINE_TAGS } from '../edition/richtext'
 import { useElement } from './use-element'
@@ -31,7 +31,7 @@ export function useEditor(
   const future = shallowRef<TransientComponentSchema[]>([])
   const canRedo = computed(() => future.value.length > 0)
 
-  const original = shallowRef<TransientComponentSchema>(structuredClone(toRaw(component.value)))
+  const original = shallowRef<TransientComponentSchema>(snapshot(component.value))
   const isDirty = computed(() => {
     return JSON.stringify(original.value) !== JSON.stringify(component.value)
   })
@@ -126,7 +126,7 @@ export function useEditor(
   }
 
   function edit(edition: Edition) {
-    past.value = [...past.value, structuredClone(toRaw(component.value))].slice(-50)
+    past.value = [...past.value, snapshot(component.value)].slice(-50)
     future.value = []
     applyEdition(edition, component.value?.template?.elements ?? [])
     history.value = [edition, ...history.value].slice(0, 20)
@@ -137,7 +137,7 @@ export function useEditor(
     if (!prev) {
       return
     }
-    future.value = [...future.value, structuredClone(toRaw(component.value))]
+    future.value = [...future.value, snapshot(component.value)]
 
     past.value = past.value.slice(0, -1)
     component.value = prev
@@ -148,7 +148,7 @@ export function useEditor(
     if (!next) {
       return
     }
-    past.value = [...past.value, structuredClone(toRaw(component.value))]
+    past.value = [...past.value, snapshot(component.value)]
 
     future.value = future.value.slice(0, -1)
     component.value = next
@@ -193,4 +193,8 @@ export function useEditor(
     canUndo,
     canRedo,
   }
+}
+
+function snapshot<T extends Record<string, unknown>>(record: T): T {
+  return JSON.parse(JSON.stringify(record))
 }
