@@ -123,12 +123,30 @@ export default defineConfig({
       'tr-menu-item':
         'tr-h-[30px] tr-px-4 tr-flex tr-items-center tr-justify-between tr-rounded-sm tr-cursor-pointer tr-outline-none tr-text-body tr-select-none data-[highlighted]:tr-bg-surface-hover aria-selected:(tr-bg-slot-soft tr-text-slot tr-font-medium) data-[disabled]:(tr-text-ink-disabled tr-cursor-default)',
 
+      // Barre d'édition (bas de page) : position, bascule Édition, séparateur, statut
+      'tr-toolbar-dock':
+        'tr-fixed tr-left-1/2 tr-translate-x-[-50%] tr-bottom-[calc(var(--tr-space-6)+env(safe-area-inset-bottom,0px))] tr-z-[var(--tr-z-panel)]',
+      'tr-toolbar-sep': 'tr-w-px tr-h-[20px] tr-mx-2 tr-shrink-0 tr-bg-line',
+      'tr-mode-toggle':
+        'tr-btn-reset tr-h-toolbar tr-flex tr-items-center tr-gap-4 tr-pl-[10px] tr-pr-4 tr-rounded-md tr-text-ink tr-text-body tr-font-medium hover:tr-bg-surface-hover aria-pressed:(tr-bg-accent-soft tr-text-accent hover:tr-bg-accent-soft) focus-visible:(tr-outline-2 tr-outline-solid tr-outline-focus tr-outline-offset-1)',
+      // Interrupteur dessiné dans la bascule : <span class="tr-mode-switch"><span class="tr-mode-thumb" /></span>
+      'tr-mode-switch':
+        'tr-relative tr-inline-block tr-w-[28px] tr-h-[16px] tr-rounded-full tr-bg-track-off tr-transition-colors [[aria-pressed=true]_&]:tr-bg-accent',
+      'tr-mode-thumb':
+        'tr-absolute tr-top-[2px] tr-left-[2px] tr-w-[12px] tr-h-[12px] tr-rounded-full tr-bg-surface tr-shadow-raised tr-transition-transform [[aria-pressed=true]_&]:tr-translate-x-[12px]',
+      // Statut des modifications : <span class="tr-status" data-state="pending|saved"><span class="tr-status-dot" />3 modifications</span>
+      'tr-status': 'tr-flex tr-items-center tr-gap-[6px] tr-px-3 tr-text-small tr-text-ink-muted',
+      'tr-status-dot': 'tr-dot tr-bg-success [[data-state=pending]_&]:tr-bg-warning',
+      // Mode édition éteint : seul ce bouton est visible
+      'tr-edit-fab':
+        'tr-btn-reset tr-h-hit tr-flex tr-items-center tr-gap-3 tr-pl-[14px] tr-pr-5 tr-rounded-full tr-bg-surface tr-border tr-border-solid tr-border-line tr-shadow-float tr-text-ink tr-font-medium hover:tr-bg-surface-hover focus-visible:(tr-outline-2 tr-outline-solid tr-outline-focus tr-outline-offset-2)',
+
       'tr-btn-reset':
-        'tr-border-0 tr-bg-transparent tr-p-0 tr-[font:inherit] tr-[color:inherit] tr-cursor-pointer focus-visible:(tr-outline-2 tr-outline-solid tr-outline-focus tr-outline-offset-1)',
+        'tr-border-0 tr-text-body tr-bg-transparent tr-p-0 tr-[font:inherit] tr-[color:inherit] tr-cursor-pointer focus-visible:(tr-outline-2 tr-outline-solid tr-outline-focus tr-outline-offset-1)',
       'tr-icon-btn':
         'tr-btn-reset tr-w-toolbar tr-h-toolbar tr-rounded-md tr-flex tr-items-center tr-justify-center tr-text-ink-secondary hover:tr-bg-surface-hover disabled:(tr-text-ink-disabled tr-cursor-default tr-bg-transparent)',
       'tr-btn-primary':
-        'tr-btn-reset tr-h-toolbar tr-px-5 tr-rounded-md tr-bg-inverse tr-text-inverse-on tr-font-medium',
+        'tr-btn-reset tr-h-toolbar tr-px-5 tr-rounded-md tr-bg-inverse tr-text-inverse-on tr-font-medium disabled:(tr-opacity-40 tr-cursor-default)',
       'tr-btn-secondary':
         'tr-btn-reset tr-h-[28px] tr-px-4 tr-rounded-md tr-bg-surface tr-border tr-border-solid tr-border-line tr-text-small',
 

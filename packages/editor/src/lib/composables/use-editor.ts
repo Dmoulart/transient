@@ -5,7 +5,7 @@ import {
   type TransientComponentSchema,
   type TransientElement,
 } from '@transient/ir'
-import { computed, type Ref, readonly, ref, shallowRef } from 'vue'
+import { computed, type Ref, readonly, ref, shallowRef, watch } from 'vue'
 import { applyEdition, type Edition } from '@/editor/edition'
 import { INLINE_TAGS } from '../edition/richtext'
 import { useElement } from './use-element'
@@ -26,6 +26,11 @@ export function useEditor(
   component: Ref<TransientComponentSchema>,
   dictionnary: TransientComponentDictionnary,
 ) {
+  const original = shallowRef<TransientComponentSchema>(JSON.parse(JSON.stringify(component.value)))
+  const isDirty = computed(() => {
+    return JSON.stringify(original.value) !== JSON.stringify(component.value)
+  })
+
   const selection = ref<Selection | null>(null)
   const editing = ref<Editing | null>(null)
   // latest first, capped
@@ -153,5 +158,6 @@ export function useEditor(
     edit,
     startEditing,
     stopEditing,
+    isDirty,
   }
 }

@@ -102,6 +102,8 @@
       @close="componentPanel.close"
       :dictionnary="dictionnary"
     />
+
+    <Toolbar id="toolbar" data-test="toolbar" :is-dirty="editor.isDirty.value" />
     <!-- <DebugPanel v-if="debug" :editor="editor" :template="component.template" :index="index" /> -->
     <!-- <SlashMenu
       v-if="slashMenu.open.value && slashMenu.rect.value"
@@ -140,6 +142,7 @@ import ElementPanel from './ElementPanel/ElementPanel.vue'
 import ComponentFrame from './Frame/ComponentFrame.vue'
 import EditingFrame from './Frame/EditingFrame.vue'
 import SlotHighlight from './SlotHighlight.vue'
+import Toolbar from './Toolbar.vue'
 
 const { dictionnary, debug = false } = defineProps<{
   dictionnary: TransientComponentDictionnary
