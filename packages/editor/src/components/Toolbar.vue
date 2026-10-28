@@ -2,9 +2,15 @@
 import { ToolbarButton, ToolbarRoot, ToolbarSeparator } from 'reka-ui'
 import { ref } from 'vue'
 
-defineProps<{ isDirty: boolean }>()
+defineProps<{ isDirty: boolean; canUndo?: boolean; canRedo?: boolean }>()
+
+const emit = defineEmits<{
+  undo: []
+  redo: []
+  publish: []
+}>()
+
 const editing = ref(true)
-function publish() {}
 </script>
 
 <template>
@@ -20,23 +26,31 @@ function publish() {}
         Édition
       </ToolbarButton>
       <ToolbarSeparator class="tr-toolbar-sep" />
-      <!-- <ToolbarButton class="tr-icon-btn" aria-label="Annuler" :disabled="!canUndo" @click="undo"
+      <ToolbarButton
+        class="tr-icon-btn"
+        aria-label="Annuler"
+        :disabled="!canUndo"
+        @click="emit('undo')"
         ><span class="tr-i-lucide-undo-2" /></ToolbarButton
       >
-      <ToolbarButton class="tr-icon-btn" aria-label="Rétablir" :disabled="!canRedo" @click="redo"
+      <ToolbarButton
+        class="tr-icon-btn"
+        aria-label="Rétablir"
+        :disabled="!canRedo"
+        @click="emit('redo')"
         ><span class="tr-i-lucide-redo-2" /></ToolbarButton
       >
-      <ToolbarButton class="tr-icon-btn" aria-label="Insérer un composant" @click="openInsert"
+      <!-- <ToolbarButton class="tr-icon-btn" aria-label="Insérer un composant" @click="openInsert"
         ><span class="tr-i-lucide-square-plus" /></ToolbarButton
       >
       <ToolbarButton class="tr-icon-btn" aria-label="Arbre des composants" @click="openTree"
         ><span class="tr-i-lucide-layers" /></ToolbarButton
       > -->
-      <!-- <ToolbarSeparator class="tr-toolbar-sep" /> -->
+      <ToolbarSeparator class="tr-toolbar-sep" />
       <span class="tr-status" :data-state="isDirty ? 'pending' : 'saved'" aria-live="polite">
         <span class="tr-status-dot" />{{ isDirty ? `Modifié` : 'À jour' }}
       </span>
-      <ToolbarButton class="tr-btn-primary" :disabled="!isDirty" @click="publish"
+      <ToolbarButton class="tr-btn-primary" :disabled="!isDirty" @click="emit('publish')"
         >Publier</ToolbarButton
       >
     </ToolbarRoot>

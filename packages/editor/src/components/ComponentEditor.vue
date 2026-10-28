@@ -103,7 +103,15 @@
       :dictionnary="dictionnary"
     />
 
-    <Toolbar id="toolbar" data-test="toolbar" :is-dirty="editor.isDirty.value" />
+    <Toolbar
+      id="toolbar"
+      data-test="toolbar"
+      :is-dirty="editor.isDirty.value"
+      :can-undo="editor.canUndo.value"
+      :can-redo="editor.canRedo.value"
+      @undo="editor.undo"
+      @redo="editor.redo"
+    />
     <!-- <DebugPanel v-if="debug" :editor="editor" :template="component.template" :index="index" /> -->
     <!-- <SlashMenu
       v-if="slashMenu.open.value && slashMenu.rect.value"

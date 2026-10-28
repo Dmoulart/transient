@@ -5,7 +5,7 @@ import {
   type TransientComponentSchema,
   type TransientElement,
 } from '@transient/ir'
-import { computed, type Ref, readonly, ref, shallowRef, watch } from 'vue'
+import { computed, type Ref, readonly, ref, shallowRef, toRaw, watch } from 'vue'
 import { applyEdition, type Edition } from '@/editor/edition'
 import { INLINE_TAGS } from '../edition/richtext'
 import { useElement } from './use-element'
@@ -26,7 +26,12 @@ export function useEditor(
   component: Ref<TransientComponentSchema>,
   dictionnary: TransientComponentDictionnary,
 ) {
-  const original = shallowRef<TransientComponentSchema>(JSON.parse(JSON.stringify(component.value)))
+  const past = shallowRef<TransientComponentSchema[]>([])
+  const canUndo = computed(() => past.value.length > 0)
+  const future = shallowRef<TransientComponentSchema[]>([])
+  const canRedo = computed(() => future.value.length > 0)
+
+  const original = shallowRef<TransientComponentSchema>(structuredClone(toRaw(component.value)))
   const isDirty = computed(() => {
     return JSON.stringify(original.value) !== JSON.stringify(component.value)
   })
@@ -121,8 +126,32 @@ export function useEditor(
   }
 
   function edit(edition: Edition) {
+    past.value = [...past.value, structuredClone(toRaw(component.value))].slice(-50)
+    future.value = []
     applyEdition(edition, component.value?.template?.elements ?? [])
     history.value = [edition, ...history.value].slice(0, 20)
+  }
+
+  function undo() {
+    const prev = past.value.at(-1)
+    if (!prev) {
+      return
+    }
+    future.value = [...future.value, structuredClone(toRaw(component.value))]
+
+    past.value = past.value.slice(0, -1)
+    component.value = prev
+  }
+
+  function redo() {
+    const next = future.value.at(-1)
+    if (!next) {
+      return
+    }
+    past.value = [...past.value, structuredClone(toRaw(component.value))]
+
+    future.value = future.value.slice(0, -1)
+    component.value = next
   }
 
   function startEditing(
@@ -159,5 +188,9 @@ export function useEditor(
     startEditing,
     stopEditing,
     isDirty,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
   }
 }
