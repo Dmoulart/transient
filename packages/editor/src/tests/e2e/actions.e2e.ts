@@ -8,7 +8,7 @@ const tile = (page: Page, label: string) =>
   canvas(page).locator('[data-test=tile]', { hasText: new RegExp(`^${label}$`) })
 
 const insertAfter = (page: Page) => page.locator('[data-action=insert-after]')
-const deleteSelected = (page: Page) => page.locator('[data-action=delete]').click()
+const deleteSelected = (page: Page) => page.locator('[data-action=delete-element]').click()
 
 async function pickComponent(page: Page, tag: string) {
   await page.locator(`[data-test=component-item][data-tag=${tag}]`).click()
