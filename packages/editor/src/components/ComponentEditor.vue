@@ -1,119 +1,121 @@
 <template>
   <div class="tr-root" :style="{display: 'contents'}">
-    <main ref="canvas" data-test="canvas">
-      <ComponentBuilder
-        v-model="index"
-        :dictionnary="dictionnary"
-        :template="component.template"
-        :resolve-component="resolveComponent"
-        :editing="editor.editing.value"
-        @edit="editor.edit"
-        @exit-editing="editor.stopEditing"
-      />
-    </main>
-
-    <ComponentFrame
-      v-if="editor.activeComponent.element.value"
-      :root="index.rootNodes(editor.activeComponent.element.value.id)"
-      :element="editor.activeComponent.element.value!"
-      @edit="editor.edit"
-    />
-    <ComponentFrame
-      v-if="
-        hoveredElement &&
-        !pointed?.slot &&
-        hoveredElement.id !== editor.activeComponent.id.value &&
-        !editor.editing.value
-      "
-      :key="hoveredElement.id"
-      :root="index.rootNodes(hoveredElement.id)"
-      :element="hoveredElement"
-      hover
-    />
-    <!-- clicking a not-yet-selected component's slot edits it right away: preview that -->
-    <EditingFrame
-      v-if="hoveredSlot"
-      :key="`${pointed!.id}-${pointed!.slot!.name}-${pointed!.slot!.occurrence}`"
-      :targets="hoveredSlot.container"
-      :slot-name="pointed!.slot!.name"
-      hover
-    />
-
-    <template v-if="editor.editing.value && !editor.editing.value.slotName">
-      <EditingFrame :targets="index.rootNodes(editor.editing.value.id)" />
-    </template>
-    <template v-else-if="editor.editing.value?.slotName">
-      <EditingFrame
-        :targets="
-          index.slot(
-            editor.editing.value.id,
-            editor.editing.value.slotName,
-            editor.editing.value.occurrence,
-          )!.container
-        "
-        :slot-name="editor.editing.value.slotName"
-      />
-    </template>
-    <template v-else-if="editor.activeComponent.element.value">
-      <SlotHighlight
-        v-for="slot in activeSlots"
-        :key="`${slot.name}-${slot.occurrence}`"
-        :targets="slot.container"
-        :empty="slot.fallback || !slot.nodes.length"
-        :slot-name="slot.name"
-        :owner-id="editor.activeComponent.id.value!"
-        :hover="
-          !editor.editing.value &&
-          isSlotHovered(editor.activeComponent.id.value!, slot.name, slot.occurrence)
-        "
-      />
-    </template>
-
-    <slot
-      v-if="editor.activeComponent.element.value && editor.activeComponent.schema.value"
-      name="panel"
-      :element="editor.activeComponent.element.value"
-      :schema="editor.activeComponent.schema.value"
-      :template="component.template"
-      :update-prop="updateProp"
-      :close="closeComponent"
-    >
-      <ElementPanel
-        v-if="Object.keys(editor.activeComponent.schema.value.props).length > 0"
-        class="tr-fixed tr-top-[10%] tr-right-4"
-        :model-value="editor.activeComponent.element.value"
-        :schema="editor.activeComponent.schema.value"
-        :template="component.template"
-        @update-prop="updateProp"
-        @close="closeComponent"
-      />
-    </slot>
-
-    <ComponentPanel
-      id="component-panel"
-      v-if="componentPanel.isOpen.value"
-      data-test="component-panel"
-      @select="
-        (selected) => {
-          componentPanel.select(selected.schema)
-          componentPanel.close()
-        }
-      "
-      @close="componentPanel.close"
-      :dictionnary="dictionnary"
-    />
-
     <Toolbar
       id="toolbar"
       data-test="toolbar"
+      v-model:is-editing="isEditing"
       :is-dirty="editor.isDirty.value"
       :can-undo="editor.canUndo.value"
       :can-redo="editor.canRedo.value"
       @undo="editor.undo"
       @redo="editor.redo"
     />
-    <!-- <DebugPanel v-if="debug" :editor="editor" :template="component.template" :index="index" /> -->
-    <!-- <SlashMenu
+    <template v-if="isEditing">
+      <main ref="canvas" data-test="canvas">
+        <ComponentBuilder
+          v-model="index"
+          :dictionnary="dictionnary"
+          :template="component.template"
+          :resolve-component="resolveComponent"
+          :editing="editor.editing.value"
+          @edit="editor.edit"
+          @exit-editing="editor.stopEditing"
+        />
+      </main>
+
+      <ComponentFrame
+        v-if="editor.activeComponent.element.value"
+        :root="index.rootNodes(editor.activeComponent.element.value.id)"
+        :element="editor.activeComponent.element.value!"
+        @edit="editor.edit"
+      />
+      <ComponentFrame
+        v-if="
+        hoveredElement &&
+        !pointed?.slot &&
+        hoveredElement.id !== editor.activeComponent.id.value &&
+        !editor.editing.value
+      "
+        :key="hoveredElement.id"
+        :root="index.rootNodes(hoveredElement.id)"
+        :element="hoveredElement"
+        hover
+      />
+      <!-- clicking a not-yet-selected component's slot edits it right away: preview that -->
+      <EditingFrame
+        v-if="hoveredSlot"
+        :key="`${pointed!.id}-${pointed!.slot!.name}-${pointed!.slot!.occurrence}`"
+        :targets="hoveredSlot.container"
+        :slot-name="pointed!.slot!.name"
+        hover
+      />
+
+      <template v-if="editor.editing.value && !editor.editing.value.slotName">
+        <EditingFrame :targets="index.rootNodes(editor.editing.value.id)" />
+      </template>
+      <template v-else-if="editor.editing.value?.slotName">
+        <EditingFrame
+          :targets="
+          index.slot(
+            editor.editing.value.id,
+            editor.editing.value.slotName,
+            editor.editing.value.occurrence,
+          )!.container
+        "
+          :slot-name="editor.editing.value.slotName"
+        />
+      </template>
+      <template v-else-if="editor.activeComponent.element.value">
+        <SlotHighlight
+          v-for="slot in activeSlots"
+          :key="`${slot.name}-${slot.occurrence}`"
+          :targets="slot.container"
+          :empty="slot.fallback || !slot.nodes.length"
+          :slot-name="slot.name"
+          :owner-id="editor.activeComponent.id.value!"
+          :hover="
+          !editor.editing.value &&
+          isSlotHovered(editor.activeComponent.id.value!, slot.name, slot.occurrence)
+        "
+        />
+      </template>
+
+      <slot
+        v-if="editor.activeComponent.element.value && editor.activeComponent.schema.value"
+        name="panel"
+        :element="editor.activeComponent.element.value"
+        :schema="editor.activeComponent.schema.value"
+        :template="component.template"
+        :update-prop="updateProp"
+        :close="closeComponent"
+      >
+        <ElementPanel
+          v-if="Object.keys(editor.activeComponent.schema.value.props).length > 0"
+          class="tr-fixed tr-top-[10%] tr-right-4"
+          :model-value="editor.activeComponent.element.value"
+          :schema="editor.activeComponent.schema.value"
+          :template="component.template"
+          @update-prop="updateProp"
+          @close="closeComponent"
+        />
+      </slot>
+
+      <ComponentPanel
+        id="component-panel"
+        v-if="componentPanel.isOpen.value"
+        data-test="component-panel"
+        @select="
+        (selected) => {
+          componentPanel.select(selected.schema)
+          componentPanel.close()
+        }
+      "
+        @close="componentPanel.close"
+        :dictionnary="dictionnary"
+      />
+
+      <!-- <DebugPanel v-if="debug" :editor="editor" :template="component.template" :index="index" /> -->
+      <!-- <SlashMenu
       v-if="slashMenu.open.value && slashMenu.rect.value"
       class="fixed z-50 w-72"
       id="slash-menu"
@@ -123,6 +125,12 @@
       }"
       :dictionnary="dictionnary"
     /> -->
+    </template>
+    <ComponentRenderer
+      :component="component"
+      :dictionnary="dictionnary"
+      :resolve-component="resolveComponent"
+    />
   </div>
 </template>
 
@@ -145,6 +153,7 @@ import { provideTemplate } from '@/lib/composables/use-template.ts'
 import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
 import ComponentBuilder from './ComponentBuilder.vue'
 import ComponentPanel from './ComponentPanel/ComponentPanel.vue'
+import ComponentRenderer from './ComponentRenderer.vue'
 import ElementPanel from './ElementPanel/ElementPanel.vue'
 import ComponentFrame from './Frame/ComponentFrame.vue'
 import EditingFrame from './Frame/EditingFrame.vue'
@@ -160,6 +169,7 @@ const { dictionnary } = defineProps<{
 const component = defineModel<TransientComponentSchema>({ required: true })
 const template = computed(() => component.value.template)
 provideTemplate(template)
+const isEditing = ref(true)
 
 const canvas = useTemplateRef('canvas')
 const index = useIndex()

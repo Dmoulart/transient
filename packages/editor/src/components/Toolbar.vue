@@ -1,27 +1,28 @@
 <script setup lang="ts">
 import { ToolbarButton, ToolbarRoot, ToolbarSeparator } from 'reka-ui'
-import { ref } from 'vue'
 
 defineProps<{ isDirty: boolean; canUndo?: boolean; canRedo?: boolean }>()
 
+const isEditing = defineModel('is-editing', {
+  required: false,
+  default: true,
+})
 const emit = defineEmits<{
   undo: []
   redo: []
   publish: []
 }>()
-
-const editing = ref(true)
 </script>
 
 <template>
   <div class="tr-toolbar-dock">
-    <button v-if="!editing" type="button" class="tr-edit-fab" @click="editing = true">
+    <button v-if="!isEditing" type="button" class="tr-edit-fab" @click="isEditing = true">
       <span class="tr-i-lucide-pencil" />
       Éditer
     </button>
 
     <ToolbarRoot v-else class="tr-toolbar" aria-label="Édition">
-      <ToolbarButton class="tr-mode-toggle" aria-pressed="true" @click="editing = false">
+      <ToolbarButton class="tr-mode-toggle" aria-pressed="true" @click="isEditing = false">
         <span class="tr-mode-switch"><span class="tr-mode-thumb" /></span>
         Édition
       </ToolbarButton>

@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import _dictionnary from '@/assets/schemas/__schemas__.json'
 import Button from '@/samples/Button.vue'
 import ComponentEditor from './components/ComponentEditor.vue'
+import ComponentRenderer from './components/ComponentRenderer.vue'
 import { useSaveTemplate } from './lib/composables/use-save-template.ts'
 import { resolveComponent } from './lib/playgrounds.ts'
 
@@ -13,7 +14,6 @@ const dictionnary = _dictionnary as unknown as TransientComponentDictionnary
 const query = new URLSearchParams(location.search)
 
 const component = ref(structuredClone(dictionnary[query.get('page') ?? 'HomePage']))
-const debug = query.get('debug') !== 'false'
 
 const template = useSaveTemplate(component)
 </script>
@@ -23,7 +23,6 @@ const template = useSaveTemplate(component)
     :resolve-component="resolveComponent"
     v-model="component"
     :dictionnary="dictionnary"
-    :debug="debug"
   />
   <Button @click="template.saveToLocalStorage">Save</Button>
   <Button @click="template.loadFromLocalStorage">Load</Button>

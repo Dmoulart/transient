@@ -2,15 +2,15 @@
 import { assert } from '@transient/core'
 import type {
   TransientComponentDictionnary,
+  TransientComponentSchema,
   TransientElement,
-  TransientTemplate,
 } from '@transient/ir'
 import { h, resolveComponent as resolveVueComponent, Text, type VNode } from 'vue'
 import type { ResolveComponent } from '@/lib/components.ts'
 import { parseElementAttributes } from '@/lib/transient/attributes.ts'
 
 const props = defineProps<{
-  template: TransientTemplate
+  component: TransientComponentSchema
   dictionnary: TransientComponentDictionnary
   resolveComponent?: ResolveComponent
 }>()
@@ -18,7 +18,7 @@ const props = defineProps<{
 const RenderTemplate = () => {
   const vnodes: VNode[] = []
 
-  vnodes.push(...render(props.template.elements))
+  vnodes.push(...render(props.component.template.elements))
 
   return vnodes
 }
