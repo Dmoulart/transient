@@ -14,6 +14,7 @@
           type="button"
           class="tr-tag-action"
           data-action="move-up"
+          :data-action:flow="flow"
           title="Move up"
           @click="
             emit('edit', {
@@ -23,13 +24,15 @@
             })
           "
         >
-          <MoveUp :size="14" />
+          <MoveUp v-if="flow === 'top' || flow === 'bottom'" :size="14" />
+          <MoveLeft v-else :size="14" />
         </button>
         <button
           v-if="canMoveElement(element.id, 'down', template.elements)"
           type="button"
           class="tr-tag-action"
           data-action="move-down"
+          :data-action:flow="flow"
           title="Move down"
           @click="
             emit('edit', {
@@ -39,7 +42,8 @@
             })
           "
         >
-          <MoveDown :size="14" />
+          <MoveDown v-if="flow === 'top' || flow === 'bottom'" :size="14" />
+          <MoveRight v-else :size="14" />
         </button>
         <button
           type="button"
@@ -76,7 +80,7 @@
 </template>
 <script setup lang="ts">
 import { canMoveElement, type TransientElement } from '@transient/ir'
-import { MoveDown, MoveUp, Plus, Trash } from 'lucide-vue-next'
+import { MoveDown, MoveLeft, MoveRight, MoveUp, Plus, Trash } from 'lucide-vue-next'
 import { computed } from 'vue'
 import type { EditorEvents } from '@/editor/events'
 import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
@@ -91,6 +95,8 @@ const emit = defineEmits<EditorEvents>()
 
 const componentPanel = useComponentPanel()
 const template = useTemplate()
+
+const flow = computed(() => getFlow(props.root))
 
 // component name > slot name > tag
 const label = computed(() => {
