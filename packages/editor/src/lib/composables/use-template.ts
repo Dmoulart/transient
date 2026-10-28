@@ -1,26 +1,14 @@
-import type { TransientComponentSchema } from '@transient/ir'
-import type { Ref } from 'vue'
+import type { TransientTemplate } from '@transient/ir'
+import { type ComputedRef, inject, provide } from 'vue'
 
-const STORAGE_KEY = 'page-schema'
-
-export function useTemplate(schema: Ref<TransientComponentSchema>) {
-  function saveToLocalStorage() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(schema.value.template))
-    console.log('Sauvegardé dans le localStorage.')
+const templateInjectionKey = Symbol('templateInjectionKey')
+export function provideTemplate(schema: ComputedRef<TransientTemplate>) {
+  provide<ComputedRef>(templateInjectionKey, schema)
+}
+export function useTemplate(): ComputedRef<TransientTemplate> {
+  const template = inject<ComputedRef<TransientTemplate>>(templateInjectionKey)
+  if (!template) {
+    throw new Error('Expected template to be provided by ComponentEditor')
   }
-
-  function loadFromLocalStorage() {
-    const savedContents = localStorage.getItem(STORAGE_KEY)
-    if (savedContents) {
-      schema.value.template = JSON.parse(savedContents)
-      console.log('Chargé depuis le localStorage.', schema.value.template)
-    } else {
-      console.log('Aucun élément dans le localStorage.')
-    }
-  }
-
-  return {
-    saveToLocalStorage,
-    loadFromLocalStorage,
-  }
+  return template
 }

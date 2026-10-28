@@ -8,6 +8,7 @@ import {
   appendElement,
   insertAfterElement,
   insertBeforeElement,
+  moveElement,
   removeElement,
   replaceElementSlot,
   updateElementProp,
@@ -17,14 +18,8 @@ export type Edition =
   | AddComponentEdition
   | DeleteElementEdition
   | UpdateElementPropEdition
+  | MoveElementEdition
   | ReplaceSlotContentEdition
-
-export type ReplaceSlotContentEdition = {
-  type: 'replace-slot-content'
-  id: string
-  slotName: string
-  content: TransientElement[]
-}
 
 export type AddComponentEdition = {
   type: 'add-component'
@@ -46,7 +41,18 @@ export type UpdateElementPropEdition = {
   transientId: string
 }
 
-export type EditionInput = AddComponentEdition | DeleteElementEdition | UpdateElementPropEdition
+export type ReplaceSlotContentEdition = {
+  type: 'replace-slot-content'
+  id: string
+  slotName: string
+  content: TransientElement[]
+}
+
+export type MoveElementEdition = {
+  type: 'move-element'
+  id: string
+  direction: 'up' | 'down'
+}
 
 export function applyEdition(edition: Edition, elements: TransientElement[]) {
   switch (edition.type) {
@@ -93,6 +99,12 @@ export function applyEdition(edition: Edition, elements: TransientElement[]) {
 
     case 'replace-slot-content': {
       replaceElementSlot(edition.content, edition.slotName, edition.id, elements)
+
+      break
+    }
+
+    case 'move-element': {
+      moveElement(edition.id, edition.direction, elements)
 
       break
     }

@@ -91,6 +91,23 @@ export function findElementById(
   return undefined
 }
 
+export function getElementLocation(
+  id: string,
+  elements: TransientElement[],
+): { parent: TransientElement[]; index: number } | undefined {
+  for (const [index, element] of elements.entries()) {
+    if (element.id === id) return { parent: elements, index }
+
+    if (element.slots) {
+      for (const slotElements of Object.values(element.slots)) {
+        const found = getElementLocation(id, slotElements)
+        if (found) return found
+      }
+    }
+  }
+  return undefined
+}
+
 export function getPathOfElementById(
   elements: TransientElement[],
   id: string,
@@ -297,6 +314,60 @@ export function insertBeforeElement(
     }
   }
   return false
+}
+
+export function canMoveElement(id: string, direction: 'up' | 'down', elements: TransientElement[]) {
+  return !!getElementNeighbor(id, direction, elements)
+}
+
+export function getElementNeighbor(
+  id: string,
+  direction: 'up' | 'down',
+  elements: TransientElement[],
+) {
+  const location = getElementLocation(id, elements)
+
+  if (!location) {
+    return false
+  }
+
+  const { parent, index } = location
+
+  const neighbor = parent[direction === 'up' ? index - 1 : index + 1]
+
+  return neighbor
+}
+
+export function moveElement(
+  id: string,
+  direction: 'up' | 'down',
+  elements: TransientElement[],
+): boolean {
+  const location = getElementLocation(id, elements)
+
+  if (!location) {
+    return false
+  }
+
+  const { parent, index } = location
+
+  const neighborIndex = direction === 'up' ? index - 1 : index + 1
+
+  const neighbor = parent[neighborIndex]
+
+  if (!neighbor) {
+    return false
+  }
+
+  const element = parent[index]!
+
+  const swapAtIndex = direction === 'up' ? index - 1 : index
+
+  const swap = direction === 'up' ? [element, neighbor] : [neighbor, element]
+
+  parent.splice(swapAtIndex, 2, ...swap)
+
+  return true
 }
 
 export function updateElementProp(

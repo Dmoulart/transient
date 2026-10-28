@@ -10,6 +10,38 @@
         </span>
 
         <button
+          v-if="canMoveElement(element.id, 'up', template.elements)"
+          type="button"
+          class="tr-tag-action"
+          data-action="move-up"
+          title="Move up"
+          @click="
+            emit('edit', {
+              type: 'move-element',
+              id: element.id,
+              direction: 'up'
+            })
+          "
+        >
+          <MoveUp :size="14" />
+        </button>
+        <button
+          v-if="canMoveElement(element.id, 'down', template.elements)"
+          type="button"
+          class="tr-tag-action"
+          data-action="move-down"
+          title="Move down"
+          @click="
+            emit('edit', {
+              type: 'move-element',
+              id: element.id,
+              direction: 'down'
+            })
+          "
+        >
+          <MoveDown :size="14" />
+        </button>
+        <button
           type="button"
           class="tr-tag-action"
           data-action="delete-element"
@@ -39,16 +71,19 @@
   </UseBoundingBox>
 </template>
 <script setup lang="ts">
-import type { TransientElement } from '@transient/ir'
-import { Plus, Trash } from 'lucide-vue-next'
+import { canMoveElement, type TransientElement } from '@transient/ir'
+import { MoveDown, MoveUp, Plus, Trash } from 'lucide-vue-next'
 import { computed } from 'vue'
 import type { EditorEvents } from '@/editor/events'
+import { useTemplate } from '@/lib/composables/use-template.ts'
 import { getFlow } from '@/lib/flow.ts'
 import BoundingBox from './BoundingBox.vue'
 import UseBoundingBox from './UseBoundingBox.vue'
 
 const props = defineProps<{ root: Node[]; element: TransientElement; hover?: boolean }>()
 const emit = defineEmits<EditorEvents & { 'insert-component': [data: { targetID: string }] }>()
+
+const template = useTemplate()
 
 // component name > slot name > tag
 const label = computed(() => {
