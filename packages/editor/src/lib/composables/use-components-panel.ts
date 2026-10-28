@@ -4,10 +4,11 @@ import { readonly, ref } from 'vue'
 
 type OnCloseCb = (componentSchema: TransientComponentSchema) => void
 
-export function useComponentPanel() {
-  const componentPanelIsOpen = ref(false)
+// Module-level so every caller shares the same panel state.
+const componentPanelIsOpen = ref(false)
+const onSelect = ref<OnCloseCb>()
 
-  const onSelect = ref<OnCloseCb>()
+export function useComponentPanel() {
   return {
     isOpen: readonly(componentPanelIsOpen),
     onSelect,

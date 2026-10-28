@@ -17,13 +17,6 @@
       :root="index.rootNodes(editor.activeComponent.element.value.id)"
       :element="editor.activeComponent.element.value!"
       @edit="editor.edit"
-      @insert-component="
-        ({ targetID: targetNodeID }) => {
-          componentPanel.open((schema) => {
-            editor.edit({ type: 'add-component', targetId: targetNodeID, position: 'after', schema })
-          })
-        }
-      "
     />
     <ComponentFrame
       v-if="
@@ -104,14 +97,6 @@
         (selected) => {
           componentPanel.select(selected.schema)
           componentPanel.close()
-        }
-      "
-      @update:open="
-        (open: boolean) => {
-          if (!open) {
-            // drawer has a crazy api should do somethign about it. Maybe wrap it.
-            componentPanel.close()
-          }
         }
       "
       @close="componentPanel.close"

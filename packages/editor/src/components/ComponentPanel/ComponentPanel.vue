@@ -3,7 +3,7 @@
     <template #header>
       <strong class="tr-title">Ajouter un composant</strong>
     </template>
-    <SearchInput ref="searchInput" v-model="search" autofocus/>
+    <SearchInput ref="searchInput" v-model="search" autofocus />
     <div class="tr-card-grid">
       <ComponentItem
         v-for="schema in filteredDictionnary"
@@ -17,7 +17,7 @@
 </template>
 <script setup lang="ts">
 import type { TransientComponentDictionnary, TransientComponentSchema } from '@transient/ir'
-import { computed, onMounted, ref, useTemplateRef } from 'vue'
+import { computed, ref } from 'vue'
 import Panel from '../Panel.vue'
 import SearchInput from '../SearchInput.vue'
 import ComponentItem from './ComponentItem.vue'
@@ -49,7 +49,7 @@ const filteredDictionnary = computed(() => {
   )
 })
 
-function normalizeSearchTerms(text:string){
+function normalizeSearchTerms(text: string) {
   return text.trim().toLowerCase()
 }
 </script>

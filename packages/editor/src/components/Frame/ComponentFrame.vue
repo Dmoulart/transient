@@ -63,7 +63,11 @@
         data-action="insert-after"
         title="Insert after"
         :class="`tr-insert tr-insert-${getFlow(root)}`"
-        @click="emit('insert-component', { targetID: element.id })"
+        @click="() => {
+          componentPanel.open((schema) => {
+            emit('edit', ({ type: 'add-component', targetId: element.id, position: 'after', element: createComponentFromSchema(schema) }))
+          })
+        }"
       >
         <Plus class="tr-size-4" :stroke-width="2.5" />
       </button>
@@ -75,14 +79,17 @@ import { canMoveElement, type TransientElement } from '@transient/ir'
 import { MoveDown, MoveUp, Plus, Trash } from 'lucide-vue-next'
 import { computed } from 'vue'
 import type { EditorEvents } from '@/editor/events'
+import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
 import { useTemplate } from '@/lib/composables/use-template.ts'
 import { getFlow } from '@/lib/flow.ts'
+import { createComponentFromSchema } from '@/lib/transient/attributes.ts'
 import BoundingBox from './BoundingBox.vue'
 import UseBoundingBox from './UseBoundingBox.vue'
 
 const props = defineProps<{ root: Node[]; element: TransientElement; hover?: boolean }>()
-const emit = defineEmits<EditorEvents & { 'insert-component': [data: { targetID: string }] }>()
+const emit = defineEmits<EditorEvents>()
 
+const componentPanel = useComponentPanel()
 const template = useTemplate()
 
 // component name > slot name > tag

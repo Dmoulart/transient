@@ -1,9 +1,4 @@
-import type {
-  BindingValue,
-  TransientComponentSchema,
-  TransientElement,
-  TransientProp,
-} from '@transient/ir'
+import type { BindingValue, TransientElement, TransientProp } from '@transient/ir'
 import {
   appendElement,
   insertAfterElement,
@@ -15,17 +10,17 @@ import {
 } from '@transient/ir'
 
 export type Edition =
-  | AddComponentEdition
+  | AddElementEdition
   | DeleteElementEdition
   | UpdateElementPropEdition
   | MoveElementEdition
   | ReplaceSlotContentEdition
 
-export type AddComponentEdition = {
+export type AddElementEdition = {
   type: 'add-component'
   position: 'after' | 'before' | 'append'
   targetId: string
-  schema: TransientComponentSchema
+  element: TransientElement
 }
 
 export type DeleteElementEdition = {
@@ -57,24 +52,17 @@ export type MoveElementEdition = {
 export function applyEdition(edition: Edition, elements: TransientElement[]) {
   switch (edition.type) {
     case 'add-component': {
-      const component: TransientElement = {
-        tag: edition.schema.tag,
-        isComponent: true,
-        attributes: {},
-        id: crypto.randomUUID(),
-      }
-
       switch (edition.position) {
         case 'after': {
-          insertAfterElement(component, edition.targetId, elements)
+          insertAfterElement(edition.element, edition.targetId, elements)
           break
         }
         case 'before': {
-          insertBeforeElement(component, edition.targetId, elements)
+          insertBeforeElement(edition.element, edition.targetId, elements)
           break
         }
         case 'append': {
-          appendElement(component, edition.targetId, elements)
+          appendElement(edition.element, edition.targetId, elements)
           break
         }
         default: {
