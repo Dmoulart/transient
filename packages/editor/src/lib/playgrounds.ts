@@ -14,4 +14,4 @@ const components = Object.fromEntries(
   ]),
 )
 
-export const resolveComponent: ResolveComponent = (tag) => components[tag]
+export const resolveComponent: ResolveComponent = (tag) => components[tag]!

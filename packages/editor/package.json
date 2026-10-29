@@ -8,9 +8,9 @@
   ],
   "scripts": {
     "dev": "bun --bun vite",
-    "build": "vite build && vue-tsc --emitDeclarationOnly -p tsconfig.lib.json",
+    "build": "vite build && vue-tsc -p tsconfig.build.json",
     "preview": "vite preview",
-    "type-check": "vue-tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
+    "type-check": "vue-tsc --noEmit",
     "test:all": "bun test && bun test:e2e",
     "test:e2e": "bun --bun x playwright test",
     "test:e2e:ui": "bun --bun x playwright test --ui",

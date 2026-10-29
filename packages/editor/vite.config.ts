@@ -12,7 +12,7 @@ export default defineConfig({
     vue(),
     vueDevTools(),
     transientAnalyzerPlugin({
-      tsConfigPath: fileURLToPath(new URL('./tsconfig.app.json', import.meta.url)),
+      tsConfigPath: fileURLToPath(new URL('./tsconfig.json', import.meta.url)),
       glob: fileURLToPath(new URL('./src/{samples,tests}/**/*.vue', import.meta.url)),
       dest: fileURLToPath(new URL('./src/assets/schemas', import.meta.url)),
     }),
