@@ -1,0 +1,21 @@
+{
+  "name": "@transient/nuxt",
+  "type": "module",
+  "private": true,
+  "files": [
+    "dist",
+    "runtime"
+  ],
+  "dependencies": {
+    "@nuxt/kit": "^4.0.0",
+    "@transient/analyzer-vue": "workspace:*",
+    "@transient/editor": "workspace:*",
+    "@transient/core": "workspace:*"
+  },
+  "exports": {
+    ".": "./dist/module.js"
+  },
+  "devDependencies": {
+    "@nuxt/schema": "^4.0.0"
+  }
+}
