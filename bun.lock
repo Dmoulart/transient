@@ -48,7 +48,7 @@
       "devDependencies": {
         "@biomejs/biome": "2.5.15",
         "@playwright/test": "^1.63.0",
-        "@transient/vite-plugin-transient-analyzer": "workspace:*",
+        "@transient/vite-plugin-vue-transient": "workspace:*",
         "@tsconfig/node22": "^22.0.1",
         "@types/bun": "^1.4.2",
         "@types/node": "^22.13.14",
@@ -77,8 +77,8 @@
         "@nuxt/schema": "^4.0.0",
       },
     },
-    "packages/vite-plugin-transient-analyzer": {
-      "name": "@transient/vite-plugin-transient-analyzer",
+    "packages/vite-plugin-vue-transient": {
+      "name": "@transient/vite-plugin-vue-transient",
       "dependencies": {
         "@transient/analyzer-vue": "workspace:*",
         "@transient/core": "workspace:*",
@@ -421,7 +421,7 @@
 
     "@transient/nuxt": ["@transient/nuxt@workspace:packages/nuxt"],
 
-    "@transient/vite-plugin-transient-analyzer": ["@transient/vite-plugin-transient-analyzer@workspace:packages/vite-plugin-transient-analyzer"],
+    "@transient/vite-plugin-vue-transient": ["@transient/vite-plugin-vue-transient@workspace:packages/vite-plugin-vue-transient"],
 
     "@tsconfig/node22": ["@tsconfig/node22@22.0.1", "", {}, "sha512-VkgOa3n6jvs1p+r3DiwBqeEwGAwEvnVCg/hIjiANl5IEcqP3G0u5m8cBJspe1t9qjZRlZ7WFgqq5bJrGdgAKMg=="],
 

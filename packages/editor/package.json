@@ -32,7 +32,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
     "@playwright/test": "^1.63.0",
-    "@transient/vite-plugin-transient-analyzer": "workspace:*",
+    "@transient/vite-plugin-vue-transient": "workspace:*",
     "@tsconfig/node22": "^22.0.1",
     "@types/bun": "^1.4.2",
     "@types/node": "^22.13.14",

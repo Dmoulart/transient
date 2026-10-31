@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["vite/client", "bun", "@transient/vite-plugin-transient-analyzer/client"],
+    "types": ["vite/client", "bun", "@transient/vite-plugin-vue-transient/client"],
     "noEmit": true,
 
     /* General */

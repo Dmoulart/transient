@@ -1,5 +1,5 @@
 {
-  "name": "@transient/vite-plugin-transient-analyzer",
+  "name": "@transient/vite-plugin-vue-transient",
   "type": "module",
   "private": true,
   "files": [
