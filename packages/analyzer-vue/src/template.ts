@@ -1,6 +1,6 @@
 import crypto from 'node:crypto'
 import { readFileSync } from 'node:fs'
-import { assertIs, someString } from '@transient/core'
+import { assertIs, pascalCase, someString } from '@transient/core'
 import type {
   BindingInfo,
   TransientElement,
@@ -11,6 +11,7 @@ import {
   type AttributeNode,
   type DirectiveNode,
   type ElementNode,
+  ElementTypes,
   NodeTypes,
   parse as parseTemplate,
   type TemplateChildNode,
@@ -85,9 +86,10 @@ function parseText(node: TextNode): TransientElement | null {
 }
 
 function parseElement(node: ElementNode, props: TransientProps): TransientElement | null {
-  const tag = node.tag
+  const isComponent = node.tagType === ElementTypes.COMPONENT
 
-  const isComponent = /^[A-Z]/.test(tag)
+  const tag = isComponent ? pascalCase(node.tag) : node.tag
+
   const attributes = parseElementAttributes(node.props, props)
 
   const slots: Record<string, TransientElement[]> = {}
@@ -155,7 +157,6 @@ function parseElementAttributes(
 }
 
 function extractBindingValue(content: string, props: TransientProps): BindingInfo {
-  // Literal: string
   if (/^(['"]).*\1$/.test(content)) {
     return { type: 'literal', expression: content.slice(1, -1) }
   }
