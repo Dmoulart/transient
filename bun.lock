@@ -81,6 +81,8 @@
       "name": "@transient/vite-plugin-transient-analyzer",
       "dependencies": {
         "@transient/analyzer-vue": "workspace:*",
+        "@transient/core": "workspace:*",
+        "@transient/ir": "workspace:*",
       },
       "devDependencies": {
         "vite": "^6.2.4",

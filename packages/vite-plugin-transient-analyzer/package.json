@@ -6,7 +6,9 @@
     "dist"
   ],
   "dependencies": {
-    "@transient/analyzer-vue": "workspace:*"
+    "@transient/analyzer-vue": "workspace:*",
+    "@transient/ir": "workspace:*",
+    "@transient/core": "workspace:*"
   },
   "peerDependencies": {
     "vite": "^6.0.0"
@@ -15,6 +17,7 @@
     "vite": "^6.2.4"
   },
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./client": "./src/client.d.ts"
   }
 }

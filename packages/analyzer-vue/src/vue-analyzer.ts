@@ -1,42 +1,54 @@
-import { resolve } from 'node:path'
-import type { TransientComponentSchema, TransientProps, TransientSlots } from '@transient/ir'
-import { type ComponentMeta, createChecker } from 'vue-component-meta'
-import { type AnalyzerConfig, defineAnalyzer } from './analyzer.js'
+import { dirname } from 'node:path'
+import type {
+  TransientComponentDictionnary,
+  TransientComponentSchema,
+  TransientProps,
+  TransientSlots,
+} from '@transient/ir'
+import { type ComponentMeta, createCheckerByJson } from 'vue-component-meta'
 import { castDefaultValue, castPropType } from './cast.js'
 import { logger } from './log/logger.js'
 import { analyzeTemplateElements } from './template.js'
 
-export type VueAnalyzerOptions = Pick<AnalyzerConfig, 'tsConfigPath' | 'dest' | 'glob'>
+export type ComponentEntry = {
+  name: string
+  filePath: string
+  exportName?: string
+}
 
-export function defineVueAnalyzer(options: VueAnalyzerOptions) {
-  const checker = createChecker(options.tsConfigPath, {
-    forceUseTs: true,
-    printer: { newLine: 1 },
-  })
+// Components that can't be described (no types, not a component…) are left out:
+// the editor still renders them, it just can't edit their props.
+export function describeVueComponents(
+  entries: ComponentEntry[],
+  tsConfigPath: string,
+): TransientComponentDictionnary {
+  // the entries join the project's program: components from node_modules
+  // (NuxtImg, NuxtLink…) aren't part of it otherwise
+  const checker = createCheckerByJson(
+    dirname(tsConfigPath),
+    { extends: tsConfigPath, files: entries.map((entry) => entry.filePath) },
+    { forceUseTs: true, printer: { newLine: 1 } },
+  )
+  const dictionnary: TransientComponentDictionnary = {}
 
-  return defineAnalyzer({
-    dest: options.dest,
-    tsConfigPath: options.tsConfigPath,
-    glob: options.glob ?? './**/*.vue',
-    describe(path, dir) {
-      const src = resolve(process.cwd(), dir, path)
-      const meta = checker.getComponentMeta(src)
-      return describeComponent(meta, src, path)
-    },
-  })
+  for (const { name, filePath, exportName } of entries) {
+    try {
+      const meta = checker.getComponentMeta(filePath, exportName)
+      dictionnary[name] = describeComponent(meta, filePath, filePath, name)
+    } catch (e) {
+      logger.details(`skipped ${name}: ${e instanceof Error ? e.message : String(e)}`)
+    }
+  }
+
+  return dictionnary
 }
 
 function describeComponent(
   meta: ComponentMeta,
   src: string,
   path: string,
+  tag: string,
 ): TransientComponentSchema {
-  const tag =
-    src
-      .split('/')
-      .pop()
-      ?.replace(/\.vue$/, '') ?? 'unknown'
-
   const props: TransientProps = {}
   let slots: TransientSlots | undefined
 
