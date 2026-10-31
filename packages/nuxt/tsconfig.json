@@ -1,0 +1,8 @@
+{
+  "references": [
+    {
+      "path": "../analyzer-vue"
+    }
+  ],
+  "extends": "../../tsconfig.base.json"
+}

@@ -26,11 +26,11 @@
     "@tiptap/extension-text": "^3.31.4",
     "@tiptap/extensions": "^3.31.4",
     "@tiptap/pm": "^3.31.4",
-    "@tiptap/vue-3": "^3.31.4"
+    "@tiptap/vue-3": "^3.31.4",
+    "@iconify-json/lucide": "^1.2.147"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
-    "@iconify-json/lucide": "^1.2.147",
     "@playwright/test": "^1.63.0",
     "@transient/vite-plugin-transient-analyzer": "workspace:*",
     "@tsconfig/node22": "^22.0.1",
@@ -42,7 +42,12 @@
     "vite-plugin-vue-devtools": "^7.7.2",
     "vue-tsc": "^2.2.8"
   },
+  "types": "./dist/types/index.d.ts",
   "exports": {
-    ".": "./dist/index.js"
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/editor.js"
+    },
+    "./style.css": "./dist/editor.css"
   }
 }

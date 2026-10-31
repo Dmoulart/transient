@@ -6,7 +6,7 @@
   ],
   "scripts": {
     "watch": "tsc -b --watch --preserveWatchOutput",
-    "build": "tsc -b",
+    "build": "tsc -b && bun run --cwd packages/editor build",
     "lint": "biome lint --write .",
     "format": "biome format --write .",
     "fix": "biome check --write .",

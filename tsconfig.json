@@ -3,7 +3,9 @@
     "references": [
         {"path": "packages/core"},
         {"path": "packages/ir"},
+        {"path": "packages/editor"},
         {"path": "packages/analyzer-vue"},
         {"path": "packages/vite-plugin-transient-analyzer"},
+        {"path": "packages/nuxt"},
     ]
 }
