@@ -95,7 +95,8 @@ export default function transient(options: TransientVitePluginOptions): Plugin {
               (e, i) =>
                 `import { ${e.exportName ?? 'default'} as c${i} } from ${JSON.stringify(e.filePath)}`,
             ),
-            `export default { ${entries.map((e, i) => `${JSON.stringify(e.name)}: c${i}`).join(', ')} }`,
+            // prevent circular imports
+            `export default { ${entries.map((e, i) => `get ${JSON.stringify(e.name)}() { return c${i} }`).join(', ')} }`,
           ].join('\n')
         }
       }

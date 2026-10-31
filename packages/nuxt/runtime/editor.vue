@@ -1,10 +1,9 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { pascalCase } from '@transient/core'
 import { ComponentEditor } from '@transient/editor'
 import '@transient/editor/style.css'
+import components from 'virtual:transient/components'
 import { type Component, ref } from 'vue'
-import components from '#build/transient/components.mjs'
-import dictionnary from '#build/transient/schemas.mjs'
 import { useRoute } from '#imports'
 
 function resolveComponent(tag: string) {
@@ -24,4 +23,4 @@ const component = ref(structuredClone(dictionnary[page]))
     :dictionnary="dictionnary"
     :resolve-component="resolveComponent"
   />
-</template>
+</template> -->

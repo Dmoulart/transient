@@ -8,12 +8,14 @@
   ],
   "dependencies": {
     "@nuxt/kit": "^4.0.0",
-    "@transient/analyzer-vue": "workspace:*",
+    "@transient/vite-plugin-vue-transient": "workspace:*",
     "@transient/editor": "workspace:*",
     "@transient/core": "workspace:*"
   },
   "exports": {
-    ".": "./dist/module.js"
+    ".": "./dist/module.js",
+    "./editor": "./dist/editor.js",
+    "./client": "./src/client.d.ts"
   },
   "devDependencies": {
     "@nuxt/schema": "^4.0.0"
