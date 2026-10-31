@@ -6,14 +6,14 @@ import ts from 'typescript'
 import type { Plugin, ResolvedConfig } from 'vite'
 export type TransientVitePluginOptions = {
   componentsPaths?: string | string[]
-  getComponentEntries?: () => Promise<ComponentEntry[]>
+  getComponentEntries?: () => ComponentEntry[]
   tsConfigPath?: string
 }
 export default function transient(options: TransientVitePluginOptions): Plugin {
   let config: ResolvedConfig
   let tsConfigPath: string
 
-  async function getComponentEntries(): Promise<ComponentEntry[]> {
+  function getComponentEntries(): ComponentEntry[] {
     if (options.getComponentEntries) {
       return options.getComponentEntries()
     }
@@ -79,17 +79,17 @@ export default function transient(options: TransientVitePluginOptions): Plugin {
       tsConfigPath = maybeTsConfigPath
     },
 
-    async load(id) {
+    load(id) {
       if (id.startsWith('\0virtual:transient')) {
         const [, subpath] = id.split('/')
         if (subpath === 'schemas') {
-          const entries = await getComponentEntries()
+          const entries = getComponentEntries()
           const dictionnary = describeVueComponents(entries, tsConfigPath)
           return `export default ${JSON.stringify(dictionnary)}`
         }
 
         if (subpath === 'components') {
-          const entries = await getComponentEntries()
+          const entries = getComponentEntries()
           return [
             ...entries.map(
               (e, i) =>
