@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import type { TransientComponentDictionnary } from '@transient/ir'
+import components from 'virtual:transient/components'
+import dictionnary from 'virtual:transient/schemas'
 import { ref } from 'vue'
-import _dictionnary from '@/assets/schemas/__schemas__.json'
 import Button from '@/samples/Button.vue'
 import ComponentEditor from './components/ComponentEditor.vue'
 import { useSaveTemplate } from './lib/composables/use-save-template.ts'
 import { resolveComponent } from './lib/playgrounds.ts'
-
-const dictionnary = _dictionnary as unknown as TransientComponentDictionnary
 
 // ?page=Slots loads another template (e2e fixtures live in src/tests/e2e), &debug=false hides the debug panel
 const query = new URLSearchParams(location.search)
@@ -20,6 +18,7 @@ const template = useSaveTemplate(component)
 <template>
   <ComponentEditor
     :resolve-component="resolveComponent"
+    :components="components"
     v-model="component"
     :dictionnary="dictionnary"
   />

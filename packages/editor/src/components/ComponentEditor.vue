@@ -55,13 +55,8 @@
       </template>
       <template v-else-if="editor.editing.value?.slotName">
         <EditingFrame
-          :targets="
-          index.slot(
-            editor.editing.value.id,
-            editor.editing.value.slotName,
-            editor.editing.value.occurrence,
-          )!.container
-        "
+          v-if="editingSlot"
+          :targets="editingSlot.container"
           :slot-name="editor.editing.value.slotName"
         />
       </template>
@@ -112,6 +107,7 @@
       "
         @close="componentPanel.close"
         :dictionnary="dictionnary"
+        :components="components"
       />
 
       <!-- <DebugPanel v-if="debug" :editor="editor" :template="component.template" :index="index" /> -->
@@ -127,6 +123,7 @@
     /> -->
     </template>
     <ComponentRenderer
+      v-else
       :component="component"
       :dictionnary="dictionnary"
       :resolve-component="resolveComponent"
@@ -135,6 +132,7 @@
 </template>
 
 <script setup lang="ts">
+import { pascalCase } from '@transient/core'
 import {
   type BindingValue,
   findElementById,
@@ -144,8 +142,7 @@ import {
   type TransientProp,
 } from '@transient/ir'
 import { useEventListener, watchOnce, whenever } from '@vueuse/core'
-import { computed, ref, useTemplateRef } from 'vue'
-import type { ResolveComponent } from '@/lib/components.ts'
+import { type Component, computed, ref, useTemplateRef } from 'vue'
 import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
 import { useEditor } from '@/lib/composables/use-editor.ts'
 import { useIndex } from '@/lib/composables/use-index.ts'
@@ -160,11 +157,15 @@ import EditingFrame from './Frame/EditingFrame.vue'
 import SlotHighlight from './SlotHighlight.vue'
 import Toolbar from './Toolbar.vue'
 
-const { dictionnary } = defineProps<{
+const { dictionnary, components } = defineProps<{
+  components: Record<string, Component>
   dictionnary: TransientComponentDictionnary
-  resolveComponent?: ResolveComponent
   debug?: boolean
 }>()
+
+function resolveComponent(tag: string) {
+  return (components as Record<string, Component>)[pascalCase(tag)] ?? null
+}
 
 const component = defineModel<TransientComponentSchema>({ required: true })
 const template = computed(() => component.value.template)
@@ -199,6 +200,13 @@ const hoveredSlot = computed(() => {
   // the selected component's slots are already outlined by SlotHighlight
   if (!hit?.slot || editor.editing.value || hit.id === editor.activeComponent.id.value) return null
   return index.slot(hit.id, hit.slot.name, hit.slot.occurrence) ?? null
+})
+
+// undefined while the edited slot isn't rendered (re-render in flight, v-if'd away…)
+const editingSlot = computed(() => {
+  const editing = editor.editing.value
+  if (!editing?.slotName) return null
+  return index.slot(editing.id, editing.slotName, editing.occurrence) ?? null
 })
 
 function isSlotHovered(ownerId: string, name: string, occurrence: number) {

@@ -11,18 +11,23 @@
         :schema="schema"
         @select="(data) => emit('select', data)"
         :dictionnary="dictionnary"
+        :component="components[pascalCase(schema.tag)]"
       />
     </div>
   </Panel>
 </template>
 <script setup lang="ts">
+import { pascalCase } from '@transient/core'
 import type { TransientComponentDictionnary, TransientComponentSchema } from '@transient/ir'
-import { computed, ref } from 'vue'
+import { type Component, computed, ref } from 'vue'
 import Panel from '../Panel.vue'
 import SearchInput from '../SearchInput.vue'
 import ComponentItem from './ComponentItem.vue'
 
-const props = defineProps<{ dictionnary: TransientComponentDictionnary }>()
+const props = defineProps<{
+  dictionnary: TransientComponentDictionnary
+  components: Record<string, Component>
+}>()
 const emit =
   defineEmits<
     (

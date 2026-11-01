@@ -69,9 +69,9 @@
       "name": "@transient/nuxt",
       "dependencies": {
         "@nuxt/kit": "^4.0.0",
-        "@transient/analyzer-vue": "workspace:*",
         "@transient/core": "workspace:*",
         "@transient/editor": "workspace:*",
+        "@transient/vite-plugin-vue-transient": "workspace:*",
       },
       "devDependencies": {
         "@nuxt/schema": "^4.0.0",
