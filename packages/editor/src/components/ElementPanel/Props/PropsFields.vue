@@ -19,7 +19,13 @@ const id = useId()
 </script>
 
 <template>
-  <div v-for="(prop, name) of propsSchema" :key="name" class="tr-prop-row">
+  <div
+    v-for="(prop, name) of propsSchema"
+    :key="name"
+    class="tr-prop-row"
+    data-test="prop"
+    :data-prop="name"
+  >
     <div class="tr-prop-head">
       <label class="tr-prop-name" :for="`${id}-${name}`">
         {{ name }}

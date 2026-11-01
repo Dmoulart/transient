@@ -1,7 +1,13 @@
 <template>
-  <input v-if="kind === 'string'" :id="id" v-model="text" class="tr-field">
+  <input v-if="kind === 'string'" :id="id" v-model="text" class="tr-field" data-field="string">
 
-  <SwitchRoot v-else-if="kind === 'boolean'" :id="id" v-model="checked" class="tr-switch">
+  <SwitchRoot
+    v-else-if="kind === 'boolean'"
+    :id="id"
+    v-model="checked"
+    class="tr-switch"
+    data-field="boolean"
+  >
     <SwitchThumb class="tr-switch-thumb" />
   </SwitchRoot>
 
@@ -12,11 +18,11 @@
     :format-options="{ maximumFractionDigits: kind === 'integer' ? 0 : 10 }"
     class="tr-flex tr-items-center tr-gap-1"
   >
-    <NumberFieldDecrement class="tr-icon-btn">
+    <NumberFieldDecrement class="tr-icon-btn" data-action="decrement">
       <span class="tr-i-lucide-minus" aria-hidden="true" />
     </NumberFieldDecrement>
-    <NumberFieldInput :id="id" class="tr-field" />
-    <NumberFieldIncrement class="tr-icon-btn">
+    <NumberFieldInput :id="id" class="tr-field" data-field="number" />
+    <NumberFieldIncrement class="tr-icon-btn" data-action="increment">
       <span class="tr-i-lucide-plus" aria-hidden="true" />
     </NumberFieldIncrement>
   </NumberFieldRoot>
@@ -27,14 +33,25 @@
     v-model="choice"
     type="single"
     class="tr-segmented"
+    data-field="toggle"
   >
-    <ToggleGroupItem v-for="option in options" :key="option" :value="option" class="tr-segment">
+    <ToggleGroupItem
+      v-for="option in options"
+      :key="option"
+      :value="option"
+      class="tr-segment"
+      :data-option="option"
+    >
       {{ option }}
     </ToggleGroupItem>
   </ToggleGroupRoot>
 
-  <SelectRoot v-else-if="options" v-model="choice">
-    <SelectTrigger :id="id" class="tr-field tr-flex tr-items-center tr-justify-between">
+  <SelectRoot v-else-if="options" v-model="selected">
+    <SelectTrigger
+      :id="id"
+      class="tr-field tr-flex tr-items-center tr-justify-between"
+      data-field="select"
+    >
       <SelectValue />
       <span class="tr-i-lucide-chevron-down" aria-hidden="true" />
     </SelectTrigger>
@@ -45,8 +62,14 @@
         :side-offset="4"
       >
         <SelectViewport>
-          <SelectItem v-for="option in options" :key="option" :value="option" class="tr-menu-item">
-            <SelectItemText>{{ option }}</SelectItemText>
+          <SelectItem
+            v-for="(option, index) in options"
+            :key="option"
+            :value="index"
+            class="tr-menu-item"
+            :data-option="option"
+          >
+            <SelectItemText>{{ option === '' ? '""' : option }}</SelectItemText>
             <SelectItemIndicator class="tr-i-lucide-check" />
           </SelectItem>
         </SelectViewport>
@@ -57,6 +80,7 @@
     v-else
     :id="id"
     class="tr-field tr-font-mono tr-h-auto tr-py-2"
+    data-field="expression"
     rows="3"
     :value="text"
     @change="model = ($event.target as HTMLTextAreaElement).value"
@@ -121,6 +145,17 @@ const choice = computed({
   get: () => current.value as string | number | undefined,
   set: (value: string | number | undefined) => {
     model.value = value
+  },
+})
+
+const selected = computed({
+  get: () => {
+    // biome-ignore lint/complexity/useIndexOf: wider type
+    const index = options.value?.findIndex((option) => option === current.value) ?? -1
+    return index === -1 ? undefined : index
+  },
+  set: (index: number) => {
+    model.value = options.value?.[index]
   },
 })
 

@@ -18,6 +18,8 @@ withDefaults(
     align?: 'left' | 'center' | 'right'
     // enum, > 4 options → select
     weight?: 'thin' | 'light' | 'regular' | 'medium' | 'bold'
+    // an empty string option, which a select can't use as a value
+    size?: '' | 'xs' | 'sm' | 'md' | 'lg'
     // numeric literals → enum of strings
     level?: 1 | 2 | 3
     // union of an enum and a decimal → raw expression
