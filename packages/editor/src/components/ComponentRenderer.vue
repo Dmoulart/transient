@@ -36,17 +36,13 @@ function render(elements: TransientElement[]) {
 }
 
 function renderComponent(element: TransientElement): VNode {
-  const schema = props.dictionnary[element.tag]
+  const schema = props.dictionnary[element.tag] as TransientComponentSchema | undefined
 
   const component =
     props.resolveComponent?.(element.tag, schema) ?? resolveVueComponent(element.tag)
 
-  const schemaSlots = schema.slots
-    ? Object.fromEntries(Object.keys(schema.slots).map((slotName) => [slotName, []]))
-    : {}
-
   const slots = Object.fromEntries(
-    Object.entries({ ...schemaSlots, ...(element.slots ?? {}) }).map(([slotName, children]) => {
+    Object.entries(element.slots ?? {}).map(([slotName, children]) => {
       return [slotName, () => render(children)]
     }),
   )
