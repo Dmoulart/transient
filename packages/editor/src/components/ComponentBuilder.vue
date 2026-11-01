@@ -68,9 +68,13 @@ function renderComponent(element: TransientElement): VNode {
 
   assert(typeof component !== 'string', `Unknown component <${element.tag}>`)
 
-  // component instances with empty slots must still be editable
+  // component instances with empty slots must still be editable when selected
   const schemaSlots = schema?.slots
-    ? Object.fromEntries(Object.keys(schema.slots).map((slotName) => [slotName, []]))
+    ? Object.fromEntries(
+        Object.keys(schema.slots)
+          .filter((slotName) => slotName === props.editing?.slotName)
+          .map((slotName) => [slotName, []]),
+      )
     : {}
 
   const slots = Object.fromEntries(
