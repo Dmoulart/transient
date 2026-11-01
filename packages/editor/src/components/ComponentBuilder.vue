@@ -2,6 +2,7 @@
 import { assert } from '@transient/core'
 import type {
   TransientComponentDictionnary,
+  TransientComponentSchema,
   TransientElement,
   TransientTemplate,
 } from '@transient/ir'
@@ -60,7 +61,7 @@ function nameSlot(slotName: string, renderSlot: () => VNode[] | VNode) {
 function renderComponent(element: TransientElement): VNode {
   assert(element.isComponent)
 
-  const schema = props.dictionnary[element.tag]
+  const schema = props.dictionnary[element.tag] as TransientComponentSchema | undefined
 
   const component =
     props.resolveComponent?.(element.tag, schema) ?? resolveVueComponent(element.tag)
@@ -68,7 +69,7 @@ function renderComponent(element: TransientElement): VNode {
   assert(typeof component !== 'string', `Unknown component <${element.tag}>`)
 
   // component instances with empty slots must still be editable
-  const schemaSlots = schema.slots
+  const schemaSlots = schema?.slots
     ? Object.fromEntries(Object.keys(schema.slots).map((slotName) => [slotName, []]))
     : {}
 

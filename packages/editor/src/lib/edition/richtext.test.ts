@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import type { JSONContent } from '@tiptap/vue-3'
 import type { TransientElement } from '@transient/ir'
-import { pmContentToTransientElements } from './richtext'
+import { pmContentToTransientElements, transientElementsToPmContent } from './richtext'
 
 // --- builders: the slot as it was before editing, and what ProseMirror hands back ---
 
@@ -171,5 +171,55 @@ describe('pmContentToTransientElements', () => {
     )
 
     expect(capture(pm, original)).toBe('<strong#s><em#e>a</em><u#u>b</u><em#new>c</em></strong>')
+  })
+})
+
+// a slot holding <h2>, <p>…: blocks keep their tag instead of being flattened into text
+
+const block = (id: string, tag: string, ...content: JSONContent[]): JSONContent => ({
+  type: 'textBlock',
+  attrs: { id, tag, attributes: {} },
+  content,
+})
+
+// IR → ProseMirror → IR, untouched by the user
+const roundtrip = (original: TransientElement) =>
+  capture(transientElementsToPmContent(original.slots!.default!, new Map()), original)
+
+describe('blocks', () => {
+  test('headings and paragraphs survive an edit', () => {
+    const original = container(
+      el('h', 'h2', [text('t1', 'Title')]),
+      el('p', 'p', [text('t2', 'Body '), el('s', 'strong', [text('t3', 'bold')])]),
+    )
+
+    expect(roundtrip(original)).toBe('<h2#h>Title</h2><p#p>Body <strong#s>bold</strong></p>')
+  })
+
+  test('a paragraph split with Enter gives a new paragraph', () => {
+    const original = container(el('p', 'p', [text('t1', 'ab')]))
+
+    const pm = doc(block('p', 'p', t('a')), block('p', 'p', t('b')))
+
+    expect(capture(pm, original)).toBe('<p#p>a</p><p#new>b</p>')
+  })
+
+  test('a <br> stays in its text', () => {
+    const original = container(
+      el('h', 'h1', [text('t1', 'Atelier'), el('b', 'br'), text('t2', 'de Saint-Gué')]),
+    )
+
+    expect(roundtrip(original)).toBe('<h1#h>Atelier<br#b></br>de Saint-Gué</h1>')
+  })
+
+  test('text between blocks stays loose, indentation goes', () => {
+    const original = container(
+      text('t0', '\n  '),
+      el('p', 'p', [text('t1', 'a')]),
+      text('t2', 'loose'),
+      el('d', 'div', [el('q', 'p', [text('t3', 'nested')])]),
+    )
+
+    expect(roundtrip(original)).toBe('<p#p>a</p>loose<div#d><p#q>nested</p></div>')
   })
 })

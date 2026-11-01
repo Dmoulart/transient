@@ -2,12 +2,16 @@
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
 import { UndoRedo } from '@tiptap/extensions'
-import { Editor, Mark, Node as PmNode } from '@tiptap/vue-3'
+import { Editor, Mark, type NodeConfig, Node as PmNode } from '@tiptap/vue-3'
 import { getDescendantComponents, type TransientElement } from '@transient/ir'
 import { h, onErrorCaptured, onUnmounted, shallowRef, Teleport, type VNode } from 'vue'
 import type { EditorEvents } from '@/editor/events'
 import { editableRoots } from '@/lib/edition/editable-root'
-import { pmContentToTransientElements, transientElementsToPmContent } from '@/lib/edition/richtext'
+import {
+  hasBlocks,
+  pmContentToTransientElements,
+  transientElementsToPmContent,
+} from '@/lib/edition/richtext'
 import { parseElementAttributes } from '@/lib/transient/attributes'
 import RichTextToolbar from './RichTextToolbar.vue'
 
@@ -65,27 +69,32 @@ if (position === (props.occurrence ?? 0)) {
   const editor = shallowRef<Editor | undefined>()
   onUnmounted(() => editor.value?.destroy())
 
+  const slotContent = props.container.slots?.[props.slotName] ?? []
+  const blocks = hasBlocks(slotContent, placeholders)
+
   Root = () => {
     // Vue renders the slot's own tag and leaves its children alone: ProseMirror owns them
     const editingContainer = h(props.container.tag, {
       ...parseElementAttributes(props.container),
       'data-test': 'editing-container',
+      'data-blocks': blocks || undefined,
       onVnodeMounted(vnode) {
         editor.value = new Editor({
           // mount on the element itself, not in a <div> appended to it
           element: { mount: vnode.el as HTMLElement },
-          // a slot is inline content (it may live in a <span> or an <h3>): no paragraph level
+          // a slot of text (it may live in a <span> or an <h3>) stays inline: no paragraph level.
+          // One holding <h2>, <p>… is a list of blocks that keep their tag
           extensions: [
-            Document.extend({ content: 'inline*' }),
+            Document.extend({ content: blocks ? 'block+' : 'inline*' }),
             Text,
             UndoRedo,
             Island(placeholders),
             InlineElement(),
+            ElementNode('textBlock', { group: 'block', content: 'inline*' }),
+            ElementNode('blockContainer', { group: 'block', content: 'block+' }),
+            ElementNode('voidElement', { group: 'inline', inline: true, atom: true }),
           ],
-          content: transientElementsToPmContent(
-            props.container.slots?.[props.slotName] ?? [],
-            placeholders,
-          ),
+          content: transientElementsToPmContent(slotContent, placeholders),
           autofocus: false,
           enableContentCheck: true,
           onMount({ editor }) {
@@ -136,6 +145,25 @@ if (position === (props.occurrence ?? 0)) {
     })
   }
 
+  // an IR element ProseMirror can hold: it renders its own tag and attributes.
+  // A tagless textBlock is inline content found between blocks (rendered as a div)
+  function ElementNode(name: string, spec: Partial<NodeConfig>) {
+    return PmNode.create({
+      name,
+      ...spec,
+      addAttributes: () => ({
+        id: { default: null },
+        // a new block (Enter at the end of a heading) is a paragraph
+        tag: { default: 'p' },
+        attributes: { default: {} },
+      }),
+      renderHTML: ({ node }) =>
+        spec.atom
+          ? [node.attrs.tag, node.attrs.attributes]
+          : [node.attrs.tag ?? 'div', node.attrs.attributes, 0],
+    })
+  }
+
   function Island(placeholders: Map<string, HTMLElement>) {
     return PmNode.create({
       name: 'island',
@@ -168,6 +196,16 @@ if (position === (props.occurrence ?? 0)) {
 tst-slot-edition:empty {
   display: inline-block;
   min-width: 1ch;
+}
+
+/* custom elements are inline: <h2>, <p> inside need a block parent.
+   Not display: contents, the editing host would lose focus. The wrapper takes the
+   blocks' place as grid/flex item, so their own z-index stops applying: keep the
+   edited text above the component's decorative layers (a hero's background) */
+tst-slot-edition[data-blocks] {
+  display: block;
+  position: relative;
+  z-index: 1;
 }
 
 [contenteditable="true"] {

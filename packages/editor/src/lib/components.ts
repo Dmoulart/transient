@@ -3,5 +3,5 @@ import type { Component } from 'vue'
 
 export type ResolveComponent = (
   tag: string,
-  schema: TransientComponentSchema,
-) => Component | undefined
+  schema: TransientComponentSchema | undefined,
+) => Component | null | undefined

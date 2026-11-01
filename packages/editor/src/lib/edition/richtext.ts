@@ -8,7 +8,80 @@ export function transientElementsToPmContent(
   content: TransientElement[],
   placeholders: Map<string, HTMLElement>,
 ): JSONContent {
-  return { type: 'doc', content: transientElementsToPMInlineContent(content, placeholders) }
+  return {
+    type: 'doc',
+    content: hasBlocks(content, placeholders)
+      ? transientElementsToPMBlocks(content, placeholders)
+      : transientElementsToPMInlineContent(content, placeholders),
+  }
+}
+
+// elements without content that sit in the text (<br>, <img>)
+export const VOID_TAGS = new Set(['br', 'img', 'wbr'])
+
+function isInline(element: TransientElement, placeholders: Map<string, HTMLElement>) {
+  return (
+    element.tag === '#text' ||
+    INLINE_TAGS.has(element.tag) ||
+    VOID_TAGS.has(element.tag) ||
+    placeholders.has(element.id)
+  )
+}
+
+// a slot holding <h2>, <p>… gets a block document, where each block keeps its tag
+export function hasBlocks(content: TransientElement[], placeholders: Map<string, HTMLElement>) {
+  return content.some((element) => !isInline(element, placeholders))
+}
+
+function elementAttrs(element: TransientElement) {
+  return { id: element.id, tag: element.tag, attributes: parseElementAttributes(element) }
+}
+
+function transientElementsToPMBlocks(
+  content: TransientElement[],
+  placeholders: Map<string, HTMLElement>,
+): JSONContent[] {
+  const blocks: JSONContent[] = []
+  let run: TransientElement[] = []
+
+  // inline content between blocks goes in a tagless block, unwrapped on the way back
+  const flush = () => {
+    const inline = transientElementsToPMInlineContent(run, placeholders)
+    // whitespace between blocks is markup indentation, not content
+    if (inline.some((node) => node.type !== 'text' || node.text?.trim())) {
+      blocks.push({
+        type: 'textBlock',
+        attrs: { id: null, tag: null, attributes: {} },
+        content: inline,
+      })
+    }
+    run = []
+  }
+
+  for (const element of content) {
+    if (isInline(element, placeholders)) {
+      run.push(element)
+      continue
+    }
+    flush()
+    const children = element.slots?.default ?? []
+    blocks.push(
+      hasBlocks(children, placeholders)
+        ? {
+            type: 'blockContainer',
+            attrs: elementAttrs(element),
+            content: transientElementsToPMBlocks(children, placeholders),
+          }
+        : {
+            type: 'textBlock',
+            attrs: elementAttrs(element),
+            content: transientElementsToPMInlineContent(children, placeholders),
+          },
+    )
+  }
+  flush()
+
+  return blocks
 }
 // rich text formatting: part of the text, never selected on its own
 export const INLINE_TAGS = new Set([
@@ -40,6 +113,10 @@ export function transientElementsToPMInlineContent(
       return text ? [{ type: 'text', text, marks }] : []
     }
 
+    if (VOID_TAGS.has(element.tag)) {
+      return [{ type: 'voidElement', attrs: elementAttrs(element), marks }]
+    }
+
     if (INLINE_TAGS.has(element.tag)) {
       const attributes = parseElementAttributes(element)
       return transientElementsToPMInlineContent(element.slots?.default ?? [], placeholders, [
@@ -66,23 +143,45 @@ export function pmContentToTransientElements(
 
   Object.values(originalElement.slots ?? {}).forEach(index)
 
-  return pmContentToTransientElementsInner(root, byId)
+  return pmContentToTransientElementsInner(root.content ?? [], byId, new Set())
 }
 
+const literalAttributes = (attributes: Record<string, string> = {}) =>
+  mapObjectValues(attributes, (value: string) => ({ type: 'literal' as const, expression: value }))
+
 function pmContentToTransientElementsInner(
-  root: JSONContent,
+  nodes: JSONContent[],
   byId: Map<string, TransientElement>,
+  // shared by the whole document: a split element (Enter in a <p>) must not reuse its id
+  usedIds: Set<string>,
 ): TransientElement[] {
-  const usedMarksIds = new Set<string>()
   const children: TransientElement[] = []
 
   const stack: TransientElement[] = []
 
   let depth: number = 0
 
-  for (const node of root.content ?? [root]) {
+  for (const node of nodes) {
     const id = node.attrs?.id
     const original = id ? byId.get(id) : undefined
+
+    if (node.type === 'textBlock' || node.type === 'blockContainer') {
+      const inner = pmContentToTransientElementsInner(node.content ?? [], byId, usedIds)
+      if (!node.attrs?.tag) {
+        children.push(...inner)
+        continue
+      }
+      const blockId = id && !usedIds.has(id) ? id : crypto.randomUUID()
+      usedIds.add(blockId)
+      children.push({
+        id: blockId,
+        tag: node.attrs.tag,
+        isComponent: false,
+        attributes: literalAttributes(node.attrs.attributes),
+        slots: { default: inner },
+      })
+      continue
+    }
 
     let wrapper: TransientElement[] = children
     stack.length = node?.marks?.length ?? 0
@@ -98,7 +197,7 @@ function pmContentToTransientElementsInner(
 
         if (!sameLevelPreviousMark || sameLevelPreviousMark.id !== id) {
           const element: TransientElement = {
-            id: id && !usedMarksIds.has(id) ? id : crypto.randomUUID(),
+            id: id && !usedIds.has(id) ? id : crypto.randomUUID(),
             tag: mark.attrs.tag,
             isComponent: false,
             attributes: mapObjectValues(mark.attrs?.attributes ?? {}, (value: string) => ({
@@ -108,7 +207,7 @@ function pmContentToTransientElementsInner(
             slots: { default: [] },
           }
 
-          usedMarksIds.add(element.id)
+          usedIds.add(element.id)
 
           stack.length = i
           depth = stack.push(element)
@@ -132,6 +231,15 @@ function pmContentToTransientElementsInner(
         isComponent: false,
         attributes: { value: { type: 'literal', expression: node?.text ?? '' } },
       }
+    } else if (node.type === 'voidElement') {
+      assertDefined(node.attrs)
+      element = {
+        id: id && !usedIds.has(id) ? id : crypto.randomUUID(),
+        tag: node.attrs.tag,
+        isComponent: false,
+        attributes: literalAttributes(node.attrs.attributes),
+      }
+      usedIds.add(element.id)
     } else if (node.type === 'inlineElement') {
       assertDefined(node.attrs)
 
