@@ -60,8 +60,8 @@ export type TransientComplexTypeName = 'list' | 'object' | 'union' | 'enum' | 'r
 export type TransientPrimitiveTypeName = 'boolean' | 'integer' | 'decimal' | 'unknown' | 'string'
 
 export type BindingInfo = {
-  type: 'prop' | 'literal'
+  type: 'prop' | 'literal' | 'directive'
   expression: BindingValue
 }
 
-export type BindingValue = string | number | boolean | undefined | Record<string, unknown>
+export type BindingValue = string | number | boolean | Record<string, unknown> | undefined | null
