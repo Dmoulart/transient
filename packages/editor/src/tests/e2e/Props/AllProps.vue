@@ -10,6 +10,8 @@ withDefaults(
     text?: string
     withDefault?: string
     requiredText: string
+    // declared camelCase, set kebab-case in the template
+    someValue?: string
     // boolean
     enabled?: boolean
     // decimal (number is never integer)

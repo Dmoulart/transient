@@ -90,3 +90,7 @@ test('other types fall back to a raw expression', async ({ page }) => {
     await expect(field(page, name)).toHaveAttribute('data-field', 'expression')
   }
 })
+
+test('kebab-case attribute is read back by the panel (camelCase prop)', async ({ page }) => {
+  await expect(field(page, 'someValue')).toHaveValue('From kebab')
+})

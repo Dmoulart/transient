@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { camelCase } from '@transient/core'
 import {
   type BindingValue,
   getTypeKind,
@@ -6,16 +7,23 @@ import {
   type TransientProp,
   type TransientProps,
 } from '@transient/ir'
-import { useId } from 'vue'
+import { computed, useId } from 'vue'
+import { mapKeys } from '@/lib/objects.ts'
 import PropField from './PropField.vue'
 
-defineProps<{ propsSchema: TransientProps; values: TransientElementAttributes }>()
+const props = defineProps<{ propsSchema: TransientProps; values: TransientElementAttributes }>()
 
 const emit = defineEmits<{
   update: [data: { prop: TransientProp; propName: string; value: BindingValue }]
 }>()
 
 const id = useId()
+
+const normalizedValues = computed(() => mapKeys(props.values, camelCase))
+
+function getValue(propName: string) {
+  return normalizedValues.value[camelCase(propName)]
+}
 </script>
 
 <template>
@@ -39,7 +47,7 @@ const id = useId()
     <PropField
       :id="`${id}-${name}`"
       :prop="prop"
-      :model-value="values[name]?.expression"
+      :model-value="getValue(name)?.expression"
       @update:model-value="(value) => emit('update', { prop, propName: name, value })"
     />
   </div>

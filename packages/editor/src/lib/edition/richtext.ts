@@ -1,7 +1,7 @@
 import type { JSONContent } from '@tiptap/vue-3'
 import { assertDefined, assertIs, someString } from '@transient/core'
 import type { TransientElement } from '@transient/ir'
-import { mapObjectValues } from '../objects'
+import { mapValues } from '../objects'
 import { parseElementAttributes } from '../transient/attributes'
 
 export function transientElementsToPmContent(
@@ -147,7 +147,7 @@ export function pmContentToTransientElements(
 }
 
 const literalAttributes = (attributes: Record<string, string> = {}) =>
-  mapObjectValues(attributes, (value: string) => ({ type: 'literal' as const, expression: value }))
+  mapValues(attributes, (value: string) => ({ type: 'literal' as const, expression: value }))
 
 function pmContentToTransientElementsInner(
   nodes: JSONContent[],
@@ -200,7 +200,7 @@ function pmContentToTransientElementsInner(
             id: id && !usedIds.has(id) ? id : crypto.randomUUID(),
             tag: mark.attrs.tag,
             isComponent: false,
-            attributes: mapObjectValues(mark.attrs?.attributes ?? {}, (value: string) => ({
+            attributes: mapValues(mark.attrs?.attributes ?? {}, (value: string) => ({
               type: 'literal',
               expression: value,
             })),
@@ -247,7 +247,7 @@ function pmContentToTransientElementsInner(
         id: id ?? crypto.randomUUID(),
         tag: node.attrs.tag,
         isComponent: false,
-        attributes: mapObjectValues(node.attrs?.attributes ?? {}, (value: string) => ({
+        attributes: mapValues(node.attrs?.attributes ?? {}, (value: string) => ({
           type: 'literal',
           expression: value,
         })),
