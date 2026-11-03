@@ -118,7 +118,7 @@ function parseElement(node: ElementNode, props: TransientProps): TransientElemen
   }
 }
 
-function parseElementAttributes(
+export function parseElementAttributes(
   props: (AttributeNode | DirectiveNode)[],
   componentProps: TransientProps,
 ): Record<string, BindingInfo> {
@@ -126,16 +126,10 @@ function parseElementAttributes(
 
   for (const prop of props) {
     if (prop.type === NodeTypes.DIRECTIVE) {
-      if (prop.arg && 'content' in prop.arg) {
-        const key = `${prop.name}${prop.arg ? `:${prop.arg.content}` : ''}`
-
-        if (prop.name === 'slot') {
-          const slotName = prop.arg.content
-          attributes['v-slot'] = { type: 'literal', expression: slotName }
-        } else if (prop.exp && 'content' in prop.exp) {
-          const value = extractBindingValue(prop.exp.content, componentProps)
-          attributes[key] = value
-        }
+      const attr = directiveToAttribute(prop, componentProps)
+      if (attr) {
+        const [key, value] = attr
+        attributes[key] = value
       }
     } else if (prop.type === NodeTypes.ATTRIBUTE) {
       const key = prop.name
@@ -154,6 +148,27 @@ function parseElementAttributes(
   }
 
   return attributes
+}
+
+function directiveToAttribute(
+  { arg, name, exp }: DirectiveNode,
+  componentProps: TransientProps,
+): [string, BindingInfo] | null {
+  if (arg && 'content' in arg) {
+    if (name === 'slot') {
+      const slotName = arg.content
+      return ['v-slot', { type: 'literal', expression: slotName }]
+    } else if (exp && 'content' in exp) {
+      const value = extractBindingValue(exp.content, componentProps)
+      if (name === 'bind') {
+        return [arg.content, value]
+      }
+      const key = `${name}${arg ? `:${arg.content}` : ''}`
+      return [key, value]
+    }
+  }
+  // not supported
+  return null
 }
 
 function extractBindingValue(content: string, props: TransientProps): BindingInfo {
