@@ -9,6 +9,7 @@
       :can-redo="editor.canRedo.value"
       @undo="editor.undo"
       @redo="editor.redo"
+      @publish="emit('publish', component)"
     />
     <template v-if="isEditing">
       <main ref="canvas" data-test="canvas">
@@ -161,6 +162,10 @@ const { dictionnary, components } = defineProps<{
   components: Record<string, Component>
   dictionnary: TransientComponentDictionnary
   debug?: boolean
+}>()
+
+const emit = defineEmits<{
+  publish: [TransientComponentSchema]
 }>()
 
 function resolveComponent(tag: string) {

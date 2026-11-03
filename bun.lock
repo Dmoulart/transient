@@ -71,6 +71,7 @@
         "@nuxt/kit": "^4.0.0",
         "@transient/core": "workspace:*",
         "@transient/editor": "workspace:*",
+        "@transient/ir": "workspace:*",
         "@transient/vite-plugin-vue-transient": "workspace:*",
       },
       "devDependencies": {
