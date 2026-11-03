@@ -26,27 +26,7 @@ export function elementToVueElement(element: TransientElement): string {
 
   for (const attribute in element.attributes) {
     const value = element.attributes[attribute]!
-
-    if (typeof value.expression !== 'string') {
-      attributes.push(`:${attribute}="${value?.expression}"`)
-      continue
-    }
-
-    if (value.type === 'literal') {
-      attributes.push(`${attribute}="${toText(value?.expression)}"`)
-    } else if (value.type === 'directive') {
-      if (value.expression !== undefined) {
-        attributes.push(`${attribute}="${value.expression}"`)
-      } else {
-        if (attribute.startsWith('v-slot:')) {
-          const elementSlot = attribute.slice('v-slot:'.length)
-          attributes.push(`#${elementSlot}`)
-        }
-      }
-    } else {
-      // todo is prop type used ?
-      throw new Error('Not implemented')
-    }
+    attributes.push(toVueAttribute(attribute, value))
   }
 
   const children: string[] = []
@@ -99,6 +79,28 @@ function createTemplate(
     slots: {
       default: content,
     },
+  }
+}
+
+function toVueAttribute(name: string, value: BindingInfo) {
+  if (value.type === 'literal') {
+    if (typeof value.expression !== 'string') {
+      return `:${name}="${value?.expression}"`
+    }
+
+    return `${name}="${toText(value?.expression)}"`
+  } else if (value.type === 'directive') {
+    if (value.expression !== undefined) {
+      return `${name}="${value.expression}"`
+    } else {
+      if (name.startsWith('v-slot:')) {
+        const elementSlot = name.slice('v-slot:'.length)
+        return `#${elementSlot}`
+      }
+    }
+  } else {
+    // todo is prop type used ?
+    throw new Error('Not implemented')
   }
 }
 
