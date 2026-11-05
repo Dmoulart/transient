@@ -21,6 +21,9 @@ export default defineConfig({
     presetIcons({
       prefix: 'tr-i-',
       scale: 1,
+      collections: {
+        lucide: () => import('@iconify-json/lucide/icons.json').then((i) => i.default),
+      },
       extraProperties: { display: 'inline-block', 'vertical-align': 'middle', 'flex-shrink': '0' },
     }),
   ],

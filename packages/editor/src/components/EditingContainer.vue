@@ -211,4 +211,17 @@ tst-slot-edition[data-blocks] {
 [contenteditable="true"] {
   outline: none;
 }
+
+/* todo : investigate tip tap and blocks vs inline, trailing breaks etc*/
+:is(br, tst-island) ~ br.ProseMirror-trailingBreak {
+  display: none;
+}
+
+tst-island:has(> :not(a, span, b, i, strong, em, img, svg)) {
+  display: block;
+}
+
+:has(> tst-island > :not(a, span, b, i, strong, em, img, svg)) > img.ProseMirror-separator {
+  display: none !important;
+}
 </style>
