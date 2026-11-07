@@ -7,10 +7,10 @@ import type {
   TransientTemplate,
 } from '@transient/ir'
 import { h, onErrorCaptured, resolveComponent as resolveVueComponent, Text, type VNode } from 'vue'
-import type { EditorEvents } from '@/editor/events.ts'
 import type { ResolveComponent } from '@/lib/components.ts'
 import type { Editing } from '@/lib/composables/use-editor.ts'
 import { type Index, useIndex } from '@/lib/composables/use-index'
+import type { EditorEvents } from '@/lib/edition/events.ts'
 import { parseElementAttributes } from '@/lib/transient/attributes.ts'
 import EditingContainer from './EditingContainer.vue'
 

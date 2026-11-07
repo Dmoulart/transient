@@ -5,8 +5,8 @@ import { UndoRedo } from '@tiptap/extensions'
 import { Editor, Mark, type NodeConfig, Node as PmNode } from '@tiptap/vue-3'
 import { getDescendantComponents, type TransientElement } from '@transient/ir'
 import { h, onErrorCaptured, onUnmounted, shallowRef, Teleport, type VNode } from 'vue'
-import type { EditorEvents } from '@/editor/events'
 import { editableRoots } from '@/lib/edition/editable-root'
+import type { EditorEvents } from '@/lib/edition/events.ts'
 import {
   hasBlocks,
   pmContentToTransientElements,

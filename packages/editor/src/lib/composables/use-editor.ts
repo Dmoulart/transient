@@ -6,7 +6,7 @@ import {
   type TransientElement,
 } from '@transient/ir'
 import { computed, type Ref, readonly, ref, shallowRef } from 'vue'
-import { applyEdition, type Edition } from '@/editor/edition'
+import { applyEdition, type Edition } from '@/lib/edition/edition'
 import { INLINE_TAGS } from '../edition/richtext'
 import { useElement } from './use-element'
 

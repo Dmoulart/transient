@@ -96,7 +96,7 @@
         />
       </slot>
 
-      <ComponentPanel
+      <ComponentPicker
         id="component-panel"
         v-if="componentPanel.isOpen.value"
         data-test="component-panel"
@@ -150,7 +150,7 @@ import { useIndex } from '@/lib/composables/use-index.ts'
 import { provideTemplate } from '@/lib/composables/use-template.ts'
 import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
 import ComponentBuilder from './ComponentBuilder.vue'
-import ComponentPanel from './ComponentPanel/ComponentPanel.vue'
+import ComponentPicker from './ComponentPicker/ComponentPicker.vue'
 import ComponentRenderer from './ComponentRenderer.vue'
 import ElementPanel from './ElementPanel/ElementPanel.vue'
 import ComponentFrame from './Frame/ComponentFrame.vue'
