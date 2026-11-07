@@ -5,7 +5,6 @@ import { ref } from 'vue'
 import Button from '@/samples/Button.vue'
 import ComponentEditor from './components/ComponentEditor.vue'
 import { useSaveTemplate } from './lib/composables/use-save-template.ts'
-import { resolveComponent } from './lib/playgrounds.ts'
 
 // ?page=Slots loads another template (e2e fixtures live in src/tests/e2e), &debug=false hides the debug panel
 const query = new URLSearchParams(location.search)
@@ -16,12 +15,7 @@ const template = useSaveTemplate(component)
 </script>
 
 <template>
-  <ComponentEditor
-    :resolve-component="resolveComponent"
-    :components="components"
-    v-model="component"
-    :dictionnary="dictionnary"
-  />
+  <ComponentEditor :components="components" v-model="component" :dictionnary="dictionnary" />
   <Button @click="template.saveToLocalStorage">Save</Button>
   <Button @click="template.loadFromLocalStorage">Load</Button>
 </template>

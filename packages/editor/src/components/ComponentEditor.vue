@@ -184,6 +184,7 @@ const componentPanel = useComponentPanel()
 // const slashMenu = useSlashMenu()
 
 const editor = useEditor(component, dictionnary)
+defineExpose(editor)
 
 const pointed = ref<PointedElement | null>(null)
 // computed: only notifies when the id changes, not on every pointermove

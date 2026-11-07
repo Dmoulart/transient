@@ -175,6 +175,13 @@ export function useEditor(
     )
   }
 
+  function markAsSaved() {
+    history.value = []
+    future.value = []
+    past.value = []
+    original.value = snapshot(component.value)
+  }
+
   return {
     select,
     selection: readonly(selection),
@@ -192,6 +199,7 @@ export function useEditor(
     redo,
     canUndo,
     canRedo,
+    markAsSaved,
   }
 }
 
