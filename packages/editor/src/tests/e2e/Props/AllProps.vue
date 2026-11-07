@@ -8,6 +8,8 @@ withDefaults(
   defineProps<{
     // string
     text?: string
+    // replaced by a custom field (Props/ColorField.vue, see Playground.vue)
+    color?: string
     withDefault?: string
     requiredText: string
     // declared camelCase, set kebab-case in the template

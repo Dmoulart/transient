@@ -9,12 +9,14 @@ import {
 } from '@transient/ir'
 import { onKeyStroke } from '@vueuse/core'
 import { computed } from 'vue'
+import type { FieldRules } from '@/lib/fields.ts'
 import Panel from '../Panel.vue'
 import PropsFields from './Props/PropsFields.vue'
 
 const props = defineProps<{
   template: TransientTemplate
   schema: TransientComponentSchema
+  fields?: FieldRules
 }>()
 
 const model = defineModel<TransientElement>({ required: true })
@@ -51,9 +53,10 @@ onKeyStroke('Escape', () => emit('close'))
     </template>
     <PropsFields
       v-if="Object.keys(schema.props).length > 0"
-      :props-schema="schema.props"
+      :schema="schema"
       :values="model.attributes"
       @update="(data) => emit('updateProp', data)"
+      :fields="fields"
     />
   </Panel>
 </template>

@@ -91,6 +91,7 @@
           :model-value="editor.activeComponent.element.value"
           :schema="editor.activeComponent.schema.value"
           :template="component.template"
+          :fields="fields"
           @update-prop="updateProp"
           @close="closeComponent"
         />
@@ -149,6 +150,7 @@ import { useEditor } from '@/lib/composables/use-editor.ts'
 import { useIndex } from '@/lib/composables/use-index.ts'
 import { provideTemplate } from '@/lib/composables/use-template.ts'
 import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
+import type { FieldRules } from '@/lib/fields.ts'
 import ComponentBuilder from './ComponentBuilder.vue'
 import ComponentPicker from './ComponentPicker/ComponentPicker.vue'
 import ComponentRenderer from './ComponentRenderer.vue'
@@ -161,6 +163,7 @@ import Toolbar from './Toolbar.vue'
 const { dictionnary, components } = defineProps<{
   components: Record<string, Component>
   dictionnary: TransientComponentDictionnary
+  fields?: FieldRules
   debug?: boolean
 }>()
 
@@ -174,7 +177,9 @@ function resolveComponent(tag: string) {
 
 const component = defineModel<TransientComponentSchema>({ required: true })
 const template = computed(() => component.value.template)
+
 provideTemplate(template)
+
 const isEditing = ref(true)
 
 const canvas = useTemplateRef('canvas')

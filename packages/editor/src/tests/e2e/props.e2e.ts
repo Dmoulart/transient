@@ -94,3 +94,11 @@ test('other types fall back to a raw expression', async ({ page }) => {
 test('kebab-case attribute is read back by the panel (camelCase prop)', async ({ page }) => {
   await expect(field(page, 'someValue')).toHaveValue('From kebab')
 })
+
+test('custom field: replaces the default field and sets the prop', async ({ page }) => {
+  await expect(field(page, 'color')).toHaveAttribute('data-field', 'color')
+
+  await field(page, 'color').fill('#ff0000')
+
+  await expectProp(page, 'color', '#ff0000')
+})
