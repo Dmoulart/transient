@@ -1,6 +1,6 @@
 import crypto from 'node:crypto'
 import { readFileSync } from 'node:fs'
-import { pascalCase } from '@transient/core'
+import { camelCase, mapKeys, pascalCase } from '@transient/core'
 import type {
   BindingInfo,
   TransientElement,
@@ -95,7 +95,10 @@ function parseElement(node: ElementNode, props: TransientProps): TransientElemen
 
   const tag = isComponent ? pascalCase(node.tag) : node.tag
 
-  const attributes = parseElementAttributes(node.props, props)
+  const parsed = parseElementAttributes(node.props, props)
+  // a component's attributes are keyed like its props (bg-image → bgImage), as Vue does.
+  // Native ones stay as written: viewBox would come back as view-box
+  const attributes = isComponent ? mapKeys(parsed, camelCase) : parsed
 
   const slots: Record<string, TransientElement[]> = {}
 

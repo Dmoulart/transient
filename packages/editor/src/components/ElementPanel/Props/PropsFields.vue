@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { camelCase } from '@transient/core'
 import {
   type BindingValue,
   getTypeKind,
@@ -7,9 +6,8 @@ import {
   type TransientElementAttributes,
   type TransientProp,
 } from '@transient/ir'
-import { type Component, computed, useId } from 'vue'
+import { type Component, useId } from 'vue'
 import type { FieldRules } from '@/lib/fields.ts'
-import { mapKeys } from '@/lib/objects.ts'
 import PropField from './PropField.vue'
 
 const props = defineProps<{
@@ -24,10 +22,8 @@ const emit = defineEmits<{
 
 const id = useId()
 
-const normalizedValues = computed(() => mapKeys(props.values, camelCase))
-
 function getValue(propName: string) {
-  return normalizedValues.value[camelCase(propName)]
+  return props.values[propName]
 }
 
 function getCustomFieldComponent(propName: string): Component | null {

@@ -1,5 +1,10 @@
 import { describe, expect, test } from 'bun:test'
-import { findNearestAncestor, getAncestorsChain, getPathOfElementById } from './ast.js'
+import {
+  findNearestAncestor,
+  getAncestorsChain,
+  getPathOfElementById,
+  updateElementProp,
+} from './ast.js'
 import type { TransientElement } from './definition.js'
 
 describe('ast', () => {
@@ -73,5 +78,26 @@ describe('ast', () => {
     expect(ids('1')).toEqual([])
     // a slot that doesn't hold the element must not end the search
     expect(ids('missing')).toEqual([])
+  })
+
+  test('updateElementProp sets the attribute named like the prop', () => {
+    const hero: TransientElement = {
+      id: 'hero',
+      tag: 'Hero',
+      isComponent: true,
+      attributes: { bgImage: { type: 'literal', expression: '/old.jpg' } },
+    }
+
+    updateElementProp('bgImage', '/new.jpg', 'hero', [hero])
+
+    expect(hero.attributes).toEqual({ bgImage: { type: 'literal', expression: '/new.jpg' } })
+  })
+
+  test('updateElementProp adds a missing attribute', () => {
+    const photo: TransientElement = { id: 'p', tag: 'Photo', isComponent: true, attributes: {} }
+
+    updateElementProp('src', '/a.jpg', 'p', [photo])
+
+    expect(photo.attributes).toEqual({ src: { type: 'literal', expression: '/a.jpg' } })
   })
 })

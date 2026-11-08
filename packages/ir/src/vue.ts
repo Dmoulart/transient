@@ -1,3 +1,4 @@
+import { kebabCase } from '@transient/core'
 import JSON5 from 'json5'
 import type {
   BindingInfo,
@@ -23,7 +24,7 @@ export function elementToVueElement(element: TransientElement): string {
   const attributes = []
 
   for (const [attribute, value] of Object.entries(element.attributes)) {
-    attributes.push(toVueAttribute(attribute, value))
+    attributes.push(toVueAttribute(element.isComponent ? kebabCase(attribute) : attribute, value))
   }
 
   const children: string[] = []

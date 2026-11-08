@@ -74,6 +74,18 @@ describe('template attributes', () => {
   })
 })
 
+describe('attribute keys', () => {
+  test('a component attribute is keyed like its prop', () => {
+    const [hero] = elementsOf(`<Hero bg-image="/a.jpg" :is-open="true" />`)
+    expect(Object.keys(hero!.attributes)).toEqual(['bgImage', 'isOpen'])
+  })
+
+  test('a native element attribute is kept as written', () => {
+    const [svg] = elementsOf(`<svg viewBox="0 0 1 1" aria-label="icon" />`)
+    expect(Object.keys(svg!.attributes)).toEqual(['viewBox', 'aria-label'])
+  })
+})
+
 describe('template slots', () => {
   test('a named slot template goes to its slot', () => {
     const [card] = elementsOf(`<Card><template #header>Title</template>Body</Card>`)

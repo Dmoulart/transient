@@ -380,8 +380,7 @@ export function updateElementProp(
 
   assertDefined(element, `Element with id ${id} not found`)
   // only literals are supported for now
-  element.attributes[propName] ??= { type: 'literal', expression: '' }
-  element.attributes[propName].expression = value
+  element.attributes[propName] = { type: 'literal', expression: value }
 }
 
 export function getElementProps(

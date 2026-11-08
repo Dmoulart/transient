@@ -96,6 +96,15 @@ describe('vue', () => {
     )
   })
 
+  test('writes component attributes kebab-case', () => {
+    const hero = element('Hero', { bgImage: '/a.jpg' })
+    hero.isComponent = true
+    const svg = element('svg', { viewBox: '0 0 1 1' })
+    expect(irToSfc(schema([hero, svg]), dictionnary)).toEqual(
+      `<template><Hero bg-image="/a.jpg"></Hero><svg viewBox="0 0 1 1"></svg></template>`,
+    )
+  })
+
   test('binds non-string literals', () => {
     const div = element('div', { count: 3, disabled: true })
     expect(irToSfc(schema([div]), dictionnary)).toEqual(
