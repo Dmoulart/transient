@@ -18,6 +18,7 @@ import {
   type TextNode,
 } from '@vue/compiler-dom'
 import { parse as parseSFC } from '@vue/compiler-sfc'
+import JSON5 from 'json5'
 
 export function analyzeTemplateElements(
   componentPath: string,
@@ -172,29 +173,14 @@ function directiveToAttribute(
 }
 
 function extractBindingValue(content: string, props: TransientProps): BindingInfo {
-  if (/^(['"]).*\1$/.test(content)) {
-    return { type: 'literal', expression: content.slice(1, -1) }
-  }
-
-  // Literal: number
-  if (!Number.isNaN(Number(content))) {
-    return { type: 'literal', expression: Number(content) }
-  }
-
-  // Literal: boolean
-  if (content === 'true') {
-    return { type: 'literal', expression: true }
-  }
-  if (content === 'false') {
-    return { type: 'literal', expression: false }
-  }
-
-  // Check if it's a declared prop
-  if (content in props) {
+  if (Object.hasOwn(props, content)) {
     return { type: 'prop', expression: content }
   }
 
-  return { type: 'prop', expression: 'not supported' }
-  // Not supported
-  // throw new Error(`binding value not implemented for ${content}`);
+  try {
+    const expression = JSON5.parse(content)
+    return { type: 'literal', expression }
+  } catch {}
+
+  return { type: 'expression', expression: content }
 }

@@ -21,6 +21,9 @@
         "noNonNullAssertion": "off",
         "useVueMultiWordComponentNames": "off",
         "useVueConsistentVOnStyle": "off"
+      },
+      "complexity": {
+        "noImportantStyles": "off"
       }
     }
   },
