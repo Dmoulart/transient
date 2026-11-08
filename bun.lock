@@ -64,6 +64,7 @@
       "name": "@transient/ir",
       "dependencies": {
         "@transient/core": "workspace:*",
+        "json5": "^2.2.3",
       },
     },
     "packages/nuxt": {

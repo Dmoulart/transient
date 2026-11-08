@@ -1,3 +1,4 @@
+import JSON5 from 'json5'
 import type {
   BindingInfo,
   TransientComponentDictionnary,
@@ -16,16 +17,12 @@ export function irToSfc(
 
 export function elementToVueElement(element: TransientElement): string {
   if (element.tag === '#text') {
-    if (element.attributes?.value?.type === 'prop') {
-      throw new Error('not implemented')
-    }
     return toText(element.attributes?.value?.expression)
   }
 
   const attributes = []
 
-  for (const attribute in element.attributes) {
-    const value = element.attributes[attribute]!
+  for (const [attribute, value] of Object.entries(element.attributes)) {
     attributes.push(toVueAttribute(attribute, value))
   }
 
@@ -67,9 +64,7 @@ function createTemplate(
   content: TransientElement[],
   slotName?: string,
 ): TransientElement {
-  const attributes: TransientElementAttributes = slotName
-    ? { [`v-slot:${slotName}`]: { type: 'directive', expression: undefined } }
-    : {}
+  const attributes: TransientElementAttributes = slotName ? { [`v-slot:${slotName}`]: null } : {}
 
   return {
     id,
@@ -82,31 +77,63 @@ function createTemplate(
   }
 }
 
-function toVueAttribute(name: string, value: BindingInfo) {
-  if (value.type === 'literal') {
-    if (typeof value.expression !== 'string') {
-      return `:${name}="${value?.expression}"`
+function toVueAttribute(name: string, value: BindingInfo | null) {
+  let directive: null | string = name.startsWith('v-') ? name : null
+
+  let content = value?.expression ?? null
+
+  if (value) {
+    if (value.type === 'literal') {
+      if (typeof value.expression === 'string') {
+        content = escapeAttribute(value.expression)
+      } else {
+        directive = 'v-bind'
+        content = JSON5.stringify(value.expression, { quote: "'" })
+      }
+    } else if (value.type === 'expression') {
+      directive = 'v-bind'
+    } else {
+      throw new Error('unknown value type')
+    }
+  }
+
+  return formatAttribute(directive, name, content)
+}
+
+function formatAttribute(
+  directive: null | string,
+  name: string,
+  value: BindingInfo['expression'] | null,
+) {
+  let key = name
+
+  if (directive) {
+    if (directive.startsWith('v-bind')) {
+      key = `:${name}`
     }
 
-    return `${name}="${toText(value?.expression)}"`
-  } else if (value.type === 'directive') {
-    if (value.expression !== undefined) {
-      return `${name}="${value.expression}"`
-    } else {
-      if (name.startsWith('v-slot:')) {
-        const elementSlot = name.slice('v-slot:'.length)
-        return `#${elementSlot}`
-      }
+    if (directive.startsWith('v-slot')) {
+      const elementSlot = name.slice('v-slot:'.length)
+      key = `#${elementSlot}`
     }
-  } else {
-    // todo is prop type used ?
-    throw new Error('Not implemented')
   }
+
+  if (value === null || value === undefined) {
+    return key
+  }
+
+  return `${key}="${value}"`
+}
+
+// in an attribute value only " ends it, and & starts an entity
+function escapeAttribute(str: string): string {
+  return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;')
 }
 
 function toText(value: BindingInfo['expression']): string {
   return escapeHtml(String(value ?? ''))
 }
+
 // Fonction pour échapper les caractèresspéciaux HTML
 function escapeHtml(str: string): string {
   return str

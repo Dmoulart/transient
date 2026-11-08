@@ -1,19 +1,29 @@
 import { describe, expect, test } from 'bun:test'
 import { type ElementNode, parse } from '@vue/compiler-dom'
-import { parseElementAttributes } from './template.js'
+import { analyzeTemplateSource, parseElementAttributes } from './template.js'
 
 function attributesOf(template: string) {
   const element = parse(template).children[0] as ElementNode
   return parseElementAttributes(element.props, { title: { type: 'string' } })
 }
 
+// analyzeTemplateElements reads an SFC from disk
+function elementsOf(template: string) {
+  return analyzeTemplateSource(`<template>${template}</template>`, {}).elements
+}
+
 describe('template attributes', () => {
+  // <button disabled> must not come back as :disabled="true" on save
+  test('an attribute without value is null', () => {
+    expect(attributesOf(`<button disabled />`)).toEqual({ disabled: null })
+  })
+
   // :size="20" used to become a `bind:size` attribute: Picto never got its prop
   test('v-bind is keyed by its argument', () => {
     expect(attributesOf(`<Picto icon="phone" :size="20" :label="title" />`)).toEqual({
       icon: { type: 'literal', expression: 'phone' },
       size: { type: 'literal', expression: 20 },
-      label: { type: 'prop', expression: 'title' },
+      label: { type: 'expression', expression: 'title' },
     })
   })
 
@@ -53,7 +63,7 @@ describe('template attributes', () => {
 
   test('a declared prop is a prop', () => {
     expect(attributesOf(`<Comp :label="title" />`)).toEqual({
-      label: { type: 'prop', expression: 'title' },
+      label: { type: 'expression', expression: 'title' },
     })
   })
 
@@ -61,5 +71,13 @@ describe('template attributes', () => {
     expect(attributesOf(`<Comp :label="title.toUpperCase()" />`)).toEqual({
       label: { type: 'expression', expression: 'title.toUpperCase()' },
     })
+  })
+})
+
+describe('template slots', () => {
+  test('a named slot template goes to its slot', () => {
+    const [card] = elementsOf(`<Card><template #header>Title</template>Body</Card>`)
+    expect(Object.keys(card!.slots ?? {}).sort()).toEqual(['default', 'header'])
+    expect(card!.slots!.header![0]).toMatchObject({ tag: '#text' })
   })
 })

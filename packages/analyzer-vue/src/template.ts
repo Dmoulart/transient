@@ -1,9 +1,10 @@
 import crypto from 'node:crypto'
 import { readFileSync } from 'node:fs'
-import { assertIs, pascalCase, someString } from '@transient/core'
+import { pascalCase } from '@transient/core'
 import type {
   BindingInfo,
   TransientElement,
+  TransientElementAttributes,
   TransientProps,
   TransientTemplate,
 } from '@transient/ir'
@@ -24,7 +25,10 @@ export function analyzeTemplateElements(
   componentPath: string,
   props: TransientProps,
 ): TransientTemplate {
-  const source = readFileSync(componentPath, 'utf-8')
+  return analyzeTemplateSource(readFileSync(componentPath, 'utf-8'), props)
+}
+
+export function analyzeTemplateSource(source: string, props: TransientProps): TransientTemplate {
   const sfc = parseSFC(source)
 
   const template = sfc.descriptor.template?.content
@@ -95,19 +99,11 @@ function parseElement(node: ElementNode, props: TransientProps): TransientElemen
 
   const slots: Record<string, TransientElement[]> = {}
 
-  const children = node.children
-    .map((child) => walk(child, props))
-    .filter(Boolean) as TransientElement[]
-
-  for (const child of children) {
-    if (child.tag === 'template' && child.slots && child.attributes['v-slot']?.expression) {
-      const slotName = child.attributes['v-slot'].expression
-      assertIs(someString, slotName)
-      slots[slotName] = child.slots.default || []
-    } else {
-      if (!slots.default) slots.default = []
-      slots.default.push(child)
-    }
+  for (const child of node.children) {
+    const slotName = slotNameOf(child)
+    const content = slotName ? (child as ElementNode).children : [child]
+    const elements = content.map((node) => walk(node, props)).filter(Boolean) as TransientElement[]
+    slots[slotName ?? 'default'] = [...(slots[slotName ?? 'default'] ?? []), ...elements]
   }
 
   return {
@@ -119,19 +115,31 @@ function parseElement(node: ElementNode, props: TransientProps): TransientElemen
   }
 }
 
+function slotNameOf(node: TemplateChildNode): string | null {
+  if (node.type !== NodeTypes.ELEMENT || node.tag !== 'template') {
+    return null
+  }
+
+  const slot = node.props.find((prop) => prop.type === NodeTypes.DIRECTIVE && prop.name === 'slot')
+  if (!slot) {
+    return null
+  }
+
+  return slot.type === NodeTypes.DIRECTIVE && slot.arg && 'content' in slot.arg
+    ? slot.arg.content
+    : 'default'
+}
+
 export function parseElementAttributes(
   props: (AttributeNode | DirectiveNode)[],
   componentProps: TransientProps,
-): Record<string, BindingInfo> {
-  const attributes: Record<string, BindingInfo> = {}
+): TransientElementAttributes {
+  const attributes: TransientElementAttributes = {}
 
   for (const prop of props) {
     if (prop.type === NodeTypes.DIRECTIVE) {
-      const attr = directiveToAttribute(prop, componentProps)
-      if (attr) {
-        const [key, value] = attr
-        attributes[key] = value
-      }
+      const [key, value] = directiveToAttribute(prop, componentProps)
+      attributes[key] = value
     } else if (prop.type === NodeTypes.ATTRIBUTE) {
       const key = prop.name
       if (prop.value?.content !== undefined) {
@@ -140,10 +148,7 @@ export function parseElementAttributes(
           expression: prop.value.content,
         }
       } else {
-        attributes[key] = {
-          type: 'literal',
-          expression: true,
-        }
+        attributes[key] = null
       }
     }
   }
@@ -152,29 +157,37 @@ export function parseElementAttributes(
 }
 
 function directiveToAttribute(
-  { arg, name, exp }: DirectiveNode,
+  node: DirectiveNode,
   componentProps: TransientProps,
-): [string, BindingInfo] | null {
-  if (arg && 'content' in arg) {
-    if (name === 'slot') {
-      const slotName = arg.content
-      return ['v-slot', { type: 'literal', expression: slotName }]
-    } else if (exp && 'content' in exp) {
-      const value = extractBindingValue(exp.content, componentProps)
-      if (name === 'bind') {
-        return [arg.content, value]
-      }
-      const key = `${name}${arg ? `:${arg.content}` : ''}`
-      return [key, value]
-    }
+): [string, BindingInfo | null] {
+  const name = node.name
+  let value: BindingInfo | null = null
+  let arg: string | null = null
+
+  if (node.exp && 'content' in node.exp) {
+    value = extractBindingValue(node.exp.content, componentProps)
   }
-  // not supported
-  return null
+
+  if (node.arg && 'content' in node.arg) {
+    arg = node.arg.content
+  }
+
+  const key = `${name}${arg ? `:${arg}` : ''}`
+
+  return [formatAttributeKey(key), value]
+}
+
+function formatAttributeKey(name: string) {
+  if (name.startsWith('bind:')) {
+    return name.slice('bind:'.length)
+  }
+
+  return name
 }
 
 function extractBindingValue(content: string, props: TransientProps): BindingInfo {
   if (Object.hasOwn(props, content)) {
-    return { type: 'prop', expression: content }
+    return { type: 'expression', expression: content }
   }
 
   try {

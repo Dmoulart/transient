@@ -1,8 +1,8 @@
 export type TransientComponentDictionnary = {
   [tag: string]: TransientComponentSchema
 }
-
-export type TransientElementAttributes = Record<string, TransientAttribute>
+// An attribute with a "null" binding signify no value not a value of null
+export type TransientElementAttributes = Record<string, TransientAttribute | null>
 export type TransientAttribute = BindingInfo
 export type TransientElement = {
   id: string
@@ -60,8 +60,15 @@ export type TransientComplexTypeName = 'list' | 'object' | 'union' | 'enum' | 'r
 export type TransientPrimitiveTypeName = 'boolean' | 'integer' | 'decimal' | 'unknown' | 'string'
 
 export type BindingInfo = {
-  type: 'prop' | 'literal' | 'directive'
+  type: 'literal' | 'expression'
   expression: BindingValue
 }
 
-export type BindingValue = string | number | boolean | Record<string, unknown> | undefined | null
+export type BindingValue =
+  | string
+  | number
+  | boolean
+  | Record<string, unknown>
+  | unknown[]
+  | undefined
+  | null

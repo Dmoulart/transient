@@ -7,7 +7,8 @@
   ],
   "sideEffects": false,
   "dependencies": {
-    "@transient/core": "workspace:*"
+    "@transient/core": "workspace:*",
+    "json5": "^2.2.3"
   },
   "exports": {
     ".": "./dist/index.js"

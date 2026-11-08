@@ -48,7 +48,7 @@ describe('vue', () => {
     expect(sfc).toEqual(`<template><div class="hero-section">Hello</div></template>`)
   })
 
-  test('irToSfc keeps named slots', () => {
+  test('keeps named slots', () => {
     const card = element('Card', {}, { default: [text('Body')], header: [text('Title')] })
     card.isComponent = true
     expect(irToSfc(schema([card]), dictionnary)).toEqual(
@@ -56,21 +56,63 @@ describe('vue', () => {
     )
   })
 
-  test('irToSfc escapes quotes in attributes', () => {
+  test('escapes quotes in attributes', () => {
     const div = element('div', { title: 'say "hi"' })
     expect(irToSfc(schema([div]), dictionnary)).toEqual(
       `<template><div title="say &quot;hi&quot;"></div></template>`,
     )
   })
 
-  test('irToSfc binds non-string literals', () => {
+  test('keeps line breaks of a static attribute', () => {
+    const div = element('div', { class: 'flex\n  gap-2' })
+    expect(irToSfc(schema([div]), dictionnary)).toEqual(
+      `<template><div class="flex\n  gap-2"></div></template>`,
+    )
+  })
+
+  test('keeps backslashes of a static attribute', () => {
+    const div = element('div', { pattern: 'C:\\dir' })
+    expect(irToSfc(schema([div]), dictionnary)).toEqual(
+      `<template><div pattern="C:\\dir"></div></template>`,
+    )
+  })
+
+  test('serializes lists and objects as readable js literals', () => {
+    const div = element('div', {})
+    div.attributes.images = {
+      type: 'literal',
+      expression: [{ src: '/a.jpg', caption: "L'Oiseau" }],
+    }
+    expect(irToSfc(schema([div]), dictionnary)).toEqual(
+      `<template><div :images="[{src:'/a.jpg',caption:'L\\'Oiseau'}]"></div></template>`,
+    )
+  })
+
+  test('writes a prop binding back', () => {
+    const div = element('div', {})
+    div.attributes.label = { type: 'expression', expression: 'title' }
+    expect(irToSfc(schema([div]), dictionnary)).toEqual(
+      `<template><div :label="title"></div></template>`,
+    )
+  })
+
+  test('binds non-string literals', () => {
     const div = element('div', { count: 3, disabled: true })
     expect(irToSfc(schema([div]), dictionnary)).toEqual(
       `<template><div :count="3" :disabled="true"></div></template>`,
     )
   })
 
-  test('irToSfc escapes text so it is never interpolated', () => {
+  // null is an attribute without value: <button disabled>, not disabled="undefined"
+  test('writes an attribute without value bare', () => {
+    const button = element('button', {})
+    button.attributes.disabled = null
+    expect(irToSfc(schema([button]), dictionnary)).toEqual(
+      `<template><button disabled></button></template>`,
+    )
+  })
+
+  test('escapes text so it is never interpolated', () => {
     const div = element('div', {}, { default: [text('{{ secret }} & a < b')] })
     expect(irToSfc(schema([div]), dictionnary)).toEqual(
       `<template><div>&#123;&#123; secret &#125;&#125; &amp; a &lt; b</div></template>`,
