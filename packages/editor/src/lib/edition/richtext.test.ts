@@ -48,7 +48,7 @@ function html(elements: TransientElement[], known: Set<string>): string {
       const id = known.has(element.id) ? element.id : 'new'
       if (element.isComponent) return `<${element.tag}#${id}/>`
       const attrs = Object.entries(element.attributes)
-        .map(([name, { expression }]) => ` ${name}="${expression}"`)
+        .map(([name, value]) => (value ? ` ${name}="${value.expression}"` : name))
         .join('')
       return `<${element.tag}#${id}${attrs}>${html(element.slots?.default ?? [], known)}</${element.tag}>`
     })
