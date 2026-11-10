@@ -17,17 +17,19 @@
     "test:e2e:report": "bun --bun x playwright test --reporter=html && bun --bun x playwright show-report"
   },
   "dependencies": {
-    "@transient/core": "workspace:*",
-    "@transient/ir": "workspace:*",
-    "@vueuse/core": "^13.0.0",
-    "lucide-vue-next": "^0.516.0",
-    "vue": "^3.5.13",
+    "@iconify-json/lucide": "^1.2.147",
     "@tiptap/extension-document": "^3.31.4",
     "@tiptap/extension-text": "^3.31.4",
     "@tiptap/extensions": "^3.31.4",
     "@tiptap/pm": "^3.31.4",
     "@tiptap/vue-3": "^3.31.4",
-    "@iconify-json/lucide": "^1.2.147"
+    "@transient/core": "workspace:*",
+    "@transient/ir": "workspace:*",
+    "@vueuse/core": "^13.0.0",
+    "css-select": "^7.0.0",
+    "glob-to-regexp": "^0.4.1",
+    "lucide-vue-next": "^0.516.0",
+    "vue": "^3.5.13"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
@@ -35,6 +37,7 @@
     "@transient/vite-plugin-vue-transient": "workspace:*",
     "@tsconfig/node22": "^22.0.1",
     "@types/bun": "^1.4.2",
+    "@types/glob-to-regexp": "^0.4.4",
     "@types/node": "^22.13.14",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vue/tsconfig": "^0.7.0",

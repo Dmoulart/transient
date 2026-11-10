@@ -150,6 +150,7 @@ import { useEditor } from '@/lib/composables/use-editor.ts'
 import { useIndex } from '@/lib/composables/use-index.ts'
 import { provideTemplate } from '@/lib/composables/use-template.ts'
 import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
+import { provideCan, type Rule } from '@/lib/edition/rules.ts'
 import type { FieldRules } from '@/lib/fields.ts'
 import ComponentBuilder from './ComponentBuilder.vue'
 import ComponentPicker from './ComponentPicker/ComponentPicker.vue'
@@ -160,11 +161,12 @@ import EditingFrame from './Frame/EditingFrame.vue'
 import SlotHighlight from './SlotHighlight.vue'
 import Toolbar from './Toolbar.vue'
 
-const { dictionnary, components } = defineProps<{
+const { dictionnary, components, rules } = defineProps<{
   components: Record<string, Component>
   dictionnary: TransientComponentDictionnary
   fields?: FieldRules
   debug?: boolean
+  rules?: Rule[]
 }>()
 
 const emit = defineEmits<{
@@ -188,8 +190,9 @@ const index = useIndex()
 const componentPanel = useComponentPanel()
 // const slashMenu = useSlashMenu()
 
-const editor = useEditor(component, dictionnary)
+const editor = useEditor(component, dictionnary, rules)
 defineExpose(editor)
+provideCan(editor.can)
 
 const pointed = ref<PointedElement | null>(null)
 // computed: only notifies when the id changes, not on every pointermove
@@ -224,9 +227,11 @@ function isSlotHovered(ownerId: string, name: string, occurrence: number) {
   const slot = pointed.value?.slot
   return hoveredId.value === ownerId && slot?.name === name && slot.occurrence === occurrence
 }
+
 useEventListener(canvas, 'pointermove', (ev) => {
   pointed.value = pointedElement(ev)
 })
+
 useEventListener(canvas, 'pointerleave', () => {
   pointed.value = null
 })
@@ -296,7 +301,7 @@ function updateProp({
     prop,
     propName,
     value,
-    transientId: editor.activeComponent.id.value!,
+    element: editor.activeComponent.element.value!,
   })
 }
 

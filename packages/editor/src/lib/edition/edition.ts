@@ -25,7 +25,7 @@ export type AddElementEdition = {
 
 export type DeleteElementEdition = {
   type: 'delete-element'
-  transientId: string
+  element: TransientElement
 }
 
 export type UpdateElementPropEdition = {
@@ -33,20 +33,20 @@ export type UpdateElementPropEdition = {
   prop: TransientProp
   propName: string
   value: BindingValue
-  transientId: string
+  element: TransientElement
 }
 
 export type ReplaceSlotContentEdition = {
   type: 'replace-slot-content'
-  id: string
   slotName: string
   content: TransientElement[]
+  element: TransientElement
 }
 
 export type MoveElementEdition = {
   type: 'move-element'
-  id: string
   direction: 'up' | 'down'
+  element: TransientElement
 }
 
 export function applyEdition(edition: Edition, elements: TransientElement[]) {
@@ -74,25 +74,25 @@ export function applyEdition(edition: Edition, elements: TransientElement[]) {
     }
 
     case 'delete-element': {
-      removeElement(edition.transientId, elements)
+      removeElement(edition.element.id, elements)
 
       break
     }
 
     case 'update-prop': {
-      updateElementProp(edition.propName, edition.value, edition.transientId, elements)
+      updateElementProp(edition.propName, edition.value, edition.element.id, elements)
 
       break
     }
 
     case 'replace-slot-content': {
-      replaceElementSlot(edition.content, edition.slotName, edition.id, elements)
+      replaceElementSlot(edition.content, edition.slotName, edition.element.id, elements)
 
       break
     }
 
     case 'move-element': {
-      moveElement(edition.id, edition.direction, elements)
+      moveElement(edition.element.id, edition.direction, elements)
 
       break
     }

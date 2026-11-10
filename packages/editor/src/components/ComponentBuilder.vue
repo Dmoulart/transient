@@ -94,7 +94,7 @@ function renderComponent(element: TransientElement): VNode {
             h(EditingContainer, {
               container,
               mouse: props.editing!.point,
-              ownerId: element.id,
+              owner: element,
               slotName,
               occurrence: props.editing!.occurrence ?? 0,
               renderComponent,
@@ -140,7 +140,7 @@ function renderElement(element: TransientElement) {
   if (props.editing?.id === element.id) {
     const editableRootVnode = h(EditingContainer, {
       container: element,
-      ownerId: element.id,
+      owner: element,
       slotName: 'default',
       mouse: props.editing.point,
       renderComponent,

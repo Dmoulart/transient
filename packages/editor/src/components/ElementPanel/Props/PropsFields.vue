@@ -42,6 +42,7 @@ function getCustomFieldComponent(propName: string): Component | null {
     :key="propName"
     class="tr-prop-row"
     data-test="prop"
+    data-edition="update-prop"
     :data-prop="propName"
   >
     <div class="tr-prop-head">

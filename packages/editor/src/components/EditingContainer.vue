@@ -20,7 +20,7 @@ const props = defineProps<{
   renderComponent: (element: TransientElement) => VNode
   render: (elements: TransientElement[]) => VNode[]
   mouse: { x: number; y: number }
-  ownerId: string
+  owner: TransientElement
   slotName: string
   // which copy of a repeated slot is editable; the others render normally
   occurrence?: number
@@ -30,7 +30,7 @@ onErrorCaptured((err) => {
   console.log(err)
 })
 
-const rootKey = `${props.ownerId}:${props.slotName}`
+const rootKey = `${props.owner.id}:${props.slotName}`
 // setup runs once per copy, in render order: the count gives this copy's position
 const position = editableRoots.get(rootKey) ?? 0
 editableRoots.set(rootKey, position + 1)
@@ -77,6 +77,7 @@ if (position === (props.occurrence ?? 0)) {
     const editingContainer = h(props.container.tag, {
       ...parseElementAttributes(props.container),
       'data-test': 'editing-container',
+      'data-edition': 'replace-slot-content',
       'data-blocks': blocks || undefined,
       onVnodeMounted(vnode) {
         editor.value = new Editor({
@@ -114,7 +115,7 @@ if (position === (props.occurrence ?? 0)) {
 
             emit('edit', {
               type: 'replace-slot-content',
-              id: props.ownerId,
+              element: props.owner,
               slotName: props.slotName,
               content,
             })

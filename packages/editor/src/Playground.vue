@@ -5,6 +5,7 @@ import { ref } from 'vue'
 import Button from '@/samples/Button.vue'
 import ComponentEditor from './components/ComponentEditor.vue'
 import { useSaveTemplate } from './lib/composables/use-save-template.ts'
+import type { Rule } from './lib/edition/rules.ts'
 import type { FieldRules } from './lib/fields.ts'
 import ColorField from './tests/e2e/Props/ColorField.vue'
 
@@ -16,6 +17,9 @@ const component = ref(structuredClone(dictionnary[query.get('page') ?? 'HomePage
 const template = useSaveTemplate(component)
 
 const fields: FieldRules = [{ component: 'AllProps', prop: 'color', use: ColorField }]
+
+// &rules=<json>: editing rules, set by e2e tests
+const rules: Rule[] = JSON.parse(query.get('rules') ?? '[]')
 </script>
 
 <template>
@@ -24,6 +28,7 @@ const fields: FieldRules = [{ component: 'AllProps', prop: 'color', use: ColorFi
     v-model="component"
     :dictionnary="dictionnary"
     :fields="fields"
+    :rules="rules"
   />
   <Button @click="template.saveToLocalStorage">Save</Button>
   <Button @click="template.loadFromLocalStorage">Load</Button>

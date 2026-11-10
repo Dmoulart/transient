@@ -8,6 +8,7 @@ import {
 import { computed, type Ref, readonly, ref, shallowRef } from 'vue'
 import { applyEdition, type Edition } from '@/lib/edition/edition'
 import { INLINE_TAGS } from '../edition/richtext'
+import { createCan, type Rule } from '../edition/rules'
 import { useElement } from './use-element'
 
 export type Selection =
@@ -25,7 +26,9 @@ export type Editing = {
 export function useEditor(
   component: Ref<TransientComponentSchema>,
   dictionnary: TransientComponentDictionnary,
+  rules: Rule[] = [],
 ) {
+  const can = createCan(rules, () => component.value.template.elements, dictionnary)
   const past = shallowRef<TransientComponentSchema[]>([])
   const canUndo = computed(() => past.value.length > 0)
   const future = shallowRef<TransientComponentSchema[]>([])
@@ -126,6 +129,11 @@ export function useEditor(
   }
 
   function edit(edition: Edition) {
+    // the UI hides denied actions, this is what actually enforces the rules
+    if (!can(edition.type, edition.element)) {
+      console.warn(`[transient] ${edition.type} denied on <${edition.element.tag}>`)
+      return
+    }
     past.value = [...past.value, snapshot(component.value)].slice(-50)
     future.value = []
     applyEdition(edition, component.value?.template?.elements ?? [])
@@ -183,6 +191,7 @@ export function useEditor(
   }
 
   return {
+    can,
     select,
     selection: readonly(selection),
     selectedElement,

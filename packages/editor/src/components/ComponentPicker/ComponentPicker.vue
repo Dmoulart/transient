@@ -20,6 +20,8 @@
 import { pascalCase } from '@transient/core'
 import type { TransientComponentDictionnary, TransientComponentSchema } from '@transient/ir'
 import { type Component, computed, ref } from 'vue'
+import { useCan } from '@/lib/edition/rules.ts'
+import { createComponentFromSchema } from '@/lib/transient/attributes.ts'
 import Panel from '../Panel.vue'
 import SearchInput from '../SearchInput.vue'
 import ComponentItem from './ComponentItem.vue'
@@ -39,18 +41,18 @@ const emit =
   >()
 
 const search = ref('')
+const can = useCan()
 
 const filteredDictionnary = computed(() => {
   const terms = normalizeSearchTerms(search.value)
 
-  if (terms === '') {
-    return props.dictionnary
-  }
-
   return Object.fromEntries(
-    Object.entries(props.dictionnary).filter(([name]) => {
-      return normalizeSearchTerms(name).includes(terms)
-    }),
+    Object.entries(props.dictionnary).filter(
+      ([name, schema]) =>
+        normalizeSearchTerms(name).includes(terms) &&
+        // the candidate isn't in the tree yet: only selectors without combinators can match it
+        can('add-component', createComponentFromSchema(schema)),
+    ),
   )
 })
 

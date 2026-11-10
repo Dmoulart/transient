@@ -10,17 +10,18 @@
         </span>
 
         <button
-          v-if="canMoveElement(element.id, 'up', template.elements)"
+          v-if="can('move-element', element) && canMoveElement(element.id, 'up', template.elements)"
           type="button"
           class="tr-tag-action"
-          data-action="move-up"
-          :data-action:flow="flow"
+          data-edition="move-element"
+          data-direction="up"
+          :data-flow="flow"
           title="Move up"
           @click="
             emit('edit', {
               type: 'move-element',
-              id: element.id,
-              direction: 'up'
+              direction: 'up',
+              element,
             })
           "
         >
@@ -28,17 +29,18 @@
           <MoveLeft v-else :size="14" />
         </button>
         <button
-          v-if="canMoveElement(element.id, 'down', template.elements)"
+          v-if="can('move-element', element) && canMoveElement(element.id, 'down', template.elements)"
           type="button"
           class="tr-tag-action"
-          data-action="move-down"
-          :data-action:flow="flow"
+          data-edition="move-element"
+          data-direction="down"
+          :data-flow="flow"
           title="Move down"
           @click="
             emit('edit', {
               type: 'move-element',
-              id: element.id,
-              direction: 'down'
+              direction: 'down',
+              element,
             })
           "
         >
@@ -46,14 +48,15 @@
           <MoveRight v-else :size="14" />
         </button>
         <button
+          v-if="can('delete-element', element)"
           type="button"
           class="tr-tag-action"
-          data-action="delete-element"
+          data-edition="delete-element"
           title="Delete"
           @click="
             emit('edit', {
               type: 'delete-element',
-              transientId: element.id,
+              element,
             })
           "
         >
@@ -64,7 +67,8 @@
       <button
         v-if="!hover"
         type="button"
-        data-action="insert-after"
+        data-edition="add-component"
+        data-position="after"
         title="Insert after"
         :class="`tr-insert tr-insert-${getFlow(root)}`"
         @click="() => {
@@ -85,6 +89,7 @@ import { computed } from 'vue'
 import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
 import { useTemplate } from '@/lib/composables/use-template.ts'
 import type { EditorEvents } from '@/lib/edition/events.ts'
+import { useCan } from '@/lib/edition/rules.ts'
 import { getFlow } from '@/lib/flow.ts'
 import { createComponentFromSchema } from '@/lib/transient/attributes.ts'
 import BoundingBox from './BoundingBox.vue'
@@ -93,6 +98,7 @@ import UseBoundingBox from './UseBoundingBox.vue'
 const props = defineProps<{ root: Node[]; element: TransientElement; hover?: boolean }>()
 const emit = defineEmits<EditorEvents>()
 
+const can = useCan()
 const componentPanel = useComponentPanel()
 const template = useTemplate()
 
