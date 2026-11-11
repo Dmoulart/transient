@@ -41,8 +41,7 @@ export default defineNuxtModule<ModuleOptions>({
       }),
     )
 
-    // the editor is browser-only (pointer events, caret APIs)
-    extendRouteRules(options.route, { ssr: false, prerender: false })
+    extendRouteRules(options.route, { ssr: false })
     // editor.js imports its CSS: let Vite handle it instead of Node on the server
     nuxt.options.build.transpile.push(runtimeDir, '@transient/nuxt')
   },
