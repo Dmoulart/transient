@@ -145,6 +145,19 @@ test('typing in a slot replaces its content once editing stops', async ({ page }
   await expect(canvas(page).getByText('Plain text in the default slot.')).toHaveCount(0)
 })
 
+// the clipboard serializes the selection: an island had no HTML rendering and threw
+test('cutting a selection that holds a component does not throw', async ({ page }) => {
+  const errors: Error[] = []
+  page.on('pageerror', (error) => errors.push(error))
+
+  await clickText(page, 'Island to cut:')
+  await page.keyboard.press('ControlOrMeta+a')
+  await page.keyboard.press('ControlOrMeta+x')
+
+  await expect(editingContainer(page)).not.toContainText('Island to cut:')
+  expect(errors).toEqual([])
+})
+
 test('editing a named slot leaves its sibling slots untouched', async ({ page }) => {
   await clickText(page, 'Header slot')
   await page.keyboard.press('ControlOrMeta+a')

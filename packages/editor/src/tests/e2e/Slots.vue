@@ -24,6 +24,8 @@ import SwitchedSlot from './Slots/SwitchedSlot.vue'
 
       <DefaultSlot>Plain text in the default slot.</DefaultSlot>
 
+      <DefaultSlot>Island to cut: <ReactiveIsland /></DefaultSlot>
+
       <DefaultSlot>Text with <b>bold</b>, <i>italic</i> and a <a href="#">link</a>.</DefaultSlot>
 
       <DefaultSlot

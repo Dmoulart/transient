@@ -173,6 +173,14 @@ if (position === (props.occurrence ?? 0)) {
       atom: true,
       selectable: true,
       addAttributes: () => ({ id: { default: null } }),
+      // the clipboard serializes a cut or copied selection, it doesn't use the node view.
+      // The rendered component goes along so it pastes as its HTML elsewhere
+      renderHTML: ({ node }) => {
+        const island = document.createElement('tst-island')
+        const rendered = placeholders.get(node.attrs.id)
+        if (rendered) island.innerHTML = rendered.innerHTML
+        return island
+      },
       addNodeView:
         () =>
         ({ node }) => {
