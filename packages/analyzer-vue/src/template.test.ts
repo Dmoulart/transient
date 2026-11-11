@@ -14,8 +14,10 @@ function elementsOf(template: string) {
 
 describe('template attributes', () => {
   // <button disabled> must not come back as :disabled="true" on save
-  test('an attribute without value is null', () => {
-    expect(attributesOf(`<button disabled />`)).toEqual({ disabled: null })
+  test('an attribute without value is an empty string, like for Vue', () => {
+    expect(attributesOf(`<button disabled />`)).toEqual({
+      disabled: { type: 'literal', expression: '' },
+    })
   })
 
   // :size="20" used to become a `bind:size` attribute: Picto never got its prop

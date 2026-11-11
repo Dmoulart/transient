@@ -145,14 +145,8 @@ export function parseElementAttributes(
       attributes[key] = value
     } else if (prop.type === NodeTypes.ATTRIBUTE) {
       const key = prop.name
-      if (prop.value?.content !== undefined) {
-        attributes[key] = {
-          type: 'literal',
-          expression: prop.value.content,
-        }
-      } else {
-        attributes[key] = null
-      }
+      // an attribute without value (`<X highlight>`) is '' like for Vue: a boolean prop reads it as true
+      attributes[key] = { type: 'literal', expression: prop.value?.content ?? '' }
     }
   }
 

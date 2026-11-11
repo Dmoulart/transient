@@ -112,10 +112,10 @@ describe('vue', () => {
     )
   })
 
-  // null is an attribute without value: <button disabled>, not disabled="undefined"
+  // '' is an attribute without value: <button disabled>, not disabled="" or :disabled="true"
   test('writes an attribute without value bare', () => {
     const button = element('button', {})
-    button.attributes.disabled = null
+    button.attributes.disabled = { type: 'literal', expression: '' }
     expect(irToSfc(schema([button]), dictionnary)).toEqual(
       `<template><button disabled></button></template>`,
     )

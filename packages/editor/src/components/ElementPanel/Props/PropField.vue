@@ -160,7 +160,8 @@ const selected = computed({
 })
 
 const checked = computed({
-  get: () => current.value === true || current.value === 'true',
+  // an attribute without value (`<X highlight>`) is '': Vue casts it to true for a boolean prop
+  get: () => current.value === true || current.value === 'true' || current.value === '',
   set: (value: boolean) => {
     model.value = value
   },

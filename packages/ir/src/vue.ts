@@ -85,7 +85,10 @@ function toVueAttribute(name: string, value: BindingInfo | null) {
 
   if (value) {
     if (value.type === 'literal') {
-      if (typeof value.expression === 'string') {
+      // '' is an attribute without value: <button disabled>, the way it was written
+      if (value.expression === '') {
+        content = null
+      } else if (typeof value.expression === 'string') {
         content = escapeAttribute(value.expression)
       } else {
         directive = 'v-bind'

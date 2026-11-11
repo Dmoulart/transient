@@ -23,7 +23,7 @@ const emit = defineEmits<{
 const id = useId()
 
 function getValue(propName: string) {
-  return props.values[propName]
+  return props.values[propName]?.expression
 }
 
 function getCustomFieldComponent(propName: string): Component | null {
@@ -59,7 +59,7 @@ function getCustomFieldComponent(propName: string): Component | null {
       :is="getCustomFieldComponent(propName) || PropField"
       :id="`${id}-${propName}`"
       :prop="prop"
-      :model-value="getValue(propName)?.expression"
+      :model-value="getValue(propName)"
       @update:model-value="(value:BindingValue) => emit('update', { prop, propName: propName, value })"
     />
   </div>
