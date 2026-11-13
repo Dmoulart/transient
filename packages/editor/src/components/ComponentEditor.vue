@@ -194,6 +194,13 @@ const editor = useEditor(component, dictionnary, rules)
 defineExpose(editor)
 provideCan(editor.can)
 
+editor.hooks.on('add-component', ({ element }, editor) =>
+  editor.select({
+    kind: 'element',
+    id: element.id,
+  }),
+)
+
 const pointed = ref<PointedElement | null>(null)
 // computed: only notifies when the id changes, not on every pointermove
 const hoveredId = computed(() => pointed.value?.id ?? null)

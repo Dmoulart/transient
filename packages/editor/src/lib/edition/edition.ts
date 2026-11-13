@@ -9,12 +9,14 @@ import {
   updateElementProp,
 } from '@transient/ir'
 
-export type Edition =
-  | AddElementEdition
-  | DeleteElementEdition
-  | UpdateElementPropEdition
-  | MoveElementEdition
-  | ReplaceSlotContentEdition
+export type Editions = {
+  'add-component': AddElementEdition
+  'delete-element': DeleteElementEdition
+  'update-prop': UpdateElementPropEdition
+  'replace-slot-content': ReplaceSlotContentEdition
+  'move-element': MoveElementEdition
+}
+export type Edition = Editions[keyof Editions]
 
 export type AddElementEdition = {
   type: 'add-component'

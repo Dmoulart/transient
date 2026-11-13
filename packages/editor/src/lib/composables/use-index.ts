@@ -24,6 +24,7 @@ export function useIndex() {
     if (vnode.component) {
       return last(vnode.component.subTree)
     }
+
     return (vnode.type === Fragment ? vnode.anchor : vnode.el) as Node
   }
 

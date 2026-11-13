@@ -9,6 +9,7 @@ import { computed, type Ref, readonly, ref, shallowRef } from 'vue'
 import { applyEdition, type Edition } from '@/lib/edition/edition'
 import { INLINE_TAGS } from '../edition/richtext'
 import { createCan, type Rule } from '../edition/rules'
+import { type EditorHooks, useEditorHooks } from './use-editor-hooks'
 import { useElement } from './use-element'
 
 export type Selection =
@@ -23,12 +24,15 @@ export type Editing = {
   occurrence?: number
 }
 
+export type Editor = ReturnType<typeof useEditor>
+
 export function useEditor(
   component: Ref<TransientComponentSchema>,
   dictionnary: TransientComponentDictionnary,
   rules: Rule[] = [],
 ) {
-  const can = createCan(rules, () => component.value.template.elements, dictionnary)
+  const hooks: EditorHooks = useEditorHooks()
+
   const past = shallowRef<TransientComponentSchema[]>([])
   const canUndo = computed(() => past.value.length > 0)
   const future = shallowRef<TransientComponentSchema[]>([])
@@ -41,8 +45,9 @@ export function useEditor(
 
   const selection = ref<Selection | null>(null)
   const editing = ref<Editing | null>(null)
-  // latest first, capped
   const history = shallowRef<Edition[]>([])
+
+  const can = createCan(rules, () => component.value.template.elements, dictionnary)
 
   const ancestors = computed(() => {
     if (selection.value?.kind === 'element') {
@@ -136,8 +141,12 @@ export function useEditor(
     }
     past.value = [...past.value, snapshot(component.value)].slice(-50)
     future.value = []
+
     applyEdition(edition, component.value?.template?.elements ?? [])
+
     history.value = [edition, ...history.value].slice(0, 20)
+
+    hooks.run(edition.type, edition, editor)
   }
 
   function undo() {
@@ -190,7 +199,7 @@ export function useEditor(
     original.value = snapshot(component.value)
   }
 
-  return {
+  const editor = {
     can,
     select,
     selection: readonly(selection),
@@ -209,7 +218,10 @@ export function useEditor(
     canUndo,
     canRedo,
     markAsSaved,
+    hooks,
   }
+
+  return editor
 }
 
 function snapshot<T extends Record<string, unknown>>(record: T): T {
