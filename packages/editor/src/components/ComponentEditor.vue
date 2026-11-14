@@ -366,18 +366,30 @@ function scrollElementIntoView(element: TransientElement) {
   if (firstNode && firstNode instanceof HTMLElement) {
     const parent = getScrollParent(firstNode)
     const ratio = getElementVisibilityRatio(firstNode)
-    console.log({ ratio })
-    if (ratio.y > 0.3) return
-    const top = firstNode.getBoundingClientRect().top - 50
-    let margin = 0
-    const actionBar = document.querySelector('#action-bar')
-    if (actionBar) {
-      margin -= actionBar.clientHeight
+
+    const rect = firstNode.getBoundingClientRect()
+    let top = 0
+    let left = 0
+
+    if (ratio.y <= 0.3) {
+      top = rect.top
+      const actionBar = document.querySelector('#action-bar')
+      if (actionBar) {
+        top -= actionBar.clientHeight + 12
+      }
     }
-    parent.scrollBy({
-      top: top + margin,
-      behavior: 'smooth',
-    })
+
+    if (ratio.x <= 0.3) {
+      left = rect.left
+    }
+
+    if (top !== 0 || left !== 0) {
+      parent.scrollBy({
+        top,
+        left,
+        behavior: 'smooth',
+      })
+    }
   }
 }
 </script>
