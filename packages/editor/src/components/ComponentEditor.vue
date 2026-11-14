@@ -141,14 +141,16 @@ import {
   getAncestorsChain,
   type TransientComponentDictionnary,
   type TransientComponentSchema,
+  type TransientElement,
   type TransientProp,
 } from '@transient/ir'
 import { useEventListener, watchOnce, whenever } from '@vueuse/core'
-import { type Component, computed, ref, useTemplateRef } from 'vue'
+import { type Component, computed, nextTick, ref, useTemplateRef } from 'vue'
 import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
 import { useEditor } from '@/lib/composables/use-editor.ts'
 import { useIndex } from '@/lib/composables/use-index.ts'
 import { provideTemplate } from '@/lib/composables/use-template.ts'
+import { getScrollParent } from '@/lib/dom/scroll.ts'
 import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
 import { provideCan, type Rule } from '@/lib/edition/rules.ts'
 import type { FieldRules } from '@/lib/fields.ts'
@@ -194,12 +196,15 @@ const editor = useEditor(component, dictionnary, rules)
 defineExpose(editor)
 provideCan(editor.can)
 
-editor.hooks.on('add-component', ({ element }, editor) =>
+editor.hooks.on('add-component', ({ element }, editor) => {
   editor.select({
     kind: 'element',
     id: element.id,
-  }),
-)
+  })
+  nextTick(() => {
+    scrollElementIntoView(element)
+  })
+})
 
 const pointed = ref<PointedElement | null>(null)
 // computed: only notifies when the id changes, not on every pointermove
@@ -348,6 +353,23 @@ function pointedElement(ev: MouseEvent): null | PointedElement {
   const slot = index.vnode(id)?.component ? index.slotAt(id, target!) : null
 
   return { id, slot, x: ev.clientX, y: ev.clientY }
+}
+
+function scrollElementIntoView(element: TransientElement) {
+  const [firstNode] = index.rootNodes(element.id)
+  if (firstNode && firstNode instanceof HTMLElement) {
+    const parent = getScrollParent(firstNode)
+    const top = firstNode.getBoundingClientRect().top - 50
+    let margin = 0
+    const actionBar = document.querySelector('#action-bar')
+    if (actionBar) {
+      margin -= actionBar.clientHeight
+    }
+    parent.scrollBy({
+      top: top + margin,
+      behavior: 'smooth',
+    })
+  }
 }
 </script>
 

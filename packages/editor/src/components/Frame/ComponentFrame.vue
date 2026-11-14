@@ -4,7 +4,7 @@
       :bbox="bbox"
       :class="hover ? 'tr-frame-hover tr-animate-fade-in' : 'tr-frame-selected'"
     >
-      <div v-if="!hover" class="tr-tag-bar">
+      <div v-if="!hover" class="tr-tag-bar" id="action-bar">
         <span data-test="selection" :data-tag="element.tag" class="tr-tag">
           {{ label }}
         </span>

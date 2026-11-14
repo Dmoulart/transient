@@ -2,42 +2,59 @@ import { forEachKeys } from '@transient/core'
 import { tryOnScopeDispose } from '@vueuse/core'
 import { shallowRef } from 'vue'
 import type { Edition, Editions } from '../edition/edition'
-import type { Editor } from './use-editor'
+import type { Editor, Selection } from './use-editor'
 
-export type OnAppliedEdition<T extends Edition> = (edition: T, editor: Editor) => void
+type Hooks = EditionHooks & SelectHooks
 
-type AppliedEditionHooks = {
-  [type in Edition['type']]: Set<OnAppliedEdition<Editions[type]>>
+type EditionHooks = {
+  [type in Edition['type']]: Editions[type]
 }
 
+type SelectHooks = {
+  select: Selection
+}
+
+export type HookHandler<K extends keyof Hooks> = (data: Hooks[K], editor: Editor) => void
+
+export type HooksHandlers = {
+  [K in keyof Hooks]: Set<HookHandler<K>>
+}
 
 export function useEditorHooks() {
-  const hooks = shallowRef<AppliedEditionHooks>({
+  const hooks = shallowRef<HooksHandlers>({
     'add-component': new Set(),
     'delete-element': new Set(),
     'replace-slot-content': new Set(),
     'move-element': new Set(),
     'update-prop': new Set(),
+    select: new Set(),
   })
 
-  function run<T extends keyof Editions>(type: T, edition: Editions[T], editor: Editor) {
-    hooks.value[type].forEach((callback) => {
-      callback(edition, editor)
+  function run<T extends keyof HooksHandlers>(hook: T, payload: Hooks[T], editor: Editor) {
+    hooks.value[hook].forEach((handler) => {
+      handler(payload, editor)
     })
   }
 
-  function on<T extends Edition['type']>(editionType: T, callback: OnAppliedEdition<Editions[T]>) {
-    hooks.value[editionType].add(callback)
+  function on<T extends keyof HooksHandlers>(hook: T, handler: HookHandler<T>) {
+    hooks.value[hook].add(handler)
 
-    return () => off(editionType, callback)
+    return () => off(hook, handler)
   }
 
-  function off<T extends Edition['type']>(editionType: T, callback: OnAppliedEdition<Editions[T]>) {
-    hooks.value[editionType].delete(callback)
+  function once<T extends keyof HooksHandlers>(hook: T, handler: HookHandler<T>) {
+    const stop = on(hook, (data, editor) => {
+      handler(data, editor)
+      stop()
+    })
   }
 
-  function clear<T extends Edition['type']>(editionType: T) {
-    hooks.value[editionType].clear()
+  function off<T extends keyof HooksHandlers>(hook: T, handler: HookHandler<T>) {
+    hooks.value[hook].delete(handler)
+  }
+
+  function clear<T extends keyof HooksHandlers>(hook: T) {
+    hooks.value[hook].clear()
   }
 
   function reset() {
@@ -46,7 +63,7 @@ export function useEditorHooks() {
 
   tryOnScopeDispose(reset)
 
-  return { run, on, off, clear, reset }
+  return { run, on, once, off, clear, reset }
 }
 
 export type EditorHooks = ReturnType<typeof useEditorHooks>

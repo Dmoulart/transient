@@ -131,6 +131,9 @@ export function useEditor(
   function select(newSelection: Selection | null) {
     selection.value = newSelection
     stopEditing()
+    if (newSelection) {
+      hooks.run('select', newSelection, editor)
+    }
   }
 
   function edit(edition: Edition) {
