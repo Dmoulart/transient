@@ -55,15 +55,9 @@ export function getElementViewportIntersection(el: HTMLElement) {
     ratioY,
     ratioX,
     isTopOverflowing,
-    overflowTop,
+    overflowTop: isTopOverflowing ? overflowTop : 0,
     isBottomOverflowing,
-    overflowBottom,
-    // overflow: {
-    //   top: overflowTop,
-    //   bottom: overflowBottom,
-    //   left: overflowLeft,
-    //   right: overflowRight,
-    // },
+    overflowBottom: isBottomOverflowing ? overflowBottom : 0,
   }
 }
 

@@ -374,14 +374,16 @@ function scrollElementIntoView(element: TransientElement) {
     if (intersection.ratioY <= 0.3) {
       // top = intersection.isTopOverflowing ? rect.bottom : rect.top
       top = intersection.isTopOverflowing ? intersection.overflowTop : intersection.overflowBottom
-      console.log(intersection)
-      const actionBar = document.querySelector('#action-bar')
-      if (actionBar) {
-        top -= actionBar.clientHeight + 12
+      if (Math.sign(top) === -1) {
+        const actionBar = document.querySelector('#action-bar')
+        if (actionBar) {
+          top -= actionBar.clientHeight + 12
+        }
       }
     }
 
     if (intersection.ratioX <= 0.3) {
+      top = intersection.isTopOverflowing ? intersection.overflowTop : intersection.overflowBottom
       left = rect.left
     }
 
