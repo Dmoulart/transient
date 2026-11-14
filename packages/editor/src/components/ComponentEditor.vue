@@ -150,7 +150,7 @@ import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
 import { useEditor } from '@/lib/composables/use-editor.ts'
 import { useIndex } from '@/lib/composables/use-index.ts'
 import { provideTemplate } from '@/lib/composables/use-template.ts'
-import { getScrollParent } from '@/lib/dom/scroll.ts'
+import { getElementVisibilityRatio, getScrollParent } from '@/lib/dom/scroll.ts'
 import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
 import { provideCan, type Rule } from '@/lib/edition/rules.ts'
 import type { FieldRules } from '@/lib/fields.ts'
@@ -201,6 +201,12 @@ editor.hooks.on('add-component', ({ element }, editor) => {
     kind: 'element',
     id: element.id,
   })
+  nextTick(() => {
+    scrollElementIntoView(element)
+  })
+})
+
+editor.hooks.on('move-element', ({ element }) => {
   nextTick(() => {
     scrollElementIntoView(element)
   })
@@ -359,6 +365,9 @@ function scrollElementIntoView(element: TransientElement) {
   const [firstNode] = index.rootNodes(element.id)
   if (firstNode && firstNode instanceof HTMLElement) {
     const parent = getScrollParent(firstNode)
+    const ratio = getElementVisibilityRatio(firstNode)
+    console.log({ ratio })
+    if (ratio.y > 0.3) return
     const top = firstNode.getBoundingClientRect().top - 50
     let margin = 0
     const actionBar = document.querySelector('#action-bar')
