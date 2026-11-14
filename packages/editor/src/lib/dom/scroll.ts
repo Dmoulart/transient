@@ -1,4 +1,4 @@
-export function getScrollParent(element: HTMLElement): HTMLElement {
+export function getParentScrollContainer(element: HTMLElement): HTMLElement {
   const overflowPattern = /(auto|scroll)/
 
   const currentElementStyle = getComputedStyle(element) // If the element has a fixed position, the scroll parent is the root document element  if (currentElementStyle.position === 'fixed') {    return document.documentElement;  }
@@ -16,7 +16,8 @@ export function getScrollParent(element: HTMLElement): HTMLElement {
       // Check if the parent is a scroll parent
       overflowPattern.test(
         `${parentStyle.overflow}${parentStyle.overflowY}${parentStyle.overflowX}`,
-      )
+      ) &&
+      (parent.scrollHeight > parent.clientHeight || parent.scrollWidth > parent.clientWidth)
     )
       return parent
 
@@ -50,7 +51,14 @@ export function getElementViewportIntersection(el: HTMLElement) {
   const overflowBottom = rect.bottom - viewport.bottom
   const isTopOverflowing = Math.sign(overflowTop) === -1
   const isBottomOverflowing = Math.sign(overflowBottom) === 1
-
+  console.log({
+    ratioY,
+    ratioX,
+    isTopOverflowing,
+    overflowTop: isTopOverflowing ? overflowTop : 0,
+    isBottomOverflowing,
+    overflowBottom: isBottomOverflowing ? overflowBottom : 0,
+  })
   return {
     ratioY,
     ratioX,

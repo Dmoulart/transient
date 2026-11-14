@@ -150,7 +150,7 @@ import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
 import { useEditor } from '@/lib/composables/use-editor.ts'
 import { useIndex } from '@/lib/composables/use-index.ts'
 import { provideTemplate } from '@/lib/composables/use-template.ts'
-import { getElementViewportIntersection, getScrollParent } from '@/lib/dom/scroll.ts'
+import { getElementViewportIntersection, getParentScrollContainer } from '@/lib/dom/scroll.ts'
 import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
 import { provideCan, type Rule } from '@/lib/edition/rules.ts'
 import type { FieldRules } from '@/lib/fields.ts'
@@ -364,7 +364,8 @@ function pointedElement(ev: MouseEvent): null | PointedElement {
 function scrollElementIntoView(element: TransientElement) {
   const [firstNode] = index.rootNodes(element.id)
   if (firstNode && firstNode instanceof HTMLElement) {
-    const parent = getScrollParent(firstNode)
+    const parent = getParentScrollContainer(firstNode)
+    console.log({ parent })
     const intersection = getElementViewportIntersection(firstNode)
 
     const rect = firstNode.getBoundingClientRect()
