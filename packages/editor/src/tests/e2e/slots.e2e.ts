@@ -93,18 +93,18 @@ test('clicking a repeated slot starts editing the clicked copy only', async ({ p
   await copies.nth(1).click()
 
   await expectEditing(page, 'default', 'Same slot rendered count times.')
-  await expect(copies.nth(1).locator('[data-test=editing-container]')).toHaveCount(1)
+  await expect(copies.nth(1)).toHaveAttribute('data-test', 'editing-container')
 })
 
 test('switching between copies of a repeated slot', async ({ page }) => {
   const copies = canvas(page).locator('li', { hasText: 'Same slot rendered count times.' })
   await copies.nth(0).click()
-  await expect(copies.nth(0).locator('[data-test=editing-container]')).toHaveCount(1)
+  await expect(copies.nth(0)).toHaveAttribute('data-test', 'editing-container')
 
   await copies.nth(2).click()
 
   await expectEditing(page, 'default', 'Same slot rendered count times.')
-  await expect(copies.nth(2).locator('[data-test=editing-container]')).toHaveCount(1)
+  await expect(copies.nth(2)).toHaveAttribute('data-test', 'editing-container')
 })
 
 test('an inline slot inside a paragraph can start editing', async ({ page }) => {
@@ -143,6 +143,25 @@ test('typing in a slot replaces its content once editing stops', async ({ page }
 
   await expect(canvas(page).getByText('Brand new text')).toHaveCount(1)
   await expect(canvas(page).getByText('Plain text in the default slot.')).toHaveCount(0)
+})
+
+test('a click right after the end of a text puts the caret there', async ({ page }) => {
+  await page.getByText('Plain text in the default slot.').waitFor()
+  // on the slot's own line, past its last character
+  const end = await canvas(page)
+    .getByText('Plain text in the default slot.')
+    .evaluate((slot) => {
+      const range = document.createRange()
+      range.selectNodeContents(slot)
+      const { right, y, height } = range.getBoundingClientRect()
+      return { x: right + 40, y: y + height / 2 }
+    })
+  await page.mouse.click(end.x, end.y)
+  await expect(editingContainer(page)).toHaveCount(1)
+  await page.keyboard.type('Z')
+  await stopEditing(page)
+
+  await expect(canvas(page).getByText('Plain text in the default slot.Z')).toHaveCount(1)
 })
 
 // the clipboard serializes the selection: an island had no HTML rendering and threw
@@ -193,6 +212,20 @@ test('leaving a slot without typing keeps its markup as is', async ({ page }) =>
   expect(await nestedFormatting(page).innerHTML()).toBe(before)
 })
 
+// the content is rebuilt from the editor, with new text ids: that alone is not a change
+test('leaving a slot without typing is not an edit', async ({ page }) => {
+  const undo = page.getByRole('button', { name: 'Annuler' })
+
+  await clickText(page, 'Crimson')
+  await stopEditing(page)
+  await expect(undo).toBeDisabled()
+
+  await clickText(page, 'Crimson')
+  await page.keyboard.type('X')
+  await stopEditing(page)
+  await expect(undo).toBeEnabled()
+})
+
 test('typing inside nested formatting keeps the nesting', async ({ page }) => {
   await clickText(page, 'emphasis')
   await page.keyboard.type('X')
@@ -202,4 +235,83 @@ test('typing inside nested formatting keeps the nesting', async ({ page }) => {
   await expect(strong).toHaveCount(1)
   await expect(strong).toHaveAttribute('style', /color: crimson/)
   await expect(strong.locator('em')).toContainText('X')
+})
+
+// --- a slot sharing its element with what the component renders around it: the editor
+// mounts on that element, and its other children must come through untouched
+
+test('typing in an empty slot fills it', async ({ page }) => {
+  await canvas(page)
+    .getByText('EmptySlot', { exact: true })
+    .locator('xpath=following-sibling::div')
+    .click()
+  await page.keyboard.type('Filled')
+  await stopEditing(page)
+
+  await expect(canvas(page).getByText('Filled')).toHaveCount(1)
+})
+
+test('editing a slot leaves the slots sharing its element untouched', async ({ page }) => {
+  await clickText(page, 'Sibling body')
+  // no wrapper: the element being edited is the one holding the three slots
+  await expect(editingContainer(page)).toContainText('Sibling header')
+  await expect(editingFrame(page)).toHaveAttribute('data-slot-name', 'default')
+
+  await page.keyboard.press('ControlOrMeta+a')
+  await page.keyboard.type('New body')
+  await stopEditing(page)
+
+  const box = canvas(page)
+    .locator('div', { has: page.getByText('Sibling header') })
+    .last()
+  await expect(box.locator('> *')).toHaveText(['Sibling header', 'New body', 'Sibling footer'])
+})
+
+test('deleting everything in a slot leaves the title next to it', async ({ page }) => {
+  await clickText(page, 'Text under the title.')
+  await page.keyboard.press('ControlOrMeta+a')
+  await page.keyboard.press('Delete')
+
+  await expect(editingContainer(page)).toHaveText('Kept title')
+
+  await stopEditing(page)
+
+  await expect(canvas(page).getByText('Kept title')).toHaveCount(1)
+  await expect(canvas(page).getByText('Text under the title.')).toHaveCount(0)
+})
+
+test('a sibling that re-renders while the slot is edited does not leak into it', async ({
+  page,
+}) => {
+  const errors: Error[] = []
+  page.on('pageerror', (error) => errors.push(error))
+  const blink = canvas(page).locator('[data-test=blink]')
+
+  await clickText(page, 'Text next to a blinking sibling.')
+  await page.keyboard.press('ControlOrMeta+a')
+  await page.keyboard.type('Edited next to a blink')
+  // several blinks' worth
+  await page.waitForTimeout(600)
+  await stopEditing(page)
+
+  await expect(canvas(page).getByText('Edited next to a blink')).toHaveText(
+    'Edited next to a blink',
+  )
+  expect(await blink.count()).toBeLessThanOrEqual(1)
+  // and it blinks again
+  await expect(blink).toHaveCount(0)
+  await expect(blink).toHaveCount(1)
+  expect(errors).toEqual([])
+})
+
+test('a slot next to text of its component is edited on its own', async ({ page }) => {
+  await clickText(page, 'labelled value')
+  // the label is not in the edited element: typing can't reach it
+  await expectEditing(page, 'default', 'labelled value')
+
+  await page.keyboard.press('ControlOrMeta+a')
+  await page.keyboard.type('new value')
+  await stopEditing(page)
+
+  await expect(canvas(page).getByText('Label: new value')).toHaveCount(1)
 })

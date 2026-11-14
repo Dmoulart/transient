@@ -80,6 +80,7 @@ function renderComponent(element: TransientElement): VNode {
   const slots = Object.fromEntries(
     Object.entries({ ...schemaSlots, ...(element.slots ?? {}) }).map(([slotName, children]) => {
       if (props.editing?.id === element.id && props.editing?.slotName === slotName) {
+        // only rendered when the editor can't mount on the element holding the slot
         const container: TransientElement = {
           id: 'transient-slot-edition',
           attributes: {},
@@ -97,6 +98,7 @@ function renderComponent(element: TransientElement): VNode {
               owner: element,
               slotName,
               occurrence: props.editing!.occurrence ?? 0,
+              locate: () => index.value.slot(element.id, slotName, props.editing?.occurrence ?? 0),
               renderComponent,
               render,
               onEdit: (e) => emit('edit', e),

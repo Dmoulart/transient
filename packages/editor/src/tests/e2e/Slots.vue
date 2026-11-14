@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import ReactiveIsland from '../../samples/ReactiveIsland.vue'
+import BlinkingSlot from './Slots/BlinkingSlot.vue'
 import ConditionalSlot from './Slots/ConditionalSlot.vue'
 import DefaultSlot from './Slots/DefaultSlot.vue'
 import EmptySlot from './Slots/EmptySlot.vue'
 import FallbackSlot from './Slots/FallbackSlot.vue'
 import InlineSlot from './Slots/InlineSlot.vue'
+import LabelledSlot from './Slots/LabelledSlot.vue'
 import MultiRootSlot from './Slots/MultiRootSlot.vue'
 import NamedSlots from './Slots/NamedSlots.vue'
 import PropToggledSlot from './Slots/PropToggledSlot.vue'
 import RepeatedSlot from './Slots/RepeatedSlot.vue'
+import SiblingSlots from './Slots/SiblingSlots.vue'
 import SwitchedSlot from './Slots/SwitchedSlot.vue'
+import TitledSlot from './Slots/TitledSlot.vue'
 </script>
 
 <template>
@@ -73,6 +77,18 @@ import SwitchedSlot from './Slots/SwitchedSlot.vue'
       </DefaultSlot>
 
       <MultiRootSlot>Slot in a component with several root nodes.</MultiRootSlot>
+
+      <SiblingSlots>
+        <template #header><h3>Sibling header</h3></template>
+        <p>Sibling body</p>
+        <template #footer><p>Sibling footer</p></template>
+      </SiblingSlots>
+
+      <TitledSlot title="Kept title"><p>Text under the title.</p></TitledSlot>
+
+      <LabelledSlot>labelled value</LabelledSlot>
+
+      <BlinkingSlot><p>Text next to a blinking sibling.</p></BlinkingSlot>
     </div>
   </main>
 </template>

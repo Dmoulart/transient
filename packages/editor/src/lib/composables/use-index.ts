@@ -7,6 +7,9 @@ export type SlotLocation = {
   fallback: boolean
   nodes: Node[]
   container: Node[]
+  // the components whose render reaches down to the slot, its owner first: their
+  // updates are what can patch the DOM around it
+  renderers: ComponentInternalInstance[]
 }
 
 export function useIndex() {
@@ -97,7 +100,7 @@ export function useIndex() {
     const root = rootNodes(ownerId)
     const found: SlotLocation[] = []
 
-    const walk = (vnode: VNode) => {
+    const walk = (vnode: VNode, renderers: ComponentInternalInstance[]) => {
       if (isSlotFragment(vnode, instance)) {
         const key = vnode.key as string
         const fallback = key.endsWith('_fb')
@@ -113,14 +116,17 @@ export function useIndex() {
           fallback,
           nodes,
           container: containerOf(start, root),
+          renderers,
         })
       }
 
-      if (vnode.component) walk(vnode.component.subTree)
-      if (Array.isArray(vnode.children)) (vnode.children as VNode[]).forEach(walk)
+      if (vnode.component) walk(vnode.component.subTree, [...renderers, vnode.component])
+      if (Array.isArray(vnode.children)) {
+        for (const child of vnode.children as VNode[]) walk(child, renderers)
+      }
     }
 
-    walk(instance.subTree)
+    walk(instance.subTree, [instance])
 
     return found
   }
