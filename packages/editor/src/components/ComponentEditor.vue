@@ -150,7 +150,7 @@ import { useComponentPanel } from '@/lib/composables/use-components-panel.ts'
 import { useEditor } from '@/lib/composables/use-editor.ts'
 import { useIndex } from '@/lib/composables/use-index.ts'
 import { provideTemplate } from '@/lib/composables/use-template.ts'
-import { getElementVisibilityRatio, getScrollParent } from '@/lib/dom/scroll.ts'
+import { getElementViewportIntersection, getScrollParent } from '@/lib/dom/scroll.ts'
 import { INLINE_TAGS } from '@/lib/edition/richtext.ts'
 import { provideCan, type Rule } from '@/lib/edition/rules.ts'
 import type { FieldRules } from '@/lib/fields.ts'
@@ -365,21 +365,23 @@ function scrollElementIntoView(element: TransientElement) {
   const [firstNode] = index.rootNodes(element.id)
   if (firstNode && firstNode instanceof HTMLElement) {
     const parent = getScrollParent(firstNode)
-    const ratio = getElementVisibilityRatio(firstNode)
+    const intersection = getElementViewportIntersection(firstNode)
 
     const rect = firstNode.getBoundingClientRect()
     let top = 0
     let left = 0
 
-    if (ratio.y <= 0.3) {
-      top = rect.top
+    if (intersection.ratioY <= 0.3) {
+      // top = intersection.isTopOverflowing ? rect.bottom : rect.top
+      top = intersection.isTopOverflowing ? intersection.overflowTop : intersection.overflowBottom
+      console.log(intersection)
       const actionBar = document.querySelector('#action-bar')
       if (actionBar) {
         top -= actionBar.clientHeight + 12
       }
     }
 
-    if (ratio.x <= 0.3) {
+    if (intersection.ratioX <= 0.3) {
       left = rect.left
     }
 

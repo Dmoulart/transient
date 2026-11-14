@@ -28,46 +28,65 @@ export function getScrollParent(element: HTMLElement): HTMLElement {
   return document.documentElement
 }
 
-export function getElementVisibilityRatio(el: HTMLElement) {
-  const rect = getBbox(el)
+export function getElementViewportIntersection(el: HTMLElement) {
+  const rect = getAbsoluteRect(el)
 
-  const viewport = getViewportRectInPage()
+  const viewport = getAbsoluteViewportRect()
 
-  const intersectionTop = Math.min(Math.max(viewport.top, rect.top), viewport.bottom)
-  const intersectionBottom = Math.max(Math.min(viewport.bottom, rect.bottom), viewport.top)
-  const intersectionHeight = intersectionBottom - intersectionTop
+  const top = Math.min(Math.max(viewport.top, rect.top), viewport.bottom)
+  const bottom = Math.max(Math.min(viewport.bottom, rect.bottom), viewport.top)
+  const height = bottom - top
 
-  const ratioY = intersectionHeight / rect.height
+  // @todo it is false
+  const ratioY = height / rect.height
 
-  const intersectionLeft = Math.min(Math.max(viewport.left, rect.left), viewport.right)
-  const intersectionRight = Math.max(Math.min(viewport.right, rect.right), viewport.left)
-  const intersectionWidth = intersectionRight - intersectionLeft
+  const left = Math.min(Math.max(viewport.left, rect.left), viewport.right)
+  const right = Math.max(Math.min(viewport.right, rect.right), viewport.left)
+  const width = right - left
 
-  const ratioX = intersectionWidth / rect.width
+  const ratioX = width / rect.width
+
+  const overflowTop = rect.top - viewport.top
+  const overflowBottom = rect.bottom - viewport.bottom
+  const isTopOverflowing = Math.sign(overflowTop) === -1
+  const isBottomOverflowing = Math.sign(overflowBottom) === 1
 
   return {
-    y: ratioY,
-    x: ratioX,
+    ratioY,
+    ratioX,
+    isTopOverflowing,
+    overflowTop,
+    isBottomOverflowing,
+    overflowBottom,
+    // overflow: {
+    //   top: overflowTop,
+    //   bottom: overflowBottom,
+    //   left: overflowLeft,
+    //   right: overflowRight,
+    // },
   }
 }
 
-function getBbox(el: HTMLElement) {
+function getAbsoluteRect(el: HTMLElement) {
   const rect = el.getBoundingClientRect()
+
+  const scrollX = window.scrollX || document.documentElement.scrollLeft
+  const scrollY = window.scrollY || document.documentElement.scrollTop
+
   return {
-    top: rect.top + window.scrollY,
-    bottom: rect.bottom + window.scrollY,
-    left: rect.left + window.scrollX,
-    right: rect.right + window.scrollX,
+    top: rect.top + scrollY,
+    bottom: rect.bottom + scrollY,
+    left: rect.left + scrollX,
+    right: rect.right + scrollX,
     height: rect.height,
     width: rect.width,
   }
 }
-function getViewportRectInPage() {
-  // Récupère la position du scroll (avec compatibilité navigateurs)
+
+function getAbsoluteViewportRect() {
   const scrollX = window.scrollX || document.documentElement.scrollLeft
   const scrollY = window.scrollY || document.documentElement.scrollTop
 
-  // Dimensions visibles du viewport
   const width = window.innerWidth
   const height = window.innerHeight
 
