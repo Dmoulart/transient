@@ -10,12 +10,14 @@
     "@nuxt/kit": "^4.0.0",
     "@transient/vite-plugin-vue-transient": "workspace:*",
     "@transient/editor": "workspace:*",
+    "@transient/analyzer-vue": "workspace:*",
     "@transient/core": "workspace:*",
     "@transient/ir": "workspace:*"
   },
   "exports": {
     ".": "./dist/module.js",
     "./editor": "./dist/editor.js",
+    "./analyzer": "./dist/analyzer.js",
     "./ir": "./dist/ir.js",
     "./client": "./src/client.d.ts"
   },

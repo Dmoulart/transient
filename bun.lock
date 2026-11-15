@@ -74,6 +74,7 @@
       "name": "@transient/nuxt",
       "dependencies": {
         "@nuxt/kit": "^4.0.0",
+        "@transient/analyzer-vue": "workspace:*",
         "@transient/core": "workspace:*",
         "@transient/editor": "workspace:*",
         "@transient/ir": "workspace:*",
