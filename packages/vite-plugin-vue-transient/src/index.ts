@@ -44,6 +44,9 @@ export default function transient(options: TransientVitePluginOptions): Plugin {
 
   return {
     name: 'vite-plugin-vue-transient',
+    // pre: the <transient> block's transform must run before the other plugins, Nuxt's
+    // included, which parse every module as JavaScript
+    enforce: 'pre',
     resolveId(id) {
       if (id.startsWith('virtual:transient')) {
         const [base, subpath] = id.split('/')
@@ -78,7 +81,13 @@ export default function transient(options: TransientVitePluginOptions): Plugin {
       }
       tsConfigPath = maybeTsConfigPath
     },
-
+    // the <transient> block of an SFC (JSON read by the analyzer) reaches Vite as a module of its own:
+    // an empty one, or Vite would parse the JSON as JavaScript
+    transform(_code, id) {
+      if (id.includes('?vue&type=transient')) {
+        return 'export default () => {}'
+      }
+    },
     load(id) {
       if (id.startsWith('\0virtual:transient')) {
         const [, subpath] = id.split('/')

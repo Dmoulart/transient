@@ -76,13 +76,14 @@ function describeComponent(
     }
   }
 
-  const template = analyzeTemplateElements(src, props)
+  const { elements, metadata } = analyzeTemplateElements(src, props)
 
   return {
     tag,
     path,
     props,
     slots,
-    template,
+    template: { elements },
+    metadata,
   }
 }

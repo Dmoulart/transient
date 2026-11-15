@@ -95,3 +95,22 @@ describe('template slots', () => {
     expect(card!.slots!.header![0]).toMatchObject({ tag: '#text' })
   })
 })
+
+describe('hints', () => {
+  test('Transient hints are parsed', () => {
+    const template = analyzeTemplateSource(
+      `
+      <template>Hello</template>
+      <script setup>
+      </script setup>
+      <transient>
+      {
+        "thumbnail": "ok"
+      }
+      </transient>
+    `,
+      {},
+    )
+    expect(template.metadata).toEqual({ thumbnail: 'ok' })
+  })
+})

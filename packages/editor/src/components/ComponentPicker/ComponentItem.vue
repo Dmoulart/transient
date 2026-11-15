@@ -9,7 +9,14 @@
     @click="emit('select', props)"
     @keydown.enter="emit('select', props)"
   >
-    <div v-if="component" ref="thumb" class="tr-card-thumb tr-relative" inert>
+    <img
+      v-if="schema.metadata?.thumbnail"
+      :src="schema.metadata?.thumbnail"
+      ref="thumb"
+      class="tr-card-thumb"
+      alt=""
+    >
+    <div v-else-if="component" ref="thumb" class="tr-card-thumb tr-relative" inert>
       <div
         ref="content"
         class="tr-absolute tr-top-1/2 tr-left-1/2 tr-origin-center tr-flex tr-justify-center"

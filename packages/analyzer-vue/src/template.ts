@@ -5,6 +5,7 @@ import type {
   BindingInfo,
   TransientElement,
   TransientElementAttributes,
+  TransientMetadata,
   TransientProps,
   TransientTemplate,
 } from '@transient/ir'
@@ -24,11 +25,17 @@ import JSON5 from 'json5'
 export function analyzeTemplateElements(
   componentPath: string,
   props: TransientProps,
-): TransientTemplate {
+): {
+  elements: TransientElement[]
+  metadata?: TransientMetadata
+} {
   return analyzeTemplateSource(readFileSync(componentPath, 'utf-8'), props)
 }
 
-export function analyzeTemplateSource(source: string, props: TransientProps): TransientTemplate {
+export function analyzeTemplateSource(
+  source: string,
+  props: TransientProps,
+): { elements: TransientElement[]; metadata?: TransientMetadata } {
   const sfc = parseSFC(source)
 
   const template = sfc.descriptor.template?.content
@@ -37,11 +44,18 @@ export function analyzeTemplateSource(source: string, props: TransientProps): Tr
 
   const ast = parseTemplate(template)
 
+  const transientBlock = sfc.descriptor.customBlocks.find((block) => block.type === 'transient')
+
+  let metadata: TransientMetadata | undefined
+  if (transientBlock) {
+    metadata = JSON.parse(transientBlock.content)
+  }
+
   const elements = ast.children
     .map((node) => walk(node, props))
     .filter(Boolean) as TransientElement[]
 
-  return { elements }
+  return { elements, metadata }
 }
 
 function walk(node: TemplateChildNode, props: TransientProps): TransientElement | null {

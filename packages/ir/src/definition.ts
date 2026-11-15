@@ -22,11 +22,16 @@ export type TransientComponentSchema = {
   props: TransientProps
   slots?: TransientSlots
   template: TransientTemplate
+  metadata?: TransientMetadata
 }
 
 export type TransientSlots = Record<string, TransientSlot>
 
 export type TransientProps = Record<string, TransientProp>
+
+export type TransientMetadata = {
+  thumbnail?: string
+}
 
 export type TransientProp = {
   type: TransientType
