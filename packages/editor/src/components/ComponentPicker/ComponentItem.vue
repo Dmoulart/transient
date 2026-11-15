@@ -15,7 +15,7 @@
         class="tr-absolute tr-top-1/2 tr-left-1/2 tr-origin-center tr-flex tr-justify-center"
         :style="{ width: 'max-content', transform: `translate(-50%, -50%) scale(${scale})` }"
       >
-      <!-- useful to isolate parent flex effects from the component when it is a fragment -->
+        <!-- useful to isolate parent flex effects from the component when it is a fragment -->
         <div>
           <component :is="component" v-bind="defaultProps" />
         </div>
