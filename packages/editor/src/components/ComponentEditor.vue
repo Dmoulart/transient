@@ -7,6 +7,7 @@
       :is-dirty="editor.isDirty.value"
       :can-undo="editor.canUndo.value"
       :can-redo="editor.canRedo.value"
+      :publishing="publishing"
       @undo="editor.undo"
       @redo="editor.redo"
       @publish="emit('publish', component)"
@@ -169,6 +170,8 @@ const { dictionnary, components, rules } = defineProps<{
   fields?: FieldRules
   debug?: boolean
   rules?: Rule[]
+  // true while the host sends the page: the publish button shows a spinner and waits
+  publishing?: boolean
 }>()
 
 const emit = defineEmits<{

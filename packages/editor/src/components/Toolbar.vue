@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ToolbarButton, ToolbarRoot, ToolbarSeparator } from 'reka-ui'
 
-defineProps<{ isDirty: boolean; canUndo?: boolean; canRedo?: boolean }>()
+// publishing: the host is sending the page, the button waits for it
+defineProps<{ isDirty: boolean; canUndo?: boolean; canRedo?: boolean; publishing?: boolean }>()
 
 const isEditing = defineModel('is-editing', {
   required: false,
@@ -51,9 +52,18 @@ const emit = defineEmits<{
       <span class="tr-status" :data-state="isDirty ? 'pending' : 'saved'" aria-live="polite">
         <span class="tr-status-dot" />{{ isDirty ? `Modifié` : 'À jour' }}
       </span>
-      <ToolbarButton class="tr-btn-primary" :disabled="!isDirty" @click="emit('publish')"
-        >Publier</ToolbarButton
+      <ToolbarButton
+        class="tr-btn-primary"
+        :disabled="!isDirty || publishing"
+        :aria-busy="publishing"
+        @click="emit('publish')"
       >
+        <template v-if="publishing">
+          <span class="tr-i-lucide-loader-circle tr-animate-spin" aria-hidden="true" />
+          Publication…
+        </template>
+        <template v-else>Publier</template>
+      </ToolbarButton>
     </ToolbarRoot>
   </div>
 </template>
