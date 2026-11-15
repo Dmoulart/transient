@@ -6,7 +6,7 @@
     >
       <span
         v-if="empty"
-        class="z-10 absolute top-1 left-1 text-[10px] leading-none font-medium tracking-wide text-amber-600/80 uppercase"
+        class="tr-z-10 tr-absolute tr-top-1 tr-left-1 tr-text-[10px] tr-leading-none tr-font-medium tr-tracking-wide tr-text-amber-600/80 tr-uppercase"
       >
         {{ slotName }}
       </span>

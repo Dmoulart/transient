@@ -7,7 +7,6 @@ import type {
   TransientElementAttributes,
   TransientMetadata,
   TransientProps,
-  TransientTemplate,
 } from '@transient/ir'
 import {
   type AttributeNode,
