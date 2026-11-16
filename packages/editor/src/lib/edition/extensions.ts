@@ -28,8 +28,26 @@ export function extensions({
     ElementNode('blockContainer', { group: 'block', content: 'block+' }),
     ElementNode('voidElement', { group: 'inline', inline: true, atom: true }),
     ...(surroundings ? [Around(surroundings)] : []),
+    LineBreak,
   ]
 }
+
+// an inline slot has no paragraph to split: Enter breaks the line with a <br>.
+// Shift+Enter does it everywhere, a list of blocks keeps Enter for a new paragraph
+const LineBreak = Extension.create({
+  name: 'lineBreak',
+  addKeyboardShortcuts() {
+    const br = () =>
+      this.editor.commands.insertContent({
+        type: 'voidElement',
+        attrs: { id: null, tag: 'br', attributes: {} },
+      })
+    return {
+      Enter: () => this.editor.state.doc.inlineContent && br(),
+      'Shift-Enter': br,
+    }
+  },
+})
 
 // <b>, <a>, <span class>…: any inline element is a mark carrying its tag and attributes
 const InlineElement = Mark.create({

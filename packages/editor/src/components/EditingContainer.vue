@@ -242,6 +242,11 @@ img.ProseMirror-separator {
   display: none;
 }
 
+/* except after a <br> that ends the text: it holds the new, empty line (Enter at the end) */
+.ProseMirror br:not(.ProseMirror-trailingBreak) + br.ProseMirror-trailingBreak {
+  display: inline;
+}
+
 /* the fallback wrapper is a custom element, so inline: <h2>, <p> inside need a block parent.
    Not display: contents, the editing host would lose focus. The wrapper takes the
    blocks' place as grid/flex item, so their own z-index stops applying: keep the

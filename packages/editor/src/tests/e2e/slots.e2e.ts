@@ -145,6 +145,18 @@ test('typing in a slot replaces its content once editing stops', async ({ page }
   await expect(canvas(page).getByText('Plain text in the default slot.')).toHaveCount(0)
 })
 
+test('Enter in a text slot breaks the line', async ({ page }) => {
+  await clickText(page, 'Plain text in the default slot.')
+  await page.keyboard.press('ControlOrMeta+a')
+  await page.keyboard.type('First line')
+  await page.keyboard.press('Enter')
+  await page.keyboard.type('Second line')
+  await stopEditing(page)
+
+  const slot = canvas(page).getByText(/First line\s*Second line/)
+  await expect(slot.locator('br')).toHaveCount(1)
+})
+
 test('a click right after the end of a text puts the caret there', async ({ page }) => {
   await page.getByText('Plain text in the default slot.').waitFor()
   // on the slot's own line, past its last character
